@@ -1,0 +1,386 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the UT Drupal Kit.
+ */
+
+/**
+ * Administrative theme name.
+ */
+define('UTEXAS_INSTALL_ADMIN_THEME', 'seven');
+
+/**
+ * Core theme name.
+ */
+define('UTEXAS_INSTALL_CORE_THEME', 'forty_acres');
+
+/**
+ * Implements hook_install().
+ *
+ * Custom installation for UTexas.
+ */
+function utexas_install() {
+  // Include Pantheon-specific settings, which installs the Standard profile.
+  include_once DRUPAL_ROOT . '/profiles/pantheon/pantheon.install';
+  pantheon_install();
+
+  // Get an array of functions.
+  $operations = array(
+    '_utexas_install_themes',
+    '_utexas_install_blocks',
+    '_utexas_install_modules',
+    '_utexas_install_menus',
+    '_utexas_install_settings',
+    '_utexas_install_text_formats',
+  );
+  $batch = array(
+    'operations' => array(
+      array('utexas_install_batch_process', array($operations)),
+    ),
+    'finished' => 'utexas_install_batch_finished',
+    'title' => 'UTexas Configuration',
+    'init_message' => 'UTexas configuration is starting.',
+    'progress_message' => 'Installing UTexas custom components.',
+    'error_message' => 'UTexas configuration configuration has encountered an error.',
+  );
+  batch_set($batch);
+
+  $grant = array('access toolbar');
+  user_role_grant_permissions('2', $grant);
+}
+
+/**
+ * Batch processing callback.
+ */
+function utexas_install_batch_process($operations, &$context) {
+  // If this is the first run, set the progress.
+  if (!isset($context['sandbox']['progress'])) {
+    $context['sandbox']['progress'] = 0;
+    $context['sandbox']['max'] = count($operations);
+  }
+
+  // Perform the function and increment progress.
+  call_user_func($operations[$context['sandbox']['progress']]);
+  $context['results'][] = $operations[$context['sandbox']['progress']];
+  $context['message'] = st('Now processing "@op"',
+    array('@op' => $operations[$context['sandbox']['progress']]));
+  $context['sandbox']['progress']++;
+
+  // Inform the batch engine that we are not finished, and provide an
+  // estimation of the completion level we reached.
+  if ($context['sandbox']['progress'] != $context['sandbox']['max']) {
+    $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
+  }
+}
+
+/**
+ * Batch 'finished' callback.
+ */
+function utexas_install_batch_finished($success, $results, $operations) {
+  if ($success) {
+    // Here we do something meaningful with the results.
+    $message = count($results) . ' configuration tasks performed.';
+    drupal_set_message($message);
+  }
+  else {
+    // An error occurred. $operations contains the operations that remained
+    // unprocessed.
+    $error_operation = reset($operations);
+    $message = t('An error occurred while processing %error_operation with
+      arguments: @arguments', array(
+        '%error_operation' => $error_operation[0],
+        '@arguments' => print_r($error_operation[1], TRUE),
+      )
+    );
+    drupal_set_message($message, 'error');
+  }
+}
+
+/**
+ * Helper function to install themes.
+ */
+function _utexas_install_themes() {
+  $enable = array(
+    'theme_default' => UTEXAS_INSTALL_CORE_THEME,
+    'admin_theme' => UTEXAS_INSTALL_ADMIN_THEME,
+  );
+  theme_enable($enable);
+
+  foreach ($enable as $var => $theme) {
+    if (!is_numeric($var)) {
+      variable_set($var, $theme);
+    }
+  }
+
+  // Disable the "Bartik" theme, which was enabled during the Standard install.
+  theme_disable(array('bartik'));
+}
+
+/**
+ * Helper function for module settings.
+ */
+function _utexas_install_modules() {
+  // Disable the comment module, which was enabled by the Standard installation.
+  $disable = array('comment');
+  module_disable($disable);
+}
+
+/**
+ * Helper function for text formats.
+ */
+function _utexas_install_text_formats() {
+  utexas_admin_ckeditor_profile('save', 'CKEditor Global Profile');
+  utexas_admin_ckeditor_profile('save', 'Advanced');
+}
+
+/**
+ * Helper function for content settings.
+ */
+function _utexas_install_settings() {
+
+  // Enable clean URLs.
+  variable_set('clean_url', 1);
+
+  // Enable the admin theme for node forms.
+  variable_set('node_admin_theme', '1');
+
+  // Pathauto settings.
+  variable_set('pathauto_node_pattern', '[node:title]');
+
+  variable_set('menu_block_suppress_core', '1');
+  variable_set('menu_block_menu_order', array('main-menu' => ''));
+
+  // Node clone settings.
+  variable_set('clone_menu_links', 0);
+  variable_set('clone_method', 'save-edit');
+  variable_set('clone_nodes_without_confirm', 1);
+  variable_set('clone_omitted',
+    array(
+      'landing_page' => 0,
+      'standard_page' => 0,
+    )
+  );
+  variable_set('clone_reset_landing_page', 1);
+  variable_set('clone_reset_standard_page', 1);
+  variable_set('clone_use_node_type_name', 0);
+
+  // CKEditor Link File settings.
+  variable_set('ckeditor_link_file_link_method', 'url');
+  variable_set('ckeditor_link_type_name', 'Page title or filename on this site.');
+}
+
+/**
+ * Helper function to configure default blocks.
+ */
+function _utexas_install_blocks() {
+  $default_theme = variable_get('theme_default', UTEXAS_INSTALL_CORE_THEME);
+  $admin_theme = UTEXAS_INSTALL_ADMIN_THEME;
+
+  // Set default blocks.
+  $blocks = array(
+    // Main theme blocks.
+    array(
+      'module' => 'system',
+      'delta' => 'main',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'search',
+      'delta' => 'form',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => -1,
+      'region' => '',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'user',
+      'delta' => 'login',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => '',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'navigation',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => '',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'help',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => -1,
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'powered-by',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => -1,
+      'pages' => '',
+      'cache' => -1,
+    ),
+    // Admin theme blocks.
+    array(
+      'module' => 'node',
+      'delta' => 'recent',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 10,
+      'region' => 'dashboard_main',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'main',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'help',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'help',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'user',
+      'delta' => 'login',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 10,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'user',
+      'delta' => 'new',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'dashboard_sidebar',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'search',
+      'delta' => 'form',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => -10,
+      'region' => 'dashboard_sidebar',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'workbench',
+      'delta' => 'block',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => -1,
+      'pages' => '',
+      'cache' => -1,
+    ),
+  );
+
+  foreach ($blocks as $block) {
+    $updated = db_update('block')->fields(array(
+      'region' => $block['region'],
+      'status' => $block['status'],
+    ))
+      ->condition('module', $block['module'], '=')
+      ->condition('delta', $block['delta'], '=')
+      ->condition('theme', $block['theme'], '=')
+      ->execute();
+  }
+}
+
+/**
+ * Helper function to add default menus.
+ */
+function _utexas_install_menus() {
+
+  // Set special menu items to work with mega menu.
+  variable_set('special_menu_items_nolink_tag', '<a href="#">');
+
+  // Create the menu if it doesn't exist.
+  if (!menu_load('menu-header')) {
+    $menu = array(
+      'menu_name' => 'menu-header',
+      'title' => t('Header menu'),
+      'description' => 'The Header menu is displayed next to the search bar in the header region.',
+    );
+    menu_save($menu);
+  }
+  $items = array(
+    array(
+      'link_title' => st('Header Link 1'),
+      'link_path' => 'node/1',
+    ),
+    array(
+      'link_title' => st('Header Link 2'),
+      'link_path' => 'node/1',
+    ),
+  );
+  utexas_menu_builder($items, 'menu-header');
+  if (!menu_load('menu_footer')) {
+    $menu = array(
+      'menu_name' => 'menu-footer',
+      'title' => t("Footer menu"),
+      'description' => 'The Footer menu is displayed in the middle section of the site footer.',
+    );
+    menu_save($menu);
+  }
+  $items = array(
+    array(
+      'link_title' => st('Footer Link 1'),
+      'link_path' => 'node/1',
+    ),
+    array(
+      'link_title' => st('Footer Link 2'),
+      'link_path' => 'node/1',
+    ),
+    array(
+      'link_title' => st('Footer Link 3'),
+      'link_path' => 'node/1',
+    ),
+    array(
+      'link_title' => st('Footer Link 4'),
+      'link_path' => 'node/1',
+    ),
+    array(
+      'link_title' => st('Footer Link 5'),
+      'link_path' => 'node/1',
+    ),
+  );
+  utexas_menu_builder($items, 'menu-footer');
+}
