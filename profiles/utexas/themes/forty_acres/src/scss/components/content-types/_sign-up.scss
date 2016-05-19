@@ -1,0 +1,68 @@
+.ct--sign-up{
+
+	.headline{
+		font-size: rem-calc(18);
+		font-weight: 700;
+		margin-bottom: 10px;
+	}
+
+	.newsletter{
+		padding: 0 10px;
+		@include respond(medium){
+			padding: 0 15px;
+		}
+		@include respond(large){
+			padding: 0 20px;
+		}
+	}
+	.newsletter-form {
+		height: 38px;
+		max-width: 400px;
+		border: 1px solid $lightGreyDivider;
+		position: relative;
+	}
+
+	.body-copy{
+		margin-top: 10px;
+		margin-bottom: 10px !important;
+	}
+
+	input.newsletter-input {
+		border: none;
+		background: #fff;
+		font-size: rem-calc(16);
+		height: 38px;
+		float: left;
+		width: 100%;
+		padding: 0 10px;
+		outline: none;
+		border-bottom: 1px solid rgb(175, 175, 175);
+
+		&.placeholder{
+			font-style: italic;
+		}
+
+		&::placeholder {
+			font-style: italic;
+		}
+	}
+
+	.newsletter-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		background: none;
+		border: none;
+		height: 38px;
+		color: $burntOrange;
+		float: right;
+		text-align: right;
+	}
+
+	.icon-buttons {
+		position: relative;
+		top: -8px;
+		right: -20px;
+	}
+
+}

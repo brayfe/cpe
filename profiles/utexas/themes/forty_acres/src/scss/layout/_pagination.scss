@@ -1,0 +1,22 @@
+.pagination{
+	display: block;
+}
+
+ul.pagination{
+	padding-left: 0;
+}
+
+ul.pagination li a{
+	text-decoration: none;
+	padding: 5px 10px;
+	color: #6a6a6a;
+}
+
+ul.pagination li.current a{
+	background: $burntOrange;
+	color: #fff;
+}
+ul.pagination li.current a:hover{
+	background: $burntOrangeAccent;
+	cursor: pointer;
+}

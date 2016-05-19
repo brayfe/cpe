@@ -1,0 +1,261 @@
+.container-footer {
+	
+	padding-top: 25px;
+	border-top: 1px solid $nav-Bkg-desktop;
+	@include respond(medium){
+		padding-top: 45px;
+		
+	}
+
+	.footer-primary {
+		@include respond(medium){
+			border-right: 1px solid #cbcbcb;
+			padding-right: 40px; 
+		}
+	}
+	
+	.footer-secondary {
+		@include respond(medium){
+			padding-left: 32px; 
+		}
+	}
+
+	.footer-headline {
+		font-size: rem-calc(16);
+		color: $burntOrange;
+		font-weight: bold;
+		margin: 0 0 10px 0;
+
+		@include respond(medium){
+			font-size: rem-calc(20);
+			margin: 0 0 20px 0;
+		}
+	}
+
+
+	.newsletter,
+	.connect,
+	.footer-secondary {
+		@include respond(small-only){
+			border-bottom: 1px solid $lightGreyDivider;
+			padding: 0 0 18px 0;
+			margin: 0 0 18px 0;
+		}
+	}
+	
+	.newsletter-form {
+		height: 38px;
+		border: 1px solid $lightGreyDivider;
+		position: relative;
+		
+		@include respond(medium){
+			margin-bottom: 40px;
+		}
+	}
+
+	input.newsletter-input {
+		border: none;
+		background: none;
+		font-size: rem-calc(16);
+		height: 38px;
+		float: left;
+		width: 100%;
+		padding: 0 10px;
+		outline: none;
+
+		&.placeholder{
+			font-style: italic;
+		}
+
+		&::placeholder {
+			font-style: italic;
+		}
+	}
+
+	.newsletter-button {
+		position: absolute;
+		top: -9px;
+		right: -20px;
+		background: none;
+		border: none;
+		height: 38px;
+		color: $burntOrange;
+		float: right;
+		text-align: right;
+	}
+
+
+
+	.connect-links {
+		@include inline-list;
+		margin-left: rem-calc(-10);
+		margin-bottom: 0;
+		font-size: rem-calc(40);
+
+		li {
+			margin-left: rem-calc(10);
+		}
+		
+	}
+
+	.connect-link {
+		color: #392f2d;
+		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			color: #6a6361;
+		}
+	}
+
+
+
+
+
+	.helpful-links {
+		list-style-type: none;
+		padding: 0;
+		overflow: hidden;
+	}
+
+	.helpful-link-item {
+		margin-bottom:30px;
+		padding-bottom: 0;
+
+		@include respond(medium){
+			margin-bottom: 15px;
+		}
+	}
+
+	.helpful-link {
+		font-size: rem-calc(12);
+		line-height: rem-calc(15);
+		color: #2d2a28;
+		padding-right: 10px;
+		text-decoration: none;
+
+		@include respond(medium){
+			font-size: rem-calc(14);
+			line-height: rem-calc(16);
+		}
+
+		&:hover {
+			text-decoration: underline;
+		}
+		
+	}
+
+	.copyright {
+		text-align: center;
+		font-size: rem-calc(11);
+		font-style: italic;
+		margin: 0 0 25px 0;
+		color: #2d2a28;
+
+		@include respond(medium){
+			font-size: rem-calc(14);
+			margin-top: 10px;
+		}
+	}
+
+	.footer-column{
+		margin-bottom: 30px;
+	}
+
+}
+
+.helpful-link-news{
+	font-size: rem-calc(12);
+	line-height: rem-calc(15);
+	color: #2d2a28;
+	padding-right: 10px;
+	text-decoration: none;
+
+	@include respond(medium){
+		font-size: rem-calc(14);
+		line-height: rem-calc(16);
+	}
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.helpful-links-news{
+	font-size: rem-calc(12);
+	line-height: rem-calc(15);
+	color: #2d2a28;
+	padding-right: 10px;
+	text-decoration: none;
+	padding: 0;
+	margin: 0;
+	display: block;
+
+	@include respond(medium){
+		font-size: rem-calc(14);
+		line-height: rem-calc(16);
+	}
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.helpful-links-inline{
+	margin-top: 5px;
+	margin-bottom: 25px;
+	.helpful-link-item{
+		display: inline-block;
+	}
+}
+
+/* fix for android 4.2 block grid */
+@include respond(medium){
+	.medium-block-grid-3 > li:nth-of-type(1n) {
+		clear: none;
+	}
+}
+
+.container-footer-news {
+	background-color: #f8f8f8;
+
+	.newsletter{
+		margin-top: 20px;
+		padding-bottom: 1px;
+
+		@include respond(small-only){
+			margin-bottom: 5px;
+			margin-bottom: 25px;
+		}
+
+		.newsletter-form{
+			margin-bottom: 20px;
+			@include respond(medium){
+				max-width: 450px;
+			}
+			input{
+				height: 36px;
+				background-color: #fff;
+			}
+		}
+	}
+
+	.footer-secondary{
+		@include respond(medium){
+			padding-left: 5px;
+		}
+		@include respond(large){
+			padding-left: 20px;
+		}
+	}
+
+	.copyright{
+		@include respond(medium){
+			margin-top: 20px;
+			text-align: left;
+			margin-left: 6px;
+		}
+	}
+}
+
+

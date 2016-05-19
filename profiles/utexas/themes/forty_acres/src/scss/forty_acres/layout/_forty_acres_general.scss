@@ -1,0 +1,54 @@
+//// Form styles
+.form-example {
+	display: block;
+	margin-bottom: 40px;
+	@include respond(medium){
+		margin-bottom: 60px;
+	}
+
+	hr{
+		margin: 1rem 0;
+	}
+}
+.form-example input[type="submit"]{
+	background-color: $burntOrange;
+	color: white;
+	border: 0px;
+	padding: 10px 30px;
+	margin-top: 20px;
+	&:hover{
+		background-color: $burntOrangeAccent;
+	}
+
+	@include respond(small-only){
+		width: 100%;
+	}
+}
+
+textarea{
+	resize: none !important;
+}
+
+// Adjustment for Theme Navigation margin vs Core
+.breadcrumbs{
+	@include respond(large){
+		padding-top: 0px;
+	}
+}
+
+.field-collection-container {
+	border-bottom:	none;
+}
+
+// Overrides
+.utexas-promo-field.utexas-promo-list {
+	width: 100%;
+}
+
+// Add space between breadcrumb and content on full width content page
+.full-width-content-page  .region-content-top {
+	margin-top: 20px;
+	@include respond(large) {
+		margin-top: 30px;
+	}
+}

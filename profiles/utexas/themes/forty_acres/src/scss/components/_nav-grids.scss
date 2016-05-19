@@ -1,0 +1,38 @@
+@include respond(large){
+	.sub-nav {
+
+		//column widths
+		@for $i from 1 through 5 {
+			&.item-c-#{$i} {
+				.sub-nav-item {
+					width: (100%/($i));
+				}
+
+				//column left position
+				@for $j from 1 through $i {
+					.item-c-#{$j}{
+						left: (100%/($i))*($j - 1);
+					}
+				}
+
+			}
+		}
+
+		//row top offsets
+		@for $i from 1 through 7 {
+			
+			&.item-r-#{$i} {
+				height: 57px * $i;
+			}
+
+			.item-r-#{$i}{
+				top: 57px * ($i - 1);
+			}
+		}
+
+		//container heights
+
+
+
+	}
+}

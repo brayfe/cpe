@@ -1,0 +1,40 @@
+.sidebar-content {
+	display: block;
+	overflow: hidden;
+	padding-top: 0px;
+	height: 100%;
+
+	@include respond(small-only) {
+		height: auto !important;
+	}
+}
+
+.sidebar-content-news {
+	@include respond(medium) {
+		margin-left: -5px;
+		margin-right: -10px;
+		padding-right: 10px;
+	}
+}
+
+.sidebar-content,
+.sidebar-content-news {
+	p {
+		color: #474541;
+		font-size: rem-calc(15);
+		line-height: rem-calc(22);
+	}
+
+	.cta-link{
+		font-size: rem-calc(15);
+	}
+
+	.news-headline,
+	.headline-link {
+		color: #474747;
+	}
+
+	.headline-link {
+		font-size: rem-calc(15);
+	}
+}

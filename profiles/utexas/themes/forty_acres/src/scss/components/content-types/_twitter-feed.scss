@@ -1,0 +1,60 @@
+// Based off of SBX build, ITS to revise. 
+.sidebar-twitter-style{
+	background-color: #fff;
+	border: 1px solid $light-grey-border;
+
+	// Position .module-cta at the bottom of the feed and account for space it needs
+	position: relative;
+	padding-bottom: 80px;
+
+	.sidebar-headline h3{
+		padding: 0 15px;
+		font-size: rem-calc(15);
+		line-height: rem-calc(40);
+		border-bottom: 1px solid $light-grey-border;
+		&:before{
+			font-family: 'UT_v3';
+			content: "\70";
+			color: #55acee;
+			font-size: inherit;
+			margin-right: 8px;
+		}
+	}
+	 .module-cta{
+		position: absolute;
+		bottom: 20px;
+		width: 320px;
+		color: #bf5700;
+		display: block;
+		overflow: hidden;
+		text-align: center;
+		border: 1px solid #bf5700;
+		background: white;
+		display: block;
+		left: 50%;
+		margin-left: -160px;
+		font-size: 0.8125rem;
+		line-height: 1.125rem;
+
+		@include respond(medium){
+			width: 200px;
+			margin-left: -100px;
+		}
+	}
+
+	.tweet{
+		background-color: #fff;
+
+		.tweet-author{
+			font-size: rem-calc(15);
+		}
+	}
+
+	.news-module-secondary{
+		box-shadow: none;
+	}
+
+	.tweet + .tweet {
+		border-top: 1px solid #e1ddd2;
+	}
+}

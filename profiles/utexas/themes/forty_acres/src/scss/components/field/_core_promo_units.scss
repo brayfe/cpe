@@ -1,0 +1,196 @@
+.field_utexas_promo_units {
+	.cta-wrapper .cta-link {
+		padding: 0;
+	}
+	.cta-link {
+		margin-top: 0px;
+    color: $burntOrangeAccent;
+	}
+	.post-headline {
+    border-bottom: 2px solid #3c87a3;
+    font-weight: 700;
+    margin: 0 0 20px;
+    padding-bottom: 7px;
+	}
+}
+.utexas-promo-field.utexas-promo-unit {
+  background-color:#f8f8f8;
+  border:1px solid #f3f0e8;
+  padding:10px;
+  margin:0 0 10px 0;
+  @include respond(medium) {
+  	margin-bottom:20px;
+    padding:15px;
+  }
+  @include respond(large) {
+  	padding:20px;
+  }
+}
+.utexas-promo-field .promo-image {
+  float:left;
+  margin:0 10px 5px;
+  @include respond(medium) {
+  	margin:0 15px 0 0;
+  }
+  @include respond(large) {
+  	margin:0 20px 0 0;
+  }
+}
+.utexas-promo-field.utexas-promo-unit.utexas_promo_unit_landscape_image .promo-image {
+  border:1px solid #cbcbcb;
+  height:67.2px;
+  margin-left:0;
+  margin-bottom:0;
+  width:105.6px;
+  @include respond(medium) {
+    width:176px;
+    height:112px;
+  }
+  @include respond(large) {
+    width:220px;
+    height:140px;
+  }
+}
+.utexas-promo-field.utexas-promo-unit.utexas_promo_unit_square_image .promo-image {
+  border:1px solid #cbcbcb;
+  height:67.2px;
+  margin-left:0;
+  margin-bottom:0;
+  width:67.2px;
+  @include respond(medium) {
+    width:112px;
+    height:112px;
+  }
+  @include respond(large) {
+    width:140px;
+    height:140px;
+  }
+}
+.utexas-promo-field.utexas-promo-unit.utexas_promo_unit_portrait_image .promo-image {
+  border:1px solid #cbcbcb;
+  height:90.2px;
+  margin-left:0;
+  margin-bottom:0;
+  width:72px;
+  @include respond(medium) {
+    width:120px;
+    height:150.4px;
+  }
+  @include respond(large) {
+    width:150px;
+    height:188px;
+  }
+}
+.utexas-promo-field.utexas-promo-unit .promo-headline {
+  color:#333f48;
+  font-size:0.9375rem;
+  line-height:1.375rem;
+  margin:0 0 4px;
+  @include respond(medium) {
+  	font-size:1.25rem;
+    line-height:1.625rem;
+    margin:0 0 6px;
+  }
+}
+.utexas-promo-field .promo-copy p {
+  margin:0 0 10px;
+  font-size:inherit;
+  line-height:inherit;
+}
+.utexas-promo-field .promo-copy a {
+	color: $burntOrangeAccent;
+}
+.utexas-promo-field.utexas-promo-unit .promo-copy,
+.utexas-promo-field.utexas-promo-unit .cta-wrapper {
+  font-size:0.9375rem;
+  line-height:1.375rem;
+  margin:5px 0 0 0;
+  @include respond(small-only) {
+  	display:inline;
+  }
+  @include respond(medium) {
+  	display:block;
+    font-size:1rem;
+    margin-top:0;
+    padding-left:190px;
+  }
+  @include respond(large) {
+  	padding-left:240px;
+  }
+}
+.utexas-promo-field.utexas-promo-unit.utexas_promo_unit_landscape_image {
+  .promo-copy, .promo-headline, .cta-wrapper {
+    @include respond(medium) {
+      padding-left: 191px;
+    }
+    @include respond(large) {
+      padding-left: 240px;
+    }
+  }
+}
+.utexas-promo-field.utexas-promo-unit.utexas_promo_unit_square_image {
+  .promo-copy, .promo-headline, .cta-wrapper {
+    @include respond(medium) {
+      padding-left:127px;
+    }
+    @include respond(large) {
+      padding-left:160px;
+    }
+  }
+}
+.utexas-promo-field.utexas-promo-unit.utexas_promo_unit_portrait_image  {
+  .promo-copy, .promo-headline, .cta-wrapper {
+    @include respond(medium) {
+      padding-left:135px;
+    }
+    @include respond(large) {
+      padding-left:170px;
+    }
+  }
+}
+.utexas-promo-field.utexas-promo-unit.utexas_promo_unit_no_image {
+  .promo-copy, .promo-headline, .cta-wrapper {
+    padding-left: 0px;
+  }
+}
+
+.region-content-top-right,
+.sidebar-content .sidebar-module {
+	.field_utexas_promo_units .promo-copy,
+	.field_utexas_promo_units .cta-wrapper,
+	.field_utexas_promo_units .promo-headline {
+	  padding-left: initial !important;
+	}
+	.field_utexas_promo_units .promo-copy,
+	.field_utexas_promo_units .cta-wrapper{
+	  padding-left: initial !important;
+	}
+	.utexas-promo-field.utexas-promo-unit .promo-image {
+	  margin-bottom: 10px;
+	}
+	.utexas-promo-field.utexas-promo-unit .promo-image {
+	    width: 100%!important;
+	    height: auto!important;
+	}
+}
+@media only screen and (min-width: 641px) and (max-width: 800px) {
+	.region-main-content-top-left,
+	.region-main-content-top-right {
+		.field_utexas_promo_units .promo-copy,
+		.field_utexas_promo_units .cta-wrapper,
+		.field_utexas_promo_units .promo-headline {
+			padding-left: initial !important;
+		}
+		.field_utexas_promo_units .promo-copy,
+		.field_utexas_promo_units .cta-wrapper{
+			padding-left: initial !important;
+		}
+		.utexas-promo-field.utexas-promo-unit .promo-image {
+			margin-bottom: 10px;
+		}
+		.utexas-promo-field.utexas-promo-unit .promo-image {
+				width: 100%!important;
+				height: auto!important;
+		}
+	}
+}
