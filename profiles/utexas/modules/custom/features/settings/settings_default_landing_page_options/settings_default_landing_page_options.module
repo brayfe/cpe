@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Settings: Default Landing Page Options feature.
+ */
+
+include_once 'settings_default_landing_page_options.features.inc';
