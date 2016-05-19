@@ -29,6 +29,19 @@ function utexas_admin_permission() {
 }
 
 /**
+ * Implements hook_schema_alter().
+ */
+function utexas_admin_schema_alter(&$schema) {
+  // Make Drupal aware of our custom node column. Node save handles the rest.
+  $schema['node']['fields']['show_date'] = array(
+    'description' => t('Custom publishing option to display date'),
+    'type' => 'int',
+    'not null' => TRUE,
+    'default' => 1,
+  );
+}
+
+/**
  * Implements hook_menu().
  *
  * Defines the stub for the admin configuration form as well as the generic 404
@@ -66,7 +79,6 @@ function utexas_admin_menu() {
     'page callback' => 'utexas_foundation_demo',
     'access arguments' => array('access content overview'),
   );
-
   return $items;
 }
 
@@ -197,6 +209,41 @@ function utexas_admin_element_info_alter(&$type) {
 }
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ *
+ * Adds the "Show last updated date" to all node forms.
+ */
+function utexas_admin_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $current_theme = variable_get('theme_default', 'none');
+  $themes = list_themes();
+  // Are we on Forty Acres or a sub-theme of Forty Acres?
+  if ($current_theme == 'forty_acres' || (isset($themes[$current_theme]->info['base theme']) && $themes[$current_theme]->info['base theme'] == 'forty_acres')) {
+    $node = $form['#node'];
+    $default_value = (isset($node->show_date)) ? $node->show_date : NULL;
+    $form['author']['show_date'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Show last updated date',
+      '#default_value' => $default_value,
+    );
+  }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ *
+ * Add the custom show_date option as a Boolean variable.
+ */
+function utexas_admin_preprocess_page(&$variables) {
+  $variables['show_date'] = FALSE;
+  if (isset($variables['node'])) {
+    $node = $variables['node'];
+    if (isset($node->show_date) && $node->show_date) {
+      $variables['show_date'] = t('Last updated on') . ' ' . date('F j, Y, g:i a', $node->changed);
+    }
+  }
+}
+
+/**
  * Implements filter_process_format().
  *
  * Removes "Filtered HTML for Blocks" from filter formats for non-Blocks.
@@ -251,6 +298,9 @@ function utexas_admin_library_alter(array &$javascript, $module) {
       if ((isset($path[2]) and $path[2] == 'edit') or (isset($path[1]) and $path[1] == 'add')) {
         $node_form = TRUE;
       }
+    }
+    elseif (isset($path[3]) && $path[0] == 'admin' && $path[1] == 'content' && $path[2] == 'events' && in_array($path[3], array('add', 'manage'))) {
+      $node_form = TRUE;
     }
   }
 
@@ -581,10 +631,170 @@ function utexas_admin_retrieve_parent_region($nid, $block_id) {
 }
 
 /**
- * Custom function to re-weight text format filters.
+ * Custom function to update/save CKEditor profiles.
  */
-function reorder_filtered_html_text_filters() {
-  $filters = array(
+function utexas_admin_ckeditor_profile($operation = NULL, $profile = 'Advanced') {
+  // CKEditor settings.
+  $ckeditor_profiles = array(
+    'CKEditor Global Profile' => array(
+      'name' => 'CKEditor Global Profile',
+      'settings' => array(
+        'skin' => 'moono',
+        'ckeditor_path' => '//cdn.ckeditor.com/4.5.4/full-all',
+        'ckeditor_local_path' => '',
+        'ckeditor_plugins_path' => '%b/profiles/utexas/libraries/ckeditor/plugins',
+        'ckeditor_plugins_local_path' => '',
+        'ckfinder_path' => '%m/ckfinder',
+        'ckfinder_local_path' => '',
+        'ckeditor_aggregate' => 'f',
+        'toolbar_wizard' => 't',
+        'loadPlugins' => array(),
+      ),
+      'input_formats' => array(),
+    ),
+    'Advanced' => array(
+      'name' => 'Advanced',
+      'settings' => array(
+        'ss' => 2,
+        'toolbar' => '[[\'Source\'],[\'Cut\',\'Copy\',\'Paste\',\'PasteText\',\'PasteFromWord\',\'-\',\'SpellChecker\',\'Scayt\'],[\'Undo\',\'Redo\',\'Find\',\'Replace\',\'-\',\'SelectAll\'],[\'Media\',\'video_filter\',\'qualtrics_filter\',\'Table\',\'HorizontalRule\',\'SpecialChar\'],[\'Maximize\'],\'/\',[\'Format\'],[\'Bold\',\'Italic\',\'Underline\',\'Strike\',\'-\',\'Subscript\',\'Superscript\',\'-\',\'RemoveFormat\'],[\'NumberedList\',\'BulletedList\',\'-\',\'Outdent\',\'Indent\',\'Blockquote\'],[\'JustifyLeft\',\'JustifyCenter\',\'JustifyRight\',\'JustifyBlock\',\'-\',\'BidiLtr\',\'BidiRtl\'],[\'Link\',\'Unlink\',\'Anchor\']]',
+        'expand' => 't',
+        'default' => 't',
+        'show_toggle' => 't',
+        'uicolor' => 'default',
+        'uicolor_user' => 'default',
+        'width' => '100%',
+        'lang' => 'en',
+        'auto_lang' => 't',
+        'language_direction' => 'default',
+        'allowed_content' => 'f',
+        'extraAllowedContent' => '',
+        'enter_mode' => 'p',
+        'shift_enter_mode' => 'br',
+        'font_format' => 'p;div;pre;address;h1;h2;h3;h4;h5;h6',
+        'custom_formatting' => 'f',
+        'formatting' => array(
+          'custom_formatting_options' => array(
+            'indent' => 'indent',
+            'breakBeforeOpen' => 'breakBeforeOpen',
+            'breakAfterOpen' => 'breakAfterOpen',
+            'breakAfterClose' => 'breakAfterClose',
+            'breakBeforeClose' => 0,
+            'pre_indent' => 0,
+          ),
+        ),
+        'css_mode' => 'none',
+        'css_path' => '',
+        'css_style' => 'theme',
+        'styles_path' => '',
+        'filebrowser' => 'none',
+        'filebrowser_image' => '',
+        'filebrowser_flash' => '',
+        'UserFilesPath' => '%b%f/',
+        'UserFilesAbsolutePath' => '%d%b%f/',
+        'forcePasteAsPlainText' => 'f',
+        'html_entities' => 'f',
+        'scayt_autoStartup' => 'f',
+        'js_conf' => '',
+        'theme_config_js' => 'f',
+        'loadPlugins' => array(
+          'ckeditor_link' => array(
+            'name' => 'drupal_path',
+            'desc' => 'CKEditor Link - A plugin to easily create links to Drupal internal paths',
+            'path' => '%base_path%' . drupal_get_path('module', 'ckeditor_link') . '/plugins/link/',
+          ),
+          'lineutils' => array(
+            'name' => 'lineutils',
+            'desc' => 'Plugin file: lineutils',
+            'path' => '%plugin_dir_extra%lineutils/',
+            'buttons' => FALSE,
+            'default' => 'f',
+          ),
+          'media' => array(
+            'name' => 'media',
+            'desc' => 'Plugin for embedding files using Media CKEditor',
+            'path' => '%base_path%' . drupal_get_path('module', 'media_ckeditor') . '/js/plugins/media/',
+            'buttons' => array(
+              'Media' => array(
+                'icon' => 'images/icon.gif',
+                'label' => 'Add media',
+              ),
+            ),
+            'default' => 'f',
+          ),
+          'qualtrics_filter' => array(
+            'name' => 'qualtrics_filter',
+            'desc' => 'Plugin for inserting embed tags with qualtrics_filter',
+            'path' => '%plugin_dir_extra%qualtrics_filter/',
+            'buttons' => array(
+              'qualtrics_filter' => array('label' => 'qualtrics_filter', 'icon' => 'qualtrics_filter.png'),
+            ),
+            'default' => 'f',
+          ),
+          'video_filter' => array(
+            'name' => 'video_filter',
+            'desc' => 'Plugin for inserting video tags with video_filter',
+            'path' => '/profiles/utexas/modules/contrib/video_filter/editors/ckeditor/',
+            'buttons' => array(
+              'video_filter' => array('label' => 'video_filter', 'icon' => 'video_filter.png'),
+            ),
+            'default' => 'f',
+          ),
+          'widget' => array(
+            'name' => 'widget',
+            'desc' => 'Plugin file: widget',
+            'path' => '%plugin_dir_extra%widget/',
+            'buttons' => FALSE,
+            'default' => 'f',
+          ),
+        ),
+      ),
+      'input_formats' => array(
+        'filtered_html',
+        'filtered_html_for_blocks',
+      ),
+    ),
+  );
+
+  $execute_action = function ($operation, $profile) use ($ckeditor_profiles) {
+    switch ($operation) {
+      case 'save':
+        db_merge('ckeditor_settings')
+        ->key(array('name' => $profile))
+          ->fields(array(
+            'name' => $profile,
+            'settings' => serialize($ckeditor_profiles[$profile]['settings']),
+          ))
+          ->execute();
+        // Define the text formats that can use the CKEditor profile.
+        if (!empty($ckeditor_profiles[$profile]['input_formats'])) {
+          foreach ($ckeditor_profiles[$profile]['input_formats'] as $format) {
+            $text_format = db_merge('ckeditor_input_format')
+              ->key(array('name' => $profile, 'format' => $format))
+              ->fields(array(
+                'name' => $profile,
+                'format' => $format,
+              ))
+            ->execute();
+          }
+        }
+        watchdog('utexas_admin', 'CKEditor profile ' . $profile . ' was saved.', NULL, WATCHDOG_INFO);
+        break;
+
+      default:
+        return $settings;
+    }
+  };
+  $execute_action($operation, $profile);
+}
+
+/**
+ * Custom function to update/save text format filters.
+ */
+function utexas_admin_text_formats($operation) {
+  $allowed_html = array();
+  $allowed_html['filtered_html_for_blocks'] = '<a> <abbr> <address> <article> <aside> <blockquote> <br> <button> <caption> <cite> <code> <del> <details> <dl> <dt> <dd> <div> <em> <figure> <figcaption> <img> <i> <iframe> <input> <hr> <h1> <h2> <h3> <h4> <h5> <h6> <ul> <ol> <li> <mark> <nav> <object> <p> <param> <pre> <sub> <sup> <table> <th> <tr> <td> <thead> <tbody> <tfoot> <script> <section> <span> <source> <strong> <time> <track> <video>';
+  $allowed_html['filtered_html'] = '<a> <abbr> <address> <article> <aside> <blockquote> <br> <button> <caption> <cite> <code> <del> <details> <dl> <dt> <dd> <div> <em> <figure> <figcaption> <img> <i> <input> <hr> <h1> <h2> <h3> <h4> <h5> <h6> <ul> <ol> <li> <mark> <nav> <p> <pre> <sub> <sup> <table> <th> <tr> <td> <thead> <tbody> <tfoot> <section> <span> <source> <strong> <time> <track> <video>';
+  $filter_weights = array(
     'filter_html' => 0,
     'ckeditor_link_filter' => 1,
     'filter_autop' => 2,
@@ -593,16 +803,270 @@ function reorder_filtered_html_text_filters() {
     'filter_url' => 5,
     'tablesaw' => 6,
     'media_filter' => 7,
-    'html_corrector' => 8,
+    'pathologic' => 8,
+    'filter_htmlcorrector' => 9,
   );
+  $filter_settings = array(
+    'filter_html' => array(
+      'filter_html_help' => 1,
+      'filter_html_nofollow' => 0,
+    ),
+    'ckeditor_link_filter' => array(),
+    'filter_autop' => array(),
+    'qualtrics_filter' => array(
+      'qualtrics_filter_height' => 500,
+      'qualtrics_filter_title' => 'Qualtrics form',
+    ),
+    'video_filter' => array(
+      'video_filter_width' => '400',
+      'video_filter_height' => '400',
+      'video_filter_autoplay' => '0',
+      'video_filter_related' => '0',
+      'video_filter_html5' => '1',
+    ),
+    'filter_url' => array(
+      'filter_url_length' => 72,
+    ),
+    'tablesaw' => array(),
+    'media_filter' => array(),
+    'pathologic' => array(),
+    'filter_htmlcorrector' => array(),
+  );
+  $default_filter_settings = array(
+    'cache' => 1,
+    'status' => 1,
+    'weight' => -10,
+  );
+  $types = array(
+    'filtered_html' => array(
+      'name' => 'Filtered HTML',
+      'weight' => -10,
+    ),
+    'filtered_html_for_blocks' => array(
+      'name' => 'Filtered HTML for Blocks',
+      'weight' => -11,
+    ),
+  );
+  foreach ($types as $key => $values) {
+    $formats[$key] = new stdClass();
+    $formats[$key]->format = $key;
+    $formats[$key]->name = $values['name'];
+    $formats[$key]->weight = $values['weight'];
+    foreach ($default_filter_settings as $default => $setting) {
+      $formats[$key]->$default = $setting;
+    }
+    foreach ($filter_weights as $filter => $weight) {
+      $formats[$key]->filters[$filter]['weight'] = $weight;
+      $formats[$key]->filters[$filter]['status'] = 1;
+      $formats[$key]->filters[$filter]['settings'] = $filter_settings[$filter];
+    }
+    $formats[$key]->filters['filter_html']['settings']['allowed_html'] = $allowed_html[$key];
+  }
 
-  foreach ($filters as $name => $value) {
-    $num_updated = db_update('filter')
-      ->fields(array(
-        'weight' => $value,
-      ))
-      ->condition('name', $name)
-      ->condition('status', 1)
-      ->execute();
+  $execute_action = function ($operation) use ($formats, $filter_weights) {
+    switch ($operation) {
+      case 'reorder':
+        foreach ($filter_weights as $name => $value) {
+          $num_updated = db_update('filter')
+            ->fields(array(
+              'weight' => $value,
+            ))
+            ->condition('name', $name)
+            ->condition('status', 1)
+            ->execute();
+        }
+        watchdog('utexas_admin', 'Filter order was updated', NULL, WATCHDOG_INFO);
+        break;
+
+      case 'save':
+        foreach ($formats as $type => $settings) {
+          filter_format_save($settings);
+          watchdog('utexas_admin', 'Filter format ' . $settings->name . ' was saved.', NULL, WATCHDOG_INFO);
+        }
+
+        break;
+
+      default:
+        break;
+    }
+  };
+  $execute_action($operation);
+}
+
+/**
+ * Custom function to display dates.
+ *
+ * @param mixed $input
+ *   A keyed array of start and end Unix timestamps.
+ *
+ * @return string
+ *   A keyed array of start and end formatted dates
+ */
+function utexas_brand_guidelines_date_format($input, $display) {
+  if (!empty($input)) {
+    $search = array(
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+      "am",
+      "pm",
+    );
+    $replace = array(
+      "Jan.",
+      "Feb.",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "Aug.",
+      "Sept.",
+      "Oct.",
+      "Nov.",
+      "Dec.",
+      "a.m.",
+      "p.m.",
+    );
+
+    $start_time = $input['start'];
+    if (!empty($input['end']) or $input['end'] != 0) {
+      $end_time = $input['end'];
+    }
+    else {
+      $end_time = $start_time;
+    }
+    if ($display == 'utexas_days') {
+      if (date('F j Y', $start_time) == date('F j Y', $end_time)) {
+        // The Y-M-D is identical.
+        $days['start'] = date('l F j', $start_time);
+      }
+      elseif (date('F Y', $start_time) == date('F Y', $end_time)) {
+        // The Y-M is identical, but different D.
+        $days['start'] = date('F j ', $start_time);
+        $days['end'] = date('j', $end_time);
+      }
+      elseif ((date('F j', $start_time) == date('F j', $end_time))) {
+        // The M-D is identical, but different Y.
+        $days['start'] = date('F j, Y', $start_time);
+        $days['end'] = date('Y', $end_time);
+      }
+      elseif ((date('j', $start_time) == date('j', $end_time))) {
+        // The D is identical, but different M.
+        $days['start'] = date('F j', $start_time);
+        $days['end'] = date('F j', $end_time);
+      }
+      else {
+        // All three are different.
+        $days['start'] = date('F j, Y', $start_time);
+        $days['end'] = date('F j, Y', $end_time);
+      }
+      $results = $days;
+    }
+    if ($display == 'utexas_times') {
+      $results = $input;
+      $start_time_minutes = (date('i', $start_time) == '00') ? '' : date(':i', $start_time);
+      $end_time_minutes = (date('i', $end_time) == '00') ? '' : date(':i', $end_time);
+      // If same start/end meridians and different start/end time, remove
+      // starting meridian.
+      $start_time_meridian = (date('a', $start_time) == date('a', $end_time) && date('gia', $start_time) != date('gia', $end_time)) ? '' : date('a', $start_time);
+      $end_time_meridian = date('a', $end_time);
+
+      $start_time_hour = date('g', $start_time);
+      $end_time_hour = date('g', $end_time);
+      // Set preformatted start and end times based on.
+      $times['start'] = $start_time_hour . $start_time_minutes . ' ' . $start_time_meridian . ' ';
+      // Empty end time if start == end.
+      $times['end'] = (date('gia', $start_time) == date('gia', $end_time)) ? $times['end'] = '' : $times['end'] = $end_time_hour . $end_time_minutes . ' ' . $end_time_meridian;
+      // Replace 12:00 am with Midnight & 12:00 pm with Noon.
+      switch (date('H:i', $start_time)) {
+        case '00:00':
+          $times['start'] = 'Midnight';
+          break;
+
+        case '12:00':
+          $times['start'] = 'Noon';
+          break;
+      }
+      switch (date('H:i', $end_time)) {
+        case '00:00':
+          $times['end'] = 'Midnight';
+          break;
+
+        case '12:00':
+          $times['end'] = 'Noon';
+          break;
+      }
+      // Add "to" separator if end time has been defined (see $times['end']).
+      if ($times['end'] != '') {
+        $times['end'] = ' to ' . $times['end'];
+      }
+      $results = ($times['start'] == 'Midnight' || $times['start'] == $times['end']) ? array('start' => 'All Day Event', 'end' => '') : $times;
+    }
+  }
+  $results = str_replace($search, $replace, $results);
+  return $results;
+}
+
+class UtexasLorem {
+  const TYPE_WORD = 1;
+  const TYPE_CHAR = 2;
+  const TYPE_PARAGRAPH = 3;
+  const TYPE_PLAIN = 'plain';
+  const TYPE_HTML = 'html';
+  static private $plain = 'Lorem ipsum dolor sit amet consectetur adipiscing elit praeclare hoc quidem tecum optime deinde etiam mediocri amico duo reges constructio interrete haec para/doca illi nos admirabilia dicamus praeteritis inquit gaudeo hoc simile tandem est quis enim redargueret';
+  static private $html = '<strong>Lorem ipsum dolor sit amet</strong> consectetur adipiscing elit. Praeclare hoc quidem tecum optime deinde etiam mediocri amico. Duo reges <a href="#">constructio interrete Haec</a> para/doca illi nos admirabilia dicamus Praeteritis inquit gaudeo Hoc simile tandem est quis enim redargueret.';
+  /**
+   * Generate random lorem ipsum text.
+   */
+  public static function create($style = self::TYPE_PLAIN, $count = 10, $type = self::TYPE_WORD, $end = '...') {
+    $out = '';
+    $lorem = ($style == self::TYPE_PLAIN) ? self::$plain : self::$html;
+
+    switch ($type) {
+      case self::TYPE_WORD:
+        $words = explode(' ', $lorem);
+        shuffle($words);
+        $i = 0;
+        foreach ($words as $word) {
+          if ($i == 0) {
+            $word = ucfirst($word);
+          }
+          if ($i == $count) {
+            break;
+          }
+          $out .= ' ' . $word;
+          $i++;
+        }
+        break;
+
+      case self::TYPE_CHAR:
+        $shuffled = str_shuffle(str_replace(' ', '', $lorem));
+        for ($i = 1; $i <= $count; $i++) {
+          $out .= $shuffled[$i];
+        }
+        break;
+
+      case self::TYPE_PARAGRAPH:
+        for ($i = 0; $i < $count; $i++) {
+          if ($style == self::TYPE_HTML) {
+            $out .= '<p>' . $lorem . '</p>';
+          }
+          else {
+            $out .= $lorem;
+          }
+        }
+        break;
+
+    }
+    return $out . $end;
   }
 }

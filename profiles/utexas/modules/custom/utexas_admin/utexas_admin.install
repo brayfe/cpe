@@ -32,3 +32,43 @@ function utexas_admin_requirements($phase) {
 
   return $requirements;
 }
+
+/**
+ * Implements hook_install().
+ */
+function utexas_admin_install() {
+  // Set the initial value for the schema version so we can run updates after
+  // install.
+  drupal_set_installed_schema_version('utexas_admin', 7101);
+
+  // Add the "show_date" field to the node table.
+  db_add_field('node', 'show_date', array(
+    'type' => 'int',
+    'not null' => TRUE,
+    'default' => 0,
+    'description' => 'Custom publishing option to display date',
+  ));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add the "show_date" field to the node table.
+ */
+function utexas_admin_update_7101() {
+  db_add_field('node', 'show_date', array(
+    'type' => 'int',
+    'not null' => TRUE,
+    'default' => 0,
+    'description' => 'Custom publishing option to display date',
+  ));
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Remove the "show_date" field from the node table.
+ */
+function utexas_admin_uninstall() {
+  db_drop_field('node', 'show_date');
+}
