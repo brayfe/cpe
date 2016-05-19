@@ -31,21 +31,6 @@ function utexas_configure() {
   // Run the Pantheon configuration tasks.
   include_once DRUPAL_ROOT . '/profiles/pantheon/pantheon.profile';
   pantheon_configure();
-
-  // Run the Drupal Kit configuration tasks.
-  variable_set('cache', 1);
-  variable_set('block_cache', 1);
-  variable_set('cache_lifetime', '0');
-  variable_set('page_cache_maximum_age', '900');
-  variable_set('page_compression', 0);
-  variable_set('preprocess_css', 1);
-  variable_set('preprocess_js', 1);
-  $search_active_modules = array(
-    'user' => 'user',
-    'node' => 0,
-  );
-  variable_set('search_active_modules', $search_active_modules);
-
 }
 
 /**
@@ -54,6 +39,12 @@ function utexas_configure() {
 function utexas_final_tasks() {
   // Set the text formats *after* default content has been created.
   utexas_admin_text_formats('save');
+
+  // Ensure that the administrator account has all available permissions
+  // except for Full HTML text format.
+  $admin_role = user_role_load_by_name('administrator');
+  user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
+  user_role_revoke_permissions($admin_role->rid, array('use text format full_html'));
 
   features_rebuild();
   features_revert();
@@ -102,12 +93,7 @@ function install_utexas_preferences() {
 
   utexas_remove_message('clone', 'error');
   utexas_remove_message('context', 'error');
-
-  // Ensure that the administrator account has all available permissions
-  // except for Full HTML text format.
-  $admin_role = user_role_load_by_name('administrator');
-  user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
-  user_role_revoke_permissions($admin_role->rid, array('use text format full_html'));
+  utexas_remove_message('Pantheon defaults');
 
 }
 
@@ -245,6 +231,7 @@ function utexas_form_install_configure_form_alter(&$form, $form_state) {
   utexas_remove_message('Thank you for installing the Metatag module');
   utexas_remove_message('Tablesaw filter was enabled');
   utexas_remove_message('To use menu blocks');
+  utexas_remove_message('Security Review');
 
   // Do not enable the Update module on QuickSites.
   hide($form['update_notifications']);
@@ -255,6 +242,8 @@ function utexas_form_install_configure_form_alter(&$form, $form_state) {
   hide($form['server_settings']);
   $form['server_settings']['date_default_timezone']['#default_value'] = 'America/Chicago';
   unset($form['server_settings']['date_default_timezone']['#attributes']);
+
+  $form['server_settings']['clean_url']['#default_value'] = '1';
 }
 
 /**
