@@ -733,7 +733,7 @@ function utexas_admin_ckeditor_profile($operation = NULL, $profile = 'Advanced')
           'video_filter' => array(
             'name' => 'video_filter',
             'desc' => 'Plugin for inserting video tags with video_filter',
-            'path' => '/profiles/utexas/modules/contrib/video_filter/editors/ckeditor/',
+            'path' => '%base_path%profiles/utexas/modules/contrib/video_filter/editors/ckeditor/',
             'buttons' => array(
               'video_filter' => array('label' => 'video_filter', 'icon' => 'video_filter.png'),
             ),
@@ -835,26 +835,25 @@ function utexas_admin_text_formats($operation) {
   $default_filter_settings = array(
     'cache' => 1,
     'status' => 1,
-    'weight' => -10,
   );
   $types = array(
     'filtered_html' => array(
       'name' => 'Filtered HTML',
-      'weight' => -10,
+      'weight' => -9,
     ),
     'filtered_html_for_blocks' => array(
       'name' => 'Filtered HTML for Blocks',
-      'weight' => -11,
+      'weight' => -10,
     ),
   );
   foreach ($types as $key => $values) {
     $formats[$key] = new stdClass();
     $formats[$key]->format = $key;
     $formats[$key]->name = $values['name'];
-    $formats[$key]->weight = $values['weight'];
     foreach ($default_filter_settings as $default => $setting) {
       $formats[$key]->$default = $setting;
     }
+    $formats[$key]->weight = $values['weight'];
     foreach ($filter_weights as $filter => $weight) {
       $formats[$key]->filters[$filter]['weight'] = $weight;
       $formats[$key]->filters[$filter]['status'] = 1;
