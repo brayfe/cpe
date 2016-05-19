@@ -1,0 +1,96 @@
+default:
+  suites:
+    default:
+      contexts:
+        - FeatureContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\MessageContext
+        - Drupal\DrupalExtension\Context\DrushContext
+        - Drupal\DrupalExtension\Context\MarkupContext
+  extensions:
+    Behat\MinkExtension:
+      goutte: ~
+      javascript_session: selenium2
+      files_path: %paths.base%/fixtures
+      browser_name: 'chrome'
+    Drupal\DrupalExtension:
+      blackbox: ~
+      api_driver: 'drupal'
+      region_map:
+        additional_info: ".additional-info"
+        block_menu_block_1: "#block-menu-block-1"
+        branding: "#branding"
+        caption_copy: '.caption-copy'
+        content: ".content"
+        content_top_left: "#context-block-region-content_top_left"
+        content_top_right: "#context-block-region-content_top_right"
+        main_content_top_right: "#context-block-region-main_content_top_right"
+        context_editor: ".context-editor"
+        context_layout: "#context-block-region-content_top_right"
+        edit_actions: "#edit-actions"
+        edit_count: "#edit-count"
+        edit_field_utexas_background_accent: "#edit-field-utexas-background-accent"
+        featured_highlight_widget: "#edit-field-utexas-featured-highlight"
+        field_contact_info: ".field_contact_info"
+        field_faculty_title: ".field_faculty_title"
+        field_flex_content_area: "#field-utexas-flex-content-area-a-values"
+        field_name_body: ".field.body"
+        field_resource: "#field-utexas-resource-values"
+        field_utexas_flex_content_area: ".field_utexas_flex_content_area_a"
+        field_utexas_member_designation: ".field_utexas_member_designation"
+        field_utexas_photo_content_area: ".field_utexas_photo_content_area"
+        field_utexas_promo_list: ".field_utexas_promo_list"
+        field_utexas_promo_units: ".field_utexas_promo_units"
+        field_utexas_promo_units_values: "#field-utexas-promo-units-values"
+        field_utexas_promo_list_values: "#edit-field-utexas-promo-list"
+        field_utexas_resource: ".field_utexas_resource"
+        form_item_description: ".form-item-description"
+        form_item_name: ".form-item-name"
+        form_item_secondary_logo: ".form-item-secondary-logo"
+        form_item_title: ".form-item-title"
+        form_item_upload: "#form-item-upload"
+        full_page_content: "#ut-page-content"
+        header: ".UT-header"
+        highlight_date: ".highlight-date"
+        hero_caption: ".hero-caption"
+        hero_callout: ".hero-callout"
+        highlight_headline: ".highlight-headline"
+        highlight_text: ".highlight-text"
+        image_link: ".utexas-image-link"
+        image_links_edit: "#edit-field-utexas-image-link-a-und-0-link"
+        leadership_entity_table: "#draggableviews-table-team-members-page"
+        main_content_context_region: "#context-block-region-content"
+        main_content: "#context-block-region-content"
+        media_library: "#media-browser-tabset"
+        page: "#page"
+        page_title: ".page-title"
+        photo_content_area: "#edit-field-utexas-photo-content-area"
+        primary_tabs: ".tabs.primary"
+        promo_headline: ".promo-headline"
+        quick_links_block: ".field_utexas_quick_links"
+        sidebar_content: '.sidebar-content'
+        social_links_block: ".field_utexas_social_links"
+        subnav: ".subnav"
+        templates: "#edit-template-wrapper"
+        theme_default: ".theme-default"
+        toolbar: "#toolbar"
+        toolbar_drawer: '.toolbar-drawer'
+        top_left_region: '.region-main-content-top-left'
+        twitter_widget_block: ".field.field_utexas_twitter_widget"
+        utexas_member_bio: ".field_utexas_member_bio"
+        ui_dialog_buttonset: ".ui-dialog-buttonset"
+        utexas_newsreel_block: ".field.field_utexas_newsreel"
+        utexas_promo_field: ".utexas-promo-field"
+        wysiwyg_a_block: ".field_wysiwyg_a"
+        vertical_tabs: ".vertical-tabs"
+      text:
+        log_out: "Log out"
+        log_in: "Log in"
+      selectors:
+        message_selector: '.messages'
+        warning_message_selector: '.messages.warning'
+        error_message_selector: '.messages.error'
+        success_message_selector: '.messages.status'
+imports:
+  - behat.phantom.yml

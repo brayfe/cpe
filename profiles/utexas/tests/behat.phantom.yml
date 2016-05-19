@@ -1,0 +1,15 @@
+phantomjs:
+  suites:
+    default:
+      contexts:
+        - FeatureContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\MessageContext
+        - Drupal\DrupalExtension\Context\DrushContext
+        - Drupal\DrupalExtension\Context\MarkupContext 
+  extensions:
+    Behat\MinkExtension:
+      goutte: ~
+      selenium2:
+        wd_host: "http://127.0.0.1:8643/wd/hub"
