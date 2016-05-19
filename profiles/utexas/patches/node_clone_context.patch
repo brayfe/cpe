@@ -1,0 +1,14 @@
+diff --git a/profiles/utexas/modules/contrib/node_clone/clone.pages.inc b/profiles/utexas/modules/contrib/node_clone/clone.pages.inc
+index 84f39a0..73c73c2 100644
+--- a/profiles/utexas/modules/contrib/node_clone/clone.pages.inc
++++ b/profiles/utexas/modules/contrib/node_clone/clone.pages.inc
+@@ -182,6 +182,9 @@ function clone_node_save($nid, $account = NULL) {
+       if (module_exists('rules')) {
+         rules_invoke_event('clone_node', $node, $original_node);
+       }
++      if (module_exists('utexas_admin')) {
++        utexas_admin_clone_node_complete($node->nid, $original_node->nid);
++      }
+       return $node->nid;
+     }
+   }

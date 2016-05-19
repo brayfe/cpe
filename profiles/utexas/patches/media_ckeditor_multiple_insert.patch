@@ -1,0 +1,29 @@
+diff --git a/profiles/utexas/modules/contrib/media_ckeditor/js/plugins/media/plugin.js b/profiles/utexas/modules/contrib/media_ckeditor/js/plugins/media/plugin.js
+index 37fd3b9..4d5c396 100644
+--- a/profiles/utexas/modules/contrib/media_ckeditor/js/plugins/media/plugin.js
++++ b/profiles/utexas/modules/contrib/media_ckeditor/js/plugins/media/plugin.js
+@@ -83,20 +83,20 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
+         CKEDITOR.dtd.$object['mediawrapper'] = 1;
+       }
+       function prepareDataForWysiwygMode(data) {
+-        data = Drupal.media.filter.replaceTokenWithPlaceholder(data);
++/*        data = Drupal.media.filter.replaceTokenWithPlaceholder(data);
+         // Legacy media wrapper.
+         mediaPluginDefinition.mediaLegacyWrappers = (data.indexOf("<!--MEDIA-WRAPPER-START-") !== -1);
+-        data = data.replace(/<!--MEDIA-WRAPPER-START-(\d+)-->(.*?)<!--MEDIA-WRAPPER-END-\d+-->/gi, '<mediawrapper data="$1">$2</mediawrapper>');
++        data = data.replace(/<!--MEDIA-WRAPPER-START-(\d+)-->(.*?)<!--MEDIA-WRAPPER-END-\d+-->/gi, '<mediawrapper data="$1">$2</mediawrapper>');*/
+         return data;
+       }
+       function prepareDataForSourceMode(data) {
+-        var replacement = '$2';
++/*        var replacement = '$2';
+         // Legacy wrapper
+         if (mediaPluginDefinition.mediaLegacyWrappers) {
+           replacement = '<!--MEDIA-WRAPPER-START-$1-->$2<!--MEDIA-WRAPPER-END-$1-->';
+         }
+         data = data.replace(/<mediawrapper data="(.*)">(.*?)<\/mediawrapper>/gi, replacement);
+-        data = Drupal.media.filter.replacePlaceholderWithToken(data);
++        data = Drupal.media.filter.replacePlaceholderWithToken(data);*/
+         return data;
+       }
+ 
