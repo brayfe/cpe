@@ -72,7 +72,7 @@
           <p>&nbsp;</p>
           <p>&#91;video:&#91;https&#93;&#47;&#47;youtube&#91;dot&#93;com/watch?v=UMQTQhdizxI &#93;</p>
 
-<p">[video:https://www.youtube.com/watch?v=UMQTQhdizxI]</p>
+<p>[video:https://www.youtube.com/watch?v=UMQTQhdizxI]</p>
   ',
           'format' => 'filtered_html',
           'safe_value' => '<p>"This page demonstrates how to embed videos within WYSIWYG fields. This first example is a form with the video filter default options, accomplished with the following shortcode:</p>
