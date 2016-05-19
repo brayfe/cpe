@@ -1,0 +1,160 @@
+#edit-field-template {
+  display: none;
+}
+
+.node-page-form .form-text,
+.node-page-form .vertical-tabs .form-type-textfield input,
+.node-home_features-form .form-text,
+.node-home_features-form .vertical-tabs .form-type-textfield input {
+  box-sizing: content-box;
+  height: 17px;
+  padding: 5px;
+  width: 500px;
+}
+.node-page-form .form-text.form-autocomplete,
+.node-page-form .vertical-tabs .form-type-textfield input.form-autocomplete,
+.node-home_features-form .form-text.form-autocomplete,
+.node-home_features-form .vertical-tabs .form-type-textfield input.form-autocomplete {
+  background-position: 99% 7px;
+  margin: 0;
+  padding-right: 25px;
+}
+.node-page-form .form-text.form-autocomplete.throbbing,
+.node-page-form .vertical-tabs .form-type-textfield input.form-autocomplete.throbbing,
+.node-home_features-form .form-text.form-autocomplete.throbbing,
+.node-home_features-form .vertical-tabs .form-type-textfield input.form-autocomplete.throbbing {
+  background-position: 99% -13px;
+}
+.node-page-form .form-text.form-autocomplete,
+.node-home_features-form .form-text.form-autocomplete {
+  background-position: 99% 7px;
+  margin: 0;
+  width: 480px;
+}
+.node-page-form .form-text.form-autocomplete.throbbing,
+.node-home_features-form .form-text.form-autocomplete.throbbing {
+  background-position: 99% -13px;
+}
+.node-page-form .vertical-tabs .field-multiple-table .form-type-textfield input,
+.node-home_features-form .vertical-tabs .field-multiple-table .form-type-textfield input {
+  width: auto;
+}
+.node-page-form .form-file,
+.node-home_features-form .form-file {
+  margin-right: 20px;
+}
+.node-page-form .form-select,
+.node-home_features-form .form-select {
+  height: 29px;
+}
+.node-page-form .no-wysiwyg .ckeditor_links,
+.node-home_features-form .no-wysiwyg .ckeditor_links {
+  display: none !important;
+}
+.node-page-form .text-format-wrapper,
+.node-home_features-form .text-format-wrapper {
+  position: relative;
+}
+.node-page-form .text-format-wrapper .ckeditor_links,
+.node-home_features-form .text-format-wrapper .ckeditor_links {
+  position: absolute;
+  right: 5px;
+  z-index: 50;
+}
+.template-selector .template-option {
+  background: #f2f2f2;
+  border: 1px solid #e0e0d8;
+  float: left;
+  margin: 0.5em;
+  min-height: 210px;
+  width: 20%;
+  padding: 1em;
+}
+.template-selector .template-option:hover {
+  background: #ebebe6;
+  cursor: pointer;
+}
+.template-selector .template-option.selected {
+  background: #f8fff0;
+  border-color: #bbee77;
+  cursor: default;
+}
+.template-selector .template-option h2,
+.template-selector .template-option h3,
+.template-selector .template-option .none {
+  margin: 0;
+}
+.template-selector .template-option h2 {
+  font-size: 1em;
+  min-height: 4em;
+}
+.template-selector .template-option h3,
+.template-selector .template-option .template-description,
+.template-selector .template-option .template-field-list,
+.template-selector .template-option .none {
+  font-size: 0.825em;
+}
+.template-selector .template-option .none {
+  line-height: 1.25em;
+}
+.template-selector .template-option .template-field-list {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #eee;
+  list-style-type: none;
+  margin: 0;
+  padding: 10px;
+  position: absolute;
+  z-index: 5000;
+}
+.template-selector .template-option .template-field-list li {
+  margin: 0;
+  padding: 0;
+}
+.template-selector .template-option .meta-top {
+  max-height: 150px;
+  overflow-y: hidden;
+}
+.template-selector .template-option .meta-top .image {
+  float: left;
+}
+.template-selector .template-option .meta-top .template-description {
+  margin-left: 110px;
+}
+.template-selector .template-option .meta-bottom {
+  clear: both;
+  margin-top: 5px;
+}
+.template-selector .template-option .collapsed {
+  display: none;
+}
+.template-selector .template-option .field-expander {
+  position: relative;
+  margin-right: 12px;
+}
+.template-selector .template-option .field-expander:after {
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid #838369;
+  content: '';
+  display: block;
+  height: 0;
+  position: absolute;
+  right: -10px;
+  top: 3px;
+  width: 0;
+  -webkit-transition: -webkit-transform .2s ease-in;
+  -moz-transition: -moz-transform .2s ease-in;
+  -ms-transition: -ms-transform .2s ease-in;
+  -o-transition: -o-transform .2s ease-in;
+  transition: transform .2s ease-in;
+}
+.template-selector .template-option .field-expander.expanded:after {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+form .field-multiple-table th.field-label {
+  padding-left: 6px;
+}

@@ -1,0 +1,608 @@
+<?php
+/**
+ * @file
+ * Module definition for the UTexas Admin module.
+ *
+ * Creates a UTexas placeholder menu for administration tasks, and replaces the
+ * Javascript for Admin and other themes.
+ */
+
+/**
+ * UTexas administration permission.
+ */
+define('UTEXAS_ADMIN_ADMINISTER_UTEXAS_SETTINGS', 'administer utexas settings');
+
+/**
+ * Implements hook_permission().
+ */
+function utexas_admin_permission() {
+  return array(
+    UTEXAS_ADMIN_ADMINISTER_UTEXAS_SETTINGS => array(
+      'title' => t('Administer UT Core settings'),
+      'description' => t('A generic administrative permission for most site configuration'),
+      'restrict access' => TRUE,
+    ),
+    'access all themes' => array(
+      'title' => t('Access settings for all themes in the site.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * Defines the stub for the admin configuration form as well as the generic 404
+ * and 403 pages.
+ */
+function utexas_admin_menu() {
+  // Menu items.
+  $items = array();
+
+  // Admin page.
+  $items['admin/config/utexas'] = array(
+    'title' => 'University of Texas',
+    'description' => 'University of Texas',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'position' => 'left',
+    'weight' => -50,
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  // Default 404 & 403 pages.
+  $items['page/404'] = array(
+    'title' => 'Page Not Found',
+    'page callback' => 'utexas_admin_404_page',
+    'access callback' => TRUE,
+  );
+  $items['page/403'] = array(
+    'title' => 'Access Denied',
+    'page callback' => 'utexas_admin_403_page',
+    'access callback' => TRUE,
+  );
+  $items['demo/foundation-extra-libraries'] = array(
+    'title' => 'Foundation Extra Elements',
+    'page callback' => 'utexas_foundation_demo',
+    'access arguments' => array('access content overview'),
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback for demo/foundation-extra-libraries.
+ */
+function utexas_foundation_demo() {
+  $output = '';
+  return $output;
+}
+
+/**
+ * Implements hook_init().
+ */
+function utexas_admin_init() {
+  $current_path = current_path();
+  // Limit access to theme settings overview based on permission. Redirect to
+  // active theme settings page.
+  if ($current_path == 'admin/appearance' and !user_access('access all themes')) {
+    $theme_default = variable_get('theme_default', 'forty_acres');
+    drupal_goto('admin/appearance/settings/' . $theme_default);
+  }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function utexas_admin_menu_alter(&$items) {
+  $available_themes = array_keys(list_themes());
+  $theme_default = variable_get('theme_default', 'forty_acres');
+  foreach ($available_themes as $theme) {
+    if ($theme != $theme_default) {
+      $items['admin/appearance/settings/' . $theme]['access callback'] = 'user_access';
+      $items['admin/appearance/settings/' . $theme]['access arguments'] = array('access all themes');
+    }
+  }
+  $items['admin/appearance/settings']['access callback'] = 'user_access';
+  $items['admin/appearance/settings']['access arguments'] = array('access all themes');
+}
+
+/**
+ * Page callback for 404 page.
+ *
+ * Defaults to nothing (page content is built out at the theme level).
+ */
+function utexas_admin_404_page() {
+  drupal_set_title(t('Page Not Found'));
+  return array();
+}
+
+/**
+ * Page callback for 403 page.
+ *
+ * Defaults to nothing (page content is built out at the theme level).
+ */
+function utexas_admin_403_page() {
+  drupal_set_title(t('Access Denied'));
+  return array();
+}
+
+/**
+ * Custom function to convert a UNIX timestamp to AP style dates.
+ */
+function utexas_admin_ap_style_date($time = 0) {
+  // Start the output string.
+  $output = '';
+
+  $month_abbrs = array(
+    1 => 'Jan.',
+    2 => 'Feb.',
+    3 => 'March',
+    4 => 'April',
+    5 => 'May',
+    6 => 'June',
+    7 => 'July',
+    8 => 'Aug.',
+    9 => 'Sept.',
+    10 => 'Oct.',
+    11 => 'Nov.',
+    12 => 'Dec.',
+  );
+  // Will return something like "Jan. 5, 2015" or "March 8, 1980".
+  $output .= $month_abbrs[format_date($time, 'custom', 'n')] . format_date($time, 'custom', ' j, Y');
+
+  // Return the computed string.
+  return $output;
+}
+
+/**
+ * Implements hook_library().
+ *
+ * Used to add a new library for fixing multiple AJAX calls on a page.
+ */
+function utexas_admin_library() {
+  $libraries = array();
+
+  $libraries['jquery_update.ajax.fix'] = array(
+    'title' => 'jQuery Update Version Fix',
+    'js' => array(
+      drupal_get_path('module', 'utexas_admin') . '/js/jquery_update.js' => array(
+        'group' => JS_LIBRARY,
+        'weight' => 3,
+      ),
+    ),
+    'version' => '0.0.1',
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ *
+ * Used to add a process function to text_format fields.
+ */
+function utexas_admin_element_info_alter(&$type) {
+  if (isset($type['form']['#action'])) {
+    // Determine whether we are on a block page.
+    $block = strpos($type['form']['#action'], 'admin/structure/block');
+    if ($block === FALSE) {
+      // Modify text formats for non Blocks.
+      $replacement = array('filter_process_format', 'utexas_admin_filter_process_format');
+      // This callback must run immediately after filter_process_format().
+      $filter_process_format_location = array_search('filter_process_format', $type['text_format']['#process']);
+      array_splice($type['text_format']['#process'], $filter_process_format_location, 1, $replacement);
+    }
+  }
+}
+
+/**
+ * Implements filter_process_format().
+ *
+ * Removes "Filtered HTML for Blocks" from filter formats for non-Blocks.
+ */
+function utexas_admin_filter_process_format($element) {
+  global $user;
+
+  // Get a list of formats that the current user has access to.
+  $formats = filter_formats($user);
+  foreach ($formats as $format) {
+    $options[$format->format] = $format->name;
+    $element['format']['guidelines'][$format->format] = array(
+      '#theme' => 'filter_guidelines',
+      '#format' => $format,
+    );
+  }
+  if (isset($options['filtered_html_for_blocks'])) {
+    // Remove 'Filtered HTML for Blocks', if present.
+    unset($options['filtered_html_for_blocks']);
+  }
+  // Set the default value to the user's Drupal-ordered text format.
+  $user_formats = array_keys($options);
+  $element['#format'] = $user_formats[0];
+
+  $element['format']['format'] = array(
+    '#type' => 'select',
+    '#title' => t('Text format'),
+    '#options' => $options,
+    '#default_value' => $element['#format'],
+    '#access' => count($formats) > 1,
+    '#weight' => 10,
+    '#attributes' => array('class' => array('filter-list')),
+    '#parents' => array_merge($element['#parents'], array('format')),
+  );
+
+  return $element;
+}
+
+/**
+ * Implements hook_library_alter().
+ *
+ * Update non-admin jQuery modules to the latest version of jQuery (required
+ * by Foundation at the theme layer).
+ */
+function utexas_admin_library_alter(array &$javascript, $module) {
+  // Update this version to update the front-end.
+  $version = '1.10.2';
+  // Set jQuery version for node form pages.
+  $node_form = FALSE;
+  if ($path = arg()) {
+    if ($path[0] == 'node') {
+      if ((isset($path[2]) and $path[2] == 'edit') or (isset($path[1]) and $path[1] == 'add')) {
+        $node_form = TRUE;
+      }
+    }
+  }
+
+  // Only apply updates on non-admin and non-ajax paths.
+  if (!(path_is_admin(current_path()) or current_path() == 'system/ajax') or $node_form) {
+    $path = drupal_get_path('module', 'utexas_admin') . '/js';
+
+    if ($node_form) {
+      // Include jQuery in the update.
+      $names['jquery'] = 'jquery';
+    }
+
+    if ($module === 'system') {
+      // Always add a new jquery_version array to ajaxPageState.
+      // This is what we used to determine which version to use
+      // for any ajax callback.
+      $javascript['drupal.ajax']['js'][] = array(
+        'data' => array('ajaxPageState' => array('jquery_version' => $version)),
+        'type' => 'setting',
+      );
+      $javascript['drupal.ajax']['dependencies'][] = array('utexas_admin', 'jquery_update.ajax.fix');
+      $javascript['jquery']['js']['misc/jquery.js']['data'] = 'https://ajax.googleapis.com/ajax/libs/jquery/' . $version . '/jquery.min.js';
+      $javascript['jquery']['js']['misc/jquery.js']['type'] = 'external';
+      utexas_admin_jquery_backup($javascript, $path);
+
+      // Replace jQuery Form plugin.
+      $javascript['jquery.form']['js']['misc/jquery.form.js']['data'] = $path . '/replace/jquery.form.min.js';
+      $javascript['jquery.form']['version'] = '2.69';
+
+      // Replace files for Jquery 1.9 and up.
+      if (version_compare($version, '1.9', '>=')) {
+        $javascript['jquery.bbq']['js']['misc/jquery.ba-bbq.js']['data'] = $path . '/replace/1.9/jquery.ba-bbq.min.js';
+      }
+
+      // Update jQuery UI to match local changes.
+      // Add new components.
+      $javascript['ui.menu'] = array(
+        'title' => 'jQuery UI: Menu',
+        'website' => 'http://jqueryui.com/demos/menu/',
+        'version' => '1.10.2',
+        'js' => array('misc/ui/jquery.ui.menu.min.js' => array()),
+        'css' => array('misc/ui/jquery.ui.menu.css' => array()),
+        'dependencies' => array(
+          array(
+            'system',
+            'ui.widget',
+          ),
+          array(
+            'system',
+            'ui.position',
+          ),
+        ),
+      );
+      $javascript['ui.spinner'] = array(
+        'title' => 'jQuery UI: Spinner',
+        'website' => 'http://jqueryui.com/demos/spinner/',
+        'version' => '1.10.2',
+        'js' => array('misc/ui/jquery.ui.spinner.min.js' => array()),
+        'css' => array('misc/ui/jquery.ui.spinner.css' => array()),
+        'dependencies' => array(
+          array(
+            'system',
+            'ui.widget',
+          ),
+          array(
+            'system',
+            'ui.button',
+          ),
+        ),
+      );
+      $javascript['ui.tooltip'] = array(
+        'title' => 'jQuery UI: Spinner',
+        'website' => 'http://jqueryui.com/demos/tooltip/',
+        'version' => '1.10.2',
+        'js' => array('misc/ui/jquery.ui.tooltip.min.js' => array()),
+        'css' => array('misc/ui/jquery.ui.tooltip.css' => array()),
+        'dependencies' => array(
+          array(
+            'system',
+            'ui.widget',
+          ),
+          array(
+            'system',
+            'ui.position',
+          ),
+        ),
+      );
+
+      // Fix dependencies.
+      $javascript['ui.autocomplete']['dependencies'][] = array('system', 'ui.menu');
+      // Replace all CSS files.
+      $names = drupal_map_assoc(array(
+        'ui.accordion', 'ui.autocomplete', 'ui.button', 'ui.datepicker', 'ui.dialog',
+        'ui.progressbar', 'ui.resizable', 'ui.selectable', 'ui.slider', 'ui.tabs',
+        'ui.menu', 'ui.spinner', 'ui.tooltip',
+      ));
+      $names['ui'] = 'ui.core';
+      $csspath = $path . '/replace/ui/themes/base/minified/';
+      foreach ($names as $name => $file) {
+        $javascript[$name]['css']["misc/ui/jquery.$file.css"]['data'] = $csspath . 'jquery.' . $file . '.min.css';
+      }
+      // Make sure ui.theme is replaced as well.
+      $javascript['ui']['css']['misc/ui/jquery.ui.theme.css']['data'] = $csspath . 'jquery.ui.theme.min.css';
+
+      // Replace jQuery UI's JavaScript, beginning by defining the mapping.
+      $names = drupal_map_assoc(array(
+        'ui.accordion', 'ui.autocomplete', 'ui.button', 'ui.datepicker', 'ui.dialog', 'ui.draggable',
+        'ui.droppable', 'ui.mouse', 'ui.position', 'ui.progressbar', 'ui.resizable', 'ui.selectable',
+        'ui.slider', 'ui.sortable', 'ui.tabs', 'ui.widget', 'ui.spinner', 'ui.menu', 'ui.tooltip',
+        'effects.blind', 'effects.bounce', 'effects.clip', 'effects.drop', 'effects.explode', 'effects.fade',
+        'effects.fold', 'effects.highlight', 'effects.pulsate', 'effects.scale', 'effects.shake', 'effects.slide',
+        'effects.transfer',
+      ));
+      $names['ui'] = 'ui.core';
+      $names['effects'] = 'ui.effect';
+
+      // Construct the jQuery UI path and replace the JavaScript.
+      $jspath = $path . '/replace/ui/ui/minified/';
+      foreach ($names as $name => $file) {
+        $corefile = 'misc/ui/jquery.' . $file . '.min.js';
+        $javascript[$name]['js'][$corefile]['data'] = $jspath . 'jquery.' . $file . '.min.js';
+        $javascript[$name]['version'] = '1.10.2';
+      }
+    }
+
+    if ($module == 'overlay') {
+      if (version_compare($version, '1.9', '>=')) {
+        $javascript['parent']['js']['modules/overlay/overlay-parent.js']['data'] = $path . '/replace/1.9/overlay-parent.js';
+      }
+    }
+  }
+}
+
+/**
+ * Helper function to load a version of jQuery in case the CDN goes down.
+ *
+ * @param array $javascript
+ *   Represents the array of jQuery objects.
+ * @param string $path
+ *   The path to look for the local copy of jQuery.
+ */
+function utexas_admin_jquery_backup(array &$javascript, $path) {
+  $javascript['jquery']['js'][] = array(
+    'data' => 'window.jQuery || document.write("<script src=\'' . base_path() . $path . '/replace/backup/jquery.min.js\'>\x3C/script>")',
+    'type' => 'inline',
+    'group' => JS_LIBRARY,
+    'weight' => -19.999999999,
+  );
+}
+
+/**
+ * Logic for hook_field_insert().
+ *
+ * Increment file usage.
+ */
+function utexas_admin_field_insert_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, $module) {
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+
+  // Permanently save new images.
+  foreach ($items as $item) {
+    // Make sure they've been permanently stored.
+    if ($file = file_load($item['image_fid'])) {
+      file_usage_add($file, $module, $entity_type, $id);
+    }
+  }
+}
+
+/**
+ * Logic for hook_field_update().
+ *
+ * Adjust copy format+value and handle images.
+ */
+function utexas_admin_field_update_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, $module) {
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+
+  // Get an original entity.
+  $original_fids = array();
+  $original = entity_create_stub_entity($entity_type, array($id, $vid, $bundle));
+  field_attach_load($entity_type, array($id => $original), FIELD_LOAD_CURRENT, array('field_id' => $field['id']));
+  if (!empty($original->{$field['field_name']}[$langcode])) {
+    foreach ($original->{$field['field_name']}[$langcode] as $original_item) {
+      $original_fids[] = $original_item['image_fid'];
+    }
+  }
+
+  // Build a display of the current FIDs.
+  $current_fids = array();
+  foreach ($items as $item) {
+    $current_fids[] = (int) $item['image_fid'];
+
+    // If the current FID is not part of the original FID array.
+    if (!in_array($item['image_fid'], $original_fids)) {
+      // If the file exists.
+      if ($file = file_load($item['image_fid'])) {
+        // Log this file as being used.
+        file_usage_add($file, $module, $entity_type, $id);
+      }
+    }
+  }
+
+  // If there is original data but no current FIDs.
+  if (!empty($original->{$field['field_name']}[$langcode]) and (empty($current_fids) or $current_fids[0] == '0')) {
+    foreach ($original->{$field['field_name']}[$langcode] as $original_item) {
+      // If the file exists.
+      if ($file = file_load($original_item['image_fid'])) {
+        // Remove this as listed in the file usage table.
+        file_usage_delete($file, $module, $entity_type, $id);
+      }
+    }
+  }
+}
+
+/**
+ * Logic for hook_field_delete().
+ *
+ * Cleans up any remaining files, if they have not been deleted already.
+ */
+function utexas_admin_field_delete_custom($entity_type, $entity, $field, $instance, $langcode, $items, $module) {
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+  // Loop through the items in the field being deleted.
+  foreach ($items as $delta => $item) {
+    // Unlist the file as being used by this entity, if it exists.
+    if ($file = file_load($item['image_fid'])) {
+      file_usage_delete($file, $module, $entity_type, $id);
+    }
+  }
+}
+/**
+ * Strip 'http://' and 'https://' from a url, and replace it for '//'.
+ */
+function schema_free_link($url) {
+  $schemes = array('http://', 'https://');
+  $url = str_replace($schemes, '//', $url);
+  return $url;
+}
+
+/**
+ * Custom function to update the node context on clone.
+ */
+function utexas_admin_clone_node_complete($new, $old) {
+  // Only run if node ids are present and Page Builder is enabled.
+  if (isset($new) && isset($old) and module_exists('utexas_page_builder')) {
+    $result = db_query('SELECT * FROM {context} n WHERE n.name = :name', array(':name' => 'context_field-node-' . $old));
+    $existing = $result->fetchAssoc();
+    if (isset($existing)) {
+      db_merge('context')
+        ->key(array('name' => 'context_field-node-' . $new))
+        ->fields(array(
+          'name' => 'context_field-node-' . $new,
+          'description' => $existing['description'],
+          'tag' => $existing['tag'],
+          'conditions' => $existing['conditions'],
+          'reactions' => $existing['reactions'],
+          'condition_mode' => $existing['condition_mode'],
+        ))
+        ->execute();
+    }
+    if ($node = node_load($new)) {
+      // Unpublish cloned node.
+      $node->status = 0;
+      node_save($node);
+    }
+  }
+}
+
+/**
+ * Helper function to dynamically get the tid from the term_name.
+ */
+function _utexas_admin_get_term_from_name($term_name, $vocabulary_name) {
+  $term_arr = taxonomy_get_term_by_name($term_name, $vocabulary_name);
+  if (empty($term_arr)) {
+    $tid = '';
+  }
+  else {
+    $tid = array_pop($term_arr)->tid;
+  }
+  return $tid;
+}
+
+/**
+ * Helper function to trim teasers on word boundary + sentence.
+ */
+function _utexas_admin_token_truncate($string, $your_desired_width) {
+  $sentences = explode('. ', $string);
+  $sentence1 = isset($sentences[1]) ? $sentences[1] : '';
+  $sentence2 = isset($sentences[2]) ? $sentences[2] : '';
+  if ((strlen($sentences[0]) + strlen($sentence1)) < 60) {
+    $teaser = $sentences[0] . '. ' . $sentence1 . '. ' . $sentence2;
+  }
+  elseif (strlen($sentences[0]) < 60) {
+    $teaser = $sentences[0] . '. ' . $sentence1;
+  }
+  else {
+    $teaser = $sentences[0];
+  }
+  $parts = preg_split('/([\s\n\r]+)/', $teaser, NULL, PREG_SPLIT_DELIM_CAPTURE);
+  $parts_count = count($parts);
+
+  $length = 0;
+  $last_part = 0;
+  for (; $last_part < $parts_count; ++$last_part) {
+    $length += strlen($parts[$last_part]);
+    if ($length > $your_desired_width) {
+      break;
+    }
+  }
+  return implode(array_slice($parts, 0, $last_part));
+}
+
+/**
+ * Custom function to return the region a field is placed in.
+ */
+function utexas_admin_retrieve_parent_region($nid, $block_id) {
+  // Retrieve this node's context layout.
+  $layout = db_query("SELECT reactions from {context} WHERE name = :name LIMIT 1", array(":name" => 'context_field-node-' . $nid))->fetchField();
+  $blocks = unserialize($layout);
+  $region = FALSE;
+  if (isset($blocks['block']['blocks'])) {
+    foreach ($blocks['block']['blocks'] as $block) {
+      if ($block['delta'] == $block_id) {
+        $region = $block['region'];
+      }
+    }
+  }
+  return $region;
+}
+
+/**
+ * Custom function to re-weight text format filters.
+ */
+function reorder_filtered_html_text_filters() {
+  $filters = array(
+    'filter_html' => 0,
+    'ckeditor_link_filter' => 1,
+    'filter_autop' => 2,
+    'qualtrics_filter' => 3,
+    'video_filter' => 4,
+    'filter_url' => 5,
+    'tablesaw' => 6,
+    'media_filter' => 7,
+    'html_corrector' => 8,
+  );
+
+  foreach ($filters as $name => $value) {
+    $num_updated = db_update('filter')
+      ->fields(array(
+        'weight' => $value,
+      ))
+      ->condition('name', $name)
+      ->condition('status', 1)
+      ->execute();
+  }
+}

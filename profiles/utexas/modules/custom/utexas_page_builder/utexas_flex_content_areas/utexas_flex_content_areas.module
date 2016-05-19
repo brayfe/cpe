@@ -1,0 +1,862 @@
+<?php
+/**
+ * @file
+ * Main module for Flex Content Areas module.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines a new field for Flex Content Areas.
+ */
+function utexas_flex_content_areas_field_info() {
+  return array(
+    'utexas_flex_content_area' => array(
+      'label' => t('Flexible Content Area'),
+      'description' => t('Defines a flexible content area field.'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'utexas_flex_content_area',
+      'default_formatter' => 'utexas_flex_content_area',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines the default widget for the Flex Content Area.
+ */
+function utexas_flex_content_areas_field_widget_info() {
+  return array(
+    'utexas_flex_content_area' => array(
+      'label' => t('Flexible Content Area'),
+      'field types' => array('utexas_flex_content_area'),
+      'settings' => array(
+        'max_links' => 5,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_settings_form().
+ *
+ * Has one option to determine the maximum number of links available.
+ */
+function utexas_flex_content_areas_field_widget_settings_form($field, $instance) {
+  $widget = $instance['widget'];
+  $settings = $widget['settings'];
+  $form = array();
+
+  switch ($widget['type']) {
+    case 'utexas_flex_content_area':
+      $form['max_links'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Max number of links'),
+        '#description' => t('Enter a maximum number of links that the field can support. Recommended to be no greater than 8.'),
+        '#default_value' => $settings['max_links'],
+        '#required' => TRUE,
+        '#element_validate' => array('element_validate_integer_positive'),
+      );
+
+      break;
+  }
+
+  return $form;
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Form definition for the field widget.
+ *
+ * @see _utexas_flex_content_areas_add_link_empty_row()
+ */
+function utexas_flex_content_areas_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  switch ($instance['widget']['type']) {
+    case 'utexas_flex_content_area':
+
+      // Image upload.
+      $element['image'] = array(
+        '#type' => 'media',
+        '#title' => t('Flex Content Area Image'),
+        '#tree' => TRUE,
+        '#field_name' => 'utexas_flex_content_area_image',
+        '#description' => t('Upload an image, or select one from the library.'),
+        '#extended' => TRUE,
+        '#media_options' => array(
+          'global' => array(
+            'file_extensions' => 'gif png jpg jpeg',
+            'file_directory' => 'flex-content-areas',
+            'types' => array('image'),
+          ),
+        ),
+        '#default_value' => array('fid' => isset($items[$delta]['image_fid']) ? $items[$delta]['image_fid'] : 0),
+      );
+
+      // Headline.
+      $element['headline'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Headline'),
+        '#size' => 60,
+        '#maxlength' => 100,
+        '#default_value' => (isset($items[$delta]['headline'])) ? $items[$delta]['headline'] : '',
+      );
+
+      // Copy.
+      $element['copy'] = array(
+        '#type' => 'text_format',
+        '#title' => t('Copy'),
+        '#default_value' => (isset($items[$delta]['copy_value'])) ? $items[$delta]['copy_value'] : '',
+        '#format' => (isset($items[$delta]['copy_format'])) ? $items[$delta]['copy_format'] : NULL,
+        '#wysiwyg' => FALSE,
+      );
+
+      // Links.
+      $element['links'] = array(
+        '#type' => 'fieldset',
+        '#collapsible' => FALSE,
+        '#title' => t('Links'),
+      );
+
+      // Build the elements for the Links.
+      $links = array();
+      $link_delta = 0;
+      $stored_links = (isset($items[$delta]['links']) && is_string($items[$delta]['links'])) ? unserialize($items[$delta]['links']) : FALSE;
+      if ($stored_links != FALSE) {
+        for ($link_delta = 0; $link_delta < count($stored_links); $link_delta++) {
+          if (isset($stored_links[$link_delta])) {
+            // Populate existing links.
+            $links[] = array(
+              'link_title' => array(
+                '#type' => 'textfield',
+                '#maxlength' => 128,
+                '#default_value' => $stored_links[$link_delta]['link_title'],
+              ),
+              'link_url' => array(
+                '#type' => 'textfield',
+                '#maxlength' => 255,
+                '#default_value' => drupal_get_path_alias($stored_links[$link_delta]['link_url']),
+              ),
+              '_weight' => array(
+                '#type' => 'weight',
+                '#default_value' => $stored_links[$link_delta]['_weight'],
+                '#delta' => 10,
+                '#title_display' => 'invisible',
+                '#title' => t('Weight for Link'),
+              ),
+            );
+          }
+        }
+      }
+      // Fill up remaining slots with empty rows till the default limit.
+      while ($link_delta < $instance['widget']['settings']['max_links'] - 1) {
+        $links[] = _utexas_flex_content_areas_add_link_empty_row($link_delta);
+        $link_delta++;
+      }
+
+      // Ensure there is always one empty row available.
+      $links[] = _utexas_flex_content_areas_add_link_empty_row($link_delta);
+
+      // Attach the remainder of the form.
+      $element['links'] = $links;
+      $element['links']['#theme'] = 'utexas_flex_content_area_link_table';
+      $element['links'] += array(
+        '#type' => 'fieldset',
+        '#title' => t('Links'),
+        '#description' => t('Enter links for this flexible content area.'),
+      );
+
+      // CTA.
+      $element['cta'] = array(
+        '#type' => 'fieldset',
+        '#collapsible' => FALSE,
+        '#title' => t('Call to Action'),
+      );
+      $element['cta']['cta_title'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Title'),
+        '#description' => t('The maximum length is 128 characters.'),
+        '#size' => 60,
+        '#maxlength' => 128,
+        '#default_value' => (isset($items[$delta]['cta_title'])) ? $items[$delta]['cta_title'] : '',
+      );
+      $element['cta']['cta_link'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Link'),
+        '#size' => 60,
+        '#maxlength' => 100,
+        '#default_value' => (isset($items[$delta]['cta_link']) && $items[$delta]['cta_link'] != '') ? drupal_get_path_alias($items[$delta]['cta_link']) : '',
+        '#attributes' => array(
+          'placeholder' => 'external URL (http://...) or internal path (e.g., about/diversity)',
+        ),
+      );
+
+      break;
+
+  }
+
+  return $element;
+}
+
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to validate that a Flex Content Area has all the required information.
+ */
+function utexas_flex_content_areas_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  // Loop through the values, making sure all check out.
+  foreach ($items as $delta => $item) {
+    if (!utexas_flex_content_areas_field_is_empty($item, $field)) {
+
+      // Make sure a CTA title has a link.
+      if (!empty($item['cta']['cta_title']) and empty($item['cta']['cta_link'])) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'cta_no_link',
+          'message' => t('%field: A link is required for a call to action.', array('%field' => $instance['label'])),
+        );
+      }
+
+      // Make sure a CTA link has a title.
+      if (!empty($item['cta']['cta_link']) and empty($item['cta']['cta_title'])) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'cta_no_title',
+          'message' => t('%field: A title is required for a call to action.', array('%field' => $instance['label'])),
+        );
+      }
+
+      // Make sure a CTA link is a valid link.
+      $target = drupal_get_normal_path($item['cta']['cta_link']);
+      if (!empty($item['cta']['cta_link']) and !drupal_valid_path($target)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'cta_link_invalid',
+          'message' => t('%field: A valid URL is required for a call to action link.', array('%field' => $instance['label'])),
+        );
+      }
+      if (isset($item['links'])) {
+        if (is_array($item['links'])) {
+          $item['links'] = _utexas_flex_content_areas_order_links($item['links']);
+          // If we have links, make sure we don't have a call to action.
+          if (!_utexas_flex_content_areas_links_are_empty($item['links']) and
+            (!empty($item['cta']['cta_link']) or
+              !empty($item['cta']['cta_title']))) {
+            $errors[$field['field_name']][$langcode][$delta][] = array(
+              'error' => 'no_links_and_cta',
+              'message' => t('%field: You cannot have both links and a call to action.', array('%field' => $instance['label'])),
+            );
+          }
+        }
+        // Make sure links are valid links.
+        if (is_array($item['links'])) {
+          foreach ($item['links'] as $key => $link) {
+            $target = drupal_get_normal_path($link['link_url']);
+            if (!empty($link['link_url']) and !drupal_valid_path($target)) {
+              $errors[$field['field_name']][$langcode][$delta][] = array(
+                'error' => 'link_invalid',
+                'message' => t('%field: The path provided is not a valid URL alias or external link.',
+                array('%field' => $instance['label'])),
+              );
+            }
+            if (!empty($link['link_title']) and empty($link['link_url'])) {
+              $errors[$field['field_name']][$langcode][$delta][] = array(
+                'error' => 'title_no_link',
+                'message' => t('%field: There is a title but no corresponding link.',
+                array('%field' => $instance['label'])),
+              );
+            }
+            if (empty($link['link_title']) and !empty($link['link_url'])) {
+              $errors[$field['field_name']][$langcode][$delta][] = array(
+                'error' => 'link_no_title',
+                'message' => t('%field: There is a link but no corresponding title.',
+                array('%field' => $instance['label'])
+                ),
+              );
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function utexas_flex_content_areas_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  switch ($error['error']) {
+
+    case 'no_links_and_cta':
+      form_error($element['cta']['cta_title'], $error['message']);
+      form_error($element['cta']['cta_link']);
+      foreach (element_children($element['links']) as $key) {
+        form_error($element['links'][$key]['link_title']);
+        form_error($element['links'][$key]['link_url']);
+      }
+      break;
+
+    case 'cta_no_title':
+      form_error($element['cta']['cta_title'], $error['message']);
+      break;
+
+    case 'cta_no_link':
+      form_error($element['cta']['cta_link'], $error['message']);
+      break;
+
+    case 'cta_link_invalid':
+      form_error($element['cta']['cta_link'], $error['message']);
+      break;
+
+    case 'title_no_link':
+      // Loop through the links, flagging all of the elements with a problem.
+      foreach (element_children($element['links']) as $key) {
+        $link = $element['links'][$key];
+        if (!empty($link['link_title']['#value']) and empty($link['link_url']['#value'])) {
+          form_error($element['links'][$key]['link_url'], $error['message']);
+        }
+      }
+      break;
+
+    case 'link_invalid':
+      // Loop through the links, flagging all of the elements with a problem.
+      foreach (element_children($element['links']) as $key) {
+        $link = $element['links'][$key];
+        $target = drupal_get_normal_path($link['link_url']['#value']);
+        if (!empty($link['link_url']['#value']) and !drupal_valid_path($target)) {
+          form_error($element['links'][$key]['link_url'], $error['message']);
+        }
+      }
+      break;
+
+    case 'link_no_title':
+      // Loop through the links, flagging all of the elements with a problem.
+      foreach (element_children($element['links']) as $key) {
+        $link = $element['links'][$key];
+        if (!empty($link['link_url']['#value']) and empty($link['link_title']['#value'])) {
+          form_error($element['links'][$key]['link_title'], $error['message']);
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Adjusts field values to save copy and text format into respective columns.
+ */
+function utexas_flex_content_areas_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  // Throw the copy format & copy value into separate files.
+  foreach ($items as $delta => &$item) {
+
+    // Determine whether the image is coming from a form or directly from the
+    // database, as in the case of a migration.
+    $item['image_fid'] = isset($item['image']['fid']) ? $item['image']['fid'] : $item['image_fid'];
+    if (empty($item['image_fid'])) {
+      $item['image_fid'] = 0;
+    }
+    if ($item['image_fid'] == 'MigrateFileFid') {
+      $item['image_fid'] = 0;
+    }
+
+    unset($item['image']);
+
+    // Determine whether the Copy is coming from a form or directly from the
+    // database, as in the case of a migration.
+    if (isset($item['copy']['format'])) {
+      $item['copy_format'] = $item['copy']['format'];
+    }
+
+    if (isset($item['copy']['value'])) {
+      $item['copy_value'] = $item['copy']['value'];
+    }
+
+    unset($item['copy']);
+
+    if (empty($item['links'])) {
+      $item['links'] = array();
+    }
+    // Adjust links to strip out random empty strings.
+    $item['links'] = _utexas_flex_content_areas_order_links($item['links']);
+    $tmp_links = array();
+    $tmp_delta = -10;
+
+    foreach ($item['links'] as $key => &$link) {
+      if (!empty($link['link_title']) and !empty($link['link_url'])) {
+        // Store Drupal path aliases as internal paths, if they exist.
+        $target = drupal_get_normal_path($link['link_url']);
+        $tmp_links[] = array(
+          'link_title' => $link['link_title'],
+          'link_url' => $target,
+          '_weight' => $tmp_delta,
+        );
+
+        $tmp_delta++;
+      }
+    }
+    $item['links'] = serialize($tmp_links);
+
+    // Determine whether the CTA is coming from a form or directly from the
+    // database, as in the case of a migration.
+    $cta_link = isset($item['cta']['cta_link']) ? $item['cta']['cta_link'] : '';
+    $item['cta_link'] = isset($item['cta_link']) ? drupal_get_normal_path($item['cta_link']) : drupal_get_normal_path($cta_link);
+    $cta_title = isset($item['cta']['cta_title']) ? $item['cta']['cta_title'] : '';
+    $item['cta_title'] = isset($item['cta_title']) ? $item['cta_title'] : $cta_title;
+
+    unset($item['cta']);
+  }
+}
+
+/**
+ * Implements hook_file_download().
+ *
+ * Checks access to make sure users can actually use the files that have been
+ * uploaded. Required since Drupal 7.29.
+ */
+function utexas_flex_content_areas_file_download($uri) {
+  if (strpos(file_uri_target($uri), 'utexas_flex_content_areas') === 0) {
+    $info = image_get_info($uri);
+    return array('Content-Type' => $info['mime_type']);
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements hook_field_insert().
+ *
+ * Increment file usage.
+ */
+function utexas_flex_content_areas_field_insert($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_insert_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_flex_content_areas');
+}
+
+
+/**
+ * Implements hook_field_update().
+ *
+ * Adjust copy format+value and handle images.
+ */
+function utexas_flex_content_areas_field_update($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_update_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_flex_content_areas');
+}
+
+/**
+ * Implements hook_field_delete().
+ *
+ * Cleans up any remaining files, if they have not been deleted already.
+ */
+function utexas_flex_content_areas_field_delete($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  utexas_admin_field_delete_custom($entity_type, $entity, $field, $instance, $langcode, $items, 'utexas_flex_content_areas');
+}
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ * Determines whether or not the field has data in it.
+ */
+function utexas_flex_content_areas_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'utexas_flex_content_area':
+      // We check images in multiple places. Handle both implementations.
+      $image_empty = (isset($item['image'])) ? empty($item['image']['fid']) : ($item['image_fid'] == 'MigrateFileFid');
+      // An empty migration will send image_fid as "MigrateFileFid".
+      // Account for values coming directly from a migration.
+      if (isset($item['copy_value'])) {
+        $item['copy']['value'] = $item['copy_value'];
+      }
+
+      if (isset($item['cta_title'])) {
+        $item['cta']['cta_title'] = $item['cta_title'];
+      }
+
+      if (isset($item['cta_link'])) {
+        $item['cta']['cta_link'] = $item['cta_link'];
+      }
+
+      return
+        $image_empty and
+        _utexas_flex_content_areas_links_are_empty($item['links']) and
+        empty($item['headline']) and
+        empty($item['copy']['value']) and
+        empty($item['cta']['cta_title']) and
+        empty($item['cta']['cta_link']);
+  }
+
+  return FALSE;
+}
+
+/**
+ * Helper function that returns an array representing an empty row.
+ *
+ * @param int $link_count
+ *   Number of links on the form.
+ *
+ * @return array
+ *   Render array for the links.
+ */
+function _utexas_flex_content_areas_add_link_empty_row($link_count) {
+  // Define the next one down.
+  $max_delta = 10;
+
+  return array(
+    'link_title' => array(
+      '#type' => 'textfield',
+      '#maxlength' => 128,
+    ),
+    'link_url' => array(
+      '#type' => 'textfield',
+      '#maxlength' => 255,
+      '#attributes' => array(
+        'placeholder' => 'external URL (http://...) or internal path (e.g., about/diversity)',
+      ),
+    ),
+    '_weight' => array(
+      '#type' => 'weight',
+      '#delta' => $max_delta,
+      '#default_value' => ($max_delta - $link_count) * -1,
+      '#title_display' => 'invisible',
+      '#title' => t('Weight for Link'),
+    ),
+  );
+}
+
+/**
+ * Custom theme function to theme the link table as a tabledrag element.
+ */
+function theme_utexas_flex_content_area_link_table($variables) {
+  $element = $variables['element'];
+  $output = '';
+
+  $table_id = drupal_html_id($element['#id'] . '_values');
+  $order_class = $element['#id'] . '-delta-order';
+
+  $header = array(
+    array('data' => t('Link Title'), 'colspan' => 2),
+    t('Link URL'),
+    t('Weight'),
+  );
+  $rows = array();
+
+  // Sort links according to weight.
+  $items = array();
+  foreach (element_children($element) as $key) {
+    $items[] = &$element[$key];
+  }
+  usort($items, '_utexas_flex_content_areas_sort_links_by_weight');
+
+  // Add the links as table rows.
+  foreach ($items as $key => $item) {
+    $item['_weight']['#attributes']['class'] = array($order_class);
+    $delta_element = drupal_render($item['_weight']);
+    $cells = array(
+      array('data' => '', 'class' => array('field-multiple-drag')),
+      drupal_render($item['link_title']),
+      drupal_render($item['link_url']),
+      array('data' => $delta_element, 'class' => array('delta-order')),
+    );
+    $rows[] = array(
+      'data' => $cells,
+      'class' => array('draggable'),
+      'id' => $table_id . '-' . $key,
+    );
+  }
+
+  // Create the table drag.
+  $output  = '<div class="link-table">';
+  $output .= theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array(
+      'id' => $table_id,
+    ),
+  ));
+  $output .= '</div>';
+
+  // Order the table drag.
+  drupal_add_tabledrag($table_id, 'order', 'sibling', $order_class);
+
+  return $output;
+}
+
+/**
+ * Helper function to order links by weight.
+ */
+function _utexas_flex_content_areas_sort_links_by_weight($a, $b) {
+  if (isset($a['_weight']) and isset($b['_weight'])) {
+    return ($a['_weight']['#value'] < $b['_weight']['#value']) ? -1 : 1;
+  }
+  return 0;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines the primary field widget.
+ *
+ * @todo Possible Phase 2 item is to create a second field format for Flex
+ *   Content Areas.
+ */
+function utexas_flex_content_areas_field_formatter_info() {
+  return array(
+    'utexas_flex_content_area' => array(
+      'label' => t('Flexible Content Area'),
+      'field types' => array('utexas_flex_content_area'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Creates the formatter for the Flex Content Area.
+ */
+function utexas_flex_content_areas_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'utexas_flex_content_area':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('utexas_flex_content_area', array('item' => $item)),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'utexas_flex_content_areas') . '/utexas_flex_content_areas.css'),
+          ),
+        );
+      }
+
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @see template_preprocess_utexas_flex_content_area()
+ */
+function utexas_flex_content_areas_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_flex_content_area' => array(
+      'variables' => array(
+        'item' => NULL,
+        'fid' => NULL,
+      ),
+      'template' => 'theme/utexas-flex-content-area',
+    ),
+    'utexas_flex_content_area_link_table' => array(
+      'render element' => 'element',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function for flex content areas to create variables.
+ *
+ * @see utexas_flex_content_areas_theme()
+ *
+ * @ingroup themeable
+ */
+function template_preprocess_utexas_flex_content_area(&$variables) {
+  // Send template machine name to tpl.php.
+  $variables['page_template'] = FALSE;
+  if ($node = menu_get_object() and isset($node->field_template['und'][0]['target_id'])) {
+    $id = $node->field_template['und'][0]['target_id'];
+    $exists = entity_get_info('template');
+    if ($exists) {
+      $template = entity_load('template', array($id));
+      if (isset($template[$id])) {
+        $variables['page_template'] = $template[$id]->name;
+      }
+    }
+  }
+  // Generate the fieldblock ID for the given field (see fieldblock.module).
+  $variable_name = 'fieldblock-node-' . $node->type . '-default';
+  $flex_context_a = md5($variable_name . '-' . 'field_utexas_flex_content_area_a');
+  $flex_context_b = md5($variable_name . '-' . 'field_utexas_flex_content_area_b');
+  // Retrieve this node's context layout.
+  $variables['flex_content_area_a_region'] = FALSE;
+  $variables['flex_content_area_b_region'] = FALSE;
+  $variables['flex_content_area_a_region'] = utexas_admin_retrieve_parent_region($node->nid, $flex_context_a);
+  $variables['flex_content_area_b_region'] = utexas_admin_retrieve_parent_region($node->nid, $flex_context_b);
+  // Adjust passed in variables.
+  $image_fid = $variables['item']['image_fid'];
+  $copy_value = $variables['item']['copy_value'];
+  $copy_format = $variables['item']['copy_format'];
+  $cta_title = $variables['item']['cta_title'];
+  $cta_link = $variables['item']['cta_link'];
+  $headline = check_plain($variables['item']['headline']);
+  $links = !empty($variables['item']['links']) ? unserialize($variables['item']['links']) : array();
+
+  // Unset unneeded variables.
+  unset($variables['item']);
+
+  // Grab the image.
+  if (!empty($image_fid)) {
+    if ($file = file_load($image_fid)) {
+      $alt = isset($file->field_file_image_alt_text['und'][0]['safe_value']) ? $alt = $file->field_file_image_alt_text['und'][0]['safe_value'] : '';
+      $title = isset($file->field_file_image_title_text['und'][0]['safe_value']) ? $title = $file->field_file_image_title_text['und'][0]['safe_value'] : '';
+      $info = image_get_info($file->uri);
+      $image = theme('image_style', array(
+        'style_name' => 'utexas_flex_content_area_image',
+        'path' => $file->uri,
+        'width' => $info['width'],
+        'height' => $info['height'],
+        'alt' => $alt,
+        'title' => $title,
+        'attributes' => array(
+          'class' => array('utexas-flex-content-area-image'),
+        ),
+      ));
+    }
+  }
+  else {
+    $image = FALSE;
+  }
+
+  // Grab the copy.
+  $copy = (!empty($copy_value) and !empty($copy_format)) ? check_markup($copy_value, $copy_format) : FALSE;
+
+  // Set the links.
+  $tmp_links = array();
+  foreach ($links as $link) {
+    $tmp_links[] = l('<span>' . $link['link_title'] . '</span>', $link['link_url'], array(
+      'attributes' => array(
+        'class' => array(
+          'cta-link',
+          'sans',
+          'flex-content-cta',
+        ),
+      ),
+      'html' => TRUE,
+    ));
+  }
+  $links = (!count($tmp_links)) ? FALSE : theme('item_list', array(
+    'items' => $tmp_links,
+    'title' => NULL,
+    'type' => 'ul',
+    'attributes' => array(),
+  ));
+
+  // Set the call to action.
+  $cta = (!empty($cta_title) and !empty($cta_link)) ? l('<span>' . $cta_title . '</span>', $cta_link, array(
+      'attributes' => array('class' => array('cta', 'utexas-flex-content-cta')),
+      'html' => TRUE,
+  )) : FALSE;
+
+  // Linkify the headline, if it's a CTA.
+  if ($cta) {
+    $headline = l($headline, $cta_link, array('html' => TRUE, 'attributes' => array('class' => array('headline-link'))));
+  }
+  if ($cta && $image) {
+    $image = l($image, $cta_link, array('html' => TRUE));
+  }
+
+  // Reset variables.
+  $variables += array(
+    'image' => $image,
+    'headline' => $headline,
+    'copy' => $copy,
+    'call_to_action' => $cta,
+    'links' => $links,
+  );
+}
+
+/**
+ * Helper function to determine whether or not an array of links is empty.
+ *
+ * @param string $links
+ *   A serialized array representing link form information.
+ *
+ * @return bool
+ *   A boolean representing whether or not that row of links is empty or not.
+ */
+function _utexas_flex_content_areas_links_are_empty($links) {
+  $empty = TRUE;
+
+  // Ensure a sanitation of weights + other items.
+  $links = _utexas_flex_content_areas_order_links($links);
+
+  // We only care if link title or link URL is set.
+  if (!empty($links)) {
+    // An empty array can be sent via migration.
+    $links = (is_array($links)) ? $links : unserialize($links);
+    foreach ($links as $link) {
+      if (!empty($link['link_title']) or !empty($link['link_url'])) {
+        $empty = FALSE;
+      }
+    }
+  }
+  return $empty;
+}
+
+/**
+ * Helper function to sort ordered links by their weight.
+ *
+ * @param string $item
+ *   Serialiezd array for an individual link row.
+ *
+ * @return array
+ *   A sorted array of links.
+ */
+function _utexas_flex_content_areas_order_links($item) {
+
+  // Loop through, unsetting the delete link & setting by weights.
+  $weight = array();
+  $title = array();
+  // Determine whether the data is coming from the form or the database,
+  // as in the case of a migration.
+  $item = (is_array($item)) ? $item : unserialize($item);
+  if (!empty($item)) {
+    foreach ($item as $key => &$link) {
+      $weight[$key] = (int) $link['_weight'];
+      $title[$key] = $link['link_title'];
+    }
+
+    // Sort by weight, then title and return.
+    array_multisort($weight, SORT_ASC, $title, SORT_ASC, $item);
+
+    // Strip out empty fields.
+    foreach ($item as $key => &$link) {
+      if (empty($link['link_title']) and empty($link['link_url'])) {
+        unset($link);
+      }
+    }
+  }
+  return $item;
+}
+
+/**
+ * Implements hook_image_default_styles().
+ *
+ * Defines image styles for the flex content images.
+ */
+function utexas_flex_content_areas_image_default_styles() {
+  return array(
+    'utexas_flex_content_area_image' => array(
+      'label' => t('Flex Content Area Image'),
+      'effects' => array(
+        array(
+          'name' => 'smartcrop_scale_and_crop',
+          'data' => array(
+            'width' => 500,
+            'height' => 333,
+            'upscale' => FALSE,
+          ),
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+}

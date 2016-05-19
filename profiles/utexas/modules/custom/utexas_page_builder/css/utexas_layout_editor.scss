@@ -1,0 +1,80 @@
+// Move the context label to the right and allow click-through.
+.editing-context-label {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  opacity: 0.75;
+  pointer-events: none;
+  right: 70px;
+}
+
+.context-editor {
+  ul {
+    list-style-type: none;
+  }
+
+  .context_ui_dialog-stop,
+  .buttons {
+    display: none !important;
+  }
+}
+
+.context-block-browser {
+  .category {
+    margin-top: 15px;
+    &:first-child {
+      margin-top: 0;
+    }
+    .category-label {
+      margin-bottom: 5px;
+    }
+  }
+
+  .context-block-addable {
+    cursor: pointer;
+    height: 25px;
+    line-height: 25px;
+    margin: 0 0 2px;
+    padding: 0px 5px;
+    span.icon {
+      display: none;
+    }
+  }
+}
+
+
+.edit-links {
+  background: #f3f0e8;
+  clear: both;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 6px 12px;
+  margin: 12px 0;
+}
+
+
+body.context-editing {
+  .draggable:hover {
+    .contextual-links-wrapper.contextual-links-processed {
+      display: none !important;
+    }
+
+    a.context-block-remove,
+    a.context-block-handle {
+      top: 0;
+    }
+    a.context-block-remove {
+      right: 0px;
+    }
+    a.context-block-handle {
+      right: 40px;
+    }
+  }
+  .edit-links {
+    display: none;
+  }
+
+  a.context-ui-add-link:hover {
+    color: #fff;
+  }
+}

@@ -1,0 +1,186 @@
+<?php
+/**
+ * @file
+ * Install file for UT Drupal Kit code deployment.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function utexas_utdk_deploy_install() {
+  // Set the initial value for the schema version so we can run updates after
+  // install.
+  drupal_set_installed_schema_version('utexas_utdk_deploy', 7107);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable globalredirect, if not yet enabled, for better SEO.
+ */
+function utexas_utdk_deploy_update_7101() {
+  if (!module_exists('globalredirect')) {
+    module_enable(array('globalredirect'));
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add missing body field, if not present.
+ */
+function utexas_utdk_deploy_update_7102() {
+  // Conditionally adding body field to page content type.
+  if (!$instance = field_info_instance('node', 'body', 'page')) {
+    $types = node_type_get_types();
+    node_add_body_field($types['page'], $label = 'Body');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Sets CKEditor link's helper text to describe both files and pages.
+ */
+function utexas_utdk_deploy_update_7103() {
+  variable_set('ckeditor_link_type_name', 'Page title or filename on this site');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adds "Filtered HTML for Blocks" text format.
+ */
+function utexas_utdk_deploy_update_7104() {
+  $formats['filtered_html_for_blocks'] = array(
+    'format' => 'filtered_html_for_blocks',
+    'name' => 'Filtered HTML for Blocks',
+    'cache' => 1,
+    'status' => 1,
+    'weight' => -10,
+    'filters' => array(
+      'filter_html' => array(
+        'weight' => -10,
+        'status' => 1,
+        'settings' => array(
+          'allowed_html' => '<a> <abbr> <address> <article> <aside> <blockquote> <br> <button> <caption> <cite> <code> <del> <details> <dl> <dt> <dd> <div> <em> <figure> <figcaption> <img> <i> <input> <hr> <h1> <h2> <h3> <h4> <h5> <h6> <ul> <ol> <li> <mark> <nav> <p> <pre> <sub> <sup> <table> <th> <tr> <td> <thead> <tbody> <tfoot> <script> <section> <span> <strong> <time> <track> <video>',
+          'filter_html_help' => 1,
+          'filter_html_nofollow' => 0,
+        ),
+      ),
+      'qualtrics_filter' => array(
+        'weight' => -1,
+        'status' => 1,
+        'settings' => array(
+          'qualtrics_filter_height' => 500,
+          'qualtrics_filter_title' => 'Qualtrics survey',
+        ),
+      ),
+      'video_filter' => array(
+        'weight' => -1,
+        'status' => 1,
+        'settings' => array(
+          'video_filter_width' => '400',
+          'video_filter_height' => '400',
+          'video_filter_autoplay' => '0',
+          'video_filter_related' => '0',
+          'video_filter_html5' => '1',
+        ),
+      ),
+      'ckeditor_link_filter' => array(
+        'weight' => 0,
+        'status' => 1,
+        'settings' => array(),
+      ),
+      'filter_autop' => array(
+        'weight' => -2,
+        'status' => 1,
+        'settings' => array(),
+      ),
+      'filter_url' => array(
+        'weight' => 0,
+        'status' => 1,
+        'settings' => array(
+          'filter_url_length' => 72,
+        ),
+      ),
+      'tablesaw' => array(
+        'weight' => 0,
+        'status' => 1,
+        'settings' => array(),
+      ),
+      'media_filter' => array(
+        'weight' => 2,
+        'status' => 1,
+        'settings' => array(),
+      ),
+      'filter_htmlcorrector' => array(
+        'weight' => 10,
+        'status' => 1,
+        'settings' => array(),
+      ),
+    ),
+  );
+  // Add the "Filtered HTML for Blocks" text format to the database.
+  foreach ($formats as $type => $settings) {
+    $exists = (bool) db_query_range('SELECT 1 FROM {filter_format} WHERE format = :name', 0, 1, array(':name' => $type))->fetchField();
+    if (!$exists) {
+      // Create new text formats.
+      filter_format_save((object) $settings);
+    }
+  }
+  $text_format = db_merge('ckeditor_input_format')
+    ->key(array('name' => 'Advanced', 'format' => $settings['format']))
+    ->fields(array(
+      'name' => 'Advanced',
+      'format' => $settings['format'],
+    ))
+    ->execute();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove duplicative reference to the widget/lineutils plugins.
+ */
+function utexas_utdk_deploy_update_7105() {
+  $result = db_query('SELECT n.settings FROM {ckeditor_settings} n WHERE n.name = :name', array(':name' => 'Advanced'));
+  foreach ($result as $record) {
+    $settings = unserialize($record->settings);
+  }
+  if (isset($settings['js_conf']) && $settings['js_conf'] == "config.extraPlugins = 'lineutils';config.extraPlugins = 'widget';") {
+    unset($settings['js_conf']);
+    $ckeditor_settings = db_merge('ckeditor_settings')
+      ->key(array('name' => 'Advanced'))
+      ->fields(array(
+        'settings' => serialize($settings),
+    ))
+    ->execute();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update menu_block_menu_order.
+ */
+function utexas_utdk_deploy_update_7106() {
+  $menu_block_menu_order = variable_get('menu_block_menu_order', NULL);
+  if ($menu_block_menu_order === '') {
+    variable_set('menu_block_menu_order', array('main-menu' => ''));
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update adminstrator role to ensure they have new utexas_twitter_widget permission.
+ */
+function utexas_utdk_deploy_update_7107() {
+  if (module_exists('utexas_twitter_widget')) {
+    if ($admin_role = user_role_load_by_name('administrator')) {
+      $permissions = array('configure twitter widgets');
+      user_role_grant_permissions($admin_role->rid, $permissions);
+    }
+  }
+}

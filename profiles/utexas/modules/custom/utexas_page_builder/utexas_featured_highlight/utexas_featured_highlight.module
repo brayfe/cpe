@@ -1,0 +1,540 @@
+<?php
+/**
+ * @file
+ * Custom field definition for the Featured Highlight form element.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines the Featured Highlight field.
+ */
+function utexas_featured_highlight_field_info() {
+  return array(
+    'utexas_featured_highlight' => array(
+      'label' => t('Featured Highlight'),
+      'description' => t('This field stores information about featured highlights'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'utexas_featured_highlight',
+      'default_formatter' => 'utexas_featured_highlight',
+    ),
+  );
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function utexas_featured_highlight_entity_info_alter(&$entity_info) {
+
+  $entity_info['file']['view modes'] += array(
+    'featured_highlight_video' => array(
+      'label' => t('Featured Highlight Video'),
+      'custom settings' => 1,
+    ),
+  );
+
+  return $entity_info;
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines two widgets for the Featured Highlight.
+ */
+function utexas_featured_highlight_field_widget_info() {
+  return array(
+    'utexas_featured_highlight' => array(
+      'label' => t('Featured Highlight'),
+      'field types' => array('utexas_featured_highlight'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines one formatter for the featured highlight field.
+ */
+function utexas_featured_highlight_field_formatter_info() {
+  return array(
+    'utexas_featured_highlight' => array(
+      'label' => t('Featured Highlight'),
+      'field types' => array('utexas_featured_highlight'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Defines forms for the Featured Highlight.
+ */
+function utexas_featured_highlight_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  switch ($instance['widget']['type']) {
+
+    case 'utexas_featured_highlight':
+
+      // Headline.
+      $element['headline'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Headline'),
+        '#size' => 60,
+        '#maxlength' => 100,
+        '#default_value' => (isset($items[$delta]['headline'])) ? $items[$delta]['headline'] : '',
+      );
+
+      // Image upload input.
+      $element['image'] = array(
+        '#type' => 'media',
+        '#title' => t('Highlight Image'),
+        '#tree' => TRUE,
+        '#field_name' => 'file_upload',
+        '#description' => t('Upload an image, or select one from the library.'),
+        '#extended' => TRUE,
+        '#media_options' => array(
+          'global' => array(
+            'file_extensions' => 'gif png jpg jpeg',
+            'file_directory' => 'featured-highlights',
+            'types' => array('image', 'video'),
+          ),
+        ),
+        '#default_value' => array('fid' => isset($items[$delta]['image_fid']) ? $items[$delta]['image_fid'] : 0),
+      );
+
+      // Date fieldset.
+      $element['date'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Date'),
+        '#collapsible' => FALSE,
+        '#collapsed' => FALSE,
+        '#description' => t('Enter an optional date for this Featured Highlight'),
+      );
+
+      // Date defaults to today; if it has previously been removed by the user,
+      // return null.
+      if (isset($items[$delta]['date'])) {
+        $date = (($items[$delta]['date'] == 0)) ? '' : format_date(strtotime($items[$delta]['date']), 'custom', 'Y-m-d');
+      }
+      else {
+        $date = format_date(strtotime('now'), 'custom', 'Y-m-d');
+      }
+
+      $element['date']['date'] = array(
+        '#type' => 'date_popup',
+        '#date_format' => 'Y-m-d',
+        '#date_year_range' => '-50:+0',
+        '#default_value' => $date,
+      );
+
+      // Copy.
+      $element['copy'] = array(
+        '#type' => 'text_format',
+        '#title' => t('Copy'),
+        '#default_value' => (isset($items[$delta]['copy_value'])) ? $items[$delta]['copy_value'] : '',
+        '#format' => (isset($items[$delta]['copy_format'])) ? $items[$delta]['copy_format'] : NULL,
+        '#wysiwyg' => FALSE,
+      );
+
+      // Call to action.
+      $element['call'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Call to Action'),
+        '#collapsible' => FALSE,
+        '#collapsed' => FALSE,
+        '#attributes' => array('class' => array('half-width')),
+        '#attached' => array(
+          'css' => array(drupal_get_path('module', 'utexas_featured_highlight')
+            . '/utexas_featured_highlight.css',
+          ),
+        ),
+      );
+
+      $element['call']['title'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Title'),
+        '#description' => t('128 characters maximum. If left empty with a link present,
+          below, text defaults to <em>Read story</em>'),
+        '#size' => 60,
+        '#maxlength' => 128,
+        '#default_value' => (isset($items[$delta]['cta'])) ? $items[$delta]['cta'] : '',
+      );
+
+      // Link.
+      $link = '';
+      if (isset($items[$delta]['link'])) {
+        if (trim($items[$delta]['link']) != '') {
+          $link = drupal_get_path_alias($items[$delta]['link']);
+        }
+      }
+
+      $element['call']['link'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Link'),
+        '#description' => t('A valid URL for this highlight.'),
+        '#size' => 60,
+        '#maxlength' => 100,
+        '#default_value' => $link,
+        '#attributes' => array(
+          'placeholder' => 'external URL (http://) or internal path (e.g., about/diversity)',
+        ),
+      );
+
+      $element['highlight_style'] = array(
+        '#type' => 'radios',
+        '#title' => t('Highlight Style'),
+        '#options' => array(
+          'light' => t('Light'),
+          'dark' => t('Dark'),
+          'navy' => t('Navy Blue'),
+        ),
+        '#default_value' => (isset($items[$delta]['highlight_style'])) ? $items[$delta]['highlight_style'] : 'light',
+      );
+
+      break;
+
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to make sure all fields have valid data in them.
+ */
+function utexas_featured_highlight_field_validate($entity_type, $entity, $field,
+  $instance, $langcode, $items, &$errors) {
+
+  // Loop through the values, making sure all check out.
+  foreach ($items as $delta => $item) {
+    if (!empty($item) and !utexas_featured_highlight_field_is_empty($item, $field)) {
+      // Make sure headline is not empty.
+      if (empty($item['headline'])) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'headline_empty',
+          'message' => t('%headline: Headline field is required.', array('%headline' => $instance['label'])),
+        );
+      }
+
+      $image = isset($item['image']['fid']) ? $item['image']['fid'] : 0;
+
+      $copy_value = isset($item['copy']['value']) ? $item['copy']['value'] : $item['copy_value'];
+
+      $link = isset($item['call']['link']) ? $item['call']['link'] : $item['link'];
+
+      $title = isset($item['call']['title']) ? $item['call']['title'] : $item['cta'];
+
+      if (empty($copy_value)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'copy_empty',
+          'message' => t('%copy: Copy field is required.', array('%copy' => $instance['label'])),
+        );
+      }
+
+      // Make sure link is present if title is present.
+      if (!empty($title) and empty($link)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'link_empty',
+          'message' => t('%copy: You cannot enter a title without a link url.', array('%copy' => $instance['label'])),
+        );
+      }
+
+      // Make sure link is valid.
+      $target = drupal_get_normal_path($link);
+      if (!empty($link) and !drupal_valid_path($target)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'link_invalid',
+          'message' => t('%link: The path provided is not a valid URL alias or external link.', array('%link' => $instance['label'])),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function utexas_featured_highlight_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  switch ($error['error']) {
+    case 'headline_empty':
+      form_error($element['headline'], $error['message']);
+      break;
+
+    case 'copy_empty':
+      form_error($element['copy']['value'], $error['message']);
+      break;
+
+    case 'link_invalid':
+      form_error($element['call']['link'], $error['message']);
+      break;
+
+    case 'link_empty':
+      form_error($element['call']['link'], $error['message']);
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Adjust copy format+value and handle images.
+ */
+function utexas_featured_highlight_field_presave($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  // Throw the copy format & copy value into separate files & adjust values.
+  foreach ($items as $delta => &$item) {
+
+    $item['date'] = (!isset($item['date']['date'])) ? 0 : $item['date']['date'];
+    if (isset($item['date']['time'])) {
+      unset($item['date']['time']);
+    }
+
+    // Determine whether the file is coming from the form or directly from the
+    // database, as in the case of a migration.
+    $item['image_fid'] = (isset($item['image']['fid'])) ? $item['image']['fid'] : $item['image_fid'];
+    // An empty field from a migration comes as null, but needs to be sent as 0.
+    if (empty($item['image_fid'])) {
+      $item['image_fid'] = 0;
+    }
+
+    // Split call to action into two columns, 'cta' and 'link'.
+    $item['cta'] = isset($item['call']['title']) ? $item['call']['title'] : $item['cta'];
+    if (!empty($item['call']['link'])) {
+      // Store Drupal path aliases as internal paths, if they exist.
+      $item['link'] = drupal_get_normal_path($item['call']['link']);
+    }
+    elseif (!empty($item['link'])) {
+      // Store Drupal path aliases as internal paths, if they exist.
+      $item['link'] = drupal_get_normal_path($item['link']);
+    }
+    else {
+      $item['link'] = '';
+    }
+    unset($item['call']);
+
+    // Split copy into two columns, 'copy_format' and 'copy_value'.
+    $item['copy_format'] = isset($item['copy']['format']) ? $item['copy']['format'] : $item['copy_format'];
+    $item['copy_value'] = isset($item['copy']['value']) ? $item['copy']['value'] : $item['copy_value'];
+    unset($item['copy']);
+
+  }
+}
+
+
+/**
+ * Implements hook_file_download().
+ *
+ * Checks access to make sure users can actually use
+ * the files that have been uploaded. Required since Drupal 7.29.
+ */
+function utexas_featured_highlight_file_download($uri) {
+  if (strpos(file_uri_target($uri), 'featured-highlights') === 0) {
+    $info = image_get_info($uri);
+    return array('Content-Type' => $info['mime_type']);
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements hook_field_insert().
+ *
+ * Increment file usage.
+ */
+function utexas_featured_highlight_field_insert($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_insert_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_featured_highlight');
+}
+
+
+/**
+ * Implements hook_field_update().
+ *
+ * Adjust copy format+value and handle images.
+ */
+function utexas_featured_highlight_field_update($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_update_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_featured_highlight');
+}
+
+/**
+ * Implements hook_field_delete().
+ *
+ * Cleans up any remaining files, if they have not been deleted already.
+ */
+function utexas_featured_highlight_field_delete($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  utexas_admin_field_delete_custom($entity_type, $entity, $field, $instance, $langcode, $items, 'utexas_featured_highlight');
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function utexas_featured_highlight_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'utexas_featured_highlight':
+      return empty($item['headline'])
+      and empty($item['copy']['value'])
+      and empty($item['link'])
+      and empty($item['call']['link'])
+      and empty($item['image']['fid']);
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Builds the formatter view for the Featured Highlight.
+ */
+function utexas_featured_highlight_field_formatter_view($entity_type, $entity,
+  $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'utexas_featured_highlight':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('utexas_featured_highlight', $item),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'utexas_featured_highlight')
+              . '/utexas_featured_highlight.css',
+            ),
+          ),
+        );
+      }
+
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Register the Featured Highlight.
+ */
+function utexas_featured_highlight_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_featured_highlight' => array(
+      'variables' => array(
+        'headline' => NULL,
+        'image_fid' => NULL,
+        'date' => NULL,
+        'copy_format' => NULL,
+        'copy_value' => NULL,
+        'link' => NULL,
+        'cta' => NULL,
+        'template' => NULL,
+      ),
+      'template' => 'theme/utexas-featured-highlight',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function for Featured Highlights.
+ *
+ * @see utexas-featured-highlight.tpl.php
+ */
+function template_preprocess_utexas_featured_highlight(&$variables) {
+  // Send template machine name to tpl.php
+  $variables['page_template'] = FALSE;
+  if ($node = menu_get_object() and isset($node->field_template['und'][0]['target_id'])) {
+    $id = $node->field_template['und'][0]['target_id'];
+    $exists = entity_get_info('template');
+    if ($exists) {
+      $template = entity_load('template', array($id));
+      if (isset($template[$id])) {
+        $variables['page_template'] = $template[$id]->name;
+      }
+    }
+  }
+  // Generate the fieldblock ID for the given field (see fieldblock.module).
+  $variable_name = 'fieldblock-node-' . $node->type . '-default';
+  $featured_highlight_id = md5($variable_name . '-' . 'field_utexas_featured_highlight');
+  // Retrieve this node's context layout.
+  $layout = db_query("SELECT reactions from {context} WHERE name = :name LIMIT 1", array(":name" => 'context_field-node-' . $node->nid))->fetchField();
+  $blocks = unserialize($layout);
+  $variables['featured_highlight_region'] = FALSE;
+  if (isset($blocks['block']['blocks'])) {
+    foreach ($blocks['block']['blocks'] as $block) {
+      if ($block['delta'] == $featured_highlight_id) {
+        $variables['featured_highlight_region'] = $block['region'];
+      }
+    }
+  }
+
+  // Format the date for output.
+  $variables['date'] = (($variables['date'] == 0)) ? FALSE : utexas_admin_ap_style_date(strtotime($variables['date']));
+
+  // Replace the copy variables with the formatted copy.
+  $variables['copy'] = check_markup($variables['copy_value'], $variables['copy_format']);
+  unset($variables['copy_value']);
+  unset($variables['copy_format']);
+
+  // Make read-more link.
+  $default = (!empty($variables['cta'])) ? $variables['cta'] : t('Read story');
+  $variables['read_more'] = (!empty($variables['link'])) ? l('<span>' . $default . '</span>', $variables['link'],
+    array('html' => TRUE, 'attributes' => array('class' => array('cta')))) : FALSE;
+
+  // Make an image object ("featured_highlight_image" image style
+  // defined in utexas_page_builder.module).
+  $variables['has_image'] = 'no_image';
+  if (!empty($variables['image_fid'])) {
+    $variables['has_image'] = 'has_image';
+    if ($file = file_load($variables['image_fid'])) {
+      if ($file->type == 'image') {
+        $info = image_get_info($file->uri);
+        $alt = isset($file->field_file_image_alt_text['und'][0]['safe_value']) ? $alt = $file->field_file_image_alt_text['und'][0]['safe_value'] : '';
+        $title = isset($file->field_file_image_title_text['und'][0]['safe_value']) ? $title = $file->field_file_image_title_text['und'][0]['safe_value'] : '';
+        $image = theme('image_style', array(
+          'style_name' => 'featured_highlight_image',
+          'path' => $file->uri,
+          'width' => $info['width'],
+          'height' => $info['height'],
+          'alt' => $alt,
+          'title' => $title,
+          'attributes' => array('class' => array('featured-highlight')),
+        ));
+
+        // Make the image a link, if available.
+        if (!empty($variables['link'])) {
+          $image = l($image, $variables['link'], array(
+            'html' => TRUE,
+            'attributes' => array('class' => array('featured-highlight-image-link')),
+          ));
+        }
+      }
+      elseif ($file->type == 'video') {
+        $image = file_view($file, 'featured_highlight_video');
+      }
+    }
+  }
+
+  // Set the image variable to pass to the template.
+  $variables['image'] = (isset($image)) ? $image : FALSE;
+
+  // Make the headline a link, if available.
+  if (!empty($variables['link'])) {
+    $variables['headline'] = l($variables['headline'], $variables['link'], array(
+      'attributes' => array(
+        'class' => array('highlight-headline'),
+      ),
+    ));
+  }
+
+  // Get a re-styled CTA link.
+  $variables['link'] = (isset($variables['link'])) ? l($variables['cta'], $variables['link'],
+      array('html' => TRUE, 'attributes' => array('class' => array('cta-link')))
+    ) : FALSE;
+
+}

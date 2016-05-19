@@ -1,0 +1,134 @@
+<?php
+/**
+ * @file
+ * Installation file for the Featured Highlight module.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines promo content type field schema.
+ */
+function utexas_featured_highlight_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+  // The alt tag and photo credit for any files uploaded here are stored in
+  // field_data_field_alt_tag and field_data_field_photo_credit.
+  switch ($field['type']) {
+    case 'utexas_featured_highlight':
+      $columns['image_fid'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The {file_managed}.fid for a featured highlight image',
+      );
+      $foreign_keys['image_fid'] = array(
+        'table' => 'file_managed',
+        'columns' => array('image_fid' => 'fid'),
+      );
+      $columns['date'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores date for the highlight',
+      );
+      $columns['headline'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores headline for the highlight',
+      );
+      $columns['copy_value'] = array(
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+        'description' => 'Stores copy value for the highlight',
+      );
+      $columns['copy_format'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores copy text format for the highlight',
+      );
+      $foreign_keys['copy_format'] = array(
+        'table' => 'filter_format',
+        'columns' => array('copy_format' => 'format'),
+      );
+      $columns['link'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores optional link either internal or external content',
+      );
+      $columns['cta'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores optional call to action',
+      );
+      $columns['highlight_style'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores the desired style for the featured highlight',
+      );
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+    'foreign keys' => $foreign_keys,
+  );
+}
+
+/**
+ * Implements hook_install().
+ */
+function utexas_featured_highlight_install() {
+  $export = array();
+
+  $file_display = new stdClass();
+  $file_display->api_version = 1;
+  $file_display->name = 'video__featured_highlight_video__media_youtube_video';
+  $file_display->weight = 0;
+  $file_display->status = 1;
+  $file_display->settings = array(
+    'width' => '320',
+    'height' => '195',
+    'theme' => 'dark',
+    'color' => 'red',
+    'autohide' => '2',
+    'captions' => FALSE,
+    'autoplay' => 0,
+    'loop' => 0,
+    'showinfo' => 1,
+    'modestbranding' => 0,
+    'rel' => 1,
+    'nocookie' => 0,
+    'protocol_specify' => 0,
+    'protocol' => 'https:',
+    'enablejsapi' => 0,
+    'origin' => '',
+  );
+  $export['video__featured_highlight_video__media_youtube_video'] = $file_display;
+  foreach ($export as $display) {
+    $updated = db_merge('file_display')
+      ->key(array('name' => $display->name))
+      ->fields(array(
+        'name' => $display->name,
+        'weight' => $display->weight,
+        'status' => $display->status,
+        'settings' => serialize($display->settings),
+      ))
+      ->execute();
+  }
+}
+
+/**
+ * Implements hook_unininstall().
+ *
+ * Intentionally left blank to register an uninstall of the field.
+ */
+function utexas_highlight_uninstall() {
+  // Left blank to force an uninstall of the schema.
+}

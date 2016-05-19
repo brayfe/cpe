@@ -1,0 +1,42 @@
+<?php
+/**
+ * @file
+ * Install file for Background Accent module.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines the schema.
+ */
+function utexas_background_accent_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+    case 'utexas_background_accent':
+      $columns['image_fid'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The {file_managed}.fid for the image',
+      );
+      $columns['blur'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'Boolean for image blur effect',
+        'default' => 0,
+      );
+      $foreign_keys['image_fid'] = array(
+        'table' => 'file_managed',
+        'columns' => array('image_fid' => 'fid'),
+      );
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+    'foreign keys' => $foreign_keys,
+  );
+}

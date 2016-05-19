@@ -1,0 +1,19 @@
+.field_utexas_social_links {
+  margin: 0;
+  padding: 10px;
+}
+.field_utexas_social_links .connect-links {
+  margin: 0;
+}
+.field_utexas_social_links .connect-links li {
+  display: inline-block;
+  list-style-type: none;
+  margin: 0 5px;
+}
+.hiddenText {
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  position: absolute !important;
+  width: 1px;
+}

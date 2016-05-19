@@ -1,0 +1,34 @@
+<?php
+/**
+ * @file
+ * Module definition for the UTexas Admin module.
+ *
+ * Creates a UTexas placeholder menu for administration tasks, and replaces the
+ * Javascript for Admin and other themes.
+ */
+
+/**
+ * UTexas administration permission.
+ */
+define('UTEXAS_ADMIN_MINIMUM_PHP', '5.4.0');
+
+/**
+ * Implements hook_requirements().
+ */
+function utexas_admin_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break during installation.
+  $t = get_t();
+
+  // Test PHP version.
+  $requirements['utexas-php'] = array(
+    'title' => $t('PHP (UTexas)'),
+    'value' => ($phase == 'runtime') ? l(phpversion(), 'admin/reports/status/php') : phpversion(),
+  );
+  if (version_compare(phpversion(), UTEXAS_ADMIN_MINIMUM_PHP) < 0) {
+    $requirements['utexas-php']['description'] = $t('Your PHP installation is too old. This distribution requires at least PHP %version.', array('%version' => UTEXAS_ADMIN_MINIMUM_PHP));
+    $requirements['utexas-php']['severity'] = REQUIREMENT_ERROR;
+  }
+
+  return $requirements;
+}

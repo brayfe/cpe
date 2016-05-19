@@ -1,0 +1,6 @@
+name = UTexas Social Accounts
+description = Provides a header and footer social accounts block
+core = 7.x
+package = UTexas
+version = 7.x-1.0
+configure = admin/config/utexas

@@ -1,0 +1,33 @@
+name = Page Builder
+description = Defines rules to reorganize the 'page' content type node edit screen.
+core = 7.x
+version = 7.x-1.1
+package = UTexas
+
+; Contrib dependencies
+dependencies[] = context
+dependencies[] = context_field
+dependencies[] = context_layouts
+dependencies[] = ctr
+dependencies[] = fieldblock
+dependencies[] = multiple_fields_remove_button
+dependencies[] = views
+
+; Sub-modules
+dependencies[] = utexas_background_accent
+dependencies[] = utexas_beacon
+dependencies[] = utexas_featured_highlight
+dependencies[] = utexas_flex_content_areas
+dependencies[] = utexas_hero_photo
+dependencies[] = utexas_image_links
+dependencies[] = utexas_newsreel
+dependencies[] = utexas_photo_content_area
+dependencies[] = utexas_promo_field
+dependencies[] = utexas_resource
+dependencies[] = utexas_promo_list
+dependencies[] = utexas_quick_links
+dependencies[] = utexas_social_links
+dependencies[] = utexas_templates
+
+; file autoloads
+files[] = plugins/utexas_page_builder_views_plugin_display_block.inc

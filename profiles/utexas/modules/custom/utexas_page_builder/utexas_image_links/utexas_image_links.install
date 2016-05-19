@@ -1,0 +1,48 @@
+<?php
+/**
+ * @file
+ * Install file for the utexas_image_links module.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines image link field schema.
+ */
+function utexas_image_links_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+    case 'utexas_image_link':
+      $columns['image_fid'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The {file_managed}.fid for an image link image.',
+      );
+      $foreign_keys['image_fid'] = array(
+        'table' => 'file_managed',
+        'columns' => array('image_fid' => 'fid'),
+      );
+      $columns['link_title'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores optional link title for the link.',
+      );
+      $columns['link_href'] = array(
+        'type' => 'varchar',
+        'length' => 2048,
+        'not null' => FALSE,
+        'description' => 'Stores link href for the link.',
+      );
+
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+    'foreign keys' => $foreign_keys,
+  );
+}

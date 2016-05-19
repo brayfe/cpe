@@ -1,0 +1,7 @@
+name = UTexas Fonts
+description = Includes fonts to be used with UT Branding
+core = 7.x
+version = 7.x-1.0
+package = UTexas
+
+stylesheets[all][] = css/fonts.css

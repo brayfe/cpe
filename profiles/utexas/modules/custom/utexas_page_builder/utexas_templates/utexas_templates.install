@@ -1,0 +1,1482 @@
+<?php
+
+/**
+ * @file
+ * UTexas Templates Install profile.
+ *
+ * Add hook_update_N() functions here to create/edit existing templates
+ * Each new template must include an array definition such as shown below,
+ * a tpl.php file, and a .svg thumbnail, all stored in this module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function utexas_templates_schema() {
+
+  $schema = array();
+
+  $schema['utexas_templates'] = array(
+    'description' => 'The base table for the Template entity',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key of the Template entity',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'Template Name',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'description' => array(
+        'description' => 'Template Description',
+        'type' => 'varchar',
+        'length' => 1024,
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'image_filename' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The filename for a template thumbnail.',
+      ),
+      'template_filename' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The filename for the tpl.php file',
+      ),
+      'fields' => array(
+        'description' => 'Allowed Fields',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+
+}
+
+/**
+ * Implements hook_install().
+ */
+function utexas_templates_install() {
+  // Set the initial value for the schema version so we can
+  // run updates after install.
+  drupal_set_installed_schema_version('utexas_templates', 7101);
+
+  $templates = array(
+    array(
+      'name' => 'Hero Image & Sidebars',
+      'description' => 'Ideal for heavy content pages, where a prominent high quality image is available.',
+      'additional_settings' => array(
+        'template_file' => 'page--hero-image-sidebars.tpl.php',
+        'fields' => array(
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -20,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -19,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -12,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -11,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -10,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -9,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -8,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -7,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -6,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -4,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => -1,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => 0,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => 1,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'hero-image-sidebars.svg',
+      ),
+    ),
+    array(
+      'name' => 'Header with Content & Sidebars',
+      'description' => 'Ideal for heavy content pages, using smaller image and copy instead of a large promotional image above the fold.',
+      'additional_settings' => array(
+        'template_file' => 'page--header-with-content-sidebars.tpl.php',
+        'fields' => array(
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -20,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -19,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -12,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -11,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -10,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -9,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -8,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -7,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -6,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -5,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -3,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => 0,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => 1,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'header-with-content-sidebars.svg',
+      ),
+    ),
+    array(
+      'name' => 'Promotional Page & Sidebar',
+      'description' => 'Ideal for promotional or marketing pages where a large, high quality image is available and content is light to medium.',
+      'additional_settings' => array(
+        'template_file' => 'page--promotional-page-sidebar.tpl.php',
+        'fields' => array(
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -12,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -11,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -10,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -9,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -8,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -7,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -6,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -5,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -4,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -2,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => 1,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => 2,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => 3,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ), 
+        ),
+        'template_icon_fid' => 'promotional-page-sidebar.svg',
+      ),
+    ),
+    array(
+      'name' => 'Full Content Page & Sidebar',
+      'description' => 'Ideal for utility pages with lots of information, collections of links, and few images.',
+      'additional_settings' => array(
+        'template_file' => 'page--full-content-page-sidebar.tpl.php',
+        'fields' => array(
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -19,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -12,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -11,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -10,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -9,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -8,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -7,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -6,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -5,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -3,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => 0,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => 1,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => 2,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'full-content-page-sidebar.svg',
+      ),
+    ),
+    array(
+      'name' => 'Featured Highlight',
+      'description' => 'For pages like "Header with Content & Sidebars", where a story or other item is promoted.',
+      'additional_settings' => array(
+        'template_file' => 'page--featured-highlight.tpl.php',
+        'fields' => array(
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => -21,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -20,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -19,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -12,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -11,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -10,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -9,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -8,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -7,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -6,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -5,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -3,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => -2,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'featured-highlight.svg',
+      ),
+    ),
+    array(
+      'name' => 'Full Width Content Page & Title',
+      'description' => 'Ideal for news and information with a title that does not require sidebar items.',
+      'additional_settings' => array(
+        'template_file' => 'page--full-width-content-page-title.tpl.php',
+        'fields' => array(
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -19,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -3,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => -11,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -10,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => -9,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -8,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -7,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -6,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -5,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -4,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -3,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -1,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => 2,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'full-width-content-page-title.svg',
+      ),
+    ),
+    array(
+      'name' => 'Full Width Content Page',
+      'description' => 'Ideal for news and information without a title that does not require sidebar items.',
+      'additional_settings' => array(
+        'template_file' => 'page--full-width-content-page.tpl.php',
+        'fields' => array(
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -19,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_timely_announcement' => array(
+            'machine_name' => 'field_timely_announcement',
+            '_weight' => -12,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => -11,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -10,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => -9,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -8,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -7,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -6,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -5,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -4,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -3,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -1,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -3,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => -2,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'full-width-content-page.svg',
+      ),
+    ),
+    array(
+      'name' => 'Open Text Page',
+      'description' => 'Use a simple WYSIWYG tool to create a text page.',
+      'additional_settings' => array(
+        'template_file' => 'page--open-text-page.tpl.php',
+        'fields' => array(
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -16,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -15,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -14,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -13,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -12,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -11,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => -10,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -9,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => -8,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -7,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -6,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -5,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -4,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -3,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -1,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => 0,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => 1,
+            'enabled' => FALSE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'open-text-page.svg',
+      ),
+    ),
+    array(
+      'name' => 'Landing Page Template 1',
+      'description' => 'Hero image, with content & sidebar regions above and below a featured highlight region.',
+      'additional_settings' => array(
+        'template_file' => 'page--landing-page-template-1.tpl.php',
+        'fields' => array(
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => -21,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -20,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -19,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -22,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -11,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -10,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -9,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -8,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -7,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -6,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -5,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -3,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => -2,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'landing-page-template-1.svg',
+      ),
+    ),
+
+    array(
+      'name' => 'Landing Page Template 2',
+      'description' => 'Hero image, 3-column flex content features, full-width quick links, & main content regions.',
+      'additional_settings' => array(
+        'template_file' => 'page--landing-page-template-2.tpl.php',
+        'fields' => array(
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -20,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -19,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -22,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -11,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -10,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -9,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -8,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -7,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -6,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -5,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -3,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => -2,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'landing-page-template-2.svg',
+      ),
+    ),
+
+    array(
+      'name' => 'Landing Page Template 3',
+      'description' => 'Hero image, 4-column flex content features, full-width featured highlight, & content + sidebar regions.',
+      'additional_settings' => array(
+        'template_file' => 'page--landing-page-template-3.tpl.php',
+        'fields' => array(
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => -21,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_wysiwyg_a' => array(
+            'machine_name' => 'field_wysiwyg_a',
+            '_weight' => -20,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_wysiwyg_b' => array(
+            'machine_name' => 'field_wysiwyg_b',
+            '_weight' => -19,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_a' => array(
+            'machine_name' => 'field_utexas_flex_content_area_a',
+            '_weight' => -18,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_flex_content_area_b' => array(
+            'machine_name' => 'field_utexas_flex_content_area_b',
+            '_weight' => -17,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_units' => array(
+            'machine_name' => 'field_utexas_promo_units',
+            '_weight' => -16,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_promo_list' => array(
+            'machine_name' => 'field_utexas_promo_list',
+            '_weight' => -15,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_quick_links' => array(
+            'machine_name' => 'field_utexas_quick_links',
+            '_weight' => -14,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_photo_content_area' => array(
+            'machine_name' => 'field_utexas_photo_content_area',
+            '_weight' => -13,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_hero_photo' => array(
+            'machine_name' => 'field_utexas_hero_photo',
+            '_weight' => -22,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
+          'field_gift_link' => array(
+            'machine_name' => 'field_gift_link',
+            '_weight' => -11,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_a' => array(
+            'machine_name' => 'field_utexas_image_link_a',
+            '_weight' => -10,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_image_link_b' => array(
+            'machine_name' => 'field_utexas_image_link_b',
+            '_weight' => -9,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_social_links' => array(
+            'machine_name' => 'field_utexas_social_links',
+            '_weight' => -8,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_contact_info' => array(
+            'machine_name' => 'field_utexas_contact_info',
+            '_weight' => -7,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_newsreel' => array(
+            'machine_name' => 'field_utexas_newsreel',
+            '_weight' => -6,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_twitter_widget' => array(
+            'machine_name' => 'field_utexas_twitter_widget',
+            '_weight' => -5,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_call_to_action' => array(
+            'machine_name' => 'field_utexas_call_to_action',
+            '_weight' => -3,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+          'field_utexas_resource' => array(
+            'machine_name' => 'field_utexas_resource',
+            '_weight' => -2,
+            'enabled' => TRUE,
+            'locked' => FALSE,
+          ),
+        ),
+        'template_icon_fid' => 'landing-page-template-3.svg',
+      ),
+    ),
+  );
+  $inc = 1;
+  foreach ($templates as $template) {
+    $entity = entity_create('template', array('id' => $inc));
+    $entity->name = $template['name'];
+    $entity->description = $template['description'];
+    $entity->template_filename = $template['additional_settings']['template_file'];
+    $entity->image_filename = $template['additional_settings']['template_icon_fid'];
+    $entity->fields = serialize($template['additional_settings']['fields']);
+    $entity->save();
+    $inc++;
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enabling UTexas Resource field.
+ */
+function utexas_templates_update_7101() {
+
+  $modules = array(
+    'utexas_resource',
+  );
+  module_enable($modules);
+
+  features_revert();
+
+  $templates = entity_load('template', FALSE, array(), FALSE);
+  foreach ($templates as $template) {
+
+    $template_fields = unserialize($template->fields);
+    if ($template->name != 'Open Text Page') {
+      $new_field = array(
+        'field_utexas_resource' => array(
+          'machine_name' => 'field_utexas_resource',
+          '_weight' => 1,
+          'enabled' => TRUE,
+          'locked' => FALSE,
+        )
+      );
+      $template_fields = array_merge($template_fields, $new_field);
+      $template->fields = serialize($template_fields);
+      entity_save('template', $template);
+    }
+  }
+}

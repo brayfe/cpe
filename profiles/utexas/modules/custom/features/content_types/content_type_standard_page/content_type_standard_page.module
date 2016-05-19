@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Standard Page feature.
+ */
+
+include_once 'content_type_standard_page.features.inc';

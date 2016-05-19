@@ -1,0 +1,50 @@
+<?php
+/**
+ * @file
+ * Installation functions for the Page Builder module.
+ */
+
+/**
+ * Implements hook_schema_alter().
+ *
+ * Attaches a callback for the context module.
+ */
+function utexas_page_builder_schema_alter(&$schema) {
+
+  // Attach a callback for the export.
+  $schema['context']['export']['load all callback'] = 'utexas_page_builder_export_load_all';
+}
+
+/**
+ * Implements hook_install().
+ *
+ * Alters the context schema.
+ */
+function utexas_page_builder_install() {
+
+  // Change the context schema.
+  $schema = drupal_get_schema('context', TRUE);
+  $schema = array('context' => $schema);
+  utexas_page_builder_schema_alter($schema);
+
+  variable_set('context_reaction_block_all_regions', 1);
+  variable_set('context_ui_dialog_enabled', 1);
+  variable_set('hide_context_field', 1);
+  variable_set('utexas_page_builder_hide_context_field_admin_ui', 1);
+}
+
+/**
+ * Implements hook_unininstall().
+ *
+ * Deletes set variables, files attached to the templates taxonomy, and drops
+ * the extra columns added to the taxonomy data.
+ */
+function utexas_page_builder_uninstall() {
+  // Delete the context setting variable.
+  variable_del('context_by_node_hide_context_ui_admin');
+  variable_del('context_reaction_block_all_regions');
+  variable_del('context_ui_dialog_enabled');
+  variable_del('hide_context_field');
+  variable_del('utexas_page_builder_hide_context_field_admin_ui');
+
+}

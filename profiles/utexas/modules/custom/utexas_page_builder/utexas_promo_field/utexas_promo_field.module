@@ -1,0 +1,507 @@
+<?php
+/**
+ * @file
+ * Custom field definition for the Promo Field form element.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines the Promo Field field.
+ */
+function utexas_promo_field_field_info() {
+  return array(
+    'utexas_promo_field' => array(
+      'label' => t('Promo Field'),
+      'description' => t('This field stores information about promos'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'utexas_promo_unit',
+      'default_formatter' => 'utexas_promo_unit',
+    ),
+  );
+}
+
+/**
+ * Implements hook_image_default_styles().
+ *
+ * Defines image styles for promo field images for both promo units promo lists.
+ */
+function utexas_promo_field_image_default_styles() {
+  return array(
+    'utexas_promo_unit_landscape_image' => array(
+      'label' => t('Promo Unit Landscape Image'),
+      'effects' => array(
+        array(
+          'name' => 'smartcrop_scale_and_crop',
+          'data' => array(
+            'width' => 440,
+            'height' => 280,
+            'upscale' => FALSE,
+          ),
+          'weight' => 0,
+        ),
+      ),
+    ),
+    'utexas_promo_unit_square_image' => array(
+      'label' => t('Promo Unit Square Image'),
+      'effects' => array(
+        array(
+          'name' => 'smartcrop_scale_and_crop',
+          'data' => array(
+            'width' => 280,
+            'height' => 280,
+            'upscale' => FALSE,
+          ),
+          'weight' => 0,
+        ),
+      ),
+    ),
+    'utexas_promo_unit_portrait_image' => array(
+      'label' => t('Promo Unit Portrait Image'),
+      'effects' => array(
+        array(
+          'name' => 'smartcrop_scale_and_crop',
+          'data' => array(
+            'width' => 300,
+            'height' => 376,
+            'upscale' => FALSE,
+          ),
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_file_download().
+ *
+ * Checks access to make sure users can actually use the files that have been
+ * uploaded. Required since Drupal 7.29.
+ */
+function utexas_promo_field_file_download($uri) {
+  if (strpos(file_uri_target($uri), 'promo_images') === 0) {
+    $info = image_get_info($uri);
+    return array('Content-Type' => $info['mime_type']);
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to make sure all fields have valid data in them.
+ */
+function utexas_promo_field_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  // Loop through the values, making sure all check out.
+  foreach ($items as $delta => $item) {
+    if (!utexas_promo_field_field_is_empty($item, $field)) {
+      // Check to make sure headline is not empty.
+      if (empty($item['headline'])) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'headline_empty',
+          'message' => t('%headline: Headline field is required.', array('%headline' => $instance['label'])),
+        );
+      }
+
+      // Check to make sure copy is not empty.
+      $copy = isset($item['copy_value']) ? $item['copy_value'] : $item['copy']['value'];
+      if (empty($copy)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'copy_empty',
+          'message' => t('%copy: Copy field is required.', array('%copy' => $instance['label'])),
+        );
+      }
+
+      // Check to make sure valid link.
+      $target = drupal_get_normal_path($item['link']);
+      if (!empty($item['link']) and !drupal_valid_path($target)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'link_invalid',
+          'message' => t('%link: Link must be a valid URL.', array('%link' => $instance['label'])),
+        );
+      }
+      // Bypass if coming from a migration.
+      $image = isset($item['image']['fid']) ? $item['image']['fid'] : 0;
+
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function utexas_promo_field_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  switch ($error['error']) {
+    case 'headline_empty':
+      form_error($element['headline'], $error['message']);
+      break;
+
+    case 'copy_empty':
+      form_error($element['copy']['value'], $error['message']);
+      break;
+
+    case 'link_invalid':
+      form_error($element['link'], $error['message']);
+      break;
+
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Adjust copy format+value and handle images.
+ */
+function utexas_promo_field_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  // Throw the copy format & copy value into separate files.
+  foreach ($items as $delta => &$item) {
+    // Determine whether the image is coming from a form or directly from the
+    // database, as in the case of a migration.
+    if (isset($item['image']['fid'])) {
+      $item['image_fid'] = $item['image']['fid'];
+    }
+    // A migration with no image sends null; file_save needs 0.
+    if (empty($item['image_fid'])) {
+      $item['image_fid'] = 0;
+    }
+
+    // Adjust CTA link.
+    $item['link'] = isset($item['link']) ? drupal_get_normal_path($item['link']) : '';
+
+    // Adjust copy format & copy value.
+    $item['copy_format'] = isset($item['copy_format']) ? $item['copy_format'] : $item['copy']['format'];
+    $item['copy_value'] = isset($item['copy_value']) ? $item['copy_value'] : $item['copy']['value'];
+    unset($item['copy']);
+  }
+}
+
+/**
+ * Implements hook_field_insert().
+ *
+ * Increment file usage.
+ */
+function utexas_promo_field_field_insert($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_insert_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_promo_field');
+}
+
+
+/**
+ * Implements hook_field_update().
+ *
+ * Adjust copy format+value and handle images.
+ */
+function utexas_promo_field_field_update($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_update_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_promo_field');
+}
+
+/**
+ * Implements hook_field_delete().
+ *
+ * Cleans up any remaining files, if they have not been deleted already.
+ */
+function utexas_promo_field_field_delete($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  utexas_admin_field_delete_custom($entity_type, $entity, $field, $instance, $langcode, $items, 'utexas_promo_field');
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function utexas_promo_field_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'utexas_promo_field':
+      // An empty image from a Migration will send "MigrateFileFid".
+      $image_empty = (isset($item['image'])) ? empty($item['image']['fid']) : empty($item['image_fid']);
+      if (isset($item['image_fid'])) {
+        if ($item['image_fid'] == 'MigrateFileFid') {
+          $image_empty = TRUE;
+        }
+      }
+      // An empty headline from a migration will send NULL.
+      if (isset($item['headline'])) {
+        if ($item['headline'] == '') {
+          unset($item['headline']);
+        }
+      }
+      // An empty title from a migration will send NULL.
+      if (isset($item['title'])) {
+        if ($item['title'] == '') {
+          unset($item['title']);
+        }
+      }
+      // Copy from a migration comes from copy_value directly.
+      if (isset($item['copy_value'])) {
+        $item['copy']['value'] = $item['copy_value'];
+      }
+
+      return empty($item['headline']) and
+        empty($item['copy']['value']) and
+        empty($item['link']) and
+        empty($item['cta']) and
+        $image_empty;
+  }
+
+  return FALSE;
+}
+
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines two widgets for the Promo Field.
+ */
+function utexas_promo_field_field_widget_info() {
+  return array(
+    'utexas_promo_unit' => array(
+      'label' => t('Promo Unit'),
+      'field types' => array('utexas_promo_field'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Defines two widget forms for the Promo Field.
+ */
+function utexas_promo_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  switch ($instance['widget']['type']) {
+
+    case 'utexas_promo_unit':
+      if ($delta == 0) {
+        // Title. Make this only available on the first item.
+        $element['title'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Title'),
+          '#description' => t('Optionally add a title for the collection of promo units.'),
+          '#size' => 60,
+          '#maxlength' => 100,
+          '#default_value' => (isset($items[$delta]['title'])) ? $items[$delta]['title'] : '',
+        );
+      }
+
+      // Image upload.
+      $element['image'] = array(
+        '#type' => 'media',
+        '#title' => t('Promo Unit Image'),
+        '#tree' => TRUE,
+        '#field_name' => 'file_upload',
+        '#description' => t('Upload an image, or select one from the library.'),
+        '#extended' => TRUE,
+        '#media_options' => array(
+          'global' => array(
+            'file_extensions' => 'gif png jpg jpeg',
+            'file_directory' => 'promo-images',
+            'types' => array('image'),
+          ),
+        ),
+        '#default_value' => array('fid' => isset($items[$delta]['image_fid']) ? $items[$delta]['image_fid'] : 0),
+      );
+      // Create image style options for radio set.
+      $options = array(
+        'utexas_promo_unit_landscape_image' => t('Landscape (220x140)'),
+        'utexas_promo_unit_square_image' => t('Square (140x140)'),
+        'utexas_promo_unit_portrait_image' => t('Portrait (150x188)'),
+        'utexas_promo_unit_no_image' => t('No image'),
+      );
+      $element['size_option'] = array(
+        '#type' => 'radios',
+        '#title' => t('Image Style'),
+        '#description' => t('Select what size picture you would like. <em>This field is required.</em>'),
+        '#required' => TRUE,
+        '#options' => $options,
+        '#default_value' => (isset($items[$delta]['size_option'])) ? $items[$delta]['size_option'] : 'utexas_promo_unit_landscape_image',
+      );
+      // Headline.
+      $element['headline'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Headline'),
+        '#description' => t('Enter a headline for this promotion. <em>This field is required.</em>'),
+        '#size' => 60,
+        '#maxlength' => 100,
+        '#default_value' => (isset($items[$delta]['headline'])) ? $items[$delta]['headline'] : '',
+      );
+
+      // Copy.
+      $element['copy'] = array(
+        '#type' => 'text_format',
+        '#title' => t('Copy'),
+        '#description' => t('Enter body copy for this promotion. <em>This field is required.</em>'),
+        '#default_value' => (isset($items[$delta]['copy_value'])) ? $items[$delta]['copy_value'] : '',
+        '#format' => (isset($items[$delta]['copy_format'])) ? $items[$delta]['copy_format'] : NULL,
+        '#wysiwyg' => FALSE,
+      );
+
+      // Link.
+      $link = '';
+      if (isset($items[$delta]['link'])) {
+        if (trim($items[$delta]['link']) != '') {
+          $link = drupal_get_path_alias($items[$delta]['link']);
+        }
+      }
+
+      // Link.
+      $element['link'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Call to Action Link'),
+        '#description' => t('Enter a valid URL for this link.'),
+        '#size' => 60,
+        '#maxlength' => 2048,
+        '#default_value' => $link,
+        '#attributes' => array(
+          'placeholder' => 'external URL (http://) or internal path (e.g., about/diversity)',
+        ),
+      );
+
+      // CTA.
+      $element['cta'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Call to Action Title'),
+        '#description' => t('Enter a title for the Call to Action Link.'),
+        '#size' => 60,
+        '#maxlength' => 100,
+        '#default_value' => (isset($items[$delta]['cta'])) ? $items[$delta]['cta'] : '',
+      );
+
+      break;
+
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines two formatters for the Promo Field.
+ */
+function utexas_promo_field_field_formatter_info() {
+  return array(
+    'utexas_promo_unit' => array(
+      'label' => t('Promo Unit'),
+      'field types' => array('utexas_promo_field'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Builds the two formatter views for the Promo Field.
+ */
+function utexas_promo_field_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'utexas_promo_unit':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('utexas_promo_unit', $item),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'utexas_promo_field') . '/utexas_promo_field.css'),
+          ),
+        );
+      }
+
+      break;
+
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Register the promo unit and promo list displays.
+ */
+function utexas_promo_field_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_promo_unit' => array(
+      'variables' => array(
+        'title' => NULL,
+        'delta' => NULL,
+        'headline' => NULL,
+        'image_fid' => NULL,
+        'size_options' => NULL,
+        'copy_format' => NULL,
+        'copy_value' => NULL,
+        'link' => NULL,
+        'cta' => NULL,
+      ),
+      'template' => 'theme/utexas-promo-unit',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function for promo units.
+ *
+ * @see utexas-promo-unit.tpl.php
+ */
+function template_preprocess_utexas_promo_unit(&$variables) {
+  // Attach some theme hook suggestions to override individual promo units.
+  $variables['theme_hook_suggestions'] = array(
+    'utexas-promo-unit',
+    'utexas-promo-unit--' . $variables['id'],
+  );
+
+  // Replace the copy variables with the formatted copy.
+  $variables['copy'] = check_markup($variables['copy_value'], $variables['copy_format']);
+  unset($variables['copy_value']);
+  unset($variables['copy_format']);
+
+  // Get a read-more link.
+  $default = (!empty($variables['cta'])) ? $variables['cta'] : t('Read story');
+  $variables['read_more'] = (!empty($variables['link'])) ? l('<span>' . $default . '</span>', $variables['link'], array('html' => TRUE, 'attributes' => array('class' => array('cta-link')))) : FALSE;
+
+  $image = FALSE;
+  $size_option = isset($variables['size_option']) ? $variables['size_option'] : 'utexas_promo_unit_landscape_image';
+  $variables['size_option'] = $size_option;
+  // Get an image loaded.
+  if (!empty($variables['image_fid']) && $size_option != 'utexas_promo_unit_no_image') {
+    if ($file = file_load($variables['image_fid'])) {
+      $info = image_get_info($file->uri);
+      $alt = isset($file->field_file_image_alt_text['und'][0]['safe_value']) ? $alt = $file->field_file_image_alt_text['und'][0]['safe_value'] : '';
+      $title = isset($file->field_file_image_title_text['und'][0]['safe_value']) ? $title = $file->field_file_image_title_text['und'][0]['safe_value'] : '';
+      $image = theme('image_style', array(
+        'style_name' => $size_option,
+        'path' => $file->uri,
+        'width' => $info['width'],
+        'height' => $info['height'],
+        'alt' => $alt,
+        'title' => $title,
+        'attributes' => array('class' => array('promo-image')),
+      ));
+    }
+
+    // Wrap a link around the image, if there is one.
+    if (!empty($variables['link'])) {
+      $image = l($image, $variables['link'], array('html' => TRUE, 'attributes' => array('class' => array('promo-utexas-image-link'))));
+    }
+  }
+
+  // Set the image variable to pass to the template.
+  $variables['image'] = (isset($image)) ? $image : FALSE;
+
+  // Get a link-ified headline, if necessary.
+  $variables['headline_text'] = $variables['headline'];
+  if (!empty($variables['link'])) {
+    $variables['headline'] = l($variables['headline'], $variables['link'], array(
+      'attributes' => array(
+        'class' => array('headline-link'),
+      ),
+    ));
+  }
+}

@@ -1,0 +1,8 @@
+name = UTexas Twitter Widget
+description = Define and store settings for individual twitter feeds
+core = 7.x
+version = 7.x-1.1
+package = UTexas
+
+dependencies[] = entity
+dependencies[] = entityreference

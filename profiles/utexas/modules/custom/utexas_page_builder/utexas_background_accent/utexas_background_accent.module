@@ -1,0 +1,284 @@
+<?php
+/**
+ * @file
+ * Module file for the Background Accent module.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines the field within the system.
+ */
+function utexas_background_accent_field_info() {
+  return array(
+    'utexas_background_accent' => array(
+      'label' => t('Background Accent'),
+      'description' => t('Defines a background accent field.'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'utexas_background_accent',
+      'default_formatter' => 'utexas_background_accent',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines the default widget.
+ */
+function utexas_background_accent_field_widget_info() {
+  return array(
+    'utexas_background_accent' => array(
+      'label' => t('Background Accent'),
+      'field types' => array('utexas_background_accent'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_image_default_styles().
+ *
+ * Used to define the image style used here.
+ */
+function utexas_background_accent_image_default_styles() {
+  $styles = array();
+
+  // Define the crop to 1500 x 543
+  $styles['utexas_background_accent'] = array(
+    'label' => 'Background Accent Image',
+    'effects' => array(
+      array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 1500,
+          'height' => 800,
+          'upscale' => FALSE,
+        ),
+        'weight' => 0,
+      ),
+    ),
+  );
+
+  return $styles;
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Form definition for the field widget.
+ */
+function utexas_background_accent_field_widget_form(&$form, &$form_state, $field,
+  $instance, $langcode, $items, $delta, $element) {
+  switch ($instance['widget']['type']) {
+    case 'utexas_background_accent':
+
+      // Image upload input.
+      $element['utexas_background_accent_image'] = array(
+        '#type' => 'media',
+        '#title' => t('Background Accent'),
+        '#tree' => TRUE,
+        '#field_name' => 'utexas_background_accent_image',
+        '#description' => t('Optionally, add a background image for the
+          "related content" region. For best results, upload an image of
+          minimum size 1500x500 pixels. Allows GIF, PNG, JPG, JPEG. Image
+          will show only on templates that have this region.'),
+        '#extended' => TRUE,
+        '#media_options' => array(
+          'global' => array(
+            'file_extensions' => 'gif png jpg jpeg',
+            'file_directory' => 'background-accents',
+            'types' => array('image'),
+          ),
+        ),
+        '#default_value' => array('fid' => isset($items[$delta]['image_fid']) ? $items[$delta]['image_fid'] : 0),
+      );
+
+      $element['blur'] = array(
+        '#type' => 'checkbox',
+        '#default_value' => (isset($items[$delta]['blur'])) ? $items[$delta]['blur'] : 1,
+        '#title' => 'Apply blur to image?',
+        '#description' => '* The blur feature is not supported in Internet Explorer.',
+      );
+      break;
+  }
+  return $element;
+}
+
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to validate the user input on the form.
+ */
+function utexas_background_accent_field_validate($entity_type, $entity, $field,
+  $instance, $langcode, $items, &$errors) {
+  // No validation steps right now, as the field is optional.
+  // The following prevents a potential problem when using utexas_migrate.
+  foreach ($items as $delta => $item) {
+    if (!utexas_background_accent_field_is_empty($item, $field)) {
+
+      // Bypass if data sent directly via a migration.
+      $image = isset($item['image_fid']) ? 0 : $item['utexas_background_accent_image']['fid'];
+
+    }
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Adjusts nested fieldset field values to save into their respective columns.
+ */
+function utexas_background_accent_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+
+  foreach ($items as $delta => &$item) {
+
+    if (isset($item['utexas_background_accent_image']['fid'])) {
+      $item['image_fid'] = $item['utexas_background_accent_image']['fid'];
+      unset($item['utexas_background_accent_image']);
+    }
+  }
+}
+
+/**
+ * Implements hook_file_download().
+ *
+ * Checks access to make sure users can actually use the files that have been
+ * uploaded. Required since Drupal 7.29.
+ */
+function utexas_background_accent_file_download($uri) {
+  if (strpos(file_uri_target($uri), 'utexas-background-accent') === 0) {
+    $info = image_get_info($uri);
+    return array('Content-Type' => $info['mime_type']);
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements hook_field_insert().
+ *
+ * Increment file usage.
+ */
+function utexas_background_accent_field_insert($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_insert_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_background_accent');
+}
+
+/**
+ * Implements hook_field_update().
+ *
+ * Adjust copy format+value and handle images.
+ */
+function utexas_background_accent_field_update($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_update_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_background_accent');
+}
+
+/**
+ * Implements hook_field_delete().
+ *
+ * Cleans up any remaining files, if they have not been deleted already.
+ */
+function utexas_background_accent_field_delete($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  utexas_admin_field_delete_custom($entity_type, $entity, $field, $instance, $langcode, $items, 'utexas_background_accent');
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines the primary field widget.
+ */
+function utexas_background_accent_field_formatter_info() {
+  return array(
+    'utexas_background_accent' => array(
+      'label' => t('Background Accent'),
+      'field types' => array('utexas_background_accent'),
+    ),
+  );
+}
+
+/**
+ * Implements template_preprocess_theme().
+ *
+ * Converts the image file id with the themed image URL.
+ */
+function template_preprocess_utexas_background_accent(&$variables) {
+  // Set the variables.
+  $variables['background_accent'] = ($variables['background_accent']) ? image_style_url('utexas_background_accent', file_load($variables['image'])->uri) : FALSE;
+}
+
+/**
+ * Implements theme_preprocess_page().
+ *
+ * Adds the background image as an inline style.
+ */
+function utexas_background_accent_preprocess_page(&$variables) {
+  global $_utexas_background_accent_set;
+  $_utexas_background_accent_set = FALSE;
+  // Only continue if on a node page.
+  if (isset($variables['node']) and arg(2) !== 'edit' and arg(2) !== 'delete') {
+    $fields = field_info_instances($entity_type = 'node', $bundle_name = $variables['node']->type);
+    $background_accent = FALSE;
+    // Determine if a background accent widget is on the current node type.
+    foreach ($fields as $field) {
+      if (isset($field['widget']['type']) && $field['widget']['type'] == 'utexas_background_accent') {
+        // Note the field name to which this widget is attached.
+        $background_accent = $field['field_name'];
+        break;
+      }
+    }
+    if ($background_accent) {
+      if (isset($variables['node']->{$background_accent}['und'][0]['image_fid']) && $variables['node']->{$background_accent}['und'][0]['image_fid'] != 0) {
+        $fid = $variables['node']->{$background_accent}['und'][0]['image_fid'];
+        $file = file_load($fid);
+        $style = 'utexas_background_accent';
+        $derivative_uri = image_style_path($style, $file->uri);
+        $success = file_exists($derivative_uri) || image_style_create_derivative(image_style_load($style), $file->uri, $derivative_uri);
+        $image_url  = file_create_url($derivative_uri);
+        if ($variables['node']->{$background_accent}['und'][0]['blur']) {
+          drupal_add_css('.container.container-bottom.accent:before {background-image:url("' . $image_url . '");filter: blur(6px);  -webkit-filter: blur(6px); -ms-filter: blur(6px);}', array('type' => 'inline'));
+        }
+        else {
+          drupal_add_css('.container.container-bottom.accent:before {background-image:url("' . $image_url . '");}', array('type' => 'inline'));
+        }
+        $variables['background_accent'] = TRUE;
+        $_utexas_background_accent_set = TRUE;
+      }
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_region().
+ *
+ * Adds the "accent" class to the content bottom region, if image present.
+ */
+function utexas_background_accent_preprocess_region(&$variables) {
+  if ($variables['region'] == 'content_bottom') {
+    global $_utexas_background_accent_set;
+    if ($_utexas_background_accent_set) {
+      $variables['classes_array'][] = 'accent';
+    }
+  }
+}
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ * Determines whether or not the field has data in it.
+ */
+function utexas_background_accent_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'utexas_background_accent':
+      // An empty migration will send image_fid as "MigrateFileFid".
+      $image_empty = (isset($item['utexas_background_accent_image'])) ? empty($item['utexas_background_accent_image']['fid']) : ($item['image_fid'] == 'MigrateFileFid');
+
+      return $image_empty and empty($item['caption']);
+
+  }
+  return FALSE;
+}

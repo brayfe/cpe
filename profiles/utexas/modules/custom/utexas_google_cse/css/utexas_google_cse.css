@@ -1,0 +1,12 @@
+.gsc-selected-option-container {
+  /* Fixes the "relevance" width in the sort by filter */
+  min-width: 80px !important;
+}
+
+.div-google-results {
+  font-family: open_sans,"Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
+}
+
+.container-topnav .topnav ul.connect-links {
+  top: -7px;
+}

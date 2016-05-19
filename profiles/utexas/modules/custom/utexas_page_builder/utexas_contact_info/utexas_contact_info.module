@@ -1,0 +1,612 @@
+<?php
+/**
+ * @file
+ * UTexas Contact Info module.
+ *
+ * Provides the entity data that renders contact forms on various
+ * content types. This provides a basic CRUD interface.
+ */
+
+/**
+ * Permission for viewing available contact forms.
+ */
+define('UTEXAS_CONTACT_INFO_VIEW_PERMISSION', 'view contact info forms');
+
+/**
+ * Permission for editing contact forms.
+ */
+define('UTEXAS_CONTACT_INFO_EDIT_PERMISSION', 'administer contact info forms');
+
+/**
+ * Internal path to contact info entities.
+ */
+define('UTEXAS_CONTACT_INFO_CALLBACK', 'admin/content/contact_info');
+
+/**
+ * Implements hook_entity_info().
+ */
+function utexas_contact_info_entity_info() {
+
+  $info = array();
+
+  $info['contact_info'] = array(
+    'label' => t('Contact Info'),
+    'base table' => 'utexas_contact_info',
+    'entity keys' => array(
+      'id' => 'id',
+      'label' => 'name',
+    ),
+    'module' => 'utexas_contact_info',
+    'entity class' => 'ContactInfoEntity',
+    'controller class' => 'ContactInfoEntityController',
+    'views controller class' => 'EntityDefaultViewsController',
+    'access callback' => 'utexas_contact_info_access_callback',
+    'uri callback' => 'entity_class_uri',
+    'admin ui' => array(
+      'path' => UTEXAS_CONTACT_INFO_CALLBACK,
+      'controller class' => 'ContactInfoUIController',
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_entity_property_info().
+ */
+function utexas_contact_info_entity_property_info() {
+
+  $info = array();
+
+  $info['contact_info']['properties']['id'] = array(
+    'label' => t('Contact Info Form ID'),
+    'description' => t('The ID of the contact form.'),
+    'type' => 'integer',
+    'schema field' => 'id',
+  );
+  $info['contact_info']['properties']['name'] = array(
+    'label' => t('Contact Info Form Title'),
+    'description' => t('Identifies the contact info form within the site.'),
+    'type' => 'text',
+    'schema field' => 'name',
+  );
+  $info['contact_info']['properties']['field_location_1'] = array(
+    'label' => t('Location 1'),
+    'type' => 'text',
+    'schema field' => 'field_location_1',
+  );
+  $info['contact_info']['properties']['field_location_2'] = array(
+    'label' => t('Location 2'),
+    'type' => 'text',
+    'schema field' => 'field_location_2',
+  );
+  $info['contact_info']['properties']['field_location_3'] = array(
+    'label' => t('Location 3'),
+    'type' => 'text',
+    'schema field' => 'field_location_3',
+  );
+  $info['contact_info']['properties']['field_location_city'] = array(
+    'label' => t('Location City'),
+    'type' => 'text',
+    'schema field' => 'field_location_city',
+  );
+  $info['contact_info']['properties']['field_location_state'] = array(
+    'label' => t('Location State'),
+    'type' => 'text',
+    'schema field' => 'field_location_state',
+  );
+  $info['contact_info']['properties']['field_location_zip'] = array(
+    'label' => t('Location Zip Code'),
+    'description' => t('Enter a 5 or 9-digit number with dashes (e.g., "78123" or "78123-5678").'),
+    'type' => 'text',
+    'schema field' => 'field_location_zip',
+  );
+  $info['contact_info']['properties']['field_address_1'] = array(
+    'label' => t('Address 1'),
+    'type' => 'text',
+    'schema field' => 'field_address_1',
+  );
+  $info['contact_info']['properties']['field_address_2'] = array(
+    'label' => t('Address 2'),
+    'type' => 'text',
+    'schema field' => 'field_address_2',
+  );
+  $info['contact_info']['properties']['field_address_3'] = array(
+    'label' => t('Address 3'),
+    'type' => 'text',
+    'schema field' => 'field_address_3',
+  );
+  $info['contact_info']['properties']['field_address_city'] = array(
+    'label' => t('Address City'),
+    'type' => 'text',
+    'schema field' => 'field_address_city',
+  );
+  $info['contact_info']['properties']['field_address_state'] = array(
+    'label' => t('Address State'),
+    'type' => 'text',
+    'schema field' => 'field_address_state',
+  );
+  $info['contact_info']['properties']['field_address_zip'] = array(
+    'label' => t('Address Zip Code'),
+    'description' => t('Enter a 5 or 9-digit number with dashes (e.g., "78123" or "78123-5678").'),
+    'type' => 'text',
+    'schema field' => 'field_address_zip',
+  );
+  $info['contact_info']['properties']['field_url'] = array(
+    'label' => t('Website'),
+    'type' => 'text',
+    'schema field' => 'field_url',
+  );
+  $info['contact_info']['properties']['field_phone'] = array(
+    'label' => t('Phone'),
+    'type' => 'text',
+    'schema field' => 'field_phone',
+  );
+  $info['contact_info']['properties']['field_fax'] = array(
+    'label' => t('Fax'),
+    'type' => 'text',
+    'schema field' => 'field_fax',
+  );
+  $info['contact_info']['properties']['field_email'] = array(
+    'label' => t('Email'),
+    'type' => 'text',
+    'schema field' => 'field_email',
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function utexas_contact_info_permission() {
+  // Define a permission that allows users to edit forms.
+  return array(
+    UTEXAS_CONTACT_INFO_VIEW_PERMISSION => array(
+      'title' => t('View Contact Info Forms'),
+      'description' => t('Allow users to view available forms'),
+    ),
+    UTEXAS_CONTACT_INFO_EDIT_PERMISSION => array(
+      'title' => t('Edit & Delete Contact Info Forms'),
+      'description' => t('Allow users to edit & delete forms'),
+    ),
+  );
+}
+
+/**
+ * Access callback for entities.
+ */
+function utexas_contact_info_access_callback($op, $contact_form = NULL, $account = NULL) {
+  $url = current_path();
+  $access = FALSE;
+  if ($url == UTEXAS_CONTACT_INFO_CALLBACK &&  user_access(UTEXAS_CONTACT_INFO_EDIT_PERMISSION)) {
+    // Allow users with permission to view entity overview page.
+    $access = TRUE;
+  }
+  if ($op == 'view' && user_access(UTEXAS_CONTACT_INFO_VIEW_PERMISSION) && $url !== UTEXAS_CONTACT_INFO_CALLBACK) {
+    // Allow users with permission to view rendered entities.
+    $access = TRUE;
+  }
+  elseif (($op == 'update' || $op == 'create' || $op == 'delete') && user_access(UTEXAS_CONTACT_INFO_EDIT_PERMISSION)) {
+    // Allow users with permission to modify entities.
+    $access = TRUE;
+  }
+  return $access;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function utexas_contact_info_menu() {
+  // Menu items.
+  $items = array();
+
+  $items['contact_info/%'] = array(
+    'title' => 'Contact Info',
+    'page callback' => '_utexas_contact_info_view_form',
+    'page arguments' => array(1),
+    'access arguments' => array('view contact info'),
+  );
+
+  return $items;
+}
+/**
+ * Custom controller for the administrator UI.
+ */
+class ContactInfoUIController extends EntityDefaultUIController {
+
+  /**
+   * Override the menu hook for default ui controller.
+   */
+  public function hook_menu() {
+    $items = parent::hook_menu();
+    $items[$this->path]['title'] = t('Contact Info');
+    $items[$this->path]['description'] = t('Manage Contact Info');
+    $items[$this->path]['type'] = MENU_LOCAL_TASK;
+    return $items;
+  }
+
+}
+
+/**
+ * Contact form entity class extending the Entity class.
+ */
+class ContactInfoEntity extends Entity {
+  /**
+   * Change the default URI from default/id to contact-info/id.
+   */
+  protected function defaultUri() {
+    return array('path' => 'contact_info/' . $this->identifier());
+  }
+
+}
+
+/**
+ * Form definition for adding / editing a Contact Info Form entity.
+ */
+function contact_info_form($form, &$form_state, $instance = NULL) {
+
+  $state_array = array(
+    '' => '- None -',
+    'Alabama' => 'Alabama',
+    'Alaska' => 'Alaska',
+    'Arizona' => 'Arizona',
+    'Arkansas' => 'Arkansas',
+    'California' => 'California',
+    'Colorado' => 'Colorado',
+    'Connecticut' => 'Connecticut',
+    'Delaware' => 'Delaware',
+    'Florida' => 'Florida',
+    'Georgia' => 'Georgia',
+    'Hawaii' => 'Hawaii',
+    'Idaho' => 'Idaho',
+    'Illinois' => 'Illinois',
+    'Indiana' => 'Indiana',
+    'Iowa' => 'Iowa',
+    'Kansas' => 'Kansas',
+    'Kentucky' => 'Kentucky',
+    'Louisiana' => 'Louisiana',
+    'Maine' => 'Maine',
+    'Maryland' => 'Maryland',
+    'Massachusetts' => 'Massachusetts',
+    'Michigan' => 'Michigan',
+    'Minnesota' => 'Minnesota',
+    'Mississippi' => 'Mississippi',
+    'Missouri' => 'Missouri',
+    'Montana' => 'Montana',
+    'Nebraska' => 'Nebraska',
+    'Nevada' => 'Nevada',
+    'New Hampshire' => 'New Hampshire',
+    'New Jersey' => 'New Jersey',
+    'New Mexico' => 'New Mexico',
+    'New York' => 'New York',
+    'North Carolina' => 'North Carolina',
+    'North Dakota' => 'North Dakota',
+    'Ohio' => 'Ohio',
+    'Oklahoma' => 'Oklahoma',
+    'Oregon' => 'Oregon',
+    'Pennsylvania' => 'Pennsylvania',
+    'Rhode Island' => 'Rhode Island',
+    'South Carolina' => 'South Carolina',
+    'South Dakota' => 'South Dakota',
+    'Tennessee' => 'Tennessee',
+    'Texas' => 'Texas',
+    'Utah' => 'Utah',
+    'Vermont' => 'Vermont',
+    'Virginia' => 'Virginia',
+    'Washington' => 'Washington',
+    'West Virginia' => 'West Virginia',
+    'Wisconsin' => 'Wisconsin',
+    'Wyoming' => 'Wyoming',
+  );
+
+  $form['name'] = array(
+    '#title' => t('Title'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->name) ? $instance->name : '',
+    '#required' => TRUE,
+    '#description' => t('Identifies this contact info within the site. It should be descriptive and unique.'),
+  );
+  $form['location'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Location'),
+    '#collapsible' => FALSE,
+    '#collapsed' => TRUE,
+    '#description' => t('Use “Location” to include additional information about your physical location
+     (e.g., building name, office number, floor number, suite number) that may not be included in your mailing address.'),
+  );
+  $form['location']['field_location_1'] = array(
+    '#title' => t('Location 1'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_location_1) ? $instance->field_location_1 : '',
+    '#required' => FALSE,
+  );
+
+  $form['location']['field_location_2'] = array(
+    '#title' => t('Location 2'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_location_2) ? $instance->field_location_2 : '',
+    '#required' => FALSE,
+  );
+
+  $form['location']['field_location_3'] = array(
+    '#title' => t('Location 3'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_location_3) ? $instance->field_location_3 : '',
+    '#required' => FALSE,
+  );
+
+  $form['location']['field_location_city'] = array(
+    '#title' => t('City'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_location_city) ? $instance->field_location_city : '',
+    '#required' => FALSE,
+  );
+
+  $form['location']['field_location_state'] = array(
+    '#title' => t('State'),
+    '#type' => 'select',
+    '#default_value' => isset($instance->field_location_state) ? $instance->field_location_state : '',
+    '#required' => FALSE,
+    '#options' => $state_array,
+  );
+
+  $form['location']['field_location_zip'] = array(
+    '#title' => t('Zip Code'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_location_zip) ? $instance->field_location_zip : '',
+    '#required' => FALSE,
+    '#description' => t('Enter a 5 or 9-digit number with dashes (e.g., "78123" or "78123-5678").'),
+  );
+
+  $form['address'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Mailing Address'),
+    '#collapsible' => FALSE,
+    '#collapsed' => TRUE,
+    '#description' => t('Enter the Mailing Address Information.'),
+  );
+
+  $form['address']['field_address_1'] = array(
+    '#title' => t('Address 1'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_address_1) ? $instance->field_address_1 : '',
+    '#required' => FALSE,
+  );
+
+  $form['address']['field_address_2'] = array(
+    '#title' => t('Address 2'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_address_2) ? $instance->field_address_2 : '',
+    '#required' => FALSE,
+  );
+
+  $form['address']['field_address_3'] = array(
+    '#title' => t('Address 3'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_address_3) ? $instance->field_address_3 : '',
+    '#required' => FALSE,
+  );
+
+  $form['address']['field_address_city'] = array(
+    '#title' => t('City'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_address_city) ? $instance->field_address_city : '',
+    '#required' => FALSE,
+  );
+
+  $form['address']['field_address_state'] = array(
+    '#title' => t('State'),
+    '#type' => 'select',
+    '#default_value' => isset($instance->field_address_state) ? $instance->field_address_state : '',
+    '#required' => FALSE,
+    '#options' => $state_array,
+  );
+
+  $form['address']['field_address_zip'] = array(
+    '#title' => t('Zip Code'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_address_zip) ? $instance->field_address_zip : '',
+    '#required' => FALSE,
+    '#description' => t('Enter a 5 or 9-digit number with dashes (e.g., "78123" or "78123-5678").'),
+  );
+
+  $form['field_url'] = array(
+    '#title' => t('Website'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_url) ? $instance->field_url : '',
+    '#required' => FALSE,
+    '#description' => t('Enter a valid URL (e.g., "http://validurl.com").'),
+  );
+  $form['field_phone'] = array(
+    '#title' => t('Phone'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_phone) ? $instance->field_phone : '',
+    '#required' => FALSE,
+    '#description' => t('Enter a 10-digit number with dashes (e.g., "123-456-7890").'),
+  );
+  $form['field_fax'] = array(
+    '#title' => t('Fax'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_fax) ? $instance->field_fax : '',
+    '#required' => FALSE,
+    '#description' => t('Enter a 10-digit number with dashes (e.g., "123-456-7890").'),
+  );
+  $form['field_email'] = array(
+    '#title' => t('Email'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->field_email) ? $instance->field_email : '',
+    '#required' => FALSE,
+    '#description' => t('Enter an email address (e.g., "email@domain.com").'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => isset($instance->id) ? t('Update') : t('Save'),
+    '#weight' => 50,
+  );
+
+  return $form;
+}
+
+/**
+ * Implements entity_form_validate().
+ */
+function contact_info_form_validate(&$form, &$form_state) {
+  // Checks if the value of the Zip code is greater than 0
+  // and if it does not match the regex is wrong.
+  if (strlen($form_state['input']['field_location_zip']) > 0 &&
+   !preg_match('/^\d{5}(?:[-]\d{4})?$/', $form_state['input']['field_location_zip'])) {
+    form_set_error('field_location_zip', t('Not a valid Location Zip Code (e.g, 78123 or 78123-5678)'));
+  }
+  // Checks if the value of the Zip code is greater than 0
+  // and if it does not match the regex is wrong.
+  if (strlen($form_state['input']['field_address_zip']) > 0 &&
+   !preg_match('/^\d{5}(?:[-]\d{4})?$/', $form_state['input']['field_address_zip'])) {
+    form_set_error('field_address_zip', t('Not a valid Address Zip Code (e.g, 78123 or 78123-5678)'));
+  }
+  // Checks if the value of the Phone field is greater than 0
+  // and different than 10, or if it has non number digits.
+  if (strlen($form_state['input']['field_phone']) > 0 &&
+   !preg_match('/^\d{3}[-]\d{3}[-]\d{4}?$/', $form_state['input']['field_phone'])) {
+    form_set_error('field_phone', t('Not a valid Phone Number (e.g, 123-456-7890)'));
+  }
+  // Checks if the value of the Phone field is greater than 0
+  // and different than 10, or if it has non number digits.
+  if (strlen($form_state['input']['field_fax']) > 0 &&
+   !preg_match('/^\d{3}[-]\d{3}[-]\d{4}?$/', $form_state['input']['field_fax'])) {
+    form_set_error('field_fax', t('Not a valid Fax Number (e.g, 123-456-7890)'));
+  }
+  // Checks if the value of the Email field is different than 0
+  // and has a valid formar.
+  if (!filter_var($form_state['input']['field_email'], FILTER_VALIDATE_EMAIL) &&
+   strlen($form_state['input']['field_email']) !== 0) {
+    form_set_error('field_email', t('Not a valid Email format (e.g, email@domain.com)'));
+  }
+  // Checks if the value of the Website field is different than 0
+  // and has a valid formar.
+  if (!filter_var($form_state['input']['field_url'], FILTER_VALIDATE_URL) &&
+   strlen($form_state['input']['field_url']) !== 0) {
+    form_set_error('field_url', t('Not a valid URL (e.g, http://validurl.com)'));
+  }
+
+  // Check if the contact form name already exists, so that any entity reference
+  // field shows unique form names.
+  $existing_forms = array();
+  $forms = entity_load('contact_info');
+  foreach ($forms as $key => $contact_form) {
+    $existing_forms[$key] = $contact_form->name;
+  }
+  // If the current form does not yet exist AND (for forms being edited)
+  // the previous value was not already in the existing forms.
+  if (in_array($form_state['input']['name'], $existing_forms) and !in_array($form['name']['#default_value'], $existing_forms)) {
+    form_error($form['name'], t('The title %value is already being used. Choose something else so that each form can be easily identified.', array('%value' => $form_state['input']['name'])));
+  }
+
+}
+
+/**
+ * Submit handler for the Contact Info entity add/edit form.
+ */
+function contact_info_form_submit($form, &$form_state) {
+
+  $entity = entity_ui_form_submit_build_entity($form, $form_state);
+  // Combine the field definitions into a serialized array for storage.
+  $entity->save();
+  drupal_set_message(t('The contact info form: @name has been saved.', array('@name' => $entity->name)));
+  $form_state['redirect'] = UTEXAS_CONTACT_INFO_CALLBACK;
+}
+
+/**
+ * Extends the EntityAPIController for the Contact Info entity.
+ */
+class ContactInfoEntityController extends EntityAPIController {
+  /**
+   * Extends buildContent().
+   */
+  public function buildContent($entity, $view_mode = 'full', $langcode = NULL, $content = array()) {
+    $build = parent::buildContent($entity, $view_mode, $langcode, $content);
+
+    $has_location = FALSE;
+    $has_address = FALSE;
+    // Validate if address or location fields not empty.
+    foreach ($entity as $field => $value) {
+      if (strpos($field, 'location') == TRUE && $value !== '') {
+        $has_location = TRUE;
+      }
+      if (strpos($field, 'address') == TRUE && $value !== '') {
+        $has_address = TRUE;
+      }
+      // Validating the city, state, zip for location.
+      if ($field == 'field_location_state' && !empty($value) && !empty($entity->field_location_city)) {
+        $entity->field_location_state = ", " . $entity->field_location_state;
+      }
+      if ($field == 'field_location_zip' && !empty($value) && !empty($entity->field_location_state) ||
+        $field == 'field_location_zip' && !empty($value) && !empty($entity->field_location_city)) {
+        $entity->field_location_zip = ", " . $entity->field_location_zip;
+      }
+      // Validating the city, state, zip for address.
+      if ($field == 'field_address_state' && !empty($value) && !empty($entity->field_address_city)) {
+        $entity->field_address_state = ", " . $entity->field_address_state;
+      }
+      if ($field == 'field_address_zip' && !empty($value) && !empty($entity->field_address_state) ||
+        $field == 'field_address_zip' && !empty($value) && !empty($entity->field_address_city)) {
+        $entity->field_address_zip = ", " . $entity->field_address_zip;
+      }
+    }
+
+    $build['#attached']['css'][] = drupal_get_path('module', 'utexas_contact_info') . '/theme/contact-info.css';
+    // Send data to template.
+    $build += array(
+      'title' => check_plain($entity->name),
+      'location_1' => check_plain($entity->field_location_1),
+      'location_2' => check_plain($entity->field_location_2),
+      'location_3' => check_plain($entity->field_location_3),
+      'location_city' => check_plain($entity->field_location_city),
+      'location_state' => check_plain($entity->field_location_state),
+      'location_zip' => check_plain($entity->field_location_zip),
+      'address_1' => check_plain($entity->field_address_1),
+      'address_2' => check_plain($entity->field_address_2),
+      'address_3' => check_plain($entity->field_address_3),
+      'address_city' => check_plain($entity->field_address_city),
+      'address_state' => check_plain($entity->field_address_state),
+      'address_zip' => check_plain($entity->field_address_zip),
+      'website' => check_plain($entity->field_url),
+      'phone' => check_plain($entity->field_phone),
+      'fax' => check_plain($entity->field_fax),
+      'email' => check_plain($entity->field_email),
+      'has_location' => $has_location,
+      'has_address' => $has_address,
+    );
+
+    return $build;
+  }
+
+}
+/**
+ * Callback function for displaying the individual form page.
+ */
+function _utexas_contact_info_view_form($id) {
+
+  $contact_forms = entity_load('contact_info', array($id));
+  $contact_form = $contact_forms[$id];
+
+  drupal_set_title($contact_form->name);
+  // View data is defined in buildContent().
+  $output = entity_view('contact_info', array($contact_form));
+
+  return $output;
+}
+
+/**
+ * Adds our theme specifications to the Theme Registry.
+ */
+function utexas_contact_info_theme($existing, $type, $theme, $path) {
+  return array(
+    'contact_info' => array(
+      'variables' => array('element' => NULL),
+      'template' => 'contact-info',
+      'path' => drupal_get_path('module', 'utexas_contact_info') . '/theme',
+    ),
+  );
+}

@@ -1,0 +1,7 @@
+name = Image Link Field
+description = Defines a custom image link field used for ad areas
+core = 7.x
+version = 7.x-1.1
+package = UTexas
+
+dependencies[] = media

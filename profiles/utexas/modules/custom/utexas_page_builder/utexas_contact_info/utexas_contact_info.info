@@ -1,0 +1,8 @@
+name = UTexas Contact Info
+description = Define and store settings for individual contact info forms
+core = 7.x
+version = 7.x-1.1
+package = UTexas
+
+dependencies[] = entity
+dependencies[] = entityreference

@@ -1,0 +1,375 @@
+<?php
+/**
+ * @file
+ * Module definition file for utexas_image_links module.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines the utexas_image_link field type.
+ */
+function utexas_image_links_field_info() {
+  return array(
+    'utexas_image_link' => array(
+      'label' => t('Image Link'),
+      'description' => t('Defines an image link field.'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'utexas_image_link',
+      'default_formatter' => 'utexas_image_link',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines one widget for uploading an image link.
+ */
+function utexas_image_links_field_widget_info() {
+  return array(
+    'utexas_image_link' => array(
+      'label' => t('Image Link'),
+      'field types' => array('utexas_image_link'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Used to create the form field widget.
+ */
+function utexas_image_links_field_widget_form(&$form, &$form_state, $field,
+  $instance, $langcode, $items, $delta, $element) {
+  switch ($instance['widget']['type']) {
+    case 'utexas_image_link':
+
+      // Image upload input.
+      $element['image'] = array(
+        '#type' => 'media',
+        '#title' => t('Image'),
+        '#tree' => TRUE,
+        '#field_name' => 'utexas_image_link_image',
+        '#description' => t('Add an image with an optional link.'),
+        '#extended' => TRUE,
+        '#media_options' => array(
+          'global' => array(
+            'file_extensions' => 'gif png jpg jpeg',
+            'file_directory' => 'image-link',
+            'types' => array('image'),
+          ),
+        ),
+        '#default_value' => array('fid' => isset($items[$delta]['image_fid']) ? $items[$delta]['image_fid'] : 0),
+      );
+
+      // Link.
+      $element['link'] = array(
+        '#type' => 'fieldset',
+        '#collapsible' => FALSE,
+        '#title' => t('Link'),
+      );
+
+      // Link.
+      $link = '';
+      if (isset($items[$delta]['link_href'])) {
+        if (trim($items[$delta]['link_href']) != '') {
+          $link = drupal_get_path_alias($items[$delta]['link_href']);
+        }
+      }
+
+      $element['link']['link_href'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Link'),
+        '#size' => 60,
+        '#maxlength' => 2048,
+        '#default_value' => $link,
+        '#attributes' => array(
+          'placeholder' => 'external URL (http://) or internal path (e.g., about/diversity)',
+        ),
+      );
+      $element['link']['link_title'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Title'),
+        '#description' => t('An optional title for this image link anchor tag.
+          The maximum length is 128 characters.'),
+        '#size' => 60,
+        '#maxlength' => 128,
+        '#default_value' => (isset($items[$delta]['link_title'])) ? $items[$delta]['link_title'] : '',
+      );
+
+      break;
+
+  }
+
+  return $element;
+}
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to make sure uploaded links are valid before trying to save.
+ */
+function utexas_image_links_field_validate($entity_type, $entity, $field,
+  $instance, $langcode, $items, &$errors) {
+  // Loop through the values, making sure all check out.
+  foreach ($items as $delta => &$item) {
+    if (!empty($item) and !utexas_image_links_field_is_empty($item, $field)) {
+      // == CUSTOM VALIDATION RULES ==.
+
+      // Bypass if data sent directly via a migration.
+      $image = isset($item['image_fid']) ? 0 : $item['image']['fid'];
+
+      $title = isset($item['link']['link_title']) ? $item['link']['link_title'] : $item['link_title'];
+
+      $href = isset($item['link']['link_href']) ? $item['link']['link_href'] : $item['link_href'];
+
+      // Make sure an image exists.
+      if (isset($item['image'])) {
+        if ($item['image']['fid'] == 0) {
+          $errors[$field['field_name']][$langcode][$delta][] = array(
+            'error' => 'image_no_image',
+            'message' => t('%field: An image is required.', array('%field' => $instance['label'])),
+          );
+        }
+      }
+
+      // Make sure link title has a link.
+      if (!empty($title) and empty($href)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'utexas_image_link_no_href',
+          'message' => t('%field: A link is required for a link title.',
+            array('%field' => $instance['label'])),
+        );
+      }
+
+      // Make sure a link is a valid link.
+      $target = drupal_get_normal_path($href);
+      if (!empty($href) and !drupal_valid_path($target)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'utexas_image_link_bad_href',
+          'message' => t('%field: A valid URL is required for an image link.',
+            array('%field' => $instance['label'])),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function utexas_image_links_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  switch ($error['error']) {
+    case 'image_no_image':
+      form_error($element['image']['fid'], $error['message']);
+      break;
+
+    case 'utexas_image_link_no_href':
+      form_error($element['link']['link_href'], $error['message']);
+      break;
+
+    case 'utexas_image_link_bad_href':
+      form_error($element['link']['link_href'], $error['message']);
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Used to split widget groups into column data.
+ */
+function utexas_image_links_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  foreach ($items as $delta => &$item) {
+    // Adjust image alt & fid.
+    $item['image_fid'] = isset($item['image_fid']) ? $item['image_fid'] : $item['image']['fid'];
+
+    if ($item['image_fid'] == 'MigrateFileFid') {
+      // Migration fields without images arrive as "MigrateFileFid".
+      $item['image_fid'] = '0';
+    }
+
+    // Adjust CTA link & title.
+    $item['link_title'] = isset($item['link']['link_title']) ? $item['link']['link_title'] : $item['link_title'];
+    $item['link_href'] = isset($item['link']['link_href']) ? drupal_get_normal_path($item['link']['link_href']) : drupal_get_normal_path($item['link_href']);
+    unset($item['link']);
+  }
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function utexas_image_links_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'utexas_image_link':
+      $image_empty = (isset($item['image'])) ? empty($item['image']['fid']) : ($item['image_fid'] == 'MigrateFileFid');
+      return
+        $image_empty and
+        empty($item['link']['link_title']) and
+        empty($item['link']['link_href']);
+
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_file_download().
+ *
+ * Checks access to make sure users can actually use the files that have been
+ * uploaded. Required since Drupal 7.29.
+ */
+function utexas_image_links_file_download($uri) {
+  if (strpos(file_uri_target($uri), 'utexas_image_links') === 0) {
+    $info = image_get_info($uri);
+    return array('Content-Type' => $info['mime_type']);
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements hook_field_insert().
+ *
+ * Increment file usage.
+ */
+function utexas_image_links_field_insert($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_insert_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_image_links');
+}
+
+
+/**
+ * Implements hook_field_update().
+ *
+ * Adjust copy format+value and handle images.
+ */
+function utexas_image_links_field_update($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_update_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_image_links');
+}
+
+/**
+ * Implements hook_field_delete().
+ *
+ * Cleans up any remaining files, if they have not been deleted already.
+ */
+function utexas_image_links_field_delete($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  utexas_admin_field_delete_custom($entity_type, $entity, $field, $instance, $langcode, $items, 'utexas_image_links');
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Used to define the utexas_image_link formatter.
+ */
+function utexas_image_links_field_formatter_info() {
+  return array(
+    'utexas_image_link' => array(
+      'label' => t('Image Link'),
+      'field types' => array('utexas_image_link'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Used to display the utexas_image_link formatter.
+ */
+function utexas_image_links_field_formatter_view($entity_type, $entity, $field,
+  $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'utexas_image_link':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('utexas_image_link', array('item' => $item)),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'utexas_image_links') . '/utexas_image_links.css'),
+          ),
+        );
+      }
+
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Defines the utexas_image_link type.
+ *
+ * @see template_preprocess_utexas_image_link()
+ */
+function utexas_image_links_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_image_link' => array(
+      'variables' => array(
+        'item' => NULL,
+      ),
+      'template' => 'theme/utexas-image-link',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function for image links.
+ *
+ * @see utexas_image_links_theme()
+ * @see utexas-image-link.tpl.php
+ *
+ * @ingroup themeable
+ */
+function template_preprocess_utexas_image_link(&$variables) {
+  // Adjust passed in variables.
+  $image_fid = $variables['item']['image_fid'];
+  $link_title = $variables['item']['link_title'];
+  $link_href = $variables['item']['link_href'];
+  $link = '';
+
+  // Unset unneeded variables.
+  unset($variables['item']);
+
+  // Grab the image.
+  if ($file = file_load($image_fid)) {
+    $info = image_get_info($file->uri);
+    $alt = isset($file->field_file_image_alt_text['und'][0]['safe_value']) ? $alt = $file->field_file_image_alt_text['und'][0]['safe_value'] : '';
+    $title = isset($file->field_file_image_title_text['und'][0]['safe_value']) ? $title = $file->field_file_image_title_text['und'][0]['safe_value'] : '';
+    $info = image_get_info($file->uri);
+    $image = theme('image', array(
+      'path' => $file->uri,
+      'width' => $info['width'],
+      'height' => $info['height'],
+      'alt' => $alt,
+      'title' => $title,
+    ));
+
+    // Set the link.
+    if (!empty($link_title)) {
+      $link = l($image, $link_href, array('html' => TRUE, 'attributes' => array('title' => $link_title)));
+    }
+    else {
+      $link = l($image, $link_href, array('html' => TRUE));
+    }
+  }
+  else {
+    $link = FALSE;
+  }
+
+  // Reset variables.
+  $variables += array(
+    'link' => $link,
+  );
+}

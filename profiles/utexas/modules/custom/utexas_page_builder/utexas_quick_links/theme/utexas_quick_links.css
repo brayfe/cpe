@@ -1,0 +1,7 @@
+fieldset .half-width .fieldset-wrapper div.form-item {
+  display: inline-block;
+  margin-right: 30px;
+}
+fieldset .half-width .fieldset-wrapper div.form-item input {
+  width: 100%;
+}

@@ -1,0 +1,10 @@
+fieldset .half-width .fieldset-wrapper div.form-item {
+  display: inline-block;
+  margin-right: 30px;
+}
+fieldset .half-width .fieldset-wrapper div.form-item input {
+  width: 100%;
+}
+.field_utexas_featured_highlight {
+  margin-bottom: 0px;
+}

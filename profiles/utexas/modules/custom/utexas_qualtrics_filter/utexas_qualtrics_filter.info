@@ -1,0 +1,6 @@
+name = Qualtrics Filter
+description = Filter to include qualtrics forms.
+core = 7.x
+package = Input filters
+version = "7.x-1.0"
+project = "utexas_qualtrics_filter"

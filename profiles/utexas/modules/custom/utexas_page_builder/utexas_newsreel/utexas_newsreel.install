@@ -1,0 +1,74 @@
+<?php
+/**
+ * @file
+ * Install file for UTexas Newsreel functionality
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines the schema.
+ */
+function utexas_newsreel_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+    case 'utexas_newsreel':
+      $columns['headline'] = array(
+        'description' => 'The block headline',
+        'type' => 'varchar',
+        'length' => 512,
+        'not null' => FALSE,
+      );
+      $columns['type'] = array(
+        'description' => 'The article type from news.utexas.edu',
+        'type' => 'varchar',
+        'length' => 4098,
+        'not null' => FALSE,
+      );
+      $columns['category'] = array(
+        'description' => 'The primary category machine name from news.utexas.edu',
+        'type' => 'varchar',
+        'length' => 4098,
+        'not null' => FALSE,
+      );
+      $columns['tag'] = array(
+        'description' => 'A news tag from news.utexas.edu',
+        'type' => 'varchar',
+        'length' => 4098,
+        'not null' => FALSE,
+      );
+      $columns['count'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The number of items to display',
+      );
+      $columns['include_description'] = array(
+        'description' => '1 = yes, 0 = no',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      );
+      $columns['refresh_rate'] = array(
+        'description' => 'How frequently (in hours) the feed should be refreshed',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 12,
+      );
+      $columns['view_all'] = array(
+        'description' => 'Text for link to source.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      );
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+  );
+}
