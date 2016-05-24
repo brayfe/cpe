@@ -1,0 +1,32 @@
+.fieldblock_field_utexas_twitter_widget.sidebar-module.sidebar-default-style {
+  background-color: #fff;
+  border-bottom: 0px solid #f0ede6;
+  border-left: 0px solid #f0ede6;
+  border-right: 0px solid #f0ede6;
+  padding-bottom: 0px;
+}
+
+.region-content .fieldblock_field_utexas_twitter_widget .sidebar-default-style h3.sidebar-headline {
+  width: 100.3%;
+}
+
+@media only screen and (max-width: 40em) {
+  .region-content .fieldblock_field_utexas_twitter_widget {
+    margin-bottom: -20px;
+  }
+  .fieldblock_field_utexas_twitter_widget .sidebar-module {
+    margin-bottom: 10px;
+  }
+  .region-content .fieldblock_field_utexas_twitter_widget .sidebar-default-style h3.sidebar-headline {
+    width: 100.4%;
+  }
+}
+
+.field.field_utexas_twitter_widget .sidebar-headline {
+  margin-top: -2px;
+  width: 100.3%;
+}
+
+.container-top .field.field_utexas_twitter_widget .sidebar-module {
+  padding: 0px;
+}

@@ -1,0 +1,15 @@
+/**
+ * @file
+ *
+ * utexas_templates.css file
+ */
+
+/* Apply styles in your theme to give disabled fields the "greyed out" look */
+input.form-autocomplete.readonly,
+input.form-text.readonly,
+input.form-file.readonly,
+textarea.form-textarea.readonly,
+select.form-select.readonly {
+  background-color: #eee;
+  color: #777;
+}

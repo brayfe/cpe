@@ -1,0 +1,1046 @@
+<?php
+/**
+ * @file
+ * Page Builder module.
+ *
+ * This module leverages the utexas_templates Templates entity to provide
+ * templates assignable to any content type. It adds a "Layout" tab which
+ * provides a draggable interface for positioning allowed fieldblocks and views.
+ *
+ * This module also modifies the views and context modules by making changes to
+ * what is included by these modules. Since some blocks can be restricted in the
+ * Layout Editor, we need to provide site administrators the flexibility in
+ * setting what can be used and not.
+ *
+ * Finally, this module updates the core page node edit form to place the form
+ * into an AJAX multistep functionality to allow users to choose a template at
+ * the node edit level.
+ */
+
+/**
+ * Permission for editing page layouts.
+ */
+define('UTEXAS_PAGE_BUILDER_LAYOUT_EDIT_PERMISSION', 'edit page layouts');
+
+/**
+ * AJAX multistep id.
+ */
+define('UTEXAS_PAGE_BUILDER_MULTISTEP_ID', 'ajax-multistep-page-node-form');
+
+/**
+ * Implements hook_image_default_styles().
+ *
+ * Defines image styles for photo content area images and featured highlight.
+ * images.
+ */
+function utexas_page_builder_image_default_styles() {
+  return array(
+    'featured_highlight_image' => array(
+      'label' => t('Featured Highlight Image'),
+      'effects' => array(
+        array(
+          'name' => 'smartcrop_scale_and_crop',
+          'data' => array(
+            'width' => 560,
+            'height' => 340,
+            'upscale' => FALSE,
+          ),
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_permission().
+ */
+function utexas_page_builder_permission() {
+  // Define a permission that allows users to edit page layouts.
+  return array(
+    UTEXAS_PAGE_BUILDER_LAYOUT_EDIT_PERMISSION => array(
+      'title' => t('Edit page layouts'),
+      'description' => t('Allow users to edit contexts on <em>Page</em> content types.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * Creates a dummy page for the layout editor as a tab on the node and a
+ * taxonomy term additional settings form.
+ */
+function utexas_page_builder_menu() {
+  $items = array();
+
+  // Add the context menu.
+  $items['node/%node/layout-editor'] = array(
+    'title' => 'Layout Editor',
+    'page callback' => 'utexas_page_builder_context',
+    'page arguments' => array(1),
+    'access callback' => 'utexas_page_builder_context_access',
+    'access arguments' => array('context_update', 1),
+    'weight' => 500,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @see template_preprocess_utexas_page_builder_template_option()
+ * @see utexas-page-builder-template-option.tpl.php
+ */
+function utexas_page_builder_theme() {
+  // Return an element for the template form field.
+  return array(
+    'utexas_page_builder_template_option' => array(
+      'variables' => array(
+        'term' => NULL,
+        'selected' => NULL,
+        'name' => NULL,
+        'image' => NULL,
+        'description' => NULL,
+        'fields' => NULL,
+      ),
+      'template' => 'theme/utexas-page-builder-template-option',
+    ),
+    'utexas_templates_field_table' => array(
+      'render element' => 'element',
+    ),
+  );
+}
+
+/**
+ * Template preprocess function for utexas-page-builder-template-options.
+ *
+ * Populates fields for the passed term.
+ *
+ * @see utexas_page_builder_theme()
+ * @see utexas-page-builder-template-option.tpl.php
+ */
+function template_preprocess_utexas_page_builder_template_option(&$variables) {
+
+  // Grab the term.
+  $term = $variables['term'];
+  $template = entity_load('template', array($term));
+  // Grab the fields.
+  $fields = array();
+  if (isset($template[$term]->fields)) {
+    $fields = unserialize($template[$term]->fields);
+    foreach ($fields as $field) {
+      $field_info = field_info_instance('node', $field['machine_name'], $variables['bundle']);
+      $fields[$field['machine_name']] = array(
+        'label' => $field_info['label'],
+        'description' => $field_info['description'],
+        'weight' => $field['_weight'],
+        'enabled' => ($field['enabled']) ? $field['enabled'] : FALSE,
+        'locked' => ($field['locked']) ? $field['locked'] : FALSE,
+      );
+    }
+  }
+  // Sort by weight.
+  uasort($fields, function($a, $b) {
+    $a_weight = (is_array($a) && isset($a['weight'])) ? $a['weight'] : 0;
+    $b_weight = (is_array($b) && isset($b['weight'])) ? $b['weight'] : 0;
+                    if ($a_weight == $b_weight) {
+                      return 0;
+                    }
+    return ($a_weight < $b_weight) ? -1 : 1;
+  });
+
+  $image_url = '//placehold.it/100x150';
+  // Need to check if the file is present in the active theme.
+  global $theme;
+  $default_theme = variable_get('theme_default', $theme);
+  $machine_name = str_replace('.svg', '', $template[$term]->image_filename);
+  $theme_location = drupal_get_path('theme', $default_theme) . '/page_builder_layouts/' . $machine_name . '/' . $template[$term]->image_filename;
+  $module_location = drupal_get_path('module', 'utexas_templates') . '/page_builder_layouts/' . $machine_name . '/' . $template[$term]->image_filename;
+  // Grab the images.
+  if (isset($template[$term]->image_filename)) {
+    if (file_exists($theme_location)) {
+      // Use the svg defined in the active theme (if present).
+      $image_url = $theme_location;
+    }
+    elseif (file_exists($module_location)) {
+      // Use the svg defined in utexas_templates (if present).
+      $image_url = $module_location;
+    }
+    else {
+      if (isset($template[$term]->template_filename)) {
+        $template_name = str_replace('.tpl.php', '', str_replace('-', '_', $template[$term]->template_filename));
+        $templates = theme_get_registry();
+        if (isset($templates[$template_name]['path'])) {
+          $template_location = $templates[$template_name]['path'] . '/';
+          if (file_exists($template_location . $template[$term]->image_filename)) {
+            $image_url = $template_location . $template[$term]->image_filename;
+          }
+        }
+      }
+    }
+  }
+
+  // Assign the variables.
+  $variables['fields'] = $fields;
+  $variables['name'] = $template[$term]->name;
+  $variables['machine_name'] = strtolower(preg_replace("/[^a-zA-Z0-9_]+/", "", str_replace(" ", "_", $template[$term]->name)));
+  $variables['description'] = check_markup($template[$term]->description, $term['format']);
+  $variables['image'] = theme('image', array(
+    'path' => $image_url,
+    'alt' => $template[$term]->name . ' ' . t('icon'),
+    'width' => 100,
+    'height' => 150,
+  ));
+  $variables['selected'] = ($term == $variables['selected']) ? ' selected' : '';
+}
+
+/**
+ * Page callback that returns an empty array.
+ *
+ * Needed for the page callback for changing layouts.
+ *
+ * @see utexas_page_builder.js
+ */
+function utexas_page_builder_context($node) {
+  // Dummy page. Never fires.
+  return array();
+}
+
+/**
+ * Access callback to determine if a user has the permission.
+ */
+function utexas_page_builder_context_access($action, $node) {
+
+  // If we're on anything other than view, return false. Users can only edit a
+  // page layout when they are on a node view page.
+  if (!(arg(0) == 'node' and is_numeric(arg(1)) and (arg(2) == NULL or arg(2) == 'view'))) {
+    return FALSE;
+  }
+
+  // Check permissions to make sure they can access the layout editor.
+  // and that the content type has the field_template field.
+  global $user;
+  if (!($action == 'context_update' and isset($node->field_template) and user_access(UTEXAS_PAGE_BUILDER_LAYOUT_EDIT_PERMISSION, $user))) {
+    return FALSE;
+  }
+
+  // At this point, they have permission to see the page layout menu.
+  return TRUE;
+}
+
+/**
+ * Implements hook_page_build().
+ *
+ * If the user is allowed to edit the page, attach the context UI forms and
+ * adjust the allowed blocks on the context ui form.
+ */
+function utexas_page_builder_page_build(&$page) {
+  if (user_access(UTEXAS_PAGE_BUILDER_LAYOUT_EDIT_PERMISSION)) {
+    if ((arg(0) == 'node' and (arg(1) !== NULL) and (arg(1) !== 'add') and (arg(2) == NULL or (arg(2) == 'view'))) and $contexts = context_active_contexts() and $node = node_load(arg(1))) {
+      // Add in extra CSS from context_field module.
+      $path = drupal_get_path('module', 'context_field');
+      drupal_add_css($path . '/context_field.css');
+
+      // Grab the info needed to grab allowed blocks.
+      $entity_info = entity_get_info('node');
+      $id_field = $entity_info['entity keys']['id'];
+      $id = $node->{$id_field};
+      $instance = field_info_instance('node', 'field_page_layout', $node->type);
+
+      // Grab the allowed blocks.
+      if (isset($node->field_page_layout[$node->language]) and ($plugin = context_get_plugin('condition', 'context_field'))) {
+        foreach ($node->field_page_layout[$node->language] as $field_value) {
+          $plugin->execute($field_value['context']);
+
+          // Figure out the allowed blocks.
+          $allowed_blocks = &drupal_static(__FUNCTION__);
+          $allowed_blocks[$field_value['context']] = $instance['settings']['allowed_blocks'];
+          drupal_add_js(array('context_field_allowed_blocks' => $allowed_blocks), 'setting');
+        }
+      }
+
+      $form = drupal_get_form('context_ui_editor', $contexts);
+      $form['buttons']['save']['#attributes']['class']   = array('context-inline-editor-save');
+      $form['buttons']['cancel']['#attributes']['class'] = array('context-inline-editor-cancel');
+
+      // Attach the form to the page bottom.
+      $page['page_bottom']['context_inline_editor'] = array(
+        'content' => $form,
+        '#prefix' => '<div id="context-inline-editor" class="element-invisible">',
+        '#suffix' => '</div>',
+      );
+
+      // Add necessary assets.
+      drupal_add_library('system', 'ui.dialog');
+      drupal_add_js(drupal_get_path('module', 'utexas_page_builder') . '/js/utexas_page_builder.js');
+      drupal_add_css(drupal_get_path('module', 'utexas_page_builder') . '/css/utexas_layout_editor.css');
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Attaches the utexas_page_builder.css to the node
+ * types, and makes general enhancements to the page node form. Makes the
+ * core page node form use AJAX to select new templates to prevent the user
+ * from updating fields on a template that doesn't support certain fields.
+ *
+ * Also adjusts the taxonomy term overview to show additional_settings links
+ * if they exist, and makes general adjustments to the context ui forms to
+ * support our new functionality.
+ */
+function utexas_page_builder_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+    // If it's a home_features form, make some modifications.
+    case 'home_features_node_form':
+      // Attach the CSS.
+      $form['#attached']['css'][] = drupal_get_path('module', 'utexas_page_builder') . '/css/utexas_page_builder.css';
+
+      // Change the filtered format.
+      if (isset($form['body'])) {
+        _utexas_page_builder_element_children_all_set_text_format($form['body'], 'filtered_html');
+      }
+      break;
+
+    // If it's the context ui form, perform some modifications to increase
+    // clarity.
+    case 'context_ui_editor':
+      // Change the initial editor form.
+      $form['title']['#markup'] = t('Change Layout');
+      $form['help']['#markup'] = t('Click the edit link to activate the block editor.
+        You will be able to add page components from the block screen.');
+
+      // Make sure we only have "context by node" context available for editing.
+      $items = array();
+      foreach (element_children($form['contexts']) as $key) {
+        $context = &$form['contexts'][$key]['context']['#value'];
+        if (strpos($context->name, 'context_field') === FALSE) {
+          // Remove any non-context field created contexts.
+          unset($form['contexts'][$key]);
+        }
+        else {
+          // Reset the item name.
+          $edit = l(t('Edit'), $_GET['q'], array('fragment' => $context->name, 'attributes' => array('class' => array('edit'))));
+          $done = l(t('Done'), $_GET['q'], array('fragment' => $context->name, 'attributes' => array('class' => array('done'))));
+          $items[] = array(
+            'data' => '<div class="label top">' . t('Page Layout') . '</div><div class="links">' . $edit . $done . '</div>',
+            'class' => array('context-editable clearfix'),
+            'id' => 'context-editable-trigger-' . $context->name,
+          );
+        }
+      }
+
+      // Reassign the markup.
+      $form['editables']['#markup'] = theme('item_list', array('items' => $items));
+      // If there are no items in the form, prevent access to it.
+      if (!count($items)) {
+        $form['#access'] = FALSE;
+      }
+
+      break;
+
+    // If it's the context settings form, add a new setting to allow the user to
+    // show or hide context by node items.
+    case 'context_ui_settings':
+      $form['context_admin_options'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Context Admin Options'),
+      );
+
+      // Attach a checkbox.
+      $form['context_admin_options']['hide_context_field'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Hide Context Field on admin interface'),
+        '#description' => t('Check this box to disable the display of the context field nodes in the admin interface.'),
+        '#default_value' => variable_get('utexas_page_builder_hide_context_field_admin_ui', 1),
+      );
+
+      // Attach an additional submit handler.
+      $form['#submit'][] = 'utexas_page_builder_hide_context_field_admin_ui_submit';
+
+      break;
+
+    // If it's the block admin, prevent WYSIWYG from loading.
+    case 'block_admin_configure':
+      if (isset($form['settings']['body_field']['body'])) {
+        $form['settings']['body_field']['body']['#wysiwyg'] = FALSE;
+      }
+      break;
+
+  }
+
+  // If the content type has the "field_template" field, style the templates.
+  if (isset($form['field_template'])) {
+
+    // Retrieve available templates from content type settings.
+    $allowed = variable_get('page_builder_template_' . $form["#node"]->type, array());
+    // Attach the CSS & Javascript.
+    $form['#attached']['css'][] = drupal_get_path('module', 'utexas_page_builder') . '/css/utexas_page_builder.css';
+    $form['#attached']['js'][] = drupal_get_path('module', 'utexas_page_builder') . '/js/utexas_page_builder.js';
+    // Determine whether to display templates, and which should be selected.
+    if (isset($allowed[0])) {
+      // Retrieve the templates that should be displayed on this content type.
+      $query = new EntityFieldQuery();
+      $query->entityCondition('entity_type', 'template')
+        ->propertyCondition('name', $allowed, 'IN');
+      $result = $query->execute();
+      $allowed_ids = array_keys($result['template']);
+      if (isset($form_state['input']['field_template'])) {
+        // The template has been set while the user is on the page (for AJAX).
+        $current_template = $form_state['input']['field_template'];
+      }
+      elseif (isset($form_state['node']->field_template['und'][0]['target_id'])) {
+        // The template is being loaded from the saved form.
+        $current_template = $form_state['node']->field_template['und'][0]['target_id'];
+      }
+      else {
+        // No template has been set (node/add). Default to first available.
+        $current_template = $allowed_ids[0];
+      }
+    }
+    else {
+      // Make the field not required.
+      $form['field_template'][$form['language']['#value']]['#required'] = FALSE;
+    }
+
+    // Grab the fields in the form.
+    $fields = field_info_instances('node', $form['#node']->type);
+
+    // // Make sure we have a template id before we do any of this.
+    if (isset($current_template)) {
+      $form['template_wrapper'] = array(
+        '#type' => 'container',
+      );
+      // Attach the template options.
+      $options = array();
+      if (count($allowed_ids) > 1) {
+        // Only display the template choices if there is more than 1 available.
+        foreach ($allowed_ids as $id) {
+          $options[] = array(
+            '#markup' => theme('utexas_page_builder_template_option', array(
+              'term' => $id,
+              'selected' => $current_template,
+              'bundle' => $form['#node']->type,
+            )),
+          );
+        }
+        $form['template_wrapper']['template_selector'] = $options;
+        $form['template_wrapper']['template_selector']['#prefix']  = '<div class="template-selector clearfix"><label>' . t('Page Template');
+        $form['template_wrapper']['template_selector']['#prefix'] .= ' <span class="form-required" title="' . t('This field is required.') . '">*</span></label>';
+        $form['template_wrapper']['template_selector']['#suffix']  = '</div>';
+        // Create a dummy form element that is hidden by CSS that reacts to a
+        // change event called by the Javascript.
+      }
+
+      // Set a template ID regardless of whether the field is being shown.
+      $form['template_wrapper']['field_template'] = array(
+        '#type' => 'textfield',
+        '#default_value' => $current_template,
+      );
+
+      // AJAXify the form.
+      if (isset($form['additional_settings'])) {
+        // Put a wrapper around the title and additional settings.
+        $form['multistep'] = array(
+          '#type' => 'container',
+          '#prefix' => '<div id="' . UTEXAS_PAGE_BUILDER_MULTISTEP_ID . '">',
+          '#suffix' => '</div>',
+        );
+        $form['multistep']['additional_settings'] = $form['additional_settings'];
+        // Remove the originals.
+        unset($form['additional_settings']);
+        // Attach ajax to the field template.
+        $form['template_wrapper']['field_template']['#ajax'] = array(
+          'event' => 'change',
+          'callback' => 'utexas_page_builder_node_form_template_change',
+          'wrapper' => UTEXAS_PAGE_BUILDER_MULTISTEP_ID,
+          'effect' => 'fade',
+          'method' => 'replace',
+        );
+      }
+
+      // Set weights and access if we have a valid template. If we don't, rely
+      // on the default ordering from Drupal.
+      if (isset($result['template'][$current_template])) {
+        $template = entity_load('template', array($result['template'][$current_template]->id));
+        $defined_fields = unserialize($template{$result['template'][$current_template]->id}->fields);
+        foreach ($defined_fields as $field) {
+          $form[$field['machine_name']]['#weight'] = abs($field['_weight'] * 100) * -1;
+          $form[$field['machine_name']]['#access'] = $field['enabled'];
+          // Attach an asterisk on field names to denote locked.
+          if ($field['locked']) {
+            if (isset($form[$field['machine_name']]['#language']) && $langcode = $form[$field['machine_name']]['#language']) {
+              if (isset($form[$field['machine_name']][$langcode]['#title'])) {
+                $form[$field['machine_name']][$langcode]['#title'] .= ' *';
+              }
+              else {
+                $form[$field['machine_name']][$langcode][0]['#title'] .= ' *';
+              }
+            }
+          }
+        }
+        // Remove the original field template.
+        unset($form['field_template']);
+      }
+      else {
+        // If we don't have a term, just hide the field template instead.
+        $form['field_template']['#access'] = FALSE;
+      }
+
+      // Set the fields with custom text areas.
+      $field_filters = array(
+        'filtered_html' => array(
+          'field_wysiwyg_a',
+          'field_wysiwyg_b',
+          'field_utexas_flex_content_area_a',
+          'field_utexas_flex_content_area_b',
+          'field_contact_info',
+        ),
+        'simple_html' => array(
+          'field_utexas_featured_highlight',
+          'field_utexas_promo_list',
+          'field_utexas_promo_units',
+          'field_utexas_quick_links',
+          'field_utexas_photo_content_area',
+          'field_timely_announcement',
+        ),
+      );
+
+      // Loop through each field, creating the sub wrapper.
+      foreach ($fields as $field_name => $field) {
+
+        switch ($field_name) {
+          case 'field_template':
+          case 'page_layout':
+          case 'field_utexas_member_designation':
+          case 'field_utexas_member_group':
+          case 'field_utexas_member_given_name':
+          case 'field_utexas_member_surname':
+          case 'field_utexas_eid':
+          case 'field_link_to_profile_page':
+            break;
+
+          default:
+            // Attach text formats.
+            if (in_array($field_name, $field_filters['filtered_html'])) {
+              _utexas_page_builder_element_children_all_set_text_format($form[$field_name], 'filtered_html');
+            }
+            if (in_array($field_name, $field_filters['simple_html'])) {
+              _utexas_page_builder_element_children_all_set_text_format($form[$field_name], 'simple_html');
+              $form[$field_name]['#attributes']['class'][] = 'no-wysiwyg';
+            }
+            // Create a fieldset for the field.
+            $title = isset($form[$field_name][$form[$field_name]['#language']]['#title']) ? $form[$field_name][$form[$field_name]['#language']]['#title'] : $form[$field_name][$form[$field_name]['#language']][0]['#title'];
+            $form['sub_' . $field_name] = array(
+              '#title' => check_plain($title),
+              '#type' => 'fieldset',
+              '#collapsible' => TRUE,
+              '#collapsed' => TRUE,
+              '#group' => 'additional_settings',
+              '#weight' => $form[$field_name]['#weight'] - 25,
+              '#access' => $form[$field_name]['#access'],
+            );
+            // Attach the fieldset to the form and remove the original field.
+            $form['sub_' . $field_name][$field_name] = $form[$field_name];
+            unset($form[$field_name]);
+            break;
+        }
+      }
+
+      // Hide the page layout options.
+      $form['sub_field_page_layout']['#access'] = FALSE;
+
+      // Set final weights.
+      $form['title']['#weight'] = 0;
+      $form['template_wrapper']['#weight'] = 5;
+      $form['multistep']['#weight'] = 10;
+      $form['actions']['#weight'] = 15;
+    }
+    else {
+      drupal_set_message('This content type has no templates associated with
+        it, even though the Template field is present. Assign templates at
+        admin/structure/content_types');
+    }
+  }
+  return $form;
+}
+
+/**
+ * AJAX callback to return the node edit form.
+ */
+function utexas_page_builder_node_form_template_change(&$form, &$form_state) {
+  // Return the multistep part of the form.
+  $form_state['rebuild'] = FALSE;
+  return $form['multistep'];
+}
+
+/**
+ * Implements hook_form_submit().
+ *
+ * Manually forces the field template change since the hook_form_alter() call
+ * removed template as a valid field.
+ */
+function utexas_page_builder_node_submit($node, $form, &$form_state) {
+  if (isset($form_state['input']['field_template'])) {
+    // Manually set the template type.
+    $node->field_template[$node->language][0]['target_id'] = $form_state['input']['field_template'];
+
+  }
+}
+
+/**
+ * Submit callback used to store the context field admin UI option.
+ */
+function utexas_page_builder_hide_context_field_admin_ui_submit($form, &$form_state) {
+  // Store the value.
+  variable_set('utexas_page_builder_hide_context_field_admin_ui', $form_state['values']['hide_context_field']);
+}
+
+/**
+ * Implements hook_export_load_all().
+ *
+ * Callback for the load list of the Export UI for Context.
+ */
+function utexas_page_builder_export_load_all($reset) {
+  // Get contexts.
+  $contexts = ctools_export_load_object('context');
+
+  // If the user has indicated we should hide context field contexts ..
+  if (variable_get('utexas_page_builder_hide_context_field_admin_ui', 1)) {
+    // .. loop through contexts, seeing if any are field nodes.
+    foreach ($contexts as $key => $context) {
+      if ($context->tag == 'Context Field Custom' or $context->tag == 'Context Field Default') {
+        // The context is a custom field, so don't display it.
+        unset($contexts[$key]);
+      }
+    }
+  }
+
+  return $contexts;
+}
+
+/**
+ * Implements hook_block_info_alter().
+ *
+ * Alter block labels from field block for the context editor page.
+ * NOTE: Changes to page content type label MUST BE INCLUDED HERE for the layout
+ * editor to properly process locked fields.
+ */
+function utexas_page_builder_block_info_alter(&$blocks, $theme, $code_blocks) {
+  // Ensure that the fieldblock fields are set.
+  if (isset($blocks['fieldblock'])) {
+    // Loop through those blocks.
+    foreach ($blocks['fieldblock'] as $delta => &$block) {
+      $blocks['fieldblock'][$delta]['title'] = preg_replace("/field \(from node: (.*): default\)/", "", $block['info']);
+      $blocks['fieldblock'][$delta]['info'] = preg_replace("/field \(from node: (.*): default\)/", "($1)", $block['info']);
+    }
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ *
+ * Alters contextual links for fieldblock elements on the page layout.
+ */
+function utexas_page_builder_block_view_alter(&$data, $block) {
+  // Universally add edit_links as a variable on $block for use in the theme
+  // layer.
+  $block->edit_links = FALSE;
+
+  // If we're on a fieldblock, find out if we should add real edit links.
+  if ($block->module == 'fieldblock') {
+    if ($node = menu_get_object() and @node_access('update', $node->type)) {
+      if (isset($data['content'])) {
+        $block->edit_links = l(
+          t('Edit') . ' ' . $data['content']['#title'],
+          'node/' . $node->nid . '/edit',
+          array('fragment' => 'edit-sub-' . drupal_html_class($data['content']['#field_name']))
+        );
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements hook_context_registry_alter().
+ *
+ * Changes our reaction block plugin to use the modified plugin that limits the
+ * use of disallowed blocks.
+ *
+ * @see utexas_page_builder_context_reaction_block.js
+ */
+function utexas_page_builder_context_registry_alter(&$registry) {
+  // Adjust the block reaction to our new form.
+  if (!empty($registry['reactions']['block'])) {
+    $registry['reactions']['block'] = array(
+      'title' => t('Blocks'),
+      'description' => t('Control block visibility using context.'),
+      'plugin' => 'utexas_page_builder_context_reaction_block',
+    );
+  }
+}
+
+/**
+ * Implements hook_context_plugins().
+ *
+ * Defines a new reaction block for the context module.
+ */
+function utexas_page_builder_context_plugins() {
+  $plugins = array();
+
+  $plugins['utexas_page_builder_context_reaction_block'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'utexas_page_builder') . '/plugins',
+      'file' => 'utexas_page_builder_context_reaction_block.inc',
+      'class' => 'utexas_page_builder_context_reaction_block',
+      'parent' => 'context_reaction_block',
+    ),
+  );
+
+  return $plugins;
+}
+
+/**
+ * Implements hook_views_plugins_alter().
+ *
+ * Creates a new block option for the handler to allow certain block views to be
+ * hidden from the layout editor.
+ */
+function utexas_page_builder_views_plugins_alter(&$plugins) {
+  if (isset($plugins['display']['block'])) {
+    $plugins['display']['block']['handler'] = 'utexas_page_builder_views_plugin_display_block';
+    $plugins['display']['block']['module'] = 'utexas_page_builder';
+    $plugins['display']['block']['path'] = drupal_get_path('module', 'utexas_page_builder') . '/plugins';
+    $plugins['display']['block']['file'] = 'utexas_page_builder_views_plugin_display_block.inc';
+  }
+}
+
+/**
+ * Helper function to return the view display for a given block's delta.
+ *
+ * @param string $delta
+ *   A block's delta.
+ *
+ * @return mixed
+ *   Returns FALSE if there is no block display.
+ *   Returns the block display if there is a match.
+ */
+function _utexas_page_builder_get_view_display_from_block_delta($delta) {
+  // Figure out the view name and display name from the delta.
+  $matches = explode('-', $delta);
+  if (count($matches) == 1) {
+    // If the array only returns one match, we have to look at the hash table
+    // to continue to split out the view name and display.
+    $hashes = variable_get('views_block_hashes', array());
+    $hash = $hashes[$matches[0]];
+    $matches = explode('-', $hash);
+  }
+
+  // Assign easy to use names.
+  $view_name = $matches[0];
+  $view_display = $matches[1];
+
+  // Get the view.
+  $view = views_get_view($view_name);
+  if (isset($view->display[$view_display])) {
+    // If the display exists, return the display.
+    return $view->display[$view_display];
+  }
+
+  // Return false.
+  return FALSE;
+}
+
+/**
+ * Helper function to set all text formats to use the default format.
+ *
+ * @param array $element
+ *   A Form API element.
+ * @param string $format
+ *   A valid text format.
+ */
+function _utexas_page_builder_element_children_all_set_text_format(array &$element, $format) {
+  $results = array();
+  $children = element_children($element);
+  foreach ($children as $key) {
+    $child = &$element[$key];
+    if (is_array($child)) {
+      if (!empty($child['#type'])) {
+        $results[] = &$child;
+      }
+
+      // If the type is text_format, assign the format.
+      if (isset($child['#type']) and $child['#type'] == 'text_format') {
+        $child['#default_format'] = $format;
+      }
+
+      $results = array_merge($results, _utexas_page_builder_element_children_all_set_text_format($child, $format));
+    }
+    unset($child);
+  }
+  return $results;
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function utexas_page_builder_theme_registry_alter(&$theme_registry) {
+  // Defined path to the current module.
+  $module_path = drupal_get_path('module', 'utexas_page_builder');
+  // Find all .tpl.php files in this module's folder recursively.
+  $template_file_objects = drupal_find_theme_templates($theme_registry, '.tpl.php', $module_path);
+  // Iterate through all found template file objects.
+  foreach ($template_file_objects as $key => $template_file_object) {
+    // If the template has not already been overridden by a theme.
+    if (!isset($theme_registry[$key]['theme path']) || !preg_match('#/themes/#', $theme_registry[$key]['theme path'])) {
+      // Alter the theme path and template elements.
+      $theme_registry[$key]['theme path'] = $module_path;
+      $theme_registry[$key] = array_merge($theme_registry[$key], $template_file_object);
+      $theme_registry[$key]['type'] = 'module';
+    }
+  }
+}
+
+/**
+ * Implements theme_preprocess_theme.
+ *
+ * Used to change the context block browser's available fields based off of what
+ * the user has selected for their template.
+ */
+function utexas_page_builder_preprocess_context_block_browser(&$variables) {
+  // Create a list of modules to display in the browser, keyed to the caption.
+  $available_modules = array(
+    'fieldblock' => t('Page Components'),
+    'views' => t('Views'),
+    'menu-block' => t('Menu Blocks'),
+    'block' => t('Standard Blocks'),
+  );
+
+  // Reassign blocks based on available modules.
+  $modules = array_keys($available_modules);
+  $blocks  = array();
+
+  // Move 'Standard Blocks' to end of array.
+  if (isset($variables['blocks']['block'])) {
+    $standard_blocks = $variables['blocks']['block'];
+    unset($variables['blocks']['block']);
+    $variables['blocks']['block'] = $standard_blocks;
+  }
+
+  $initial_blocks = $variables['blocks'];
+  unset($variables['blocks']);
+  foreach ($initial_blocks as $key => $block_list) {
+    if (in_array($key, $modules)) {
+      // Make sure the module can work.
+      if ($key == 'menu-block') {
+
+      }
+      if ($key == 'fieldblock') {
+        // node_load below should only execute once.
+        $allowed_fields = array();
+        $nid = str_replace('context_field-node-', '', $variables['context']->name);
+        if ($node = node_load($nid) and $template = field_get_items('node', $node, 'field_template')) {
+          $node_type_name = node_type_get_name($node);
+          $template = entity_load('template', array($template[0]['target_id']));
+          $tempkey = key($template);
+          if (isset($template[$tempkey]->fields)) {
+            $defined_fields = unserialize($template[$tempkey]->fields);
+          }
+          foreach ($defined_fields as $field) {
+            if ($field['enabled'] and !$field['locked']) {
+              $field_label = field_info_instance('node', $field['machine_name'], $node->type);
+              $allowed_fields[] = $field_label['label'];
+            }
+          }
+          foreach ($block_list as $block_id => &$block) {
+            $title = '';
+            if (isset($block->title)) {
+              $title = trim($block->title);
+            }
+            if (strpos($block->info, $node_type_name) === FALSE or $title == '' or !in_array($title, $allowed_fields)) {
+              unset($block_list[$block_id]);
+            }
+          }
+        }
+      }
+      if ($key == 'views' and function_exists('_page_builder_get_view_display_from_block_delta')) {
+        foreach ($block_list as $block_id => &$block) {
+          // Check to make sure this view has been exposed to the layout editor.
+          if ($display = _page_builder_get_view_display_from_block_delta($block->delta)) {
+            if (!(isset($display->display_options['block_exposed_to_editor']) and $display->display_options['block_exposed_to_editor'])) {
+              // Since this block can't be exposed, remove it from the block
+              // editor.
+              unset($block_list[$block_id]);
+            }
+          }
+        }
+      }
+      // Attach the block list to the blocks array, if there's anything in that
+      // block list.
+      if (count($block_list) >= 0) {
+        $blocks[$key] = $block_list;
+      }
+    }
+  }
+  // Change the categories.
+  $categories = array(
+    0 => '<' . t('all components') . '>',
+  );
+  foreach ($available_modules as $id => $data) {
+    $categories[$id] = $data;
+  }
+
+  // Assign the variables.
+  $variables['categories']['#options'] = $categories;
+
+  // Change the helper text.
+  $variables['help_text']['#markup']  = '<p>' . t('To add a component to the
+    page, click on the component. You can then drag and drop components into
+    different regions on the page.') . '</p>';
+  $variables['help_text']['#markup'] .= '<p>' . t('You can additionally filter
+    by component type.') . '</p>';
+
+  // Reset the blocks.
+  $variables['available_modules'] = $available_modules;
+  $variables['blocks'] = $blocks;
+}
+
+/**
+ * Implements template_preprocess_block().
+ *
+ * Attaches field information to fieldblock blocks, prepares blocks for the
+ * layout editor, and applies default classes to blocks in the sidebars.
+ *
+ * @see theme_context_block_edit_wrap()
+ *
+ * @todo ITS to override twitter component on this page after writing the new
+ *   Twitter feed module.
+ */
+function utexas_page_builder_preprocess_block(&$variables) {
+  // Determine whether the current block is a "node" type.
+  if (isset($variables['elements']['nodes'])) {
+    $node = $variables['elements']['nodes'];
+    reset($node);
+    $nid = key($node);
+    if (isset($variables['elements']['nodes'][$nid]['#node']->field_page_layout)) {
+      // This is a node that uses page builder. Send a flag to block.tpl.php.
+      $variables['page_builder_node'] = TRUE;
+    }
+  }
+  // Attach a theme hook suggestions for fieldblocks based on the content in
+  // the field.
+  if (isset($variables['block']) and $variables['block']->module == 'fieldblock' and isset($variables['elements']['#field_name'])) {
+    // Attach some extra theme hooks for extended customization.
+    $variables['theme_hook_suggestions'][] = 'block__fieldblock__' . $variables['elements']['#field_name'];
+    $variables['theme_hook_suggestions'][] = 'block__fieldblock__' . $variables['block']->region . '__' . $variables['elements']['#field_name'];
+
+    // Attach the items to the block.
+    $items = array();
+    foreach (element_children($variables['elements']) as $key) {
+      if (is_numeric($key)) {
+        $items[] = $variables['elements'][$key];
+      }
+    }
+    $variables['field_items'] = $items;
+
+    // Attach markup to make the block editable via the context UI. If we are
+    // rendering field items in the block--fieldblock.tpl.php (and not rendering
+    // $content), we need to add the $editable variable to let the fieldblock be
+    // rearranged via the context UI.
+    //
+    // Before this, make sure the user has permission to edit before adding the
+    // $editable variable for their use.
+    $block = $variables['block'];
+    $variables['editable'] = FALSE;
+    if (user_access(UTEXAS_PAGE_BUILDER_LAYOUT_EDIT_PERMISSION) and isset($block->context)) {
+      $variables['editable'] = "<a id='context-block-{$block->module}-{$block->delta}' class='context-block editable edit-{$block->context}'></a>";
+    }
+  }
+
+  // Stick a class of sidebar module on a block if it's in the sidebar.
+  if ($variables['block']->region == 'sidebar_second') {
+    // Make sure we're not adding this to content areas.
+    $variables['classes_array'][] = 'sidebar-module';
+
+    // Set certain regions to be default to no sidebar style.
+    $no_default = array(
+      'field_utexas_flex_content_area_a',
+      'field_utexas_flex_content_area_b',
+      'field_wysiwyg_a',
+      'field_wysiwyg_b',
+      'field_utexas_contact_info',
+      'field_utexas_social_links',
+      'field_utexas_image_link_a',
+      'field_utexas_image_link_b',
+      'field_gift_link',
+      'field_utexas_promo_list',
+      'field_utexas_resource',
+      'field_utexas_promo_units',
+    );
+    if (isset($variables['elements']['#field_name']) and !in_array($variables['elements']['#field_name'], $no_default)) {
+      $variables['classes_array'][] = 'sidebar-default-style';
+
+      // Find the region key.
+      $key = array_search('block__' . $variables['block']->region, $variables['theme_hook_suggestions']);
+      $hooks = utexas_page_builder_array_insert_after($key, $variables['theme_hook_suggestions'], 'new_theme_hook', 'block__' . $variables['block']->region . '__default_style');
+      $variables['theme_hook_suggestions'] = array_values($hooks);
+    }
+
+    // If it's a non-field (i.e. news block or localist block), attach the
+    // default style as well.
+    if (!isset($variables['elements']['#field_name']) && ($variables['block']->module) != 'menu_block') {
+      $variables['classes_array'][] = 'sidebar-default-style';
+      $variables['theme_hook_suggestions'][] = 'block__' . $variables['block']->region . '__default_style';
+    }
+  }
+}
+
+/**
+ * Implements theme_preprocess_field().
+ *
+ * Renames the default classes for the field name to match the front-end
+ * template styles.
+ */
+function utexas_page_builder_preprocess_field(&$variables) {
+  // Compress the class array.
+  $variables['classes_array'] = array(
+    'field',
+    str_replace('-', '_', $variables['field_name_css']),
+  );
+}
+
+/**
+ * Helper function to insert a new value after a key.
+ *
+ * @param mixed $key
+ *   An array key to insert a new key/value pair after.
+ * @param array $array
+ *   The array to search for a key on.
+ * @param mixed $new_key
+ *   The new key to be inserted.
+ * @param mixed $new_value
+ *   The new value to be inserted.
+ *
+ * @return mixed
+ *   FALSE if the key wasn't found.
+ *   The new key/value pair.
+ */
+function utexas_page_builder_array_insert_after($key, array &$array, $new_key, $new_value) {
+  if (array_key_exists($key, $array)) {
+    $new = array();
+    foreach ($array as $k => $value) {
+      $new[$k] = $value;
+      if ($k === $key) {
+        $new[$new_key] = $new_value;
+      }
+    }
+    return $new;
+  }
+  return FALSE;
+}

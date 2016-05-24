@@ -1,0 +1,52 @@
+<?php
+/**
+ * @file
+ * Installation methods for the Google Tag Manager module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function utexas_google_tag_manager_install() {
+  // Intentionally left blank to register the install hook.
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Performs cleanup actions when the module is uninstalled.
+ */
+function utexas_google_tag_manager_uninstall() {
+  // Delete variables set by the module.
+  variable_del('utexas_google_tag_manager_gtm_code');
+  variable_del('utexas_google_tag_manager_gtm_include_admin');
+  variable_del('utexas_google_tag_manager_gtm_exclude_paths');
+}
+
+/**
+ * Implements hook_requirements().
+ *
+ * Used to report problems if certain module-specific configuration
+ * variables are not set.
+ */
+function utexas_google_tag_manager_requirements($phase) {
+  $requirements = array();
+
+  switch ($phase) {
+    case 'runtime':
+      // Check to make sure the configuration variables have been set. If not,
+      // alert a status report issue.
+      if (!variable_get('utexas_google_tag_manager_gtm_code', '') and user_access('administer utexas google tag manager')) {
+        $requirements['gtm_code_required'] = array(
+          'title' => 'Google Tag Manager',
+          'value' => 'Unconfigured',
+          'description' => 'The !tag_config module needs to be configured. Until the module is configured, no Google Tag Manager tracking will occur.', array('!tag_config' => l('Google Tag Manager', 'admin/config/system/utexas-google-tag-manager')),
+          'severity' => REQUIREMENT_WARNING,
+        );
+      }
+
+      break;
+  }
+
+  return $requirements;
+}

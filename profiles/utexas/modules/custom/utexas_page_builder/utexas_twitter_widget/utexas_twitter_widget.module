@@ -1,0 +1,786 @@
+<?php
+/**
+ * @file
+ * UTexas Twitter Widget module.
+ *
+ * Provides the entity data that renders widgets on various
+ * content types. This provides a basic CRUD interface.
+ */
+
+/**
+ * Permission for viewing available widgets.
+ */
+define('UTEXAS_TWITTER_WIDGET_VIEW_PERMISSION', 'view twitter widgets');
+
+/**
+ * Permission for editing widgets.
+ */
+define('UTEXAS_TWITTER_WIDGET_EDIT_PERMISSION', 'administer twitter widgets');
+
+/**
+ * Permission for editing widgets.
+ */
+define('UTEXAS_TWITTER_WIDGET_CONFIGURE_PERMISSION', 'configure twitter widgets');
+
+/**
+ * Internal path to twitter entities.
+ */
+define('UTEXAS_TWITTER_WIDGET_CALLBACK', 'admin/content/twitter');
+
+/**
+ * Implements hook_entity_info().
+ */
+function utexas_twitter_widget_entity_info() {
+
+  $info = array();
+
+  $info['twitter_widget'] = array(
+    'label' => t('Twitter Widget'),
+    'base table' => 'utexas_twitter_widgets',
+    'entity keys' => array(
+      'id' => 'id',
+      'label' => 'name',
+    ),
+    'module' => 'utexas_twitter_widget',
+    'entity class' => 'TwitterWidgetEntity',
+    'controller class' => 'TwitterWidgetEntityController',
+    'views controller class' => 'EntityDefaultViewsController',
+    'access callback' => 'utexas_twitter_widget_access_callback',
+    'uri callback' => 'entity_class_uri',
+    'admin ui' => array(
+      'path' => UTEXAS_TWITTER_WIDGET_CALLBACK,
+      'controller class' => 'TwitterWidgetUIController',
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_entity_property_info().
+ */
+function utexas_twitter_widget_entity_property_info() {
+
+  $info = array();
+
+  $info['twitter_widget']['properties']['id'] = array(
+    'label' => t('Widget ID'),
+    'description' => t('The ID of the widget.'),
+    'type' => 'integer',
+    'schema field' => 'id',
+  );
+  $info['twitter_widget']['properties']['name'] = array(
+    'label' => t('Widget Label'),
+    'description' => t('Identifies the widget within the site.'),
+    'type' => 'text',
+    'schema field' => 'name',
+  );
+  $info['twitter_widget']['properties']['headline'] = array(
+    'label' => t('Widget Headline'),
+    'description' => t('Headline displayed atop the widget.'),
+    'type' => 'text',
+    'schema field' => 'headline',
+  );
+  $info['twitter_widget']['properties']['account'] = array(
+    'label' => t('Twitter Account'),
+    'description' => t('The account name from which to pull tweets.'),
+    'type' => 'text',
+    'schema field' => 'account',
+  );
+  $info['twitter_widget']['properties']['timeline_list'] = array(
+    'label' => t('Timeline List'),
+    'description' => t('The optional timeline list of the account.'),
+    'type' => 'text',
+    'schema field' => 'timeline_list',
+  );
+  $info['twitter_widget']['properties']['count'] = array(
+    'label' => t('Count'),
+    'description' => t('The number of tweets to display.'),
+    'type' => 'int',
+    'schema field' => 'count',
+  );
+  $info['twitter_widget']['properties']['view_all'] = array(
+    'label' => t('View All text'),
+    'description' => t('Text for the link back to Twitter. Leave blank for no link.'),
+    'type' => 'text',
+    'schema field' => 'view_all',
+  );
+  $info['twitter_widget']['properties']['retweets'] = array(
+    'label' => t('Retweets'),
+    'description' => t('Whether to include retweets.'),
+    'type' => 'int',
+    'schema field' => 'retweets',
+  );
+  $info['twitter_widget']['properties']['replies'] = array(
+    'label' => t('Replies'),
+    'description' => t('Whether to include replies.'),
+    'type' => 'int',
+    'schema field' => 'replies',
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function utexas_twitter_widget_permission() {
+  // Define a permission that allows users to edit widgets.
+  return array(
+    UTEXAS_TWITTER_WIDGET_VIEW_PERMISSION => array(
+      'title' => t('View Twitter Widgets'),
+      'description' => t('Allow users to view available widgets'),
+    ),
+    UTEXAS_TWITTER_WIDGET_EDIT_PERMISSION => array(
+      'title' => t('Edit & Delete Widgets'),
+      'description' => t('Allow users to edit & delete widgets'),
+    ),
+    UTEXAS_TWITTER_WIDGET_CONFIGURE_PERMISSION => array(
+      'title' => t('Configure Twitter widget account'),
+      'description' => t('Allow users to enter Twitter credentials.'),
+    ),
+  );
+}
+
+/**
+ * Access callback for entities.
+ */
+function utexas_twitter_widget_access_callback($op, $widget = NULL, $account = NULL) {
+  $url = current_path();
+  $access = FALSE;
+  if ($url == UTEXAS_TWITTER_WIDGET_CALLBACK && user_access(UTEXAS_TWITTER_WIDGET_EDIT_PERMISSION)) {
+    // Allow users with permission to view entity overview page.
+    $access = TRUE;
+  }
+  elseif ($op == 'view' && user_access(UTEXAS_TWITTER_WIDGET_VIEW_PERMISSION) && $url !== UTEXAS_TWITTER_WIDGET_CALLBACK) {
+    // Allow users with permission to view rendered entities.
+    $access = TRUE;
+  }
+  elseif (($op == 'update' || $op == 'create' || $op == 'delete') && user_access(UTEXAS_TWITTER_WIDGET_EDIT_PERMISSION)) {
+    // Allow users with permission to modify entities.
+    $access = TRUE;
+  }
+  return $access;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function utexas_twitter_widget_menu() {
+  // Menu items.
+  $items = array();
+
+  $items['twitter/%'] = array(
+    'title' => 'Twitter Widget',
+    'page callback' => '_utexas_twitter_widget_view_widget',
+    'page arguments' => array(1),
+    'access arguments' => array('view twitter widgets'),
+  );
+
+  $items['admin/config/utexas/twitter'] = array(
+    'title' => 'Twitter Configuration',
+    'description' => 'Set Twitter app credentials and refresh rate.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('utexas_twitter_widget_config_form'),
+    'access arguments' => array(UTEXAS_TWITTER_WIDGET_CONFIGURE_PERMISSION),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function utexas_twitter_widget_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  if ($root_path == UTEXAS_TWITTER_WIDGET_CALLBACK) {
+    $item = menu_get_item('admin/config/utexas/twitter');
+    if ($item['access']) {
+      if (variable_get('utexas_twitter_widget_token', '') != 'Credentials Valid') {
+        drupal_set_message(t('You need to') . ' ' . l(t('add a Twitter App key'), '/admin/config/utexas/twitter') . ' ' . t('to activate widgets.'), 'warning');
+      }
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_task',
+        '#link' => $item,
+      );
+    }
+  }
+}
+
+/**
+ * Implements drupal_get_form(). Builds the administration menu for the module.
+ */
+function utexas_twitter_widget_config_form($form, &$form_state) {
+
+  // Twitter app account information.
+  $form['utexas_twitter_widget_api'] = array(
+    '#type'        => 'fieldset',
+    '#title'       => t('Twitter API Credentials'),
+    '#description' => t('Assign the Twitter App for this site. To register a new App,
+      go to the ') . l(t('Twitter App page'), 'https://apps.twitter.com') . '.',
+    '#collapsible' => TRUE,
+  );
+  $form['utexas_twitter_widget_api']['utexas_twitter_widget_owner'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Twitter App Owner (username)'),
+    '#default_value' => variable_get('utexas_twitter_widget_owner', ''),
+    '#required'      => TRUE,
+  );
+  $form['utexas_twitter_widget_api']['utexas_twitter_widget_key'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Twitter App Key'),
+    '#default_value' => variable_get('utexas_twitter_widget_key', ''),
+    '#required'      => TRUE,
+  );
+  $form['utexas_twitter_widget_api']['utexas_twitter_widget_secret'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Twitter App Secret'),
+    '#default_value' => variable_get('utexas_twitter_widget_secret', ''),
+    '#required'      => TRUE,
+  );
+  $form['utexas_twitter_widget_api']['utexas_twitter_widget_token'] = array(
+    '#type'   => 'markup',
+    '#markup' => '<p><strong>' . t('API Token') . ': </strong>' . variable_get('utexas_twitter_widget_token', '<em>NO TOKEN</em>') . '</p>',
+  );
+
+  $form['utexas_twitter_widget_cache_time'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Refresh Interval (seconds)'),
+    '#default_value' => variable_get('utexas_twitter_widget_cache_time', 300),
+    '#description'   => t('Twitter\'s <a href="@rate-limiting">rate
+      limiting policy</a> requires you limit how frequently you pull new tweets. The general rule:
+      don\'t pull more frequently (in minutes) than the number of widgets should exceed the number
+      of individual widgets on the site (e.g., if there are 5 widgets, the cache lifetime should
+      be at least 300 seconds).',
+     array('@rate-limiting' => 'https://dev.twitter.com/rest/public/rate-limits')),
+    '#required'      => TRUE,
+    '#size' => 10,
+    '#attributes'    => array(
+      'placeholder' => 300,
+    ),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_form_validate().
+ *
+ * Validate the form to make sure an accurate. Twitter API token is used.
+ */
+function utexas_twitter_widget_config_form_validate($form, &$form_state) {
+  // Get the current API key & secret.
+  if (empty($form_state['values']['utexas_twitter_widget_key'])) {
+    form_set_error('utexas_twitter_widget_key', t('You need to enter a valid key.'));
+  }
+
+  if (empty($form_state['values']['utexas_twitter_widget_secret'])) {
+    form_set_error('utexas_twitter_widget_secret', t('You need to enter a valid secret.'));
+  }
+
+  // Validate connection to Twitter with current account and (optional) list.
+  $request = _utexas_twitter_widget_get_request(
+    $form_state['values']['utexas_twitter_widget_owner'],
+    '',
+    0,
+    0,
+    $form_state['values']['utexas_twitter_widget_key'],
+    $form_state['values']['utexas_twitter_widget_secret']
+  );
+
+  require_once drupal_get_path('module', 'utexas_twitter_widget') . '/twitter-api-php/TwitterAPIExchange.php';
+  $twitter = new TwitterAPIExchange($request['settings']);
+  $tweets = $twitter->setGetfield($request['getfield'])
+    ->buildOauth($request['url'], 'GET')
+    ->performRequest();
+  $data = json_decode($tweets);
+  if (empty($data)) {
+    form_set_error('utexas_twitter_widget_api', 'Cannot connect to Twitter. Please check the Twitter account and credentials.');
+  }
+  if (isset($data->errors)) {
+    form_set_error('utexas_twitter_widget_api', $data->errors[0]->message . ' The form has not been updated; any previously valid data you entered will remain active.');
+  }
+  else {
+    variable_set('utexas_twitter_widget_token', 'Credentials Valid');
+  }
+
+}
+
+/**
+ * Custom controller for the administrator UI.
+ */
+class TwitterWidgetUIController extends EntityDefaultUIController {
+
+  /**
+   * Override the menu hook for default ui controller.
+   */
+  public function hook_menu() {
+    $items = parent::hook_menu();
+    $items[$this->path]['title'] = t('Twitter Widgets');
+    $items[$this->path]['description'] = t('Manage twitter');
+    $items[$this->path]['type'] = MENU_LOCAL_TASK;
+    return $items;
+  }
+
+}
+
+/**
+ * Twitter Widget entity class extending the Entity class.
+ */
+class TwitterWidgetEntity extends Entity {
+  /**
+   * Change the default URI from default/id to twitter/id.
+   */
+  protected function defaultUri() {
+    return array('path' => 'twitter/' . $this->identifier());
+  }
+
+}
+
+/**
+ * Form definition for adding / editing a Twitter Widget entity.
+ */
+function twitter_widget_form($form, &$form_state, $instance = NULL) {
+
+  if (variable_get('utexas_twitter_widget_token', '') != 'Credentials Valid') {
+    drupal_set_message(t('You need to') . ' ' . l(t('add a Twitter App key'), '/admin/config/utexas/twitter') . ' ' . t('to activate this widget.'), 'warning');
+  }
+
+  $form['name'] = array(
+    '#title' => t('Widget Label'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->name) ? $instance->name : '',
+    '#required' => TRUE,
+    '#description' => t('Identifies this widget within the site. It should be descriptive and unique.'),
+  );
+
+  $form['headline'] = array(
+    '#title' => t('Headline'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->headline) ? $instance->headline : 'Tweets',
+    '#required' => FALSE,
+    '#description' => t('The header that appears above the tweets.'),
+  );
+
+  $form['account'] = array(
+    '#title' => t('Twitter Account'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->account) ? $instance->account : '',
+    '#required' => TRUE,
+  );
+
+  $form['timeline_list'] = array(
+    '#title' => t('Timeline List'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->timeline_list) ? $instance->timeline_list : '',
+    '#description' => t('Optional user timeline list from which to pull tweets.'),
+  );
+
+  $form['count'] = array(
+    '#type' => 'select',
+    '#title' => t('Number of Tweets'),
+    '#default_value' => isset($instance->count) ? $instance->count : 5,
+    '#options' => array(
+      '1' => '1',
+      '2' => '2',
+      '3' => '3',
+      '4' => '4',
+      '5' => '5',
+      '6' => '6',
+      '7' => '7',
+      '8' => '8',
+      '9' => '9',
+      '10' => '10',
+    ),
+    '#description' => t('How many Tweets should be displayed?'),
+  );
+
+  $form['view_all'] = array(
+    '#title' => t('"View all..." text'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->view_all) ? $instance->view_all : '',
+    '#description' => t('The text displayed at the bottom of the widget, linking to Twitter.'),
+  );
+
+  $form['retweets'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => isset($instance->retweets) ? $instance->retweets : 1,
+    '#title' => 'Include re-tweets?',
+  );
+
+  $form['replies'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => isset($instance->replies) ? $instance->replies : 1,
+    '#title' => 'Include replies?',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => isset($instance->id) ? t('Update') : t('Save'),
+    '#weight' => 50,
+  );
+
+  return $form;
+}
+
+/**
+ * Implements entity_form_validate().
+ */
+function twitter_widget_form_validate(&$form, &$form_state) {
+  // Do not allow saving widgets unless valid Twitter credentials are present.
+  if (variable_get('utexas_twitter_widget_token', '') != 'Credentials Valid') {
+    form_error($form, t('You need to') . ' ' . l(t('add a Twitter App key'), '/admin/config/utexas/twitter') . ' ' . t('to activate this widget.'));
+  }
+  // Check if the widget name already exists, so that any entity reference field
+  // shows unique widget names.
+  $existing_widgets = array();
+  $widgets = entity_load('twitter_widget');
+  foreach ($widgets as $key => $widget) {
+    $existing_widgets[$key] = $widget->name;
+  }
+  // If the current widget does not yet exist AND (for widgets being edited)
+  // the previous value was not already in the existing widgets.
+  if (in_array($form_state['input']['name'], $existing_widgets) and !in_array($form['name']['#default_value'], $existing_widgets)) {
+    form_error($form['name'], t('The title %value is already being used. Choose something else so that each widget can be easily identified.', array('%value' => $form_state['input']['name'])));
+  }
+
+  $account = check_plain($form_state['input']['account']);
+  $list = isset($form_state['input']['timeline_list']) ? check_plain($form_state['input']['timeline_list']) : '';
+  $replies     = $form_state['input']['replies'];
+  $retweets    = $form_state['input']['retweets'];
+  $cache_name  = $account . $list;
+  $cache_time  = variable_get('utexas_twitter_widget_cache_time', '300');
+  $key         = variable_get('utexas_twitter_widget_key', '');
+  $secret      = variable_get('utexas_twitter_widget_secret', '');
+
+  $tweets      = _utexas_twitter_widget_grab_tweets(
+  $cache_name, $cache_time, $account, $list, $retweets, $replies, $key, $secret);
+
+  // Set a value that the template can use to decide whether to display content.
+  if (empty($tweets) or isset($tweets->errors)) {
+    if ($list != '') {
+      form_error($form['timeline_list'], t('The Twitter timeline list %value does not appear to be valid.', array('%value' => $form_state['input']['timeline_list'])));
+    }
+    else {
+      form_error($form['account'], t('The Twitter username %value does not appear to be valid.', array('%value' => $form_state['input']['account'])));
+    }
+  }
+}
+
+/**
+ * Submit handler for the Twitter widget entity add/edit form.
+ */
+function twitter_widget_form_submit($form, &$form_state) {
+  $entity = entity_ui_form_submit_build_entity($form, $form_state);
+  // Combine the field definitions into a serialized array for storage.
+  $entity->save();
+  drupal_set_message(t('The widget: @name has been saved.', array('@name' => $entity->name)));
+  $form_state['redirect'] = UTEXAS_TWITTER_WIDGET_CALLBACK;
+}
+
+/**
+ * Extends the EntityAPIController for the Twitter Widget entity.
+ */
+class TwitterWidgetEntityController extends EntityAPIController {
+  /**
+   * Extends buildContent().
+   */
+  public function buildContent($entity, $view_mode = 'full', $langcode = NULL, $content = array()) {
+    $build = parent::buildContent($entity, $view_mode, $langcode, $content);
+    // Our additions to the $build render array.
+    $account = check_plain($entity->account);
+    $list = isset($entity->timeline_list) ? check_plain($entity->timeline_list) : '';
+    $replies     = $entity->replies;
+    $retweets    = $entity->retweets;
+    $cache_name  = $account . $list;
+    $cache_time  = variable_get('utexas_twitter_widget_cache_time', '300');
+    $key         = variable_get('utexas_twitter_widget_key', '');
+    $secret      = variable_get('utexas_twitter_widget_secret', '');
+
+    $tweets      = _utexas_twitter_widget_grab_tweets(
+      $cache_name, $cache_time, $account, $list, $retweets, $replies, $key, $secret);
+
+    // Get the tweet display count.
+    $render = array();
+    $count = $entity->count;
+    $inc = 0;
+    // Used to create the Tweet action links.
+    $actions = array(
+      'Reply' => '//twitter.com/intent/tweet?in_reply_to=',
+      'Retweet' => '//twitter.com/intent/retweet?tweet_id=',
+      'Favorite' => '//twitter.com/intent/favorite?tweet_id=',
+    );
+
+    // Set a value that the template can use to decide to display content.
+    if (empty($tweets) or isset($tweets->errors)) {
+      $tweets_filtered = FALSE;
+    }
+    else {
+      foreach ($tweets as $tweet) {
+        $inc++;
+        $tweet_actions = '';
+        // Prepare the Tweet Action links, based on $tweet->id.
+        foreach ($actions as $action => $link) {
+          $tweet_actions .=
+            '<li class="tweet-action">' .
+            l('<span class="hiddenText">' . $action . '</span>',
+              $link . $tweet->id,
+              array(
+                'html' => TRUE,
+                'external' => TRUE,
+                'attributes' => array(
+                  'class' => array('action-link', 'action-' . strtolower($action)),
+                ),
+              )
+            )
+            . '</li>';
+        }
+        $tweets_filtered[] = array(
+          'id'        => (int) $tweet->id,
+          'image'     => theme('image', array(
+              'path' => $tweet->user->profile_image_url,
+              'alt' => $tweet->user->name,
+            )
+          ),
+          'author'    => $tweet->user->name,
+          'username'  => $tweet->user->screen_name,
+          'text'      => _utexas_twitter_widget_parse_twitter_links($tweet->text),
+          'timestamp' => _utexas_twitter_widget_time_ago(strtotime($tweet->created_at), 1),
+          'tweet_actions' => $tweet_actions,
+        );
+        if ($inc >= $count) {
+          break;
+        }
+      }
+    }
+    $link = $list != '' ? $account . '/lists/' . $list : $account;
+
+    $view_all = $entity->view_all != '' ? l(check_plain($entity->view_all), '//twitter.com/' . $link,
+        array(
+          'external' => TRUE,
+          'attributes' => array('class' => array('cta', 'sidebar-cta')),
+        )) : FALSE;
+
+    $build['#attached']['css'][] = drupal_get_path('module', 'utexas_twitter_widget') . '/theme/twitter-widget.css';
+
+    // Send data to template.
+    $build += array(
+      'headline' => check_plain($entity->headline),
+      'tweets' => $tweets_filtered,
+      'view_all' => $view_all,
+      'link' => $link,
+    );
+
+    return $build;
+  }
+
+}
+
+/**
+ * Helper function to grab tweets from the Twitter REST API.
+ *
+ * @param string $account
+ *   String representing the Twitter feed to pull.
+ * @param bool $replies
+ *   Boolean representing whether or not replies should be included.
+ *
+ * @return array
+ *   Array representing tweets.
+ */
+function _utexas_twitter_widget_grab_tweets($cache_name, $cache_time, $account, $list, $retweets, $replies, $key, $secret) {
+
+  $request = _utexas_twitter_widget_get_request($account, $list, $replies, $retweets, $key, $secret);
+  // Check the tweet value and expiration date.
+  $cache = cache_get('utexas_twitter:' . $cache_name, 'cache');
+  if (!$cache or time() >= (int) $cache->expire) {
+
+    require_once drupal_get_path('module', 'utexas_twitter_widget') . '/twitter-api-php/TwitterAPIExchange.php';
+    $twitter = new TwitterAPIExchange($request['settings']);
+    $tweets = $twitter->setGetfield($request['getfield'])
+             ->buildOauth($request['url'], 'GET')
+             ->performRequest();
+
+    // Set the array in the cache -- expires every 5 minutes.
+    cache_set('utexas_twitter:' . $cache_name, $tweets, 'cache', time() + $cache_time);
+  }
+
+  return json_decode(cache_get('utexas_twitter:' . $cache_name, 'cache')->data);
+}
+
+/**
+ * Helper function to prepare a request via OAuth from the Twitter API.
+ *
+ * @param string $account
+ *   The Twitter account to pull data from.
+ * @param string $list
+ *   The optional timeline list owned by the account.
+ * @param bool $replies
+ *   Whether replies should be included.
+ * @param bool $retweets
+ *   Whether retweets should be included.
+ *
+ * @return array
+ *   a url, token, and field parameter to send to Twitter
+ */
+function _utexas_twitter_widget_get_request($account, $list, $replies, $retweets, $key, $secret) {
+
+  $settings = array(
+    'oauth_access_token' => '',
+    'oauth_access_token_secret' => '',
+    'consumer_key' => $key,
+    'consumer_secret' => $secret,
+  );
+
+  // Default to getting Tweets from a user.
+  $url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+  $params = array(
+    'count' => 50,
+    'screen_name' => $account,
+  );
+
+  if ($replies == 0) {
+    $params['exclude_replies'] = TRUE;
+  }
+
+  // Conditionally, get a list timeline instead.
+  if ($list != '') {
+    $url = 'https://api.twitter.com/1.1/lists/statuses.json';
+    $params = array(
+      'count' => 50,
+      'slug' => $list,
+      'owner_screen_name' => $account,
+    );
+  }
+
+  $params['include_rts'] = $retweets;
+
+  $getfield = '?' . http_build_query($params);
+  return array(
+    'settings' => $settings,
+    'url' => $url,
+    'getfield' => $getfield,
+  );
+}
+
+/**
+ * Helper function.
+ *
+ * Parses tweet text and replaces links, at-mentions, and hashtags.
+ *
+ * @param string $text
+ *   String with the tweet.
+ *
+ * @return string
+ *   Converted tweet that has anchor links to Twitter entity types.
+ */
+function _utexas_twitter_widget_parse_twitter_links($text) {
+  // Links.
+  $text = preg_replace('@(https?://([-\w\.]+)+(/([\w/_\.]*(\?\S+)?(#\S+)?)?)?)@', '<a href="$1">$1</a>', $text);
+
+  // @ mentions.
+  $text = preg_replace('/@(\w+)/', '<a href="//twitter.com/$1">@$1</a>', $text);
+
+  // Hashtags.
+  $text = preg_replace('/\s#(\w+)/', ' <a href="//twitter.com/search?q=%23$1">#$1</a>', $text);
+
+  return $text;
+}
+
+/**
+ * Helper function to convert timestamp to 'time ago' format.
+ *
+ * @todo Could this be replaced with Drupal's built in date parsing functions?
+ *
+ * @param int $timestamp
+ *   UNIX timestamp representing the tweet timestamp.
+ * @param int $levels
+ *   How many concatenations should a tweet be? (2 weeks, 4 days vs. 3 weeks).
+ *
+ * @return string
+ *   Converted timestamp into 'time ago' format.
+ */
+function _utexas_twitter_widget_time_ago($timestamp = 0, $levels = 2) {
+  $diff    = time() - $timestamp;
+  $periods = array(
+    'decade' => 315360000,
+    'year'   => 31536000,
+    'month'  => 2628000,
+    'week'   => 604800,
+    'd'      => 86400,
+    'h'      => 3600,
+    'm'      => 60,
+    's'      => 1,
+  );
+
+  $return = '';
+  foreach ($periods as $key => $value) {
+    if ($diff >= $value) {
+      $time    = floor($diff / $value);
+      $diff   %= $value;
+      $return .= ' ' . $time . ' ' . $key . (($time == 0 or $time >= 2) ? 's' : '') . ' ago';
+      $levels--;
+    }
+    if ($levels == '0') {
+      break;
+    }
+  }
+  return $return;
+}
+
+/**
+ * Callback function for displaying the individual widget page.
+ */
+function _utexas_twitter_widget_view_widget($id) {
+
+  $widgets = entity_load('twitter_widget', array($id));
+  $widget = $widgets[$id];
+
+  drupal_set_title($widget->headline);
+  // View data is defined in buildContent().
+  $output = entity_view('twitter_widget', array($widget));
+
+  return $output;
+}
+
+/**
+ * Adds our theme specifications to the Theme Registry.
+ */
+function utexas_twitter_widget_theme($existing, $type, $theme, $path) {
+  return array(
+    'twitter_widget' => array(
+      'variables' => array('element' => NULL),
+      'template' => 'twitter-widget',
+      'path' => drupal_get_path('module', 'utexas_twitter_widget') . '/theme',
+    ),
+  );
+}
+
+/**
+ * Generates a twitter widget on the site, mainly for testing purposes.
+ *
+ * This requires configuration in profiles/utexas/tests/credentials.php
+ */
+function generate_twitter_widget() {
+  $file_name = DRUPAL_ROOT . '/profiles/utexas/tests/credentials.php';
+  if (file_exists($file_name)) {
+    include $file_name;
+    variable_set('utexas_twitter_widget_key', $credentials['twitter_key']);
+    variable_set('utexas_twitter_widget_secret', $credentials['twitter_secret']);
+    variable_set('utexas_twitter_widget_owner', 'utaustin');
+    variable_set('utexas_twitter_widget_token', 'Credentials Valid');
+
+    $keys = array_keys(entity_load('twitter_widget'));
+    $current = end($keys);
+    $inc = $current + 1;
+
+    $entity = entity_create('twitter_widget', array('id' => $inc));
+    $entity->name = 'Test Twitter Widget ' . $inc;
+    $entity->headline = 'Tweets';
+    $entity->account = 'utaustin';
+    $entity->count = 5;
+    $entity->retweets = 1;
+    $entity->replies = 1;
+    $entity->save();
+  }
+
+}

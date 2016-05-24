@@ -1,0 +1,92 @@
+name = Utexas
+description = UT Drupal Kit installation profile
+version = "7.x-2.3"
+core = 7.x
+php = 5.4
+
+; The distribution_name property is used in the installer and other places as
+; a label for the software being installed.
+distribution_name = UT Drupal Kit
+
+; The exclusive flag auto-selects the profile during installation, if there
+; are no other exclusive ones.
+exclusive = TRUE
+
+; Required modules (Core)
+; Copy/pasted from standard.info
+dependencies[] = block
+dependencies[] = comment
+dependencies[] = contextual
+dependencies[] = ctools
+dependencies[] = filter
+dependencies[] = image
+dependencies[] = list
+dependencies[] = menu
+dependencies[] = number
+dependencies[] = options
+dependencies[] = path
+dependencies[] = taxonomy
+dependencies[] = dblog
+dependencies[] = search
+dependencies[] = shortcut
+dependencies[] = strongarm
+dependencies[] = toolbar
+dependencies[] = file
+dependencies[] = rdf
+dependencies[] = views
+
+; Pantheon-specific dependencies
+;dependencies[] = apachesolr
+;dependencies[] = apachesolr_search
+;dependencies[] = pantheon_api
+;dependencies[] = pantheon_login
+;dependencies[] = pantheon_apachesolr
+
+; Required modules (Contrib)
+dependencies[] = ckeditor
+dependencies[] = ckeditor_link
+dependencies[] = ckeditor_link_file
+dependencies[] = ckeditor_link_user
+dependencies[] = clone
+dependencies[] = context
+dependencies[] = ctools
+dependencies[] = date
+dependencies[] = entity
+dependencies[] = entityreference
+dependencies[] = features_roles_permissions
+dependencies[] = field_collection
+dependencies[] = field_collection_node_clone
+dependencies[] = file_entity
+dependencies[] = globalredirect
+dependencies[] = libraries
+dependencies[] = link
+dependencies[] = media
+dependencies[] = media_ckeditor
+dependencies[] = media_youtube
+dependencies[] = menu_block
+dependencies[] = metatag
+dependencies[] = module_filter
+dependencies[] = node_clone_tab
+dependencies[] = pathauto
+dependencies[] = redirect
+dependencies[] = security_review
+dependencies[] = special_menu_items
+dependencies[] = token
+dependencies[] = video_filter
+dependencies[] = views
+
+; UTexas Dependencies
+dependencies[] = utexas_admin
+dependencies[] = utexas_beacon
+dependencies[] = utexas_contact_info
+dependencies[] = utexas_fonts
+dependencies[] = utexas_google_cse
+dependencies[] = utexas_google_tag_manager
+dependencies[] = utexas_menu
+dependencies[] = utexas_qualtrics_filter
+dependencies[] = utexas_social_accounts
+dependencies[] = utexas_tablesaw_filter
+dependencies[] = utexas_twitter_widget
+dependencies[] = utexas_utdk_deploy
+
+files[] = utexas.profile

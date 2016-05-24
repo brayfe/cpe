@@ -1,0 +1,244 @@
+<?php
+/**
+ * @file
+ * Drupal needs this blank file.
+ */
+
+/**
+ * Implements hook_theme().
+ *
+ * Defines the utexas_social_accounts_theme theme function.
+ */
+function utexas_social_accounts_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_social_accounts' => array(
+      'template' => 'utexas-social-accounts',
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * Defines an administration path for the module.
+ */
+function utexas_social_accounts_menu() {
+  // Menu items.
+  $items = array();
+
+  // Now we create the admin page item.
+  $items['admin/config/utexas/utexas-social-accounts'] = array(
+    'title' => 'Social Accounts Settings',
+    'description' => 'Manage social media accounts for the site header and footer.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('utexas_social_accounts_admin'),
+    'access arguments' => array('manage social accounts settings'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function utexas_social_accounts_permission() {
+  return array(
+    'manage social accounts settings' => array(
+      'title' => t('Manage the social accounts settings'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_admin().
+ *
+ * We use it to create the admin form.
+ */
+function utexas_social_accounts_admin() {
+  $form = array();
+
+  $form['utexas_social_accounts_facebook'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Facebook'),
+    '#default_value' => variable_get('utexas_social_accounts_facebook', ''),
+    '#size' => 100,
+    '#maxlength' => 100,
+    '#description' => t('The Facebook URL that you want to set on the site (e.g. http://www.facebook.com/UTAustinTX)'),
+    '#required' => FALSE,
+  );
+
+  $form['utexas_social_accounts_twitter'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Twitter'),
+    '#default_value' => variable_get('utexas_social_accounts_twitter', ''),
+    '#size' => 100,
+    '#maxlength' => 100,
+    '#description' => t('The Twitter URL that you want to set on the site (e.g. http://twitter.com/utaustin)'),
+    '#required' => FALSE,
+  );
+
+  $form['utexas_social_accounts_instagram'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Instagram'),
+    '#default_value' => variable_get('utexas_social_accounts_instagram', ''),
+    '#size' => 100,
+    '#maxlength' => 100,
+    '#description' => t('The Instagram URL that you want to set on the site (e.g. https://instagram.com/utaustintx)'),
+    '#required' => FALSE,
+  );
+
+  $form['utexas_social_accounts_linkedin'] = array(
+    '#type' => 'textfield',
+    '#title' => t('LinkedIn'),
+    '#default_value' => variable_get('utexas_social_accounts_linkedin', ''),
+    '#size' => 100,
+    '#maxlength' => 100,
+    '#description' => t('The LinkedIn URL that you want to set on the site (e.g. https://www.linkedin.com/edu/the-university-of-texas-at-austin-19518)'),
+    '#required' => FALSE,
+  );
+
+  $form['utexas_social_accounts_youtube'] = array(
+    '#type' => 'textfield',
+    '#title' => t('YouTube'),
+    '#default_value' => variable_get('utexas_social_accounts_youtube', ''),
+    '#size' => 100,
+    '#maxlength' => 100,
+    '#description' => t('The YouTube URL that you want to set on the site (e.g. http://www.youtube.com/utaustintexas)'),
+    '#required' => FALSE,
+  );
+
+  $form['utexas_social_accounts_googleplus'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Google+'),
+    '#default_value' => variable_get('utexas_social_accounts_googleplus', ''),
+    '#size' => 100,
+    '#maxlength' => 100,
+    '#description' => t('The Google+ URL that you want to set on the site (e.g. https://plus.google.com/+UTAustin)'),
+    '#required' => FALSE,
+  );
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_block_info().
+ *
+ * Defines the block that will be available at Structure>Blocks.
+ */
+function utexas_social_accounts_block_info() {
+  $blocks = array();
+
+  $blocks['social_accounts_block'] = array(
+    'info' => t('Social accounts block'),
+    'status' => TRUE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Defines the validate handler function.
+ */
+function utexas_social_accounts_form_alter(&$form, &$form_state, $form_id) {
+  // dsm($form_id);
+  if ($form_id == 'utexas_social_accounts_admin') {
+    $form['#validate'][] = 'utexas_social_accounts_form_validate';
+  }
+}
+
+/**
+ * Implements utexas_social_accounts_form_validate().
+ *
+ * Defines the validation for each input field from the admin form.
+ */
+function utexas_social_accounts_form_validate($form, &$form_state) {
+  if (filter_var($form_state['values']['utexas_social_accounts_facebook'], FILTER_VALIDATE_URL) === FALSE
+      && !empty($form_state['values']['utexas_social_accounts_facebook'])) {
+    form_set_error('utexas_social_accounts_facebook', t('You have to set a valid URL for your Facebook account'));
+  }
+  if (filter_var($form_state['values']['utexas_social_accounts_twitter'], FILTER_VALIDATE_URL) === FALSE
+    && !empty($form_state['values']['utexas_social_accounts_twitter'])) {
+    form_set_error('utexas_social_accounts_twitter', t('You have to set a valid URL for your Twitter account'));
+  }
+  if (filter_var($form_state['values']['utexas_social_accounts_instagram'], FILTER_VALIDATE_URL) === FALSE
+    && !empty($form_state['values']['utexas_social_accounts_instagram'])) {
+    form_set_error('utexas_social_accounts_instagram', t('You have to set a valid URL for your Instagram account'));
+  }
+  if (filter_var($form_state['values']['utexas_social_accounts_linkedin'], FILTER_VALIDATE_URL) === FALSE
+    && !empty($form_state['values']['utexas_social_accounts_linkedin'])) {
+    form_set_error('utexas_social_accounts_linkedin', t('You have to set a valid URL for your LinkedIn account'));
+  }
+  if (filter_var($form_state['values']['utexas_social_accounts_youtube'], FILTER_VALIDATE_URL) === FALSE
+    && !empty($form_state['values']['utexas_social_accounts_youtube'])) {
+    form_set_error('utexas_social_accounts_youtube', t('You have to set a valid URL for your YouTube account'));
+  }
+  if (filter_var($form_state['values']['utexas_social_accounts_googleplus'], FILTER_VALIDATE_URL) === FALSE
+    && !empty($form_state['values']['utexas_social_accounts_googleplus'])) {
+    form_set_error('utexas_social_accounts_googleplus', t('You have to set a valid URL for your Google+ account'));
+  }
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function utexas_social_accounts_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'social_accounts_block':
+      $block['content'] = social_accounts_block_view();
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements social_accounts_block_view().
+ *
+ * Custom function that defines how the new block will be displayed.
+ */
+function social_accounts_block_view() {
+  $block = array();
+
+  // Building the block content.
+  $content = '<ul class="connect-links">';
+  $fb = variable_get('utexas_social_accounts_facebook', '');
+  if (!empty($fb)) {
+    $content .= '<li><a href="' . $fb . '" class="connect-link"><span class="icon-facebook"><span class="hiddenText">Facebook</span></span></a></li>';
+  }
+  $tw = variable_get('utexas_social_accounts_twitter', '');
+  if (!empty($tw)) {
+    $content .= '<li><a href="' . $tw . '" class="connect-link"><span class="icon-twitter"><span class="hiddenText">Twitter</span></span></a></li>';
+  }
+  $ig = variable_get('utexas_social_accounts_instagram', '');
+  if (!empty($ig)) {
+    $content .= '<li><a href="' . $ig . '" class="connect-link"><span class="icon-instagram"><span class="hiddenText">Instagram</span></span></a></li>';
+  }
+  $li = variable_get('utexas_social_accounts_linkedin', '');
+  if (!empty($li)) {
+    $content .= '<li><a href="' . $li . '" class="connect-link"><span class="icon-linkedin"><span class="hiddenText">LinkedIn</span></span></a></li>';
+  }
+  $yt = variable_get('utexas_social_accounts_youtube', '');
+  if (!empty($yt)) {
+    $content .= '<li><a href="' . $yt . '" class="connect-link"><span class="icon-youtube"><span class="hiddenText">YouTube</span></span></a></li>';
+  }
+  $gp = variable_get('utexas_social_accounts_googleplus', '');
+  if (!empty($gp)) {
+    $content .= '<li><a href="' . $gp . '" class="connect-link"><span class="icon-googleplus"><span class="hiddenText">Google+</span></span></a></li>';
+  }
+  $content .= '</ul>';
+
+  // Block output in HTML with div wrapper.
+  $block = array(
+    'content' => array(
+      '#prefix' => '',
+      '#type' => 'markup',
+      '#markup' => $content,
+      '#suffix' => '',
+    ),
+  );
+
+  return $block;
+}

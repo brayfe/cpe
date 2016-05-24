@@ -1,0 +1,7 @@
+name = Google Tag Manager
+description = A module to add the Google Tag Manager script tag to the bottom of every page
+core = 7.x
+version = 7.x-1.0
+package = UTexas
+
+configure = admin/config/system/utexas_google_tag_manager

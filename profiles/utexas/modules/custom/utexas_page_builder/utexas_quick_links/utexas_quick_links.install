@@ -1,0 +1,55 @@
+<?php
+/**
+ * @file
+ * Install file for Quick Links module. Used to install a field schema
+ * for the Quick Links compound field.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines the schema for Quick Links fields.
+ */
+function utexas_quick_links_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+    case 'utexas_quick_links':
+      $columns['headline'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores headline for the quick links compound field.',
+      );
+      $columns['copy_value'] = array(
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+        'description' => 'Stores copy for the quick links compound field.',
+      );
+      $columns['copy_format'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores text format for the quick links compound field.',
+      );
+      $foreign_keys['copy_format'] = array(
+        'table' => 'filter_format',
+        'columns' => array('copy_format' => 'format'),
+      );
+      $columns['links'] = array(
+        'type' => 'blob',
+        'size' => 'normal',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+        'description' => 'Stores serialized array of links for the flexible content area.',
+      );
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+    'foreign keys' => $foreign_keys,
+  );
+}

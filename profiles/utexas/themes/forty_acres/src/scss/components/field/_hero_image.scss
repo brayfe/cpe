@@ -1,0 +1,408 @@
+.field_utexas_hero_photo {
+  img {
+    width: 100%;
+  }
+  .container.container-hero.hero-style-1 {
+      .subhead {
+        display: none;
+      }
+      .hero-callout {
+        position: absolute;
+        bottom: 30px;
+        right: 7px;
+        display: inline-block;
+        float: right;
+        @include respond(large) {
+          // Set desired max-width based on content/photo
+          max-width: 70%;
+        }
+      }
+      .callout-text {
+        font-size: rem-calc(20);
+        line-height: rem-calc(26);
+        background-color: $burntOrange;
+        color: #FFF;
+        font-weight: 700;
+        padding: 10px 20px;
+        text-align: right;
+        opacity: .96;
+        display: inline-block;
+        border-radius: 4px;
+        @include respond(medium) {
+          padding: 20px 40px;
+          font-size: rem-calc(36);
+          line-height: rem-calc(42);
+        }
+        @include respond(large) {
+          font-size: rem-calc(40);
+          line-height: rem-calc(50);
+        }
+        @include respond(small-only) {
+          float: right;
+        }
+      }
+      .hero-cta {
+        bottom: inherit;
+        font-size: 13px;
+        position: relative;
+        right: 0;
+        background-color: white;
+        color: $burntOrange;
+        padding: 10px 20px;
+        line-height: rem-calc(18);
+        margin-top: 15px;
+        float: right;
+        font-style: normal !important;
+        @include respond(medium) {
+          padding: 15px 25px;
+          font-size: inherit;
+          margin-top: 6px;
+        }
+        &:hover {
+          background-color: #F5F4F0;
+        }
+      }
+    }
+
+  .container.container-hero.hero-style-2 {
+    .subhead {
+      display: none;
+    }
+    .hero-callout{
+      position: absolute;
+      bottom: 30px;
+      right: 7px;
+      max-width: 60%;
+      @include respond(medium){
+        // Set desired max-width based on content/photo
+        max-width: 48%;
+      }
+    }
+    .callout-text{
+      font-size: rem-calc(18);
+      line-height: rem-calc(24);
+      background-color: #f8f8f8;
+      color: $burntGrey;
+      font-weight: 700;
+      padding: 10px 20px;
+      opacity: .96;
+      display: block;
+      overflow: hidden;
+      border-radius: 4px;
+      @include respond(medium){
+        padding: 15px 30px;
+        font-size: rem-calc(28);
+        line-height: rem-calc(38);
+      }
+      @include respond(large){
+        padding: 20px 40px;
+        font-size: rem-calc(34);
+        line-height: rem-calc(44);
+      }
+    }
+    .hero-cta {
+      bottom: inherit;
+      font-size: 13px;
+      position: relative;
+      right: 0;
+      background-color: $burntOrange;
+      color: white;
+      padding: 10px 20px;
+      line-height: rem-calc(18);
+      margin-top: 15px;
+      float: right;
+      font-style: normal !important;
+      @include respond(medium) {
+        padding: 15px 25px;
+        font-size: inherit;
+        margin-top: 6px;
+      }
+      &:hover {
+        background-color: #a04400;
+      }
+    }
+  }
+
+  .container.container-hero.hero-style-3 {
+    padding-left:0;
+    padding-right:0;
+    position: relative;
+    @include respond(large){
+      padding-left:10px;
+      padding-right:10px;
+    }
+    .background-box {
+      height: 110px;
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: 100%;
+      @include respond(large){
+        height: 100px;
+        background-color: rgba(255,255,255, .90);
+      }
+    }
+    .hero-callout{
+      position: absolute;
+      bottom: 10px;
+      right: 0px;
+      width: 100%;
+      @include respond(large){
+        bottom: 20px;
+      }
+      @include respond(small-only, medium-only){
+        background-color: rgba(255,255,255, .90);
+        padding: 10px;
+        margin-bottom: -10px;
+      }
+    }
+    .callout-text{
+      padding: 0 3px;
+      display: block;
+      width: 100%;
+      float: left;
+      @include respond(large){
+        width: 85%;
+        padding: 0 7px;
+        .cta-link{
+          display: none;
+        }
+      }
+    }
+    .callout-cta{
+      display: none;
+      @include respond(large){
+        display: block;
+      }
+    }
+    .headline{
+      color: $burntGrey;
+      font-weight: 200;
+      padding-bottom: 5px;
+      @include respond(medium){
+        padding-bottom: 0;
+        font-size: rem-calc(20);
+        line-height: rem-calc(26);
+      }
+      @include respond(large){
+        font-size: rem-calc(28);
+        line-height: rem-calc(38);
+      }
+    }
+    .subhead{
+      font-size: rem-calc(13);
+      line-height: rem-calc(19);
+      @include respond(medium){
+        font-size: rem-calc(16);
+        line-height: rem-calc(24);
+      }
+    }
+    .hero-cta{
+      bottom: 5px;
+      font-size: rem-calc(15);
+      right: 7px;
+      padding: 15px 25px;
+      background-color: $burntOrange;
+      color: white;
+    }
+  }
+  .container.container-hero.hero-style-4 {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid $light-grey-border;
+    padding: 50px 5px 20px 5px;
+
+    @include respond(medium){
+      padding: 50px 10px 40px 10px;
+    }
+    .column {
+      min-height: 0;
+    }
+    .hero-img{
+      height: auto;
+      width: 100%;
+    }
+    .herocallout{
+      padding: 15px 15px 0 15px;
+      background-color: $navy;
+      @include respond(medium){
+        padding: 20px;
+      }
+    }
+    .headline{
+      color: #fff;
+      font-weight: 200;
+      padding-bottom: 5px;
+      font-size: rem-calc(18);
+      line-height: rem-calc(23);
+      @include respond(medium){
+        padding-bottom: 2px;
+        font-size: rem-calc(24);
+        line-height: rem-calc(32);
+      }
+      @include respond(large){
+        font-size: rem-calc(26);
+        line-height: rem-calc(34);
+      }
+    }
+    .subhead{
+      display: inline;
+      margin-right: 6px;
+      color: #f8f8f8;
+      font-size: rem-calc(13);
+      line-height: rem-calc(19);
+      @include respond(medium){
+        font-size: rem-calc(16);
+        line-height: rem-calc(22);
+      }
+    }
+    .hero-cta{
+      display: block;
+      text-align: center;
+      margin: 20px 0 15px 0;
+      position: inherit;
+      bottom: 0;
+      right: 0;
+      color: #fff;
+      background-color: $burntOrange;
+      padding: 0.625rem 1.25rem;
+      @include respond(medium){
+        margin-top: 20px;
+        margin-bottom: 0;
+        display: inline-block;
+      }
+      @include respond(large){
+        margin-top: 5%;
+        margin-bottom: 5%;
+        float: right;
+      }
+      &:hover {
+        background-color: #a04400;
+      }
+    }
+  }
+  .container.container-hero.hero-style-5 {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid $light-grey-border;
+    padding: 50px 5px 0 5px;
+
+    @include respond(medium){
+      padding: 50px 10px 40px 10px;
+    }
+    .column {
+      min-height: inherit;
+    }
+    .hero-thumbnail{
+      background-repeat: no-repeat;
+      background-size: cover;
+      @include respond(small-only){
+        //Overrides Equalizer
+        height: 200px !important;
+      }
+    }
+
+    .content-wrap{
+      border: 1px solid $light-grey-border;
+      padding: 15px;
+      background-color: #fff;
+      min-height: inherit;
+      @include respond(medium){
+        padding: 50px 30px 60px 30px;
+        padding-left: 40px;
+        margin-left: -15px;
+        min-height: 250px;
+      }
+      @include respond(small-only){
+        //Overrides Equalizer
+        height: auto !important;
+        margin-bottom: 20px;
+      }
+    }
+
+    .hero-headline{
+      font-size: rem-calc(20);
+      line-height: rem-calc(26);
+      color: $navy;
+      font-weight: 700;
+      opacity: .96;
+      margin-bottom: 4px;
+      background: none;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      left: 0;
+      bottom:0;
+      display: block;
+      @include respond(medium){
+        margin-top: 0px;
+        margin-bottom: 0px;
+        font-size: rem-calc(36);
+        line-height: rem-calc(46);
+        position: relative;
+        top: -10px;
+      }
+
+      @include respond(large){
+        font-size: rem-calc(44);
+        line-height: rem-calc(54);
+      }
+    }
+    .hero-subhead{
+      font-size: rem-calc(16);
+      line-height: rem-calc(22);
+      margin-bottom: 10px;
+      @include respond(medium){
+        color: $burntGrey;
+        font-size: rem-calc(26);
+        line-height: rem-calc(34);
+        font-weight: 400;
+        margin-bottom: 25px;
+      }
+    }
+    .hero-cta{
+      background-color: $burntOrangeAccent;
+      color: #F5F4F0;
+      font-weight: 700;
+      display: block;
+      text-align: center;
+      margin: 20px 0 0px 0;
+      position: inherit;
+      @include respond(medium){
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 0px;
+        font-size: rem-calc(16);
+        line-height: rem-calc(16);
+      }
+
+      @include respond(large){
+        padding: 15px 25px;
+        font-size: rem-calc(18);
+        line-height: rem-calc(18);
+      }
+
+      &:hover{
+        background-color: $burntOrangeAccent;
+      }
+    }
+
+    // Tablet Break
+    @media only screen and (min-width: 641px) and(max-width: 850px){
+      .force-width{
+        width: 100% !important;
+      }
+      .content-wrap{
+        padding: 30px;
+        margin-left: 0px;
+        height: auto !important;
+        min-height: inherit;
+      }
+      .hero-thumbnail{
+        max-height: 300px  !important;
+        min-height: 250px;
+      }
+    }
+  }
+}
+.logged-in .field_utexas_hero_photo {
+  margin-top: 30px;
+}

@@ -1,0 +1,106 @@
+.field_utexas_photo_content_area{
+	border-top: 1px solid #F3F0E8;
+	padding: 20px 0 0 0;
+	@include respond(small-only) {
+		padding: 0;
+		border-top:none;
+	}
+	@include respond(medium) {
+		padding: 15px;
+		border: 0px;
+	}
+
+	.links {
+		h3 {
+			margin: 0 0 10px 0;
+		}
+		p {
+			font-size: rem-calc(16);
+			line-height: rem-calc(24);
+			margin: 0 0 10px 0;
+			color: $bodyCopy;
+		}
+
+		ul {
+			margin-top: 0px;
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+		li {
+			margin-bottom: 3px;
+		}
+		li .cta-link{
+			font-size: rem-calc(16);
+			line-height: rem-calc(22);
+
+		}
+	}
+	.photo-wrap{
+		@include respond(large) {
+			display: block;
+			max-width: 80%;
+			margin: 0 auto;
+			}
+		}
+	img{
+		margin-top: 4px;
+		border: 1px solid #cbcbcb;
+
+		@include respond(small-only) {
+			width: 85%;
+			display: block;
+			margin: 0 auto;
+		}
+	}
+	.hero-caption{
+		@include respond(small-only) {
+			width: 85%;
+			display: block;
+			margin: 0 auto;
+			margin-bottom: 10px;
+		}
+	}
+}
+
+.field_utexas_photo_content_area{
+	@media only screen and (min-width: 641px) and(max-width: 950px){
+
+		.force-width{
+			width: 100% !important;
+		}
+		.photo-wrap{
+			max-width: 300px;
+			display: block;
+			margin: 0 auto;
+		}
+		.caption-copy{
+			padding-bottom: 10px;
+		}
+		h3{
+			margin-top: 10px !important;
+		}
+	}
+}
+.sidebar-content {
+	.sidebar-module.sidebar-default-style {
+		.field_utexas_photo_content_area {
+			border-top: 1px solid #f3f0e8;
+			padding-bottom: 0;
+			.photo-wrap {
+				padding-bottom: 10px;
+				max-width: 100%;
+			}
+		}
+	}
+}
+.region-content-top-right {
+	.field_utexas_photo_content_area {
+		padding: 0;
+		padding-bottom: 0;
+		.photo-wrap {
+			padding-bottom: 10px;
+			max-width: 100%;
+		}
+	}
+}

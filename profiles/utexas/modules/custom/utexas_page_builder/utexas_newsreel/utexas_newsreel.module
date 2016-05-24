@@ -1,0 +1,347 @@
+<?php
+/**
+ * @file
+ * Module file for the Background Accent module.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines the field within the system.
+ */
+function utexas_newsreel_field_info() {
+  return array(
+    'utexas_newsreel' => array(
+      'label' => t('UT Newsreel'),
+      'description' => t('Defines a UTexas newsreel.'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'utexas_newsreel',
+      'default_formatter' => 'utexas_newsreel',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines the default widget.
+ */
+function utexas_newsreel_field_widget_info() {
+  return array(
+    'utexas_newsreel' => array(
+      'label' => t('UT Newsreel'),
+      'field types' => array('utexas_newsreel'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Form definition for the field widget.
+ */
+function utexas_newsreel_field_widget_form(&$form, &$form_state, $field,
+  $instance, $langcode, $items, $delta, $element) {
+  switch ($instance['widget']['type']) {
+    case 'utexas_newsreel':
+      $element['headline'] = array(
+        '#title' => t('Headline'),
+        '#type' => 'textfield',
+        '#default_value' => (isset($items[$delta]['headline'])) ? $items[$delta]['headline'] : 'Latest from UTNews',
+        '#required' => TRUE,
+        '#description' => t('The text that serves as the block header.'),
+      );
+
+      // Unserialize stored user-defined categories.
+      $types = (is_string($items[$delta]['type'])) ? unserialize($items[$delta]['type']) : $items[$delta]['type'];
+
+      $element['type'] = array(
+        '#type' => 'checkboxes',
+        '#title' => t('Article Types'),
+        '#default_value' => $types,
+        '#options' => array(
+          'news' => t('News'),
+          'press-releases' => t('Press Releases'),
+          'texas-perspectives' => t('Texas Perspectives'),
+        ),
+        '#description' => t('Choose which types of articles to display.'),
+      );
+
+      $available_categories = array(
+        'arts-and-humanities' => 'Arts and Humanities',
+        'business-and-economy' => 'Business and Economy',
+        'campus-and-community' => 'Campus and Community',
+        'education-and-leadership' => 'Education and Leadership',
+        'health-and-wellness' => 'Health and Wellness',
+        'policy-and-law' => 'Policy and Law',
+        'science-and-technology' => 'Science and Technology',
+      );
+
+      $categories = (is_string($items[$delta]['category'])) ? unserialize($items[$delta]['category']) : $items[$delta]['category'];
+
+      $element['category'] = array(
+        '#type' => 'checkboxes',
+        '#title' => t('Categories'),
+        '#default_value' => $categories,
+        '#options' => $available_categories,
+        '#required' => TRUE,
+        '#description' => t('The primary categories from which to display items.'),
+      );
+
+      $element['tag'] = array(
+        '#title' => t('Tags'),
+        '#type' => 'textfield',
+        '#default_value' => (isset($items[$delta]['tag'])) ? $items[$delta]['tag'] : '',
+        '#required' => FALSE,
+        '#description' => t('A comma-delimited list of tags to filter on (e.g., "Harry Ransom Center, Dell Medical School").'),
+      );
+
+      $element['count'] = array(
+        '#type' => 'select',
+        '#title' => t('Count'),
+        '#default_value' => (isset($items[$delta]['count'])) ? $items[$delta]['count'] : 4,
+        '#options' => array(
+          '1' => '1',
+          '2' => '2',
+          '3' => '3',
+          '4' => '4',
+          '5' => '5',
+          '6' => '6',
+          '7' => '7',
+          '8' => '8',
+          '9' => '9',
+          '10' => '10',
+        ),
+        '#description' => t('The number of items to display.'),
+      );
+
+      $element['include_description'] = array(
+        '#type' => 'checkbox',
+        '#default_value' => (isset($items[$delta]['include_description'])) ? $items[$delta]['include_description'] : 1,
+        '#title' => 'Include article teaser text?',
+      );
+
+      $element['refresh_rate'] = array(
+        '#type' => 'select',
+        '#title' => t('Refresh rate.'),
+        '#default_value' => (isset($items[$delta]['count'])) ? $items[$delta]['count'] : 4,
+        '#options' => array(
+          '1' => '1 hour',
+          '2' => '2 hours',
+          '6' => '6 hours',
+          '12' => '12 hours',
+          '24' => '1 day',
+          '48' => '2 days',
+          '168' => '1 week',
+        ),
+        '#description' => t('How frequently the feed should be refreshed.'),
+      );
+
+      $element['view_all'] = array(
+        '#title' => t('"View all" text'),
+        '#type' => 'textfield',
+        '#default_value' => (isset($items[$delta]['view_all'])) ? $items[$delta]['view_all'] : 'View all news',
+        '#required' => FALSE,
+        '#description' => t('Text that links to the news.utexas.edu category. Leave blank for no link.'),
+      );
+
+      break;
+  }
+  return $element;
+}
+
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to validate the user input on the form.
+ */
+function utexas_newsreel_field_validate($entity_type, $entity, $field,
+  $instance, $langcode, $items, &$errors) {
+  // No validation steps right now, as the field is optional.
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Used to prepare data for saving.
+ */
+function utexas_newsreel_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  if ($field['type'] == 'utexas_newsreel') {
+    foreach ($items as $delta => &$item) {
+      if (isset($item['type']) and is_array($item['type'])) {
+        $item['type'] = serialize($item['type']);
+      }
+      if (isset($item['category']) and is_array($item['category'])) {
+        $item['category'] = serialize($item['category']);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines the primary field widget.
+ */
+function utexas_newsreel_field_formatter_info() {
+  return array(
+    'utexas_newsreel' => array(
+      'label' => t('UT Newsreel'),
+      'field types' => array('utexas_newsreel'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Creates the formatter for Hero Photo.
+ */
+function utexas_newsreel_field_formatter_view($entity_type, $entity, $field,
+  $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'utexas_newsreel':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('utexas_newsreel', array('item' => $item)),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'utexas_newsreel') .
+              '/theme/utexas_newsreel.css',
+            ),
+          ),
+        );
+      }
+      break;
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @see template_preprocess_utexas_newsreel()
+ */
+function utexas_newsreel_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_newsreel' => array(
+      'variables' => array(
+        'item' => NULL,
+      ),
+      'template' => 'theme/utexas-newsreel',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function.
+ *
+ * @ingroup themeable
+ */
+function template_preprocess_utexas_newsreel(&$variables) {
+  // Prepare conatenated list of news article types.
+  $types = unserialize($variables['item']['type']);
+  $all_types = TRUE;
+  $valid_types = array();
+  foreach ($types as $key => $value) {
+    if ($value != '0') {
+      $valid_types[] = $value;
+    }
+    else {
+      $all_types = FALSE;
+    }
+  }
+  $types = (!$all_types) ? implode(',', $valid_types) : 'all';
+
+  // Prepare concatenated list of primary categories.
+  $categories = unserialize($variables['item']['category']);
+  $all_categories = TRUE;
+  $valid_categories = array();
+  foreach ($categories as $key => $value) {
+    if ($value != '0') {
+      $valid_categories[] = $value;
+    }
+    else {
+      $all_categories = FALSE;
+    }
+  }
+  $categories = (!$all_categories) ? implode(',', $valid_categories) : 'all';
+
+  // Prepare concatenated list of tags.
+  $tag_list = $variables['item']['tag'] != '' ? $variables['item']['tag'] : 'all';
+  // Remove potential user-added space in comma delimited list.
+  $tag_list = str_replace(', ', ',', $tag_list);
+  // Convert tags to lower-case hyphenated.
+  $tag_list = strtolower(str_replace(' ', '-', $tag_list));
+
+  $cache_name = $types . '_' . $categories . '_' . $tag_list;
+  $refresh_rate = $variables['item']['refresh_rate'];
+  $cache = cache_get('utexas_newsreel:' . $cache_name, 'cache');
+  $feed_base = variable_get('news_feed_base_url', 'http://news.utexas.edu');
+  $feed_url = $feed_base . '/rss/' . $types . '/' . $categories . '/' . $tag_list . '/feed.xml';
+  // Debugging: print_r($feed_url);
+  if (!$cache or time() >= (int) $cache->expire) {
+    $items = array();
+    $result = drupal_http_request($feed_url);
+    // The HTTP request must return an OK status, and the type must be XML.
+    if (in_array($result->code, array(200, 304)) and (strpos($result->headers['content-type'], 'application/rss+xml') !== FALSE) and isset($result->data)) {
+      $xml = simplexml_load_string($result->data);
+      $array = json_decode(json_encode($xml), TRUE);
+      if (isset($array['channel']['item'])) {
+        foreach ($array['channel']['item'] as $item) {
+          $items[] = array(
+            'date' => utexas_admin_ap_style_date(strtotime($item['pubDate'])),
+            'headline' => $item['title'],
+            'description' => _utexas_admin_token_truncate($item['description'], 270) . ' ',
+            'link' => $item['link'],
+          );
+        }
+      }
+    }
+    else {
+      // The feed didn't validate. Log an error.
+      watchdog('utexas_newsreel', 'The feed URL ' . $feed_url . ' does not appear to be valid.', NULL, WATCHDOG_ERROR);
+    }
+    // Set the array in the cache -- expires every 5 minutes.
+    // If the feed didn't validate, the cache item will still be created, but
+    // with an empty listing. This approach allows it to gracefully wait until
+    // the cache expires, then try the URL again.
+    cache_set('utexas_newsreel:' . $cache_name, $items, 'cache', time() + ($refresh_rate * 3600));
+  }
+
+  $items = cache_get('utexas_newsreel:' . $cache_name, 'cache')->data;
+
+  // Reduce results to what user has defined.
+  $items = array_slice($items, 0, $variables['item']['count']);
+
+  $variables['headline'] = $variables['item']['headline'];
+  $variables['include_description'] = $variables['item']['include_description'];
+  $variables['items'] = $items;
+  $variables['view_all'] = $variables['item']['view_all'] != '' ? l('<span>' . html_entity_decode(check_plain($variables['item']['view_all'])) . '</span>', '//news.utexas.edu/',
+    array(
+      'html' => TRUE,
+      'external' => TRUE,
+      'attributes' => array('class' => array('cta', 'sidebar-cta')),
+    )) : FALSE;
+}
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ * Determines whether or not the field has data in it.
+ */
+function utexas_newsreel_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'utexas_newsreel':
+      $empty = (isset($item['utexas_newsreel'])) ? empty($item['utexas_newsreel']['headline']) : empty($item['headline']);
+
+      return $empty;
+
+  }
+  return FALSE;
+}

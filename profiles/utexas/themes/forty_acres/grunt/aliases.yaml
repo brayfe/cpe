@@ -1,0 +1,25 @@
+default:
+- 'dev'
+- 'watch'
+
+dev:
+- 'clean'
+- 'concurrent:copy-dist'
+- 'sass:dev'
+- 'autoprefixer:dist'
+- 'concat'
+- 'concurrent:minify'
+
+dist:
+- 'clean'
+- 'concurrent:copy-dist'
+- 'sass:dist'
+- 'autoprefixer:dist'
+- 'cmq'
+- 'concat'
+- 'concurrent:minify'
+- 'csslint'
+
+build:
+- 'dist'
+- 'concurrent:copy-build'

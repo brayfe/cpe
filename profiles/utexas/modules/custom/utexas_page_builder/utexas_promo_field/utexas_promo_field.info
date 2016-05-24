@@ -1,0 +1,8 @@
+name = Promo Field
+description = Defines promo field type, which has two formatters: Promo Unit and Promo List.
+core = 7.x
+version =  7.x-1.2
+package = UTexas
+
+dependencies[] = smartcrop
+dependencies[] = media

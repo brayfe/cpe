@@ -1,0 +1,89 @@
+<?php
+/**
+ * @file
+ * Install file for Hero Photo module.
+ *
+ * Used to install a field schema for the Hero Photo compound field.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines the schema for Hero Photo fields.
+ */
+function utexas_hero_photo_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+    case 'utexas_hero_photo':
+      $columns['image_fid'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The {file_managed}.fid for a hero photo image',
+      );
+      $foreign_keys['image_fid'] = array(
+        'table' => 'file_managed',
+        'columns' => array('image_fid' => 'fid'),
+      );
+      $columns['caption'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores caption for the hero photo compound field.',
+      );
+      $columns['credit'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores photo credit for the hero photo compound field.',
+      );
+      $columns['subhead'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores subheading for the hero photo compound field.',
+      );
+      $columns['link_href'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores link for the hero photo compound field.',
+      );
+      $columns['link_text'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores link text for the hero photo compound field.',
+      );
+      $columns['hero_image_style'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores the desired style for the featured highlight',
+      );
+      $columns['hero_image_position'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores the desired style for the featured highlight',
+      );
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+    'foreign keys' => $foreign_keys,
+  );
+}
+
+/**
+ * Implements hook_unininstall().
+ *
+ * This is intentionally left blank to remove any database installs made
+ * through utexas_hero_photo_schema().
+ */
+function utexas_hero_uninstall() {
+  // Left blank to force an uninstall of the schema.
+}

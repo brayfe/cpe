@@ -1,0 +1,65 @@
+.fieldblock_field_utexas_newsreel.sidebar-module.sidebar-default-style .module-content {
+  padding: 0 15px;
+}
+
+.region-content .fieldblock_field_utexas_newsreel .sidebar-default-style h3.sidebar-headline {
+  width:100.3%;
+}
+
+@include respond (small-only) {
+  .region-content .fieldblock_field_utexas_newsreel {
+    margin-bottom: -20px;
+  }
+  .fieldblock_field_utexas_newsreel .sidebar-module {
+    margin-bottom: 10px;
+  }
+  .region-content .fieldblock_field_utexas_newsreel .sidebar-default-style h3.sidebar-headline {
+    width: 100.4%;
+  }
+}
+.ct--article-details .news-headline .headline-link {
+  color: #2d2a28;
+}
+
+.field.field_utexas_newsreel {
+  p {
+    display: inline;
+  }
+  .headline-link, .sidebar-content-news .headline-link {
+    font-size: 1rem;
+    line-height:0.9375rem;
+  }
+  .news-item {
+    font-size: 0.9375rem;
+    margin-top:20px;
+  }
+  .news-date {
+    font-style: italic;
+    margin: 0 10px 5px 0;
+  }
+  .cta.sidebar-cta {
+    margin-top: 30px;
+  }
+  .cta.sidebar-cta {
+    display: block;
+  }
+  .cta-link span:hover {
+    text-decoration: underline;
+  }
+}
+.container.container-bottom.accent .field.field_utexas_newsreel .module-content {
+  padding: 0 20px 25px;
+
+}
+.container.container-bottom.accent .post-headline {
+  padding: 10px 20px 0;
+}
+.container.container-bottom.accent .sidebar-default-style .post-headline {
+  padding: 10px 0 0 0;
+}
+.container.container-bottom.accent .sidebar-default-style .field.field_utexas_newsreel .sidebar-headline {
+  background-color: transparent;
+  border-bottom: medium none;
+  border-top: 1px solid #f0ede6;
+  padding: 10px 20px 0 20px;
+}

@@ -1,0 +1,48 @@
+///// Imports & Styles For Forty Acres
+
+// Functions and Mixins
+@import "../settings";
+@import "../variables";
+@import "foundation/components/global";
+@import "../mixins/responsive";
+@import "../mixins/icons";
+@import	"foundation/components/inline-lists";
+@import "../sidebar-tabs";
+
+// Forty Acres components
+@import "../components/content-types/last-updated";
+@import "../components/content-types/sidebar-events";
+@import "../components/content-types/sidebar-news";
+@import "../components/content-types/sign-up";
+@import "../components/content-types/twitter-feed";
+@import "../components/highlight";
+
+// Global Header and Footer
+@import "../layout/header";
+@import "../layout/footer";
+
+// Forty Acres header and footer
+@import "../forty_acres/home1";
+@import "../forty_acres/footer2";
+
+// Forty Acres Layout
+@import "../forty_acres/layout/forty_acres_general";
+@import "../forty_acres/layout/topnav";
+@import "../forty_acres/layout/logo";
+@import "../forty_acres/layout/nav";
+
+// Forty Acres New Fields
+@import "../forty_acres/field/bio_block";
+//@import "../forty_acres/field/media_library";
+//@import "../forty_acres/field/course_listing_block";
+//@import "../forty_acres/field/course_info_block";
+//@import "../forty_acres/field/calendar";
+//@import "../forty_acres/field/event_details";
+//@import "../forty_acres/field/table_of_contents";
+
+// Forty Acres New Components
+@import "../components/subnav";
+@import "../components/tweets";
+
+// Drupal override
+@import "../drupal-overrides";

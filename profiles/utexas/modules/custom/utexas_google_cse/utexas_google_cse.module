@@ -1,0 +1,195 @@
+<?php
+/**
+ * @file
+ * Provides Google CSE integration.
+ *
+ * Adds a config page, formats a search results page, and a few other hook
+ * functions.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function utexas_google_cse_menu() {
+  // Here we set up the page where the results will display:
+  $items['search-results'] = array(
+    'title' => 'Search',
+    'description' => 'My Google Custom Search',
+    'page callback' => 'utexas_google_cse_searchpage',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  // Now we create the admin page item.
+  $items['admin/config/utexas/google_cse'] = array(
+    'title' => 'Google Search Configuration',
+    'description' => 'Set Google CSE ID.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('utexas_google_cse_admin'),
+    'access arguments' => array('access utexas_google_cse_searchpage content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function utexas_google_cse_theme() {
+  return array(
+    'utexas_google_cse_searchpage' => array(
+      'template' => 'node--utexas-google-cse',
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_permission().
+ */
+function utexas_google_cse_permission() {
+  return array(
+    'access utexas_google_cse_searchpage content' => array(
+      'title' => t('Configure Google Custom Search'),
+    ),
+  );
+}
+
+/**
+ * Implements custom searchpage() function.
+ */
+function utexas_google_cse_searchpage() {
+  return theme('utexas_google_cse_searchpage');
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function utexas_google_cse_theme_registry_alter(&$theme_registry) {
+  // Defined path to the current module.
+  $module_path = drupal_get_path('module', 'utexas_google_cse');
+  // Find all .tpl.php files in this module's folder recursively.
+  $template_file_objects = drupal_find_theme_templates($theme_registry, '.tpl.php', $module_path);
+  // Iterate through all found template file objects.
+  foreach ($template_file_objects as $key => $template_file_object) {
+    // If the template has not already been overridden by a theme.
+    if (!isset($theme_registry[$key]['theme path']) || !preg_match('#/themes/#', $theme_registry[$key]['theme path'])) {
+      // Alter the theme path and template elements.
+      $theme_registry[$key]['theme path'] = $module_path;
+      $theme_registry[$key] = array_merge($theme_registry[$key], $template_file_object);
+      $theme_registry[$key]['type'] = 'module';
+    }
+  }
+}
+
+/**
+ * Implements hook_block_info_alter().
+ *
+ * We use it to hide extra unnecessary blocks.
+ */
+function utexas_google_cse_block_info_alter(&$blocks, $theme, $code_blocks) {
+  // Disable default search and navigation blocks.
+  $blocks['system']['navigation']['status'] = 0;
+  $blocks['search']['form']['status'] = 0;
+}
+
+/**
+ * Implements hook_admin().
+ *
+ * We use it to create the admin page for CSE Settings.
+ */
+function utexas_google_cse_admin() {
+  $form = array();
+
+  $form['utexas_google_cse_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Google CSE Id'),
+    '#default_value' => variable_get('utexas_google_cse_id', ''),
+    '#size' => 35,
+    '#maxlength' => 35,
+    '#description' => t('The Google Custom Search Engine ID sets
+     which domains the site searches. Create a targeted search criteria at
+      <a href="@drupal-cse">https://cse.google.com/</a>.', array('@drupal-cse' => 'https://cse.google.com/')),
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_init().
+ *
+ * We use it to get the CSE Id variable in every
+ * page so we can always use the search bar.
+ */
+function utexas_google_cse_init() {
+  // If we are not in an admin page load the setting variable.
+  if (!path_is_admin(current_path())) {
+
+    $my_settings = array(
+      'cseId' => variable_get('utexas_google_cse_id', ''),
+    );
+
+    drupal_add_js($my_settings, 'setting');
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * We use it to override the search forms
+ * in both the 404 pages and the header.
+ */
+function utexas_google_cse_preprocess_page(&$variables) {
+  $placeholder = get_current_search_terms();
+  // Google custom search bars.
+  global $base_url;
+  $google_logo = $base_url . '/profiles/utexas/themes/forty_acres/src/img/general/google-logo.png';
+
+  $variables['search_cse'] = "
+  <label for='search-desktop' class='hiddenText'>Search this site</label>
+  <form action='/search-results' method='get' id='cse_searchbox'>
+    <input type='text' name='query' id='search-desktop' placeholder='" . $placeholder . "' class='search-page-input' title='Search this site' aria-labelledby='desktopSearchLabel'>
+    <button class='nav-search-button'><span class='hiddenText'>Search</span><span class='icon-search'></span></button>
+  </form>
+  <p class='custom-search'>
+    <img src='" . $google_logo . "'>
+    Custom Search
+  </p>";
+
+  $variables['header_search_cse'] = "
+  <div class='nav-search-container'>
+    <form action='/search-results' method='get' id='cse_searchbox'>
+      <input type='text' name='query' id='search-desktop' placeholder='Search' class='nav-search-input' title='Search this site' aria-labelledby='desktopSearchLabel'>
+      <button class='nav-search-button'><span class='hiddenText'>Search</span><span class='icon-search'></span></button>
+    </form>
+  </div>";
+}
+
+/**
+ * Helper function to retrieve search terms in URL for search form placeholder.
+ */
+function get_current_search_terms() {
+  // Only do this once per request.
+  static $return;
+  if (!isset($return) && isset($_GET['query']) && $_GET['query'] != "") {
+    // Gets the path after base url.
+    $path = explode('/', $_GET['q'], 3);
+    // Gets the query keywords that will be set to the placeholder.
+    $query = explode('/', $_GET['query'], 3);
+
+    // Only if the path is search-results
+    // (if you have a different search url, please modify).
+    if (count($path) == 1 && $path[0] == "search-results") {
+      $return = $query["0"];
+    }
+  }
+  else {
+    $keys = empty($_REQUEST['keys']) ? 'Search' : $_REQUEST['keys'];
+    $return = $keys;
+  }
+  // Replacing white spaces with special character so
+  // the placeholder can be printed correctly in the tpl file.
+  $return = str_replace(' ', '&nbsp;', $return);
+  return $return;
+}

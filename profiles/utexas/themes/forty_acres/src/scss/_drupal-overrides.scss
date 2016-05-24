@@ -1,0 +1,67 @@
+//
+// ++++++++
+// drupal-overrides.scss
+// ++++++++
+// Only include in files that result in Drupal builds.
+// ++++++++
+//
+
+body {
+  // Make sure the toolbar is always on top
+  #toolbar {
+    z-index: 9999;
+  }
+
+  // Strip a border bottom off of the field container
+  .field-collection-container {
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  @include respond(small-only, medium-only) {
+    &.toolbar-drawer {
+      padding-top: 0 !important;
+    }
+    #toolbar {
+      display: none;
+    }
+  }
+
+  .ui-dialog {
+    // Ensure all jQuery UI dialogs are on the top-most z-index
+    z-index: 9999;
+  }
+
+  // Make sure the skip link is styled for UT.
+  #skip-link {
+    position: absolute;
+
+    a.element-invisible.element-focusable:focus,
+    a.element-invisible.element-focusable:active {
+      // Override Drupal
+      position: fixed !important;
+      left: 1rem;
+      top: 1rem;
+      z-index: 9999;
+
+      background: $burntOrange;
+      border-radius: 1rem;
+      box-shadow: 1px 1px 0.125rem $bodyCopy;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.75rem;
+      outline: 0;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+    }
+  }
+}
+
+hr{
+  display: block; 
+  height: 1px;
+    border: 0; 
+    border-top: 1px solid #ccc;
+    margin: 1em 20px; 
+    padding: 0;
+}

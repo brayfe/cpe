@@ -1,0 +1,7 @@
+name = UTexas Newsreel
+description = Allows adding a styled feed of primary categories from news.utexas.edu
+core = 7.x
+version = 7.x-1.0
+package = UTexas
+
+dependencies[] = utexas_admin

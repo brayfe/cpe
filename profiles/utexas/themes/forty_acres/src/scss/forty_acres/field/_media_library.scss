@@ -1,0 +1,92 @@
+.field_media_library{
+	border-top: 2px solid #d6d6d6;
+	margin: 0px 0 20px 0;
+	padding-top: 20px;
+	display: block;
+	overflow: hidden;
+
+	.media-block{
+		display: block;
+		overflow: hidden;
+		margin-bottom: 20px;
+	}
+
+
+	.file-icon{
+		&:before{
+			content: "";
+			margin-right: 8px;
+			display: inline-block;
+			width: 14px;
+			height: 14px;
+			background-image: url('../img/forty_acres/file-icon-small.png');
+			background-size: 14px 14px;
+			position: relative;
+			top: 1px;
+		}
+	}
+
+	.download-label{
+		display: inline;
+		text-transform: uppercase;
+		font-size: rem-calc(13);
+		margin-left: 6px;
+		color: #6a6a6a;
+	}
+
+
+	.media-block + .media-block{
+		border-top: 1px solid #d6d6d6;
+		padding-top: 20px;
+	}
+
+	h3{
+		margin: 0 0 10px 0;
+	}
+	ul{
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	li{
+		padding-right: 10px;
+		margin-bottom: 15px;
+
+		img{
+			float: left;
+			margin: 5px 10px 5px 0;
+			display: inline-block;
+			height: 50px;
+			width: 50px;
+
+			@include respond(medium){
+				margin: 2px 10px 5px 0;
+			}
+		}
+
+		p{	
+			font-size: rem-calc(16);
+			line-height: rem-calc(24);
+			margin: 0 0 10px 0;
+			color: $bodyCopy;
+		}
+
+		.post-cta-link {
+			margin-right: 14px;
+		}
+	}
+
+	.field_utexas_flex_content_area_a {
+		@include respond(small-only){
+			.flex-content{
+				margin-bottom: 30px;
+			}
+		}
+		.two-up + .two-up{
+			border: 0px;
+		}
+	}
+	
+	
+}

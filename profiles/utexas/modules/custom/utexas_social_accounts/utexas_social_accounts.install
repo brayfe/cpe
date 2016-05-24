@@ -1,0 +1,18 @@
+<?php
+/**
+ * @file
+ * Install file for Utexas Social Accounts module.
+ */
+
+/**
+ * Implements hook_unininstall().
+ */
+function utexas_social_accounts_enable() {
+  // Creating default variables for the social links.
+  variable_set('utexas_social_accounts_facebook', 'http://www.facebook.com/UTAustinTX');
+  variable_set('utexas_social_accounts_twitter', 'http://twitter.com/utaustin');
+  variable_set('utexas_social_accounts_instagram', 'https://instagram.com/utaustintx');
+  variable_set('utexas_social_accounts_linkedin', 'https://www.linkedin.com/edu/the-university-of-texas-at-austin-19518');
+  variable_set('utexas_social_accounts_youtube', 'http://www.youtube.com/utaustintexas');
+  variable_set('utexas_social_accounts_googleplus', 'https://plus.google.com/+UTAustin');
+}

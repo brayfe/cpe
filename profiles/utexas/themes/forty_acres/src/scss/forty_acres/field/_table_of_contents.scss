@@ -1,0 +1,56 @@
+.toc{
+	box-sizing: border-box;
+	border: 1px solid $light-grey-border;
+	border-top: 2px solid $burntOrange;
+	margin: 0 0 20px 0;
+	padding: 20px;
+
+	@include respond(medium){
+		float: left;
+		width: 50%;
+		display: inline;
+		margin: 10px 20px 10px 0;
+	}
+	@include respond(large){
+		width: 35%;
+	}
+	@media (min-width: 641px) and (max-width: 950px){
+		width: 100%;
+		margin-bottom: 20px;
+	}
+	h2,h3,h4,p{
+		color: $bodyCopy;
+	}
+	ul{
+		list-style-type: none;
+	}
+	ol ol{
+		list-style-type: lower-latin;
+		padding-left: 20px;
+	}
+	p, ul, ol, li{
+		//overrides font-size when inside of WYSIWYG
+		font-size: rem-calc(15) !important;
+		line-height: rem-calc(24)!important; 
+		a{
+			font-size: inherit;
+		}
+	}
+	p{
+		color: $bodyCopy;
+		margin: 0 0 12px 0;
+	}
+	
+	h2{
+		font-size: rem-calc(26);
+		line-height: rem-calc(32);
+	}
+	h3{
+		font-size: rem-calc(18);
+		line-height: rem-calc(23);
+	}
+	h4{
+		font-size: rem-calc(16);
+		line-height: rem-calc(21);
+	}
+}

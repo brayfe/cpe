@@ -1,0 +1,406 @@
+.container-topnav {
+	&.container{
+		padding: 0;
+
+		@include respond(large){
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+	}
+	@include respond(large){
+		background: $hamburgerBrown;
+		height: 34px!important;
+		color: #FFF;
+		width: 100%;
+		margin: 0;
+	}
+
+	.mobile-links {
+		margin: 0;
+		padding: 0 rem-calc(15);
+		list-style: none;
+		text-align: center;
+		font-size: 0;
+
+		@include respond(large){
+			@include inline-list;
+			margin-bottom: 0;
+			float: right;
+		}
+
+		.nav-item-info{
+			margin-top: 0px;
+			width: 100%;
+			padding: 0;
+			.nav-link{
+				line-height: 24px;
+			}
+		}
+	}
+
+	.nav-item-search{
+		font-size: 15px;
+		@include respond(large){
+			display: block;
+			overflow: hidden;
+			float: right;
+			margin-top: 20px;
+			height: 40px;
+			margin-bottom: 10px;
+		}
+	}
+
+	.nav-search-container {
+		height: 35px;
+		background-color: #fff;
+		margin: rem-calc(20) 0 0 0;
+		position: relative;
+
+		// Drupal overrides here:
+		& > form {
+			height: 100%;
+			margin: 0;
+			& > div {
+				height: 100%;
+			}
+			.form-item,
+			.form-actions {
+				height: 100%;
+				margin: 0;
+			}
+		}
+
+		@include respond(large){
+			display: inline-block;
+			border-radius: 15px;
+			border: 1px solid #666;
+			background-color: #fff;
+			height: 30px;
+			width: 220px;
+			margin-top: 0px;
+			margin-left: 30px;
+			top: 1px;
+		}
+
+		input.nav-search-input {
+			float: left;
+			border: none;
+			background: none;
+			height: 100%;
+			padding: 0 30px 0 10px;
+			width: 100%;
+			color: #000;
+			font-size: rem-calc(14);
+			outline: none;
+
+			//IE chokes on webkit selector
+			&.placeholder
+			 {
+				font-style: italic;
+				color: #000;
+			}
+
+			&::placeholder {
+				font-style: italic;
+				color: #000;
+			}
+
+			@include respond(large){
+				margin: 0 0 0 17px;
+				padding: 0;
+			}
+		}
+
+		.nav-search-button {
+			position: absolute;
+			top: 0;
+			right: 0;
+			background: none;
+			border: none;
+			height: 100%;
+			padding: 0;
+			color: $burntOrange;
+			margin-right: 10px;
+			font-size: rem-calc(22);
+			@include respond(large){
+				color: $burntOrange;
+				top: -1px;
+			}
+		}
+	}
+
+	.media-links{
+		line-height: 12px;
+		display: inline-block;
+		position: relative;
+		top: -4px;
+		padding-left: 20px;
+		color: $burntGrey;
+		font-weight: 700;
+		font-size: rem-calc(14);
+		a{
+			font-weight: 100;
+			line-height: inherit;
+			font-size: inherit;
+			color: $burntGrey;
+		}
+	}
+
+	li.nav-item-info {
+		text-align: center;
+		margin: 12px 0 0 0;
+		padding: 0;
+		width: 33.333%;
+		padding: 0 4px;
+		display: inline-block;
+
+		.nav-link {
+			color:#fff;
+			text-decoration: none;
+			display: block;
+			height: 100%;
+			width: 100%;
+			background:$nav-constituents-bkg;
+			height: 30px;
+			line-height: 30px;
+			font-size: rem-calc(12);
+
+			@include respond(large){
+				font-size: rem-calc(13);
+				background: none;
+				width: auto;
+				line-height: $topnav-height;
+
+				&:hover,
+				&:focus {
+					text-decoration: underline
+				}
+			}
+		}
+	}
+
+	// Desktop parent logos
+	.parent-banner-links{
+		display: none;
+		@include respond(large){
+			display: block;
+			width: 100%;
+			height: 32px;
+		}
+
+	}
+
+	.logo-link {
+		display: block;
+		height: 100%;
+		background: transparent;
+		text-decoration: none;
+	}
+
+	//mobile topnav dropdown
+	.topnav{
+		.UT-parent-link {
+			float: left;
+			margin-bottom: 0;
+			line-height: 1;
+			font-size: 25px;
+			.parent_link {
+				color:white;
+				font-size: rem-calc(14);
+				letter-spacing: 0px;
+				font-family: $charis;
+                font-weight: 400;
+                -webkit-font-smoothing: antialiased;
+  				-moz-osx-font-smoothing: grayscale;
+				&:hover {
+					text-decoration: none;
+				}
+			}
+			div.parent_link {
+				margin-top: 7px;
+				cursor: default;
+			}
+		}
+		.parent-links{
+			display: none;
+			line-height: 50px;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+		}
+		.parent-links a{
+			text-decoration: none;
+			color: #fff;
+			display: block;
+			font-size: rem-calc(14);
+			border-bottom: 1px solid #6a6361;
+			background-color: #2d2523;;
+		}
+		.current-directory{
+			color: white;
+			display: block;
+			text-align: center;
+			text-decoration: none;
+			border-bottom: 1px solid #6a6361;
+
+			&.active{
+				background-color: #2d2523;
+				color: $burntOrange;
+				font-weight: 600;
+			}
+
+			.name{
+				display: inline-block;
+				font-size: rem-calc(14);
+				width: 80%;
+				line-height: 2;
+				border-right: 1px solid #6a6361;
+				min-height: 50px;
+				vertical-align: middle;
+				padding: 10px 5px;
+			}
+			.toggle{
+				font-size: rem-calc(12);
+				color: white;
+				width: 20%;
+				display: inline-block;
+				&:after{
+					@include icon(chevron-up);
+					vertical-align: middle;
+				}
+
+				&.active{
+					&:after{
+						font-size: rem-calc(16);
+						@include icon(close);
+					}
+				}
+			}
+			.icon-chevron-up:before{
+				position: relative;
+				top: 19px;
+			}
+		}
+// delete if necessary - theme the social icon list in the header
+		.nav-item-search ul.connect-links li {
+			display: inline-block;
+		}
+		.nav-item-search a.connect-link {
+			color: #555;
+			font-size: 22px;
+			margin-right: 5px;
+            &:hover {
+              text-decoration: none;
+            }
+		}
+		ul.connect-links {
+			display:inline;
+			position:relative;
+		}
+// end delete section if changes made
+	}
+
+	// Mobile search, persona links
+	.topnav-links {
+		margin: 0;
+		padding: 0 rem-calc(15);
+		list-style: none;
+		text-align: center;
+		font-size: 0;
+
+		@include respond(large){
+			@include inline-list;
+			margin-bottom: 0;
+			float: right;
+		}
+
+		input.nav-search-input {
+			@include respond(small-only, medium-only){
+				margin-bottom: 0px;
+			}
+
+		}
+		.media-links a{
+			color: #fff;
+			position: absolute;
+			text-align: right;
+			top: 12px;
+			left: 120px;
+			width: 100px;
+		}
+		.persona-link{
+			margin: 12px 0 0 0;
+			width: 33.333%;
+
+			@include respond(small-only, medium-only){
+				display: inline-block !important;
+			}
+		}
+	}
+}
+.container-topnav {
+	&.container{
+		.nav-item-search.show-for-large-up{
+			.topnav-constituents{
+				color: #2d2a28;
+				display: inline-block;
+				font-size: 0.875rem;
+				font-weight: 700;
+				line-height: 12px;
+				padding-left: 20px;
+				position: relative;
+				top: -4px;
+			}
+			li.nav-item {
+				color: #2d2a28;
+				display: inline-block;
+				font-size: 0.875rem;
+				font-weight: 700;
+				line-height: 12px;
+				padding-left: 20px;
+				position: relative;
+				top: -4px;
+				a{
+					color: #2d2a28;
+					font-size: inherit;
+					font-weight: 100;
+					line-height: inherit;
+				}
+			}
+		}
+	}
+}
+
+.container-topnav, .container-p2-topnav{
+	height: 32px;
+	padding: 0;
+	@include respond(large){
+		background: $burntOrange;
+	}
+	.topnav.knockout_logo .UT-knockout-logo {
+	  width: 113.2px;
+	  height: 26px;
+	  margin-top: 4.4px;
+      float: right;
+      margin-bottom: 0;
+	}
+	.topnav.knockout_logo .UT-knockout-logo a {
+	  background: url("../img/general/knockout_university_informal_horizontal_padded.svg") no-repeat scroll 0 0 / 100% 100%;
+	}
+}
+.no-svg .topnav.knockout_logo .UT-knockout-logo-logo a {
+    background: url("../img/general/texas_shield.png");
+	background-repeat: no-repeat;
+	background-size:100% 100%;
+	background-position: 0 0;
+}
+
+.container-p2-topnav {
+  background: $burntOrange;
+  .topnav.knockout_logo .UT-knockout-logo {
+    background: url("../img/general/knockout_university_informal_horizontal_padded.svg") no-repeat scroll 0 0 / 100% 100%;
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

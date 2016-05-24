@@ -1,0 +1,99 @@
+<?php
+
+/**
+ * @file
+ * UTexas Twitter Widget Install profile.
+ *
+ * Add hook_update_N() functions here to create default widgets.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function utexas_twitter_widget_schema() {
+
+  $schema = array();
+
+  $schema['utexas_twitter_widgets'] = array(
+    'description' => 'The base table for the Twitter entity',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key of the Twitter entity',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'Widget Label',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'headline' => array(
+        'description' => 'Widget Headline',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'account' => array(
+        'description' => 'Twitter Account',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'timeline_list' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The optional user list name.',
+      ),
+      'count' => array(
+        'description' => 'Number of tweets to display',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'view_all' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Text for the link back to Twitter',
+      ),
+      'retweets' => array(
+        'description' => '1 = yes, 0 = no',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'replies' => array(
+        'description' => '1 = yes, 0 = no',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+
+}
+
+/**
+ * Implements hook_install().
+ */
+function utexas_twitter_widget_install() {
+  // Set the initial value for the schema version so we can
+  // run updates after install.
+  drupal_set_installed_schema_version('utexas_twitter_widget', 7100);
+
+  $permissions = array(
+    'view twitter widgets',
+  );
+  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, $permissions);
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $permissions);
+}

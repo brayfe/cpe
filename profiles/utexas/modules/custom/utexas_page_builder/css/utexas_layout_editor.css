@@ -1,0 +1,61 @@
+.editing-context-label {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  opacity: 0.75;
+  pointer-events: none;
+  right: 70px;
+}
+.context-editor ul {
+  list-style-type: none;
+}
+.context-editor .context_ui_dialog-stop,
+.context-editor .buttons {
+  display: none !important;
+}
+.context-block-browser .category {
+  margin-top: 15px;
+}
+.context-block-browser .category:first-child {
+  margin-top: 0;
+}
+.context-block-browser .category .category-label {
+  margin-bottom: 5px;
+}
+.context-block-browser .context-block-addable {
+  cursor: pointer;
+  height: 25px;
+  line-height: 25px;
+  margin: 0 0 2px;
+  padding: 0px 5px;
+}
+.context-block-browser .context-block-addable span.icon {
+  display: none;
+}
+.edit-links {
+  background: #f3f0e8;
+  clear: both;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  margin: 12px 0;
+}
+body.context-editing .draggable:hover .contextual-links-wrapper.contextual-links-processed {
+  display: none !important;
+}
+body.context-editing .draggable:hover a.context-block-remove,
+body.context-editing .draggable:hover a.context-block-handle {
+  top: 0;
+}
+body.context-editing .draggable:hover a.context-block-remove {
+  right: 0px;
+}
+body.context-editing .draggable:hover a.context-block-handle {
+  right: 40px;
+}
+body.context-editing .edit-links {
+  display: none;
+}
+body.context-editing a.context-ui-add-link:hover {
+  color: #fff;
+}

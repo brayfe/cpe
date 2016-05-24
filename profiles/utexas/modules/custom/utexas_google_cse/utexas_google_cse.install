@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Here we are setting/unsetting the variabled needed by the module.
+ */
+
+/**
+ * Implements hook_enable().
+ *
+ * Here we will add the default variables needed.
+ */
+function utexas_google_cse_enable() {
+  variable_set('utexas_google_cse_id', '012511204907515981876:iju0ehs0wvq');
+  drupal_set_message(t("Added new Google CSE Id variable"), 'status', FALSE);
+}
+
+/**
+ * Implements hook_disable().
+ *
+ * Here we will remove the default variables needed.
+ */
+function utexas_google_cse_disable() {
+  variable_del('utexas_google_cse_id');
+  drupal_set_message(t("Deleted Google CSE Id variable"), 'status', FALSE);
+}

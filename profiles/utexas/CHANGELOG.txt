@@ -1,0 +1,113 @@
+UT Drupal Kit 7.x-2.2, 2016-03-16
+---------------------------------
+[MC-262] - Properly Handle DomDocument for HTML5 tags in CKEditor Link File
+[MC-264] - Increase space between multiple Flex Content Areas in sidebar
+[MC-266] - Increase space after an <ol> element
+[MC-267] - Change link color in promo units to burnt orange
+[MC-269] - Change inline link color in featured highlight to white
+[MC-271] - Resolve empty array error when enabling STARTERKIT
+[MC-274] - Fix broken L1 menu links on Android 
+[MC-276] - Fix landing page template 1 hero image title alignment on tablet view
+[MC-279] - Make Quick Links validate/display properly on Team Member
+[MC-280] - Update custom entity admin page permissions
+[MC-288] - Fix starterkit grunt configuration error
+[MC-291] - Increase color contrast of links in the footer area
+[MC-292] - Make search presence module-enable independent
+[MC-293] - Update file upload limit on custom media/file fields to default value
+[MC-301] - Underline Subscribe to Newsletter on hover
+[MC-303] - Remediate "too much recursion/Stack Overflow" error with CKEditor
+[MC-324] - Remove some Foundation elements 
+[MC-296] - Add informative message about PHP 5.4 minimum
+[MC-297] - Fix text format filter ordering
+[MC-298] - Enable Metatag module in installation
+[MC-230] - Consider more permissive WYSIWYG  styling
+[MC-277] - Remove permission for Full HTML text format from administrator role
+[MC-283] - Implement secure Qualtrics solution
+[MC-284] - Finalize role for elevated site privileges (script insertion)
+[MC-290] - Create Site Manager role
+[MC-295] - Update to Drupal 7.42
+[MC-299] - Implement new fix for Tablesaw-fixed approach
+[MC-300] - Enable and configure Video Filter Module
+[MC-302] - Create demo page for Foundation extra libraries
+[MC-304] - Cleanup debugging code 
+[MC-305] - Update utexas_deploy installed schema version (7104)
+[MC-307] - Create default video_filter content and behat feature
+[MC-308] - Fix color-contrast issues with foundation extra libraries 
+[MC-309] - Update to Drops 7.43
+[MC-311] - Hide Metatag installation message
+[MC-312] - Allow Team Member default content independent of installation
+[MC-313] - Fix excess spacing error with WYSIWYG + Promo Units
+[MC-317] - Improve Qualtrics Regex 
+[MC-318] - Revert .gitignore file
+[MC-320] - Make Tablesaw library & CSS part of "foot_scripts"
+[MC-321] - Allow Site Manager to use Filtered HTML for Blocks
+[MC-326] - Fix minimum PHP version typo in utexas.info
+[MC-328] - Revisit "Too Much Recursion" in CKEditor
+[MC-270] - Update Behat test(s) to work with new code
+[MC-272] - Add behat test for Team Member content type
+[MC-282] - Remove "content/" from default pathauto URL patterns
+[MC-314] - Build Qualtrics CKEditor plugin
+
+UT Drupal Kit 7.x-2.1, 2016-01-22
+---------------------------------
+- [MC-20] - Implement new "Resources" field
+- [MC-196] - Allow Tablesaw to honor existing table classes
+- [MC-198] - Implement responsive Views tables via preprocess function
+- [MC-221] - Update background accent behat test to match new usage
+- [MC-226] - Validate all flex_content_area link deltas
+- [MC-227] - Allow behat config to specify Chrome version
+- [MC-228] - Apply Forty Acres page.tpl.php changes to the STARTERKIT
+- [MC-236] - Properly handle PHP notice when no custom blocks available
+- [MC-238] - Make Featured Highlight image respond correctly on mobile
+- [MC-240] - Fix CTA display on Landing Page 3
+- [MC-242] - Avoid use of min-height on promo-list items
+- [MC-243] - Update to latest Tablesaw.js library
+- [MC-244] - Properly display search bar based on configuration
+- [MC-247] - Fix display of promo units in sidebars
+- [MC-248] - Fix display of photo content area in sidebar
+- [MC-249] - Fix display of flex-content areas in sidebars
+- [MC-252] - Improve text for CKEditor Link dropdown
+- [MC-253] - Display menu sub-navigation correctly in mobile
+- [MC-257] - Display Promo List unordered lists correctly
+- [MC-258] - Fix hero image style #5 cropping when subhead and CTA absent
+- [MC-259] - Fix Revisions page to use correct tpl.php
+- [MC-261] - Improve header-fixing behavior in iOS
+- [MC-211] - Abstract media usage in utexas_admin behat test
+- [MC-223] - Improve Context module patch to work with existing permissions
+- [MC-224] - Add "Tags" field to standard page and landing page
+- [MC-229] - Allow standard Drupal blocks in Page Builder
+- [MC-231] - Move special menu item setting to installation profile
+- [MC-232] - Enhance Google Tag Manager page targeting
+- [MC-234] - Revise "standard Drupal search" language in theme settings
+- [MC-239] - Allow drush site-install arguments
+- [MC-251] - Enable globalredirect module
+- [MC-254] - Add ability to load foundation javascript files in STARTERKIT
+- [MC-268] - Add table-layout:fixed for Tablesaw
+
+UT Drupal Kit 7.x-2.0, 2015-11-17
+---------------------------------
+- First release with the Forty Acres theme and Page Builder module
+
+UT Drupal Kit 7.x-1.4, 2015-09-02
+---------------------------------
+- Applying core and contrib updates
+
+UT Drupal Kit 7.x-1.3, 2015-07-01
+---------------------------------
+- Applying core and contrib updates. Please note the major version update to the Media: Youtube module
+
+UT Drupal Kit 7.x-1.2, 2015-03-25
+---------------------------------
+- Applying core and contrib updates
+
+UT Drupal Kit 7.x-1.1, 2015-02-18
+--------------------------------- 
+- Applying contrib updates
+
+UT Drupal Kit 7.x-1.0, 2015-01-28
+---------------------------------
+- Initial Release
+
+UT Drupal Kit 7.32-1.0-rc1, 2014-11-17
+--------------------------------------
+- Release Candidate 1 (RC1)

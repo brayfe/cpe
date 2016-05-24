@@ -1,0 +1,29 @@
+.news {
+	position: relative;
+	padding: 0px 0 20px 0;
+	color: $burntGrey;
+	overflow: hidden;
+	margin: 0 10px;
+
+	@include respond(medium){
+		margin: 0 15px;
+	}
+
+	//Divider Line
+	&+&{
+		border-top: 1px solid $sidebar-divider;
+	}
+
+	h4{
+		margin: 16px 0 6px 0 ;
+		line-height: rem-calc(22);
+	}
+	
+	.cta-link{
+		&:after{
+			margin-top: 4px;
+		}
+	}
+}
+
+

@@ -1,0 +1,100 @@
+// =======
+// Base styles for Flex Content Areas. Used throughout UT Core.
+// =======
+.utexas-flex-content {
+
+  .utexas-flex-content-area-image-wrapper {
+    .utexas-flex-content-area-image {
+      border: 1px solid #cbcbcb;
+      height: auto;
+      margin-bottom: 8px;
+      width: 100%;
+      @include respond(medium){
+        margin-bottom: 14px;
+      }
+    }
+  }
+
+  .utexas-flex-content-area-headline {
+    color: $burntGrey;
+    font-size: rem-calc(17px);
+    line-height: rem-calc(22px);
+    margin: 0 0 8px;
+    font-weight: 700;
+
+    @include respond(small-only) {
+      padding: 0 5px;
+    }
+    @include respond(medium) {
+      font-size: rem-calc(18px);
+      line-height: rem-calc(25px);
+      margin: 0 0 5px;
+    }
+    @include respond(large) {
+      font-size: rem-calc(20px);
+      line-height: rem-calc(27px);
+    }
+  }
+
+  .utexas-flex-content-area-copy {
+    font : {
+      size: rem-calc(15px);
+    }
+    line-height: rem-calc(22px);
+    margin: 0 0 12px;
+
+    p {
+      margin: 0 0 rem-calc(12px);
+      @include respond(medium) {
+        margin: 0 0 rem-calc(18px);
+      }
+    }
+
+    @include respond(small-only) {
+      padding: 0 5px;
+    }
+    @include respond(medium) {
+      display: block;
+      font-size: rem-calc(17px);
+      line-height: rem-calc(25px);
+    }
+  }
+
+  .utexas-flex-content-area-links {
+    ul {
+      list-style-type: none;
+      margin: 6px 0 0;
+      padding: 0;
+
+      @include respond(small-only) {
+        padding: 0 5px;
+      }
+
+      li {
+        line-height: rem-calc(22px);
+        padding-bottom: 9px;
+      }
+    }
+
+    .cta-link {
+      &:after {
+        @include respond(small-only) {
+          position: relative;
+          top: -1px;
+        }
+        @include respond(medium-only) {
+          position: relative;
+          top: -1px;
+        }
+      }
+    }
+  }
+
+  .utexas-flex-content-cta {
+    margin-top: 6px;
+    @include respond(small-only) {
+      text-align: center;
+      width: 100%;
+    }
+  }
+}

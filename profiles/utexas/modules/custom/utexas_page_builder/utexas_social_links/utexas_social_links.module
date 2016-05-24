@@ -1,0 +1,333 @@
+<?php
+/**
+ * @file
+ * Module file for the Social Links module.
+ */
+
+/**
+ * Defines which social media items are available
+ */
+define('UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS', serialize(
+  array(
+    'Facebook' => 'http://facebook.com/',
+    'Twitter' => 'http://twitter.com/',
+    'Instagram' => 'http://instagram.com/',
+    'LinkedIn' => 'http://linkedin.com/',
+    'YouTube' => 'http://youtube.com/',
+    'GooglePlus' => 'http://plus.google.com/',
+    'Flickr' => 'http://flickr.com/',
+    'Pinterest' => 'http://pinterest.com/',
+    'Tumblr' => 'http://tumblr.com/',
+  )
+));
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines a compound field for social links.
+ */
+function utexas_social_links_field_info() {
+  return array(
+    'utexas_social_links' => array(
+      'label' => t('Social Links'),
+      'description' => t('Defines a compound field for social links'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'utexas_social_links',
+      'default_formatter' => 'utexas_social_links',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines the default widget for the Social Links compound field.
+ */
+function utexas_social_links_field_widget_info() {
+  return array(
+    'utexas_social_links' => array(
+      'label' => t('Social Links'),
+      'field types' => array('utexas_social_links'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Form definition for the field widget.
+ *
+ * @see _utexas_flex_content_areas_add_link_empty_row()
+ */
+function utexas_social_links_field_widget_form(&$form, &$form_state, $field,
+  $instance, $langcode, $items, $delta, $element) {
+  switch ($instance['widget']['type']) {
+    case 'utexas_social_links':
+
+      // Headline.
+      $element['headline'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Headline'),
+        '#description' => t('Enter a headline for the social links block (e.g.,
+         "Connect with Housing and Food Service").'),
+        '#size' => 60,
+        '#maxlength' => 128,
+        '#default_value' => (isset($items[$delta]['headline'])) ?
+        $items[$delta]['headline'] : '',
+      );
+
+      // Links.
+      $element['links'] = array(
+        '#type' => 'fieldset',
+        '#collapsible' => FALSE,
+        '#title' => t('Links'),
+      );
+
+      // Unserialize links blob to populate the link #default_value.
+      $stored_links = (isset($items[$delta]['links'])) ?
+      unserialize($items[$delta]['links']) : FALSE;
+
+      // Define and populate the link fields.
+      foreach (unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS) as $name => $url) {
+        $element['links']{$name} = array(
+          '#type' => 'textfield',
+          '#title' => $name,
+          '#size' => 60,
+          '#maxlength' => 255,
+          '#default_value' => (isset($stored_links[$name])) ? $stored_links[$name] : '',
+          '#attributes' => array(
+            'placeholder' => $url . '[account_handle]',
+          ),
+        );
+      }
+      break;
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ * Determines whether or not the field has data in it.
+ */
+function utexas_social_links_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'utexas_social_links':
+      $links = empty($item['links']) ? TRUE : _utexas_social_links_links_are_empty($item['links']);
+      return
+        empty($item['headline']) and $links;
+  }
+  return FALSE;
+}
+
+/**
+ * Helper function to determine whether or not an array of links is empty.
+ *
+ * @param array $links
+ *   An array representing link form information.
+ *
+ * @return bool
+ *   A boolean representing whether or not that row of links is empty or not.
+ */
+function _utexas_social_links_links_are_empty($links) {
+  // Determine whether $links is an array. If serialized, as in the case of a
+  // migration, unserialize.
+  $links = is_array($links) ? $links : unserialize($links);
+  if (!empty($links)) {
+    // A migration can result in an empty array.
+    foreach ($links as $link) {
+      if (!empty($link)) {
+        return FALSE;
+      }
+    }
+  }
+  return TRUE;
+}
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to validate that a Social Link has all the required field information.
+ */
+function utexas_social_links_field_validate($entity_type, $entity, $field,
+  $instance, $langcode, $items, &$errors) {
+  foreach ($items as $delta => $item) {
+    if (!empty($item) and !utexas_social_links_field_is_empty($item, $field)) {
+
+      // == CUSTOM VALIDATION RULES ==
+      // Make sure links are valid links.
+      $haslink = 0;
+      $link_array = is_array($item['links']) ? $item['links'] : unserialize($item['links']);
+      foreach ($link_array as $link) {
+        if (!empty($link) and !filter_var($link, FILTER_VALIDATE_URL)) {
+          $errors[$field['field_name']][$langcode][0][] = array(
+            'error' => 'link_invalid',
+            'message' => t('%field: A valid URL is required for social links.',
+            array('%field' => $instance['label'])),
+          );
+        }
+        if (!empty($link)) {
+          $haslink++;
+        }
+      }
+
+      // Check to see if tags are included in the headline.
+      if (strcmp($item['headline'], strip_tags($item['headline'])) !== 0) {
+        $errors[$field['field_name']][$langcode][0][] = array(
+          'error' => 'headline_tags',
+          'message' => t('%field: The headline may not contain HTML.',
+            array('%field' => $instance['label'])),
+        );
+      }
+
+      // Make sure there is at least one link if a headline is present.
+      if (isset($item['headline']) and $haslink == 0) {
+        $errors[$field['field_name']][$langcode][0][] = array(
+          'error' => 'link_missing',
+          'message' => t('%field: A headline is present without any links. Either remove the headline or add links.',
+            array('%field' => $instance['label'])),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function utexas_social_links_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  switch ($error['error']) {
+
+    case 'link_invalid':
+      // Loop through the links, flagging all of the elements with a problem.
+      foreach (element_children($element['links']) as $key) {
+        if ($key !== 'add_more') {
+          $link = $element['links'][$key];
+          if (!empty($link['#value']) and !filter_var($link['#value'], FILTER_VALIDATE_URL)) {
+            form_error($element['links'][$key], $error['message']);
+          }
+        }
+      }
+      break;
+
+    case 'headline_tags':
+      form_error($element['headline'], $error['message']);
+      break;
+
+    case 'link_missing':
+      form_error($element['links'], $error['message']);
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Adjusts field values to save copy and text format into respective columns.
+ */
+function utexas_social_links_field_presave($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+
+  foreach ($items as $delta => &$item) {
+    // Serialize links to save into links column.
+    $tmp_links = array();
+    $link_array = is_array($item['links']) ? $item['links'] : unserialize($item['links']);
+    foreach ($link_array as $key => $link) {
+      $tmp_links[$key] = $link;
+    }
+    $item['links'] = serialize($link_array);
+
+    break;
+  }
+}
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines the formatter for Social Links.
+ */
+function utexas_social_links_field_formatter_info() {
+  return array(
+    'utexas_social_links' => array(
+      'label' => t('Social Links'),
+      'field types' => array('utexas_social_links'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Creates the formatter for Social Links.
+ */
+function utexas_social_links_field_formatter_view($entity_type, $entity, $field,
+ $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'utexas_social_links':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('utexas_social_links', array('item' => $item)),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'utexas_social_links') .
+              '/theme/utexas_social_links.css'),
+          ),
+        );
+      }
+
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @see template_preprocess_utexas_social_links()
+ */
+function utexas_social_links_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_social_links' => array(
+      'variables' => array(
+        'item' => NULL,
+      ),
+      'template' => 'theme/utexas-social-links',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function for social links to create variables.
+ *
+ * @see utexas_social_links_theme
+ *
+ * @ingroup themeable
+ */
+function template_preprocess_utexas_social_links(&$variables) {
+  // Sanitize and offer default headline.
+  $output = array();
+  $headline = (!empty($variables['item']['headline'])) ?
+  check_plain($variables['item']['headline']) : 'Connect';
+  $links = !empty($variables['item']['links']) ? unserialize($variables['item']['links']) : array();
+  // Filter out links without values.
+  foreach ($links as $key => $link) {
+    if (!empty($link)) {
+      $output[$key] = $link;
+    }
+  }
+  // Unset unneeded variables.
+  unset($variables['item']);
+
+  // Reset variables.
+  $variables += array(
+    'headline' => $headline,
+    'links' => $output,
+  );
+}

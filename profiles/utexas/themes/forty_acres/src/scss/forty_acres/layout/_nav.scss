@@ -1,0 +1,477 @@
+.container-nav-phase2 {
+
+	&.container{
+		padding: 0;
+
+		@include respond(large){
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+	}
+
+	@include respond(large){
+		height: rem-calc(135);
+
+		.column {
+			position: static;
+		}
+		.sub-nav.item-c-4 .sub-nav-item {
+		    min-height: 50px;
+		    width: 50%;
+		}
+	}
+
+	.nav {
+		list-style: none;
+		margin: 15px 0 0 0;
+		padding: 0;
+
+		@include respond(large){
+			text-align: justify;
+			margin-right: -10px;
+			margin-left: -10px;
+		}
+	}
+
+
+	.nav-single-line{
+		@include respond(large){
+			margin-top: rem-calc(-26);
+			text-align: justify;
+		}
+
+		.nav-link:before{
+			top: 11px;
+		}
+	}
+
+	.nav-item{
+		border-bottom:1px solid $nav-constituents-bkg;
+		margin: 0;
+		padding: 0;
+
+		&:first-child{
+			border-top: 1px solid $nav-constituents-bkg;
+		}
+
+		@include respond(large){
+			line-height: rem-calc(18);
+			display: inline-block;
+			border: none;
+			position: relative;
+			height: 42px;
+
+			&:first-child{
+				border: none;
+			}
+		}
+	}
+
+	.nav:after{
+		@include respond(large){
+			content: '';
+ 	 		width: 100%; /* Ensures there are at least 2 lines of text, so justification works */
+  			display: inline-block;
+  		}
+	}
+
+	.nav-link {
+		color: #fff;
+		display: table-cell;
+		padding:18px 15px;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-size: rem-calc(13);
+		font-weight: bold;
+		position: relative;
+        width: 77%;
+		 @include respond(large){
+           display: inline-block;
+ 			color: $burntGrey;
+			padding: 10px;
+ 			font-size: rem-calc(14);
+ 			outline: none;
+			height: 100%;
+			border: 1px solid transparent;
+			z-index: 2;
+            width: 100%;
+ 			&:hover{
+ 				color: $burntOrange;
+                text-decoration: underline;
+ 			}
+
+			&.open {
+				border: 1px solid #AAABAC;
+				border-bottom: 1px solid #aaabac;
+				background-color: #fff;
+                &.has-children {
+                  border-bottom: #fff;
+                }
+			}
+ 		}
+        &.caret {
+          display: none;
+        }
+        &.caret.has-child {
+          display: table-cell;
+          vertical-align: middle;
+          background-color: #554551;
+          border-left: 1px solid #6A6361;
+          border-right: 1px solid #6A6361;
+          @include respond(large){
+            display: none;
+          }
+        }
+		&.caret span {
+          font-size: rem-calc(15);
+		}
+
+		&.open:before {
+			display: block;
+		}
+	}
+
+	@include respond(small-only,medium-only){
+		.nav-active {
+			background: $nav-selected-Bkg;
+
+			.nav-link {
+				color: $burntOrange;
+			}
+
+			.sub-nav-wrapper {
+				display: block;
+			}
+		}
+	}
+
+	.nav-link-down{
+		color: #fff;
+		display: block;
+		padding: 18px 15px;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-size: rem-calc(12);
+		font-weight: bold;
+		position: relative;
+
+		@include respond(large){
+			color: $burntGrey;
+			padding: 0;
+			font-size: rem-calc(14);
+			outline: none;
+
+			&:hover{
+				color: $burntOrange;
+			}
+		}
+
+	}
+
+    //// swap caret down for caret up when active
+    .nav-item.accessible-megamenu-top-nav-item.nav-active{
+      .icon-chevron-down:before {
+        content: "\f109";
+      }
+    }
+	//// Phase 2 Nav Dropdown styles
+	.sub-nav-wrapper {
+		display: none;
+
+		@include respond(large){
+			position: absolute;
+			display: block;
+			visibility: hidden;
+			opacity: 0;
+			max-height: 0;
+			overflow: hidden;
+			width: 400px;
+			left: 0;
+			top: 100%;
+			margin-top: 10px;
+			@include respond(medium){
+				margin-top:9px;
+			}
+			text-align: left;
+			z-index: 1;
+			background: #fff;
+			border: 1px solid #AAABAC;
+
+			&.overflowing {
+				left: auto;
+				right: 0;
+			}
+
+			&.open {
+				max-height: 600px;
+				visibility: visible;
+				opacity: 1;
+			}
+		}
+	}
+
+	.sub-nav-row {
+		@include respond(large){
+			max-width: $row-width;
+			margin: 0 auto;
+		}
+	}
+
+	.sub-nav {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		position: relative;
+
+		@include respond(large){
+			margin: 15px auto;
+
+			.sub-nav-item {
+				float: left;
+				min-height: 50px;
+			}
+		}
+
+		&.mobile-connect-links{
+			margin-bottom: 15px;
+		}
+
+	}
+
+	.sub-nav-link {
+		font-size: rem-calc(14);
+		line-height: rem-calc(18);
+		border-top: 1px solid $nav-constituents-bkg;
+		color: #fff;
+		display: block;
+		text-decoration: none;
+		padding: 11px 15px 11px 40px;
+		overflow: hidden;
+
+		&:hover {
+			color: #FFF;
+		}
+
+		@include respond(large){
+			display: block;
+			color: $burntGrey;
+			text-decoration: none;
+			line-height: 100%;
+			padding: 4px 15px 4px 15px;
+			font-size: rem-calc(14);
+			line-height: rem-calc(19);
+			border: none;
+
+			&:hover {
+				color: $burntOrange;
+			}
+
+			&:before {
+				display: none;
+			}
+		}
+	}
+
+
+	//Mobile Nav
+	@include respond(small-only,medium-only){
+		.nav-active {
+			background: $nav-selected-Bkg;
+
+			.nav-link {
+				color: $burntOrange;
+			}
+
+			.sub-nav-wrapper {
+				display: block;
+			}
+		}
+	}
+	#main-nav li a {
+		top:0px;
+		@include respond(large){
+	    	top: 11px;
+	    }
+	}
+  #main-nav .sub-nav-row li a {
+    span:after {
+      -moz-osx-font-smoothing: grayscale;
+      content: "\f100";
+      display: inline;
+      font-family: "forty_acres_icons";
+      font-style: normal;
+      font-variant: normal;
+      font-weight: normal;
+      line-height: 1;
+      margin-left: 4px;
+      position: relative;
+      text-transform: none;
+      top: 1px;
+    }
+  }
+
+}
+
+
+.nav-search-container{
+	height: 35px;
+	max-width: 800px;
+	background-color: #fff;
+	display: inline-block;
+	position: relative;
+	width: 100%;
+
+	@include respond(large){
+		border-radius: 15px;
+		border: 1px solid #666;
+		background-color: #fff;
+		height: 30px;
+		width: 220px;
+		margin-left: 35px;
+		top: 1px;
+	}
+
+
+	input.nav-search-input {
+		float: left;
+		border: none;
+		background: none;
+		height: 100%;
+		padding: 0 30px 0 10px;
+		width: 100%;
+		color: #000;
+		font-size: rem-calc(14);
+		outline: none;
+
+		//IE chokes on webkit selector
+		&.placeholder
+		 {
+			font-style: italic;
+			color: #000;
+		}
+
+		&::placeholder {
+			font-style: italic;
+			color: #000;
+		}
+
+		@include respond(large){
+			margin: 0 0 0 17px;
+			padding: 0;
+			max-width: 160px;
+		}
+	}
+
+	.nav-search-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		background: none;
+		border: none;
+		height: 100%;
+		padding: 0;
+		color: $burntOrange;
+		margin-right: 10px;
+		font-size: rem-calc(22);
+		@include respond(large){
+			color: $burntOrange;
+			top: -2px;
+		}
+	}
+	@include respond(large){
+		.sub-nav.item-c-4 .sub-nav-item {
+	    	width: 50%!important;
+		}
+		.sub-nav.item-c-3 .sub-nav-item {
+		    width: 50%!important;
+		}
+	}
+}
+
+// Theme 2 Header Connect Links
+.theme2 header{
+	.connect-links{
+		margin: 0;
+		list-style-type: none;
+		font-size: rem-calc(38);
+		float: left;
+		line-height: 40px;
+
+		@include respond(large){
+			padding: 2px 0 0 0px;
+			font-size: rem-calc(24);
+			position: relative;
+			top: -8px;
+
+			.name {
+				// Hide the name
+				position: absolute !important;
+				height: 1px; width: 1px;
+				overflow: hidden;
+				clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+				clip: rect(1px, 1px, 1px, 1px);
+			}
+		}
+
+		@include respond(small-only, medium-only){
+			width: 235px;
+			margin: 0px;
+			padding: 10px 0 0 0;
+		}
+
+		li{
+			text-align: left;
+			float: left;
+			padding: 0 5px;
+			@include respond(large){
+				padding: 0;
+			}
+		}
+
+		.label{
+			font-size: rem-calc(13);
+			margin-right: 6px;
+			position: relative;
+			top: -1px;
+		}
+	}
+
+	.connect-link{
+		text-decoration: none;
+		line-height: 32px;
+		margin-left: 10px;
+		margin-bottom: 6px;
+		color: #575550;
+		&:hover{
+			color: #bf5700;
+		}
+		@include respond(small-only){
+			margin-left: 15px;
+			span{
+				color: #fff;
+				font-size: rem-calc(22);
+
+				&:hover{
+					color: #fff;
+				}
+			}
+		}
+		a:last-child{
+				display: block;
+				padding-bottom: 10px;
+				margin-bottom: 10px;
+		}
+
+		.name{
+			font-size: rem-calc(16);
+			margin-left: 10px;
+			&.hover{
+				text-decoration: none;
+			}
+		}
+
+		&.hover{
+			text-decoration: none;
+		}
+	}
+}

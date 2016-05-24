@@ -1,0 +1,78 @@
+<?php
+/**
+ * @file
+ * Install file for Flex Content Areas module. Used to install a field schema
+ * for the Flex Content Area.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines the schema for Flex Content Areas fields.
+ */
+function utexas_flex_content_areas_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+    case 'utexas_flex_content_area':
+      $columns['image_fid'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The {file_managed}.fid for a flexible content area image.',
+      );
+      $foreign_keys['image_fid'] = array(
+        'table' => 'file_managed',
+        'columns' => array('image_fid' => 'fid'),
+      );
+      $columns['headline'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores headline for the flexible content area.',
+      );
+      $columns['copy_value'] = array(
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+        'description' => 'Stores copy for the flexible content area.',
+      );
+      $columns['copy_format'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores text format for the flexible content area.',
+      );
+      $foreign_keys['copy_format'] = array(
+        'table' => 'filter_format',
+        'columns' => array('copy_format' => 'format'),
+      );
+      $columns['links'] = array(
+        'type' => 'blob',
+        'size' => 'normal',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+        'description' => 'Stores serialized array of links for the flexible content area.',
+      );
+      $columns['cta_title'] = array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+        'description' => 'Stores call to action title for the flexible content area.',
+      );
+      $columns['cta_link'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores call to action link for the flexible content area.',
+      );
+
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+    'foreign keys' => $foreign_keys,
+  );
+}

@@ -1,0 +1,596 @@
+<?php
+/**
+ * @file
+ * Module file for the Hero Photo module.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines a compound field for hero photo.
+ */
+function utexas_hero_photo_field_info() {
+  return array(
+    'utexas_hero_photo' => array(
+      'label' => t('Hero Photo'),
+      'description' => t('Defines a compound field for hero photo'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'utexas_hero_photo',
+      'default_formatter' => 'utexas_hero_photo',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines the default widget for the Hero Photo compound field.
+ */
+function utexas_hero_photo_field_widget_info() {
+  return array(
+    'utexas_hero_photo' => array(
+      'label' => t('Hero Photo (content block)'),
+      'field types' => array('utexas_hero_photo'),
+    ),
+    'utexas_hero_photo_full' => array(
+      'label' => t('Hero Photo (full width)'),
+      'field types' => array('utexas_hero_photo'),
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Form definition for the field widget.
+ *
+ * @see _utexas_photo_content_area_add_link_empty_row()
+ */
+function utexas_hero_photo_field_widget_form(&$form, &$form_state, $field,
+  $instance, $langcode, $items, $delta, $element) {
+  switch ($instance['widget']['type']) {
+    case 'utexas_hero_photo':
+
+      // Image upload input.
+      $element['utexas_hero_photo_image'] = array(
+        '#type' => 'media',
+        '#title' => t('HERO PHOTO'),
+        '#tree' => TRUE,
+        '#field_name' => 'utexas_hero_photo_image',
+        '#description' => t('On the "Hero Image & Sidebars" template, this appears automatically at the top left of page content. On other templates, it is positionable. Recommended minimum dimensions: 840 x 450px.'),
+        '#extended' => TRUE,
+        '#media_options' => array(
+          'global' => array(
+            'file_extensions' => 'gif png jpg jpeg',
+            'file_directory' => 'hero-photos',
+            'types' => array('image'),
+          ),
+        ),
+        '#default_value' => array('fid' => isset($items[$delta]['image_fid']) ? $items[$delta]['image_fid'] : 0),
+      );
+
+      // Caption.
+      $element['caption'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Caption'),
+        '#size' => 60,
+        '#maxlength' => 255,
+        '#default_value' => (isset($items[$delta]['caption'])) ? $items[$delta]['caption'] : '',
+        '#description' => t('Optional text to display directly beneath the image.'),
+      );
+      // Credit.
+      $element['credit'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Photo Credit'),
+        '#size' => 40,
+        '#maxlength' => 255,
+        '#default_value' => (isset($items[$delta]['credit'])) ? $items[$delta]['credit'] : '',
+        '#description' => t('Optional way to provide photo attribution, displayed directly beneath the image.'),
+      );
+      break;
+
+    case 'utexas_hero_photo_full':
+      $example_image_base = drupal_get_path('module', 'utexas_hero_photo') . '/assets/';
+      $element['hero_image_style'] = array(
+        '#type' => 'radios',
+        '#title' => t('Hero Image Style'),
+        '#default_value' => (isset($items[$delta]['hero_image_style'])) ? $items[$delta]['hero_image_style'] : 'hero-style-1',
+        '#options' => array(
+          'hero-style-1' => '1: <a href="/' . $example_image_base . 'hero-image-style-1.png" target="_blank" >Bold headline on burnt orange background, floated right</a>',
+          'hero-style-2' => '2: <a href="/' . $example_image_base . 'hero-image-style-2.png" target="_blank" >Headline on light background, floated right</a>',
+          'hero-style-3' => '3: <a href="/' . $example_image_base . 'hero-image-style-3.png" target="_blank" >Opaque bottom pane with heading, subheading and burnt orange call-to-action</a>',
+          'hero-style-4' => '4: <a href="/' . $example_image_base . 'hero-image-style-4.png" target="_blank" >Centered image with dark bottom pane containing heading, subheading and burnt orange call-to-action</a>',
+          'hero-style-5' => '5: <a href="/' . $example_image_base . 'hero-image-style-5.png" target="_blank" >Medium image with large heading, subheading and burnt orange call-to-action</a>',
+        ),
+        '#required' => TRUE,
+      );
+
+      // Set position to anchor backround image to.
+      $element['hero_image_position'] = array(
+        '#type' => 'radios',
+        '#title' => t('Image Anchor Position'),
+        '#description' => t('Select an anchor position for the hero image. This determines which side of the responsive hero the uploaded image will anchor to.  Note this does not affect option 4.'),
+        '#default_value' => (isset($items[$delta]['hero_image_position'])) ? $items[$delta]['hero_image_position'] : 'left',
+        '#options' => array(
+          'left' => 'Left',
+          'center' => 'Center',
+          'right' => 'Right',
+        ),
+      );
+
+      // Image upload input.
+      $element['utexas_hero_photo_image'] = array(
+        '#type' => 'media',
+        '#title' => t('HERO PHOTO'),
+        '#tree' => TRUE,
+        '#field_name' => 'utexas_hero_photo_image',
+        '#description' => t('The hero photo appears at the top of the page. Recommended dimensions: 1600 x 500px. An image must be uploaded to display heading and subheading.'),
+        '#extended' => TRUE,
+        '#media_options' => array(
+          'global' => array(
+            'file_extensions' => 'gif png jpg jpeg',
+            'file_directory' => 'hero-photos-full',
+            'types' => array('image'),
+          ),
+        ),
+        '#default_value' => array('fid' => isset($items[$delta]['image_fid']) ? $items[$delta]['image_fid'] : 0),
+      );
+
+      // Heading.
+      $element['caption'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Heading'),
+        '#size' => 40,
+        '#maxlength' => 255,
+        '#default_value' => (isset($items[$delta]['caption'])) ? $items[$delta]['caption'] : '',
+        '#description' => t('Optional, but recommended to provide alternative textual explanation of the image.'),
+      );
+      // Subheading.
+      $element['subhead'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Subheading'),
+        '#size' => 60,
+        '#maxlength' => 255,
+        '#default_value' => (isset($items[$delta]['subhead'])) ? $items[$delta]['subhead'] : '',
+        '#description' => t('Optional. Displays directly beneath the heading. For best appearance, use no more than 140 characters.  Note: this field is only visible in hero styles 3, 4 and 5.'),
+      );
+
+      // Link fieldset.
+      $element['link'] = array(
+        '#type' => 'fieldset',
+        '#collapsible' => FALSE,
+        '#title' => t('Link (Optional)'),
+      );
+
+      // Link. Convert from stored drupal path to alias.
+      $link = '';
+      if (isset($items[$delta]['link_href'])) {
+        if (trim($items[$delta]['link_href']) != '') {
+          $link = drupal_get_path_alias($items[$delta]['link_href']);
+        }
+      }
+      $element['link']['link_href'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Link'),
+        '#size' => 60,
+        '#maxlength' => 512,
+        '#default_value' => $link,
+        '#attributes' => array(
+          'placeholder' => 'external URL (http://) or internal path (e.g., about/diversity)',
+        ),
+      );
+
+      // Link text.
+      $element['link']['link_title'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Title'),
+        '#description' => t('The text to display for the call to action link (e.g., "Learn more")'),
+        '#size' => 60,
+        '#maxlength' => 128,
+        '#default_value' => (isset($items[$delta]['link_text'])) ? $items[$delta]['link_text'] : 'Learn More',
+      );
+
+      break;
+  }
+  return $element;
+}
+
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to validate that Hero Photo have all the required field information.
+ */
+function utexas_hero_photo_field_validate($entity_type, $entity, $field,
+  $instance, $langcode, $items, &$errors) {
+
+  foreach ($items as $delta => $item) {
+    if (!utexas_hero_photo_field_is_empty($item, $field)) {
+
+      // Make sure an image exists.
+      if (isset($item['image_fid'])) {
+        if ($item['image_fid'] == 0) {
+          $errors[$field['field_name']][$langcode][$delta][] = array(
+            'error' => 'image_no_image',
+            'message' => t('%field: An image is required.', array('%field' => $instance['label'])),
+          );
+        }
+      }
+
+      // If a link is present, make sure it is valid (internal/external).
+      if (isset($item['link']['link_href']) or isset($item['link_href'])) {
+        $href = isset($item['link']['link_href']) ? $item['link']['link_href'] : $item['link_href'];
+      }
+
+      if (!empty($href) and !drupal_valid_path(drupal_get_normal_path($href))) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'utexas_hero_photo_bad_href',
+          'message' => t('%field: A valid URL is required for a link.',
+            array('%field' => $instance['label'])),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function utexas_hero_photo_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  switch ($error['error']) {
+    case 'image_no_image':
+      form_error($element['image']['fid'], $error['message']);
+      break;
+
+    case 'utexas_hero_photo_no_href':
+      form_error($element['link']['link_href'], $error['message']);
+      break;
+
+    case 'utexas_hero_photo_bad_href':
+      form_error($element['link']['link_href'], $error['message']);
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Adjusts field values to save copy and text format into respective columns.
+ */
+function utexas_hero_photo_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+
+  foreach ($items as $delta => &$item) {
+
+    if (isset($item['utexas_hero_photo_image']['fid'])) {
+      $item['image_fid'] = $item['utexas_hero_photo_image']['fid'];
+      unset($item['utexas_hero_photo_image']);
+    }
+
+    if (isset($item['link']['link_title']) or isset($item['link_title'])) {
+      // Adjust CTA link & title.
+      $item['link_text'] = isset($item['link']['link_title']) ? $item['link']['link_title'] : $item['link_title'];
+    }
+    if (isset($item['link']['link_href']) or isset($item['link_href'])) {
+      $item['link_href'] = isset($item['link']['link_href']) ? drupal_get_normal_path($item['link']['link_href']) : drupal_get_normal_path($item['link_href']);
+      unset($item['link']);
+    }
+  }
+}
+
+/**
+ * Implements hook_file_download().
+ *
+ * Checks access to make sure users can actually use the files that have been
+ * uploaded. Required since Drupal 7.29.
+ */
+function utexas_hero_photo_file_download($uri) {
+  if (strpos(file_uri_target($uri), 'hero-photo-area') === 0) {
+    $info = image_get_info($uri);
+    return array('Content-Type' => $info['mime_type']);
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements hook_field_insert().
+ *
+ * Increment file usage.
+ */
+function utexas_hero_photo_field_insert($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_insert_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_hero_photo');
+}
+
+/**
+ * Implements hook_field_update().
+ *
+ * Adjust copy format+value and handle images.
+ */
+function utexas_hero_photo_field_update($entity_type, $entity, $field,
+  $instance, $langcode, &$items) {
+  utexas_admin_field_update_custom($entity_type, $entity, $field,
+  $instance, $langcode, $items, 'utexas_hero_photo');
+}
+
+/**
+ * Implements hook_field_delete().
+ *
+ * Cleans up any remaining files, if they have not been deleted already.
+ */
+function utexas_hero_photo_field_delete($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  utexas_admin_field_delete_custom($entity_type, $entity, $field, $instance, $langcode, $items, 'utexas_hero_photo');
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines the primary field widget.
+ */
+function utexas_hero_photo_field_formatter_info() {
+  return array(
+    'utexas_hero_photo' => array(
+      'label' => t('Hero Photo (content block)'),
+      'field types' => array('utexas_hero_photo'),
+    ),
+    'utexas_hero_photo_full' => array(
+      'label' => t('Hero Photo (full width)'),
+      'field types' => array('utexas_hero_photo'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Creates the formatter for Hero Photo.
+ */
+function utexas_hero_photo_field_formatter_view($entity_type, $entity, $field,
+  $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'utexas_hero_photo':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('utexas_hero_photo', array('item' => $item)),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'utexas_hero_photo') .
+              '/theme/utexas_hero_photo.css',
+            ),
+          ),
+        );
+      }
+      break;
+
+    case 'utexas_hero_photo_full':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('utexas_hero_photo_full', array('item' => $item)),
+        );
+      }
+      break;
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @see template_preprocess_utexas_hero_photo()
+ */
+function utexas_hero_photo_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_hero_photo' => array(
+      'variables' => array(
+        'item' => NULL,
+      ),
+      'template' => 'theme/utexas-hero-photo',
+    ),
+    'utexas_hero_photo_full' => array(
+      'variables' => array(
+        'item' => NULL,
+      ),
+      'template' => 'theme/utexas-hero-photo-full',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function for photo content area to create variables.
+ *
+ * @see utexas_photo_content_area_theme()
+ *
+ * @see utexas_photo_content_area_image_default_styles()
+ *
+ * @ingroup themeable
+ */
+function template_preprocess_utexas_hero_photo(&$variables) {
+
+  $photo = FALSE;
+  $credit = FALSE;
+  if (!empty($variables['item']['image_fid'])) {
+    if ($file = file_load($variables['item']['image_fid'])) {
+      $info = image_get_info($file->uri);
+      $photo_credit = field_get_items('file', $file, 'field_photo_credit');
+      $credit = isset($variables['item']['credit']) ? $variables['item']['credit'] : FALSE;
+      $alt = isset($file->field_file_image_alt_text['und'][0]['safe_value']) ? $alt = $file->field_file_image_alt_text['und'][0]['safe_value'] : '';
+      $title = isset($file->field_file_image_title_text['und'][0]['safe_value']) ? $title = $file->field_file_image_title_text['und'][0]['safe_value'] : '';
+      $photo = theme('image_style', array(
+        'style_name' => 'utexas_hero_photo_image',
+        'path' => $file->uri,
+        'width' => $info['width'],
+        'height' => $info['height'],
+        'alt' => $alt,
+        'title' => $title,
+        'attributes' => array('class' => array('utexas-hero-photo')),
+      ));
+    }
+  }
+
+  // Sanitize caption.
+  $output = array();
+  $caption = (!empty($variables['item']['caption'])) ?
+  check_plain($variables['item']['caption']) : FALSE;
+
+  // Unset unneeded variables.
+  unset($variables['item']);
+
+  // Reset variables.
+  $variables += array(
+    'caption' => $caption,
+    'photo' => $photo,
+    'credit' => $credit,
+  );
+}
+
+/**
+ * Theme preprocess function for photo content area to create variables.
+ *
+ * @see utexas_photo_content_area_theme()
+ *
+ * @see utexas_photo_content_area_image_default_styles()
+ *
+ * @ingroup themeable
+ */
+function template_preprocess_utexas_hero_photo_full(&$variables) {
+  $photo = FALSE;
+  $title = FALSE;
+  $subhead = FALSE;
+  $link = FALSE;
+  $post_link = FALSE;
+  $image_url = FALSE;
+  $variables['hero_alt'] = FALSE;
+  $variables['hero_title'] = FALSE;
+  $hero_style = isset($variables['item']['hero_image_style']) ? $variables['item']['hero_image_style'] : 'hero-style-1';
+  if (!empty($variables['item']['image_fid'])) {
+    $photo = TRUE;
+    if ($file = file_load($variables['item']['image_fid'])) {
+      $variables['hero_alt'] = isset($file->field_file_image_alt_text['und'][0]['safe_value']) ? $file->field_file_image_alt_text['und'][0]['safe_value'] : $file->filename;
+      $variables['hero_title'] = isset($file->field_file_image_title_text['und'][0]['safe_value']) ? $file->field_file_image_title_text['und'][0]['safe_value'] : $file->filename;
+      $style = 'utexas_hero_photo_image_full';
+      $derivative_uri = image_style_path($style, $file->uri);
+      $success = file_exists($derivative_uri) || image_style_create_derivative(image_style_load($style), $file->uri, $derivative_uri);
+      $image_url  = file_create_url($derivative_uri);
+    }
+    // Add background images to certain hero image styles.
+    if (isset($photo)) {
+      $hero_style_with_background_image = array(
+        'hero-style-1',
+        'hero-style-2',
+        'hero-style-3',
+      );
+      if ($hero_style == 'hero-style-5') {
+        drupal_add_css('.hero-thumbnail {background-image:url("' . $image_url . '"); background-position:center;}', array('type' => 'inline'));
+      }
+      elseif (in_array($hero_style, $hero_style_with_background_image)) {
+        drupal_add_css('.container.container-hero {background-image:url("' . $image_url . '");}', array('type' => 'inline'));
+      }
+    }
+  }
+  // Set hero image background-position.
+  $hero_position = isset($variables['item']['hero_image_position']) ? $variables['item']['hero_image_position'] : 'left';
+  drupal_add_css('.container.container-hero {background-position:' . $hero_position . ';}', array('type' => 'inline'));
+
+  // Sanitize headline.
+  $output = array();
+  $headline = (!empty($variables['item']['caption'])) ?
+  check_plain($variables['item']['caption']) : FALSE;
+
+  $subhead = (!empty($variables['item']['subhead'])) ?
+  check_plain($variables['item']['subhead']) : FALSE;
+
+  $link_text = $variables['item']['link_text'];
+  $link_href = $variables['item']['link_href'];
+  if (!empty($link_href)) {
+    $link = l('<span>' . $link_text . '</span>', $link_href, array(
+      'html' => TRUE,
+      'attributes' => array('title' => $link_text, 'class' => 'cta hero-cta'),
+    ));
+    $post_link = l('<span>' . $link_text . '</span>', $link_href, array(
+      'html' => TRUE,
+      'attributes' => array('title' => $link_text, 'class' => 'cta-link post-link-cta'),
+    ));
+  }
+
+  // Unset unneeded variables.
+  unset($variables['item']);
+
+  // Reset variables.
+  $variables += array(
+    'headline' => $headline,
+    'photo' => $photo,
+    'subhead' => $subhead,
+    'link' => $link,
+    'post_link' => $post_link,
+    'hero_image_style' => $hero_style,
+    'hero_position' => $hero_position,
+    'image_url' => $image_url,
+  );
+}
+
+/**
+ * Implements hook_image_default_styles().
+ *
+ * Defines image styles for Hero Photo images.
+ */
+function utexas_hero_photo_image_default_styles() {
+  return array(
+    'utexas_hero_photo_image' => array(
+      'label' => t('Hero Photo Image'),
+      'effects' => array(
+        array(
+          'name' => 'smartcrop_scale_and_crop',
+          'data' => array(
+            'width' => 1740,
+            'height' => 940,
+            'upscale' => TRUE,
+          ),
+          'weight' => 0,
+        ),
+      ),
+    ),
+    'utexas_hero_photo_image_full' => array(
+      'label' => t('Hero Photo Image Full'),
+      'effects' => array(
+        array(
+          'name' => 'smartcrop_scale_and_crop',
+          'data' => array(
+            'width' => 1600,
+            'height' => 500,
+            'upscale' => TRUE,
+          ),
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ * Determines whether or not the field has data in it.
+ */
+function utexas_hero_photo_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'utexas_hero_photo':
+      // An empty migration will send image_fid as "MigrateFileFid".
+      $image_empty = (isset($item['utexas_hero_photo_image'])) ? empty($item['utexas_hero_photo_image']['fid']) : ($item['image_fid'] == 'MigrateFileFid');
+
+      return $image_empty
+      and empty($item['caption'])
+      and empty($item['subhead'])
+      and empty($item['link']['link_href']);
+  }
+  return FALSE;
+}
