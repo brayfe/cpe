@@ -1,0 +1,157 @@
+.UT-header {
+	position: relative;
+	z-index: $headerZindex;
+	min-height: 80px;
+	&.tall_logo {
+		min-height: 102px;
+	}
+	@include respond(medium) {
+		position:fixed;
+		left: 0;
+		right: 0;
+		+ .UT-page {
+			padding-top: 82px;
+		}
+		&.tall_logo {
+			+ .UT-page {
+				padding-top: 102px;
+			}
+		}
+	}
+	@include respond(large) {
+		position: relative;
+		border-bottom: 1px solid $nav-Bkg-desktop;
+		+ .UT-page {
+			padding-top: 0;
+		}
+		&.tall_logo {
+			+ .UT-page {
+				padding-top: 0;
+			}
+		}
+	}
+	/* overlay to catch touch events when side menu is open */
+	.nav-overlay {
+		display: none;
+		background: none;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		min-width: 100%;
+		min-height: 100%;
+		z-index: $navZindex;
+		transform: translateX($mobile-nav-width*-1);
+
+		//IE8
+		.no-csstransforms & {
+			position: relative;
+			left: $mobile-nav-width*-1;
+		}
+
+		.show-nav & {
+			display: block;
+		}
+
+	}
+
+	.nav-wrapper {
+		position: fixed;
+		top: 0;
+		right: 0;
+		height: 100%;
+		transform: translateX(100%);
+		transform: translate3d(100%,0,0);
+		background: $nav-Bkg;
+		overflow: auto;
+		-webkit-overflow-scrolling: touch;
+		color: #FFF;
+		transition: $nav-transition;
+
+		.show-nav & {
+			transform: translateX(0);
+			transform: translate3d(0%,0,0);
+
+			//IE8
+			.no-csstransforms & {
+				right: 0;
+			}
+		}
+
+		//IE8
+		.no-csstransforms & {
+			right: $mobile-nav-width*-1
+		}
+
+
+
+		@include respond(small-only,medium-only){
+
+			width: $mobile-nav-width;
+
+			.column {
+				padding: 0;
+			}
+		}
+
+		@include respond(large){
+			position: static;
+			height: auto;
+			width: auto !important;
+			transform: translateX(0);
+			transform: translate3d(0,0,0);
+			background: none;
+			overflow: visible;
+		}
+	}
+}
+
+.UT-page {
+	transform: translateX(0);
+	transform: translate3d(0%,0,0);
+	transition: $nav-transition;
+	.show-nav & {
+		transform: translateX($mobile-nav-width*-1);
+		transform: translate3d($mobile-nav-width*-1,0,0);
+
+		.no-csstransforms & {
+			position: relative;
+			left: $mobile-nav-width*-1;
+		}
+
+		@include respond(large){
+			transform: translateX(0);
+			transform: translate3d(0,0,0);
+
+			.no-csstransforms & {
+				position: inherit;
+				left: 0 !important;
+			}
+		}
+	}
+}
+
+///// Navigation Options
+// Aligns nav items left instead of justifying full width at large breakpoint (example in UC files)
+.no-justify{
+	@include respond(large){
+		margin-left: -10px !important;
+		text-align: left !important;
+		li{
+			margin-right: 20px !important;
+		}
+	}
+}
+
+// Provides one line option for nav items (example in Theme 3 files)
+&.one-line-nav{
+	@include respond(large){
+		.container-nav-phase2{
+			height: 7.6rem;
+		}
+		.container-nav-phase2 .nav-item{
+			height: 48px;
+		}
+	}
+}

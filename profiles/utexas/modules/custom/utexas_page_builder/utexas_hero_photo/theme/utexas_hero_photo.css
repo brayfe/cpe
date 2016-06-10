@@ -1,0 +1,61 @@
+.field_utexas_hero_photo img {
+  width: 100%;
+}
+.field_utexas_hero_photo .hero-caption {
+  padding: 10px 0 10px 0;
+}
+.field_utexas_hero_photo .hero-caption p {
+  margin: 0px;
+}
+.field_utexas_hero_photo .hero-caption .caption-copy.full {
+  display: block;
+}
+
+.container-hero .background-box {
+  background-color: rgba(255, 255, 255, 0.9);
+  height: 100px;
+}
+.container-hero .background-box {
+  bottom: 0;
+  height: 110px;
+  position: absolute;
+  right: 0;
+  width: 100%;
+}
+
+.container-hero .headline {
+  font-size: 1.75rem;
+  line-height: 2.375rem;
+}
+.container-hero .headline {
+  font-size: 1.25rem;
+  line-height: 1.625rem;
+  padding-bottom: 0;
+}
+.container-hero .headline {
+  color: #2d2a28;
+  font-weight: 200;
+  padding-bottom: 5px;
+}
+
+.container-hero .callout-text {
+  width: 85%;
+}
+
+.container-hero .callout-text {
+  display: block;
+  float: left;
+  padding: 0 5px;
+  width: 100%;
+}
+
+.container-hero .hero-callout {
+  bottom: 20px;
+}
+
+.container-hero .hero-callout {
+  bottom: 10px;
+  position: absolute;
+  right: 0;
+  width: 100%;
+}

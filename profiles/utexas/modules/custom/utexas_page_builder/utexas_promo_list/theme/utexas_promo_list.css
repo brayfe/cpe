@@ -1,0 +1,28 @@
+.field_utexas_promo_list .one-column-full-width {
+  width: 100%;
+}
+.sidebar-default-style .field_utexas_promo_list .one-column {
+  width: 100%;
+}
+.sidebar-default-style .two-column .promo-list-li {
+  min-height: 100px;
+  width: 100%;
+  display: inline-block;
+  float: left;
+}
+.utexas-promo-field.utexas-promo-list {
+  padding: 0 0 20px;
+}
+.utexas-promo-field .promo-utexas-image-link {
+  display: block;
+}
+.utexas-promo-field.utexas-promo-list .promo-image {
+  display: inline-block;
+}
+.utexas-promo-field .promo-headline {
+  margin: 0;
+  font-weight: 700;
+}
+.utexas-promo-field.utexas-promo-list .promo-headline .cta-link {
+  display: inline;
+}

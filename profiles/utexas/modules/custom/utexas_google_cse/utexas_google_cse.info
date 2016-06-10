@@ -1,0 +1,8 @@
+name = Google Custom Search Engine
+description = Search the site with Google custom search.
+core = 7.x
+version = 7.x-1.0
+package = UTexas
+scripts[] = js/utexas_google_cse.js
+stylesheets[all][] = css/utexas_google_cse.css
+configure = admin/config/utexas/google_cse

@@ -1,0 +1,180 @@
+// Global Styles and Resets
+
+body {
+	font-family: $opensans;
+}
+
+.UT-page {
+	z-index: $pageZindex;
+  clear: both;
+	@include respond(large) {
+		padding-top: 0;
+	}
+	@include respond(small-only, medium-only) {
+		overflow: hidden;
+	}
+}
+.container{
+	padding-left: 5px;
+	padding-right: 5px;
+
+	@include respond(large){
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+input[type="text"]{
+	box-shadow: none;
+}
+input[type="text"]:focus{
+	box-shadow: none;
+}
+
+.page-404, .page-403{
+	.container-top{
+		padding: 20px 0;
+		@include respond(medium){
+			padding: 40px 0;
+		}
+	}
+	.page-title{
+		margin: 0 0 20px 0;
+	}
+	.not-found, .not-found p{
+		margin-bottom: 0px;
+	}
+	p{
+		font-family: $opensans
+	}
+	ul{
+		list-style-type: none !important;
+		padding-left: 0px;
+	}
+}
+
+/*******   accessibility related overrides  ************/
+
+span.form-required {
+	color:#000;
+}
+.tabs.primary li a {
+	background:#efefef;
+	color:#000000;
+}
+
+/**********  control margins/padding on custom blocks, fields blocks and containers  *********/
+
+.block-fieldblock, .block {
+	margin-bottom:25px;
+	@include respond(medium){
+		margin-bottom: 40px;
+	}
+}
+.sidebar-content {
+  .block-fieldblock, .block {
+    margin-bottom: 25px;
+    @include respond(medium) {
+      margin-bottom: 35px;
+    }
+    &:last-child {
+      margin-bottom: 40px;
+    }
+  }
+}
+.container.container-bottom {
+	padding-top: 25px;
+	@include respond(medium) {
+		padding-top: 40px;
+	}
+}
+.node-type-landing-page .container.container-top {
+	padding-top: 25px;
+	@include respond(medium) {
+		padding-top: 40px;
+	}
+}
+
+/********* set views tables background to white **************/
+.views-table {
+  tr.even, tr.odd {
+    background: #fff;
+  }
+}
+
+.default-page {
+	.container-top {
+		border-bottom: none;
+	}
+}
+/****************************************************************/
+/************ accessibility related overrides *******************/
+/****************************************************************/
+.edit-links a {
+	color: $burntOrangeAccent;
+}
+// utility class to fix header on mobile views-table
+.fix-header {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+}
+.button {
+	background-color: #005F86;
+	&:hover {
+		background-color: #003d64;
+	}
+}
+button.secondary, .button.secondary {
+    background-color: #ebe8e2;
+    border-color: #b9b9b9;
+    color: #000000;
+}
+.close-reveal-modal {
+	color: #333f48!important;
+}
+.alert-box {
+	font-size: 1.25rem;
+	font-weight: 600;
+	.close {
+		color: #ffffff;
+		opacity:1;
+		font-size: 2.25rem;
+		font-weight: 900;
+		&:hover {
+			color: #fff;
+			opacity: 1;
+		}
+	}
+	&.radius {
+		background-color:#005F86!important;
+	}
+	&.success {
+		background-color: #3a945b!important;
+	}
+	&.secondary {
+		background-color: #6a6361!important;
+		color: white;
+	}
+}
+.button.success {
+	background-color: #3a945b!important;
+}
+.button.alert {
+	background-color: #cf280e!important;
+}
+.button {
+	&.tiny, &.small, &.alert, &.large {
+		font-weight: 600;
+	}
+}
+.tabs {
+	li.tab-title a {
+		font-size: 1rem;
+		padding: 10px 15px;
+		&:hover {
+			background-color: #9c9796!important;
+		}
+	}
+}

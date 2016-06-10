@@ -1,0 +1,7 @@
+name = Social Links Field
+description = Defines social links compound field area
+core = 7.x
+version = 7.x-1.0
+package = UTexas
+
+;dependencies[] = utexas_fonts

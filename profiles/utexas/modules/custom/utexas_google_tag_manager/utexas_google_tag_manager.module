@@ -1,0 +1,316 @@
+<?php
+
+/**
+ * @file
+ * General utexas_google_tag_manager module file, which defines the Google Tag
+ * Manager functionality, system configuration, & other aspects of this module.
+ */
+
+/**
+ * Google Tag Manager module name.
+ */
+define('GTM_MODULE_NAME', 'utexas_google_tag_manager');
+
+/**
+ * Google Tag Manager administration path.
+ */
+define('GTM_ADMIN_PATH', 'admin/config/system/utexas_google_tag_manager');
+
+/**
+ * Google Tag Manager administration permissions.
+ */
+define('GTM_ADMIN_ROLE_NAME', 'administer utexas google tag manager');
+
+/**
+ * Google Tag Manager administration role title.
+ */
+define('GTM_ADMIN_ROLE_TITLE', 'Administer Google Tag Manager module');
+
+/**
+ * Google Tag Manager tag code variable name.
+ */
+define('GTM_VARNAME_GTM_CODE', 'utexas_google_tag_manager_gtm_code');
+
+/**
+ * Google Tag Manager tag code variable name.
+ */
+define('GTM_VARNAME_GTM_VERIFICATION', 'utexas_google_tag_manager_gtm_verification');
+
+/**
+ * Google Tag Manager include administration pages variable name.
+ */
+define('GTM_VARNAME_GTM_INCLUDE_ADMIN', 'utexas_google_tag_manager_gtm_include_admin');
+
+/**
+ * Google Tag Manager include on unpublished nodes.
+ */
+define('GTM_VARNAME_GTM_INCLUDE_UNPUBLISHED', 'utexas_google_tag_manager_gtm_include_unpublished');
+
+/**
+ * Google Tag Manager include on unpublished nodes.
+ */
+define('GTM_VARNAME_GTM_INCLUDE_403', 'utexas_google_tag_manager_gtm_include_403');
+
+/**
+ * Google Tag Manager include on authenticated pages.
+ */
+define('GTM_VARNAME_GTM_INCLUDE_AUTHENTICATED', 'utexas_google_tag_manager_gtm_include_authenticated');
+
+/**
+ * Google Tag Manager exclude paths variable name.
+ */
+define('GTM_VARNAME_GTM_EXCLUDE_PATHS', 'utexas_google_tag_manager_gtm_exclude_paths');
+
+/**
+ * Implements hook_help().
+ */
+function utexas_google_tag_manager_help($path, $args) {
+  switch ($path) {
+    case 'admin/help#' . GTM_MODULE_NAME:
+      return '<p>' . t('The Google Tag Manager module allows users with the
+        @role_title permission to configure the GTM tag that appears on every
+        page.', array('@role_title' => GTM_ADMIN_ROLE_TITLE)) . '</p>';
+    break;
+
+  }
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * Defines a user permission to allow users to configure module administration.
+ */
+function utexas_google_tag_manager_permission() {
+  return array(
+    GTM_ADMIN_ROLE_NAME => array(
+      'title' => GTM_ADMIN_ROLE_TITLE,
+      'description' => t('Perform administration tasks for the Google Tag
+        Manager module.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * Defines the menu routing for the administration path.
+ */
+function utexas_google_tag_manager_menu() {
+  return array(
+    GTM_ADMIN_PATH => array(
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('utexas_google_tag_manager_admin_form'),
+      'access arguments' => array(GTM_ADMIN_ROLE_NAME),
+      'title' => 'Google Tag Manager',
+      'description' => 'Administration tasks for the Google Tag Manager module',
+    ),
+  );
+}
+
+/**
+ * Form callback to control module settings.
+ *
+ * Defines several variables that are defined by the form.
+ */
+function utexas_google_tag_manager_admin_form($form, &$form_state) {
+  // Add the tag form field.
+  $form[GTM_VARNAME_GTM_CODE] = array(
+    '#type' => 'textfield',
+    '#title' => t('Google Tag Manager Account Code'),
+    '#description' => t('What is your !gtm_link account code? It usually is a
+      six digit code, prefixed with GTM.', array(
+        '!gtm_link' => l(t('Google Tag Manager'),
+          '//www.google.com/tagmanager/',
+          array('absolute' => TRUE)))),
+    '#default_value' => variable_get(GTM_VARNAME_GTM_CODE, ''),
+    '#attributes' => array(
+      'placeholder' => 'GTM-XXXXXX',
+    ),
+    '#element_validate' => array('utexas_google_tag_manager_valid_code'),
+    '#required' => FALSE,
+  );
+
+  $form[GTM_VARNAME_GTM_VERIFICATION] = array(
+    '#type' => 'textfield',
+    '#title' => t('Webmaster Tools Verification Code'),
+    '#description' => t('What is your !gtm_verification code? It usually is a long,
+      alphanumeric string', array(
+        '!gtm_verification' => l(t('Google site verification'),
+          '//support.google.com/webmasters/answer/35659',
+          array('absolute' => TRUE)))),
+    '#default_value' => variable_get(GTM_VARNAME_GTM_VERIFICATION, ''),
+    '#attributes' => array(
+      'placeholder' => 'Enter verification code here',
+    ),
+    '#required' => FALSE,
+  );
+
+  // Add a checkbox to indicate if GTM should be included on admin paths.
+  $form[GTM_VARNAME_GTM_INCLUDE_ADMIN] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Include Google Tag Manager on administration pages.'),
+    '#default_value' => variable_get(GTM_VARNAME_GTM_INCLUDE_ADMIN, FALSE),
+  );
+
+  // Add a checkbox to indicate if GTM should be included on unpublished nodes.
+  $form[GTM_VARNAME_GTM_INCLUDE_UNPUBLISHED] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Include Google Tag Manager on unpublished nodes.'),
+    '#default_value' => variable_get(GTM_VARNAME_GTM_INCLUDE_UNPUBLISHED, FALSE),
+  );
+
+  // Add a checkbox to indicate if GTM should show for authenticated pages.
+  $form[GTM_VARNAME_GTM_INCLUDE_AUTHENTICATED] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Include Google Tag Manager for logged in users.'),
+    '#default_value' => variable_get(GTM_VARNAME_GTM_INCLUDE_AUTHENTICATED, FALSE),
+  );
+
+  // Add a checkbox to indicate if GTM should show for 403 pages.
+  $form[GTM_VARNAME_GTM_INCLUDE_403] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Include Google Tag Manager on 403 nodes.'),
+    '#default_value' => variable_get(GTM_VARNAME_GTM_INCLUDE_403, FALSE),
+  );
+
+  // Add a textarea to set extra exclude paths.
+  $form[GTM_VARNAME_GTM_EXCLUDE_PATHS] = array(
+    '#type' => 'textarea',
+    '#title' => t('Exclude Paths'),
+    '#description' => t('Specify pages by using their paths. Enter one path per
+      line. The \'*\' character is a wildcard. Example paths are %blog for the
+      blog page and %blog-wildcard for every personal blog. %front is the front
+      page.', array(
+        '%blog' => 'blog',
+        '%blog-wildcard' => 'blog/*',
+        '%front' => '<front>')),
+    '#default_value' => variable_get(GTM_VARNAME_GTM_EXCLUDE_PATHS, ''),
+  );
+
+  // Use the system_settings_form() to add submit handlers to the button.
+  return system_settings_form($form);
+}
+
+/**
+ * Custom validator to ensure Google Tag Manager code is in a valid format.
+ */
+function utexas_google_tag_manager_valid_code($element, &$form_state, $form) {
+  $code = $element['#value'];
+
+  // Return an error if it doesn't match the right GTM code format (GTM-XXXXXX).
+  if ($code != '' and !preg_match('/^GTM-[a-zA-Z0-9]{6}$/', $code)) {
+    form_error($element,
+      t('@field_name must be a valid code in the format GTM-XXXXXX.', array(
+        '@field_name' => $element['#title'],
+      ))
+    );
+  }
+}
+
+/**
+ * Implements hook_page_build().
+ *
+ * Used to interrupt page builds to see if the Google Tag Manager embed code
+ * should be inserted into the page.
+ */
+function utexas_google_tag_manager_page_build(&$page) {
+  // Get our configuration options.
+  $include_admin = variable_get(GTM_VARNAME_GTM_INCLUDE_ADMIN, FALSE);
+  $exclude_paths = variable_get(GTM_VARNAME_GTM_EXCLUDE_PATHS, '');
+  $include_unpublished = variable_get(GTM_VARNAME_GTM_INCLUDE_UNPUBLISHED, FALSE);
+  $include_authenticated = variable_get(GTM_VARNAME_GTM_INCLUDE_AUTHENTICATED, FALSE);
+  $include_403 = variable_get(GTM_VARNAME_GTM_INCLUDE_403, FALSE);
+
+  $include_embed_code = FALSE;
+
+  // First, check whether the current path is a manually excluded path in the
+  // module config. If not, provisionally include the embed code.
+  if (!utexas_google_tag_manager_is_excluded_path($exclude_paths)) {
+    $include_embed_code = TRUE;
+  }
+
+  // Check whether the current path is an admin path and whether admin paths
+  // are excluded in the module config. If so, exclude the embed code.
+  if ((path_is_admin(current_path()) and !$include_admin)) {
+    $include_embed_code = FALSE;
+  }
+
+  // Next, exclude code if (1) the site shouldn't track authenticated
+  // traffic and (2) this page is being viewed by an authenticated user.
+  if (!$include_authenticated and user_is_logged_in()) {
+    $include_embed_code = FALSE;
+  }
+
+  // Now we check if (1) the site should track 403 pages.
+  // And if (2) this is a 403 page.
+  if (!$include_403 && drupal_get_http_header('Status') == "403 Forbidden") {
+    $include_embed_code = FALSE;
+  }
+
+  // Check if we are on an unpublished node. If so, exclude the embed.
+  if (!$include_unpublished and menu_get_object('node', 1)) {
+    $node = menu_get_object('node', 1);
+    if ($node->status == 0) {
+      $include_embed_code = FALSE;
+    }
+  }
+
+  if ($include_embed_code && $embed_code = utexas_google_tag_manager_generate_embed_code()) {
+    $page['page_bottom']['utexas_google_tag_manager'] = array(
+      '#markup' => $embed_code,
+    );
+  }
+}
+
+/**
+ * Helper function to generate the <script> tag for Google Tag Manager.
+ *
+ * @return mixed
+ *   If a Google Tag Manager account code is set, returns HTML markup
+ *     representing the <script> tag for the Google Tag Manager.
+ *   If no Google Tag Manager account code is set, return FALSE.
+ */
+function utexas_google_tag_manager_generate_embed_code() {
+  // Get the embed code.
+  $code = variable_get(GTM_VARNAME_GTM_CODE, '');
+  if (!empty($code)) {
+    return '<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=' . $code . '"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\'gtm.start\':
+new Date().getTime(),event:\'gtm.js\'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
+\'//www.googletagmanager.com/gtm.js?id=\'+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,\'script\',\'dataLayer\',\'' . $code . '\');</script>
+<!-- End Google Tag Manager -->';
+  }
+
+  // Default return is false.
+  return FALSE;
+}
+
+/**
+ * Helper function to parse excluded paths and checks current_path().
+ *
+ * @param string $paths
+ *   Multiline string that represents paths to check against.
+ *
+ * @return bool
+ *   Returns TRUE if the path is excluded.
+ *   Returns FALSE is the path is included.
+ */
+function utexas_google_tag_manager_is_excluded_path($paths) {
+  // Turn the entered string into an array of paths.
+  $pages = drupal_strtolower($paths);
+
+  // Convert the Drupal path to lowercase.
+  $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+
+  // Compare the lowercase internal and lowercase path alias (if any).
+  $page_match = drupal_match_path($path, $pages);
+  if ($path != $_GET['q']) {
+    $page_match = $page_match or drupal_match_path($_GET['q'], $pages);
+  }
+
+  return $page_match;
+}

@@ -1,0 +1,177 @@
+
+// General Typography
+a{
+	text-decoration: none;
+	color: $burntOrange;
+	&:hover{
+		color: $burntOrangeAccent;
+		text-decoration: underline;
+	}
+}
+
+p{
+	color: $bodyCopy;
+	font-size: rem-calc(16);
+	line-height: rem-calc(24);
+	margin: 0 0 rem-calc(20) 0;
+	@include respond(medium){
+		font-size: rem-calc(18);
+		line-height: rem-calc(28);
+	}
+}
+
+h2{
+	font-size: rem-calc(24);
+	line-height: rem-calc(30);
+	color: $burntGrey;
+	font-weight: 600;
+	letter-spacing: rem-calc(-1);
+	margin: 0 0 12px 0;
+	@include respond(medium){
+		font-size: rem-calc(34);
+		line-height: rem-calc(40);
+	}
+}
+
+
+h3{
+	font-size: rem-calc(20);
+	line-height: rem-calc(26);
+	font-weight: 600;
+	color: $burntGrey;
+	margin: 0 0 8px 0;
+	@include respond(medium){
+		font-size: rem-calc(26);
+		line-height: rem-calc(32);
+	}
+}
+
+h4{
+	font-size: rem-calc(17);
+	line-height: rem-calc(24);
+	font-weight: 700;
+	color: $burntGrey;
+	margin: 0 0 5px 0;
+	@include respond(medium){
+		font-size: rem-calc(18);
+		line-height: rem-calc(26);
+	}
+}
+
+strong{
+	font-weight: 700;
+}
+
+em{
+	font-style: italic;
+}
+
+
+//Misc
+.body-copy{
+	font-size: rem-calc(16);
+	line-height: rem-calc(24);
+	margin: 0 0 rem-calc(20) 0;
+	color: $bodyCopy;
+
+	strong{
+		font-weight: 700;
+	}
+}
+
+.sans{
+	font-style: normal;
+}
+
+.hiddenText {
+	position: absolute !important;
+	height: 1px; width: 1px;
+	overflow: hidden;
+	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+	clip: rect(1px, 1px, 1px, 1px);
+}
+
+.hero-caption, .caption{
+	.body-copy{
+		margin-bottom: 0px;
+		font-size: rem-calc(12);
+		line-height: rem-calc(15);
+		padding: 6px 0 0 0;
+
+		@include respond(medium){
+			font-size: rem-calc(14);
+			line-height: rem-calc(20);
+		}
+	}
+	.caption-copy{
+		padding-top: 0;
+		margin: 0 0 5px 0;
+		font-style: italic;
+		color: #6a6a6a;
+		font-size: rem-calc(12);
+		line-height: rem-calc(15);
+		text-align: right;
+
+		@include respond(medium){
+			font-size: rem-calc(14);
+			line-height: rem-calc(20);
+		}
+	}
+}
+
+
+// Global Headline classes
+h1, .page-title{
+	color: $burntGrey;
+	font-size: rem-calc(32);
+	line-height: rem-calc(38);
+	letter-spacing: rem-calc(-1.5);
+	margin: 5px 0 20px 0;
+	font-weight: 600;
+	@include respond(medium){
+		font-size: rem-calc(48);
+		line-height: rem-calc(56);
+		margin: 10px 0 30px 0;
+	}
+	@include respond(small-only){
+		margin-top: 15px;
+	}
+}
+
+.post-headline {
+	font-size: rem-calc(17);
+	line-height: rem-calc(20);
+	font-weight: 700;
+
+	@include respond(medium){
+		font-size: rem-calc(18);
+		line-height: rem-calc(22);
+	}
+
+	@include respond(large){
+		font-size: rem-calc(20);
+		line-height: rem-calc(24);
+	}
+}
+
+.headline-link{
+	color: $burntGrey;
+	text-decoration: none;
+
+	&:hover{
+		color: $burntGrey;
+		text-decoration: underline;
+	}
+}
+
+.footer-headline {
+	font-size: rem-calc(16);
+	color: $burntOrange;
+	font-weight: bold;
+	margin: 0 0 10px 0;
+
+	@include respond(medium){
+		font-size: rem-calc(20);
+		margin: 0 0 20px 0;
+	}
+}

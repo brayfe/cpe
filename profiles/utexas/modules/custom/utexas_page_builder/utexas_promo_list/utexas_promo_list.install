@@ -1,0 +1,64 @@
+<?php
+/**
+ * @file
+ * Install file for Promo List module. Used to install a field schema
+ * for the Promo List compound field.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines the schema for Promo List fields.
+ */
+function utexas_promo_list_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+    case 'utexas_promo_list':
+      $columns['headline'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores headline for the promo list compound field.',
+      );
+      $columns['image_fid'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The {file_managed}.fid for a promo list image',
+      );
+      $foreign_keys['image_fid'] = array(
+        'table' => 'file_managed',
+        'columns' => array('image_fid' => 'fid'),
+      );
+      $columns['link'] = array(
+        'type' => 'varchar',
+        'length' => 2048,
+        'not null' => FALSE,
+        'description' => 'Stores optional link to either internal or external promo content',
+      );
+      $columns['copy_value'] = array(
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+        'description' => 'Stores copy for the promo list compound field.',
+      );
+      $columns['copy_format'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores text format for the promo list compound field.',
+      );
+      $foreign_keys['copy_format'] = array(
+        'table' => 'filter_format',
+        'columns' => array('copy_format' => 'format'),
+      );
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+    'foreign keys' => $foreign_keys,
+  );
+}

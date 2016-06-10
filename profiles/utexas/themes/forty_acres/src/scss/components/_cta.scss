@@ -1,0 +1,233 @@
+.cta {
+	display: inline-block;
+	background: $burntOrange;
+	color: #FFF;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: rem-calc(13);
+	padding: rem-calc(10) rem-calc(10);
+	border-radius: 4px;
+	&:after {
+		@include icon(buttons);
+		display: inline-block;
+		margin-left: 4px;
+      position: relative;
+      top: 1px;
+		@include respond(medium){
+			margin-left: 10px;
+		}
+	}
+
+	&:hover {
+		background-color: $burntOrangeAccent;
+		color: #FFF;
+	}
+
+	.icon-buttons {
+		margin-left: 10px;
+	}
+
+	@include respond(medium){
+		font-size: rem-calc(15);
+		padding: rem-calc(10) rem-calc(20);
+	}
+}
+
+.cta-external{
+	display: inline-block;
+	background: $burntOrange;
+	color: #FFF;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: rem-calc(13);
+	padding: rem-calc(10) rem-calc(10);
+
+	&:after {
+		@include icon(external);
+		margin-left: 4px;
+		position: relative;
+		top: -1px;
+		font-size: rem-calc(15);
+
+		@include respond(medium){
+			margin-left: 10px;
+		}
+	}
+
+	&:hover {
+		background-color: $burntOrangeAccent;
+		color: #FFF;
+	}
+
+	.icon-buttons {
+		margin-left: 10px;
+	}
+
+	@include respond(medium){
+		font-size: rem-calc(15);
+		padding: rem-calc(10) rem-calc(20);
+	}
+}
+
+.cta-link {
+	color: $burntOrange;
+	text-decoration: none;
+	font-style: italic;
+	display: inline-block;
+
+	&:hover,
+	&:focus {
+		text-decoration: none;
+	}
+    span:hover {
+      text-decoration: underline;
+    }
+	&:after {
+		@include icon(buttons);
+		font-style: normal;
+		font-size: inherit;
+		font-size: rem-calc(11);
+		line-height: inherit;
+		padding-left: 7px;
+		position: relative;
+		top: 0;
+
+		&:hover{
+			text-decoration: none !important;
+		}
+	}
+
+	&:hover:after {
+		text-decoration: none !important;
+	}
+}
+
+
+.cta-link-external {
+	color: $burntOrange;
+	text-decoration: none;
+	font-style: italic;
+
+	&:hover,
+	&:focus {
+		text-decoration: underline;
+	}
+
+	&:after {
+		@include icon(external);
+		font-style: normal;
+		font-size: inherit;
+		font-size: rem-calc(10);
+		line-height: inherit;
+		padding-left: 7px;
+		display: inline-block;
+		position: relative;
+		top: -1px;
+
+		&:hover {
+			text-decoration: none !important;
+		}
+	}
+
+	&:hover:after {
+		text-decoration: none !important;
+	}
+}
+
+.external-link{
+	display: inline-block;
+	margin-left: 5px;
+	font-size: rem-calc(14);
+	color: #575757;
+	font-weight: 600;
+	margin-top: 3px;
+	&:before {
+		@include icon(external);
+		font-style: normal;
+		font-size: inherit;
+		font-size: rem-calc(10);
+		line-height: inherit;
+		position: relative;
+		top: -1px;
+		margin-right: 5px;
+		padding-left: 7px;
+	}
+}
+
+.external-link-icon{
+	display: inline-block;
+	margin-left: 5px;
+	font-size: rem-calc(14);
+	line-height: 10px;
+	color: #575757;
+	font-weight: 600;
+	&:before {
+		@include icon(external);
+		font-style: normal;
+		font-size: inherit;
+		font-size: rem-calc(10);
+		line-height: inherit;
+		position: relative;
+		top: -2px;
+		margin-right: 5px;
+		padding-left: 2px;
+	}
+}
+
+
+.sidebar-cta{
+	color: $burntOrange;
+	display: block;
+	overflow: hidden;
+	text-align: center;
+	border: 1px solid $burntOrange;
+	background: #fff;
+	margin: 10px 10px 0 10px;
+	font-size: rem-calc(13);
+	line-height: rem-calc(18);
+
+	@include respond(medium){
+		margin: 10px 15px 0 15px;
+	}
+
+	&:hover{
+		color: #fff;
+		background-color: $burntOrange;
+	}
+
+	&:after{
+		font-size: rem-calc(11);
+		position: relative;
+		top: -1px;
+	}
+}
+
+.sans{
+	font-style: normal;
+}
+
+//  fixes to keep arrow icons from displaying on own line for quick links, flex content
+//  area links, promo list links, homepage pillar cta's and call to action buttons
+
+.cta, .flex-content-cta, .utexas-flex-content-cta, .promo-list-cta, .quick-links-cta, 
+.call-to-action-cta,.newsletter .cta.sidebar-cta, .sidebar-cta, .hero-cta, .cta-link  {
+  text-decoration: none;
+  display: inline-block;
+  &:after {
+    display:inline;
+    zoom: 1;
+  }
+  &:hover {
+    text-decoration:none;
+  }
+  span:hover {
+    text-decoration:underline;
+  }
+}
+.newsletter-form .cta.sidebar-cta:after {
+  top: 0px;
+}
+.promo-list-cta:after {
+  position: relative;
+  top: -1px;
+}

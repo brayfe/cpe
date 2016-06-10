@@ -1,0 +1,647 @@
+<?php
+/**
+ * @file
+ * Module file for the Quick Links module.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines a compound field for quick links.
+ */
+function utexas_quick_links_field_info() {
+  return array(
+    'utexas_quick_links' => array(
+      'label' => t('Quick Links'),
+      'description' => t('Defines a compound field for quick links'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'utexas_quick_links',
+      'default_formatter' => 'utexas_quick_links',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines the default widget for the Quick Links compound field.
+ */
+function utexas_quick_links_field_widget_info() {
+  return array(
+    'utexas_quick_links' => array(
+      'label' => t('Quick Links'),
+      'field types' => array('utexas_quick_links'),
+      'settings' => array(
+        'max_links' => 5,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_settings_form().
+ *
+ * Has one option to determine the maximum number of links  on the Quick Links.
+ */
+function utexas_quick_links_field_widget_settings_form($field, $instance) {
+  $widget = $instance['widget'];
+  $settings = $widget['settings'];
+  $form = array();
+
+  switch ($widget['type']) {
+    case 'utexas_quick_links':
+      $form['max_links'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Max number of links'),
+        '#description' => t('Enter a maximum number of links that the field can support. Recommended to be no greater than 8.'),
+        '#default_value' => $settings['max_links'],
+        '#required' => TRUE,
+        '#element_validate' => array('element_validate_integer_positive'),
+      );
+      break;
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Form definition for the field widget.
+ *
+ * @see _quick_links_add_link_empty_row()
+ */
+function utexas_quick_links_field_widget_form(&$form, &$form_state, $field,
+  $instance, $langcode, $items, $delta, $element) {
+  switch ($instance['widget']['type']) {
+    case 'utexas_quick_links':
+      // Headline.
+      $element['headline'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Headline'),
+        '#size' => 60,
+        '#maxlength' => 100,
+        '#default_value' => (isset($items[$delta]['headline'])) ? $items[$delta]['headline'] : '',
+      );
+
+      // Copy.
+      $element['copy'] = array(
+        '#type' => 'text_format',
+        '#title' => t('Copy'),
+        '#default_value' => (isset($items[$delta]['copy_value'])) ? $items[$delta]['copy_value'] : '',
+        '#format' => (isset($items[$delta]['copy_format'])) ? $items[$delta]['copy_format'] : NULL,
+        '#wysiwyg' => FALSE,
+      );
+
+      // Links.
+      $element['links'] = array(
+        '#type' => 'fieldset',
+        '#collapsible' => FALSE,
+        '#title' => t('Links'),
+      );
+
+      // Build the elements for the Links.
+      $links = array();
+      $link_delta = 0;
+      $stored_links = (isset($items[0]['links']) && is_string($items[0]['links'])) ? unserialize($items[$delta]['links']) : FALSE;
+      if ($stored_links != FALSE) {
+        for ($link_delta = 0; $link_delta < count($stored_links); $link_delta++) {
+          if (isset($stored_links[$link_delta])) {
+            // Populate existing links.
+            $links[] = array(
+              'link_title' => array(
+                '#type' => 'textfield',
+                '#maxlength' => 128,
+                '#default_value' => $stored_links[$link_delta]['link_title'],
+              ),
+              'link_url' => array(
+                '#type' => 'textfield',
+                '#maxlength' => 255,
+                '#default_value' => drupal_get_path_alias($stored_links[$link_delta]['link_url']),
+              ),
+              '_weight' => array(
+                '#type' => 'weight',
+                '#default_value' => $stored_links[$link_delta]['_weight'],
+                '#delta' => 10,
+                '#title_display' => 'invisible',
+                '#title' => t('Weight for Link'),
+              ),
+            );
+          }
+        }
+      }
+      // Fill up remaining slots with empty rows till the default limit.
+      while ($link_delta < $instance['widget']['settings']['max_links'] - 1) {
+        $links[] = _utexas_quick_links_add_link_empty_row($link_delta);
+        $link_delta++;
+      }
+
+      // Ensure there is always one empty row available.
+      $links[] = _utexas_quick_links_add_link_empty_row($link_delta);
+
+      // Attach the remainder of the form.
+      $element['links'] = $links;
+      $element['links']['#theme'] = 'utexas_quick_links_link_table';
+      $element['links'] += array(
+        '#type' => 'fieldset',
+        '#title' => t('Links'),
+        '#description' => t('The link title is limited to 128 characters maximum. If items are full, an additional row will be provided upon save.'),
+        '#attributes' => array('class' => array('half-width')),
+        '#attached' => array(
+          'css' => array(drupal_get_path('module', 'utexas_quick_links') .
+            '/theme/utexas_quick_links.css',
+          ),
+        ),
+      );
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to validate that Quick Links have all the required field information.
+ */
+function utexas_quick_links_field_validate($entity_type, $entity, $field,
+  $instance, $langcode, $items, &$errors) {
+
+  foreach ($items as $delta => $item) {
+    if (!empty($item) and !utexas_quick_links_field_is_empty($item, $field)) {
+      // Make sure links are valid links.
+      $haslink = 0;
+      if (is_array($item['links'])) {
+        // Bypass if data is coming from a migration.
+        $link_array = $item['links'];
+        foreach ($link_array as $delta => $link) {
+          // Validate URL.
+          $target = drupal_get_normal_path($link['link_url']);
+          if (!empty($link['link_url']) and !drupal_valid_path($target)) {
+            $errors[$field['field_name']][$langcode][0][] = array(
+              'error' => 'link_invalid',
+              'message' => t('%field: The path provided is not a valid URL alias or external link.',
+              array('%field' => $instance['label'])),
+            );
+          }
+          // A title cannot be submitted without a URL.
+          if (!empty($link['link_title']) and empty($link['link_url'])) {
+            $errors[$field['field_name']][$langcode][0][] = array(
+              'error' => 'title_no_link',
+              'message' => t('%field: There is a title but no corresponding link.',
+              array('%field' => $instance['label'])),
+            );
+          }
+          if (!empty($link['link_url'])) {
+            $haslink++;
+          }
+        }
+
+        // Check if HTML is included in the headline.
+        if (strcmp($item['headline'], strip_tags($item['headline'])) !== 0) {
+          $errors[$field['field_name']][$langcode][0][] = array(
+            'error' => 'headline_tags',
+            'message' => t('%field: The headline may not contain HTML.',
+              array('%field' => $instance['label'])),
+          );
+        }
+
+        // Make sure there is at least one link if a headline is present.
+        if (isset($item['headline'])) {
+          if ($item['headline'] != '' and $haslink == 0) {
+            $errors[$field['field_name']][$langcode][0][] = array(
+              'error' => 'link_missing',
+              'message' => t('%field: There is a Link Title but no corresponding Link URL',
+              array('%field' => $instance['label'])),
+            );
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function utexas_quick_links_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  switch ($error['error']) {
+    case 'link_invalid':
+      // Loop through the links, flagging all of the elements with a problem.
+      foreach (element_children($element['links']) as $key) {
+        $link = $element['links'][$key]['link_url']['#value'];
+        $target = drupal_get_normal_path($link);
+        if (!empty($link) and !drupal_valid_path($target)) {
+          form_error($element['links'][$key]['link_url'], $error['message']);
+        }
+      }
+      break;
+
+    case 'title_no_link':
+      // Loop through the links, flagging all of the elements with a problem.
+      foreach (element_children($element['links']) as $key) {
+        $link = $element['links'][$key];
+        if (!empty($link['link_title']['#value']) and empty($link['link_url']['#value'])) {
+          form_error($element['links'][$key]['link_url'], $error['message']);
+        }
+      }
+      break;
+
+    case 'headline_tags':
+      form_error($element['headline'], $error['message']);
+      break;
+
+    case 'link_missing':
+      form_error($element['links'], $error['message']);
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Adjusts field values to save copy and text format into columns.
+ */
+function utexas_quick_links_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  // Prepare the copy format & copy value for separate columns.
+  foreach ($items as $delta => &$item) {
+    // Adjust copy format & copy value.
+    $item['copy_format'] = isset($item['copy_format']) ? $item['copy_format'] : $item['copy']['format'];
+    $item['copy_value'] = isset($item['copy_value']) ? $item['copy_value'] : $item['copy']['value'];
+    unset($item['copy']);
+
+    // Adjust links to strip out empty strings.
+    $item['links'] = _utexas_quick_links_order_links($item['links']);
+    $tmp_links = array();
+    $tmp_delta = -10;
+    foreach ($item['links'] as $key => &$link) {
+      if (!empty($link['link_url'])) {
+        // Store Drupal path aliases as internal paths, if they exist.
+        $target = drupal_get_normal_path($link['link_url']);
+        $tmp_links[] = array(
+          'link_title' => $link['link_title'],
+          'link_url' => $target,
+          '_weight' => $tmp_delta,
+        );
+
+        $tmp_delta++;
+      }
+    }
+
+    $item['links'] = serialize($tmp_links);
+
+  }
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines the primary field widget.
+ */
+function utexas_quick_links_field_formatter_info() {
+  return array(
+    'utexas_quick_links' => array(
+      'label' => t('Quick Links'),
+      'field types' => array('utexas_quick_links'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Creates the formatter for Quick Links.
+ */
+function utexas_quick_links_field_formatter_view($entity_type, $entity, $field,
+ $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'utexas_quick_links':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('utexas_quick_links', array('item' => $item)),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'utexas_quick_links') .
+              '/theme/utexas_quick_links.css',
+            ),
+          ),
+        );
+      }
+      break;
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @see template_preprocess_utexas_quick_links()
+ */
+function utexas_quick_links_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_quick_links' => array(
+      'variables' => array(
+        'item' => NULL,
+      ),
+      'template' => 'theme/utexas-quick-links',
+    ),
+    'utexas_quick_links_link_table' => array(
+      'render element' => 'element',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function for quick links to create variables.
+ *
+ * @see utexas_quick_links_theme
+ *
+ * @ingroup themeable
+ */
+function template_preprocess_utexas_quick_links(&$variables) {
+  // Send template machine name to tpl.php.
+  $variables['page_template'] = FALSE;
+  if ($node = menu_get_object() and isset($node->field_template['und'][0]['target_id'])) {
+    $id = $node->field_template['und'][0]['target_id'];
+    $exists = entity_get_info('template');
+    if ($exists) {
+      $template = entity_load('template', array($id));
+      if (isset($template[$id])) {
+        $variables['page_template'] = $template[$id]->name;
+      }
+    }
+  }
+  // Generate the fieldblock ID for the given field (see fieldblock.module).
+  $variable_name = 'fieldblock-node-' . $node->type . '-default';
+  $quick_links_id = md5($variable_name . '-' . 'field_utexas_quick_links');
+  // Retrieve this node's context layout.
+  $layout = db_query("SELECT reactions from {context} WHERE name = :name LIMIT 1", array(":name" => 'context_field-node-' . $node->nid))->fetchField();
+  $blocks = unserialize($layout);
+  $variables['quick_links_region'] = FALSE;
+  if (isset($blocks['block']['blocks'])) {
+    foreach ($blocks['block']['blocks'] as $block) {
+      if ($block['delta'] == $quick_links_id) {
+        $variables['quick_links_region'] = $block['region'];
+      }
+    }
+  }
+
+  // Create classes for block-grid display if quick links are in specified
+  // regions/templates.
+  $block_grid_view_classes = '';
+  $regions_four_column_ql_layout = array('content_top_four_pillars');
+  if ($variables['page_template'] == 'Landing Page Template 2' || in_array($variables['quick_links_region'], $regions_four_column_ql_layout)) {
+    $block_grid_view_classes = array(
+      'small-block-grid-2',
+      'medium-block-grid-3',
+      'large-block-grid-4',
+      'four-column-grid',
+    );
+  }
+  $regions_three_column_ql_layout = array(
+    'content_bottom',
+    'content_top_left',
+    'content',
+  );
+  if (in_array($variables['quick_links_region'], $regions_three_column_ql_layout)) {
+    $block_grid_view_classes = array(
+      'small-block-grid-1',
+      'medium-block-grid-2',
+      'large-block-grid-3',
+      'three-column-grid',
+    );
+  }
+
+  // Sanitize headline.
+  $output = array();
+  $headline = (!empty($variables['item']['headline'])) ?
+  check_plain($variables['item']['headline']) : FALSE;
+
+  // Grab the copy.
+  $copy_value = $variables['item']['copy_value'];
+  $copy_format = $variables['item']['copy_format'];
+  $copy = (!empty($copy_value) and !empty($copy_format)) ? check_markup($copy_value, $copy_format) : FALSE;
+
+  // Set the links.
+  $links = !empty($variables['item']['links']) ? unserialize($variables['item']['links']) : array();
+  $tmp_links = array();
+  foreach ($links as $link) {
+    // In the case of a link without a title, create an absolute URL to display.
+    $link_url = url($link['link_url'], array('absolute' => TRUE));
+    $title =  (!empty($link['link_title'])) ? $link['link_title'] : $link_url;
+
+    $tmp_links[] = l('<span>' . $title . '</span>', $link['link_url'], array(
+      'attributes' => array(
+        'class' => array(
+          'cta-link',
+          'sans',
+          'quick-links-cta',
+        ),
+      ),
+      'html' => TRUE,
+    ));
+  }
+  $links = (!count($tmp_links)) ? FALSE : theme('item_list', array(
+    'items' => $tmp_links,
+    'title' => NULL,
+    'type' => 'ul',
+    'attributes' => array(
+      'class' => $block_grid_view_classes,
+    ),
+  ));
+
+  // Unset unneeded variables.
+  unset($variables['item']);
+
+  // Reset variables.
+  $variables += array(
+    'headline' => $headline,
+    'links' => $links,
+    'copy' => $copy,
+  );
+}
+
+/**
+ * Helper function to sort ordered links by their weight.
+ *
+ * @param string $item
+ *   Serialized render array for an individual link row.
+ *
+ * @return array
+ *   A sorted array of links.
+ */
+function _utexas_quick_links_order_links($item) {
+
+  // Loop through, unsetting the delete link & setting by weights.
+  $weight = array();
+  $title = array();
+  // Determine whether the data is coming from the form or the database,
+  // as in the case of a migration.
+  $item = (is_array($item)) ? $item : unserialize($item);
+
+  foreach ($item as $key => &$link) {
+    $weight[$key] = (int) $link['_weight'];
+    $title[$key] = $link['link_title'];
+  }
+
+  // Sort by weight, then title and return.
+  if (isset($item)) {
+    array_multisort($weight, SORT_ASC, $title, SORT_ASC, $item);
+  }
+  // Strip out empty fields.
+  foreach ($item as $key => &$link) {
+    if (empty($link['link_title']) and empty($link['link_url'])) {
+      unset($link);
+    }
+  }
+
+  return $item;
+}
+
+/**
+ * Custom theme function to theme the link table as a tabledrag element.
+ */
+function theme_utexas_quick_links_link_table($variables) {
+  $element = $variables['element'];
+  $output = '';
+
+  $table_id = drupal_html_id($element['#id'] . '_values');
+  $order_class = $element['#id'] . '-delta-order';
+
+  $header = array(
+    array('data' => t('Link Title'), 'colspan' => 2),
+    t('Link URL'),
+    t('Weight'),
+  );
+  $rows = array();
+
+  // Sort links according to weight.
+  $items = array();
+  foreach (element_children($element) as $key) {
+    $items[] = &$element[$key];
+  }
+  usort($items, '_utexas_quick_links_sort_links_by_weight');
+
+  // Add the links as table rows.
+  foreach ($items as $key => $item) {
+    $item['_weight']['#attributes']['class'] = array($order_class);
+    $delta_element = drupal_render($item['_weight']);
+    $cells = array(
+      array('data' => '', 'class' => array('field-multiple-drag')),
+      drupal_render($item['link_title']),
+      drupal_render($item['link_url']),
+      array('data' => $delta_element, 'class' => array('delta-order')),
+    );
+    $rows[] = array(
+      'data' => $cells,
+      'class' => array('draggable'),
+      'id' => $table_id . '-' . $key,
+    );
+  }
+
+  // Create the table drag.
+  $output  = '<div class="link-table">';
+  $output .= theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array(
+      'id' => $table_id,
+    ),
+  ));
+  $output .= '</div>';
+
+  // Order the table drag.
+  drupal_add_tabledrag($table_id, 'order', 'sibling', $order_class);
+
+  return $output;
+}
+
+/**
+ * Helper function to order links by weight.
+ */
+function _utexas_quick_links_sort_links_by_weight($a, $b) {
+  if (isset($a['_weight']) and isset($b['_weight'])) {
+    return ($a['_weight']['#value'] < $b['_weight']['#value']) ? -1 : 1;
+  }
+  return 0;
+}
+
+/**
+ * Helper function that returns an array representing an empty row.
+ *
+ * @param int $link_count
+ *   Number of links on the form.
+ *
+ * @return array
+ *   Render array for the links.
+ */
+function _utexas_quick_links_add_link_empty_row($link_count) {
+  // Define the next one down.
+  $max_delta = 10;
+
+  return array(
+    'link_title' => array(
+      '#type' => 'textfield',
+      '#maxlength' => 128,
+    ),
+    'link_url' => array(
+      '#type' => 'textfield',
+      '#maxlength' => 128,
+      '#attributes' => array(
+        'placeholder' => 'external URL (http://...) or internal path (e.g., about/diversity)',
+      ),
+    ),
+    '_weight' => array(
+      '#type' => 'weight',
+      '#delta' => $max_delta,
+      '#default_value' => ($max_delta - $link_count) * -1,
+      '#title_display' => 'invisible',
+      '#title' => t('Weight for Link'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ * Determines whether or not the field has data in it.
+ */
+function utexas_quick_links_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'utexas_quick_links':
+      return
+        _utexas_quick_links_links_are_empty($item['links']) and
+        empty($item['headline']);
+  }
+  return FALSE;
+}
+
+/**
+ * Helper function to determine whether or not an array of links is empty.
+ *
+ * @param string $links
+ *   A serialized array representing link form information.
+ *
+ * @return bool
+ *   A boolean representing whether or not that row of links is empty or not.
+ */
+function _utexas_quick_links_links_are_empty($links) {
+  $empty = TRUE;
+
+  // Ensure a sanitation of weights + other items.
+  $links = _utexas_quick_links_order_links($links);
+
+  // We only care if link title or link URL is set.
+  foreach ($links as $link) {
+    if (!empty($link['link_title']) or !empty($link['link_url'])) {
+      $empty = FALSE;
+      break;
+    }
+  }
+
+  return $empty;
+}

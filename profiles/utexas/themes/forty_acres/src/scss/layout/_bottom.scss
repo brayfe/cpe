@@ -1,0 +1,123 @@
+.bottom-search{
+	.main-content{
+		padding-right: 0px;
+	}
+}
+.accented-container-wrapper {
+  overflow: hidden;
+}
+.container.container-bottom.accent {
+  position: relative;
+}
+.container.container-bottom.accent::before {
+  content: "";
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: block;
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: -10px;
+}
+
+// restyle fields when background image is present
+.container.container-bottom.accent{
+  .field.field_utexas_promo_units,
+  .field.field_utexas_photo_content_area,
+  .field.field_wysiwyg_a,
+  .field.field_wysiwyg_b,
+  .field_utexas_flex_content_area_a,
+  .field_utexas_flex_content_area_b,
+  .field.field_utexas_quick_links,
+  .field.field_utexas_newsreel,
+  .field.field_utexas_contact_info,
+  .fieldblock_field_utexas_promo_list,
+  .field.field_utexas_twitter_widget,
+  .field_utexas_social_links,
+  .fieldblock_field_utexas_resource,
+	.block-menu-block {
+    background-color: #fff;
+    border: 1px solid #333f48;
+    padding: 20px 20px 3px;
+  }
+  .field_utexas_resource .flex-content.horizontal {
+    background-color: #f8f8f8;
+  }
+  .fieldblock_field_utexas_resource {
+    padding: 10px 20px 3px;
+    .post-headline {
+      padding-left: 0;
+    }
+  }
+  .field.field_utexas_twitter_widget {
+    padding: 0;
+    .sidebar-module.sidebar-default-style {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+  .field.field_utexas_newsreel {
+    padding: 0;
+    .sidebar-headline {
+      margin-top: 0;
+    }
+    .sidebar-module {
+      margin-bottom: 0;
+    }
+  }
+  .field.field_utexas_contact_info {
+    padding: 0;
+  }
+  .field.field_utexas_photo_content_area {
+    padding-bottom: 20px !important;
+  }
+
+  // fields placed in sidebar
+  .sidebar-content{
+    .field.field_utexas_newsreel {
+      .sidebar-headline {
+        margin-top: 0;
+      }
+      .sidebar-module {
+        margin-bottom: 20px;
+      }
+    }
+    .field.field_utexas_twitter_widget{
+      padding: 0;
+    }
+    .sidebar-default-style {
+      background-color: inherit;
+      border-bottom: none;
+      border-left: none;
+      border-right: none;
+      padding-bottom: 0;
+    }
+    .fieldblock_field_utexas_promo_list {
+      border: 1px solid #333f48!important;
+    }
+    .sidebar-default-style h3.sidebar-headline {
+      background-color: #fef7ed;
+      color: #373737;
+      display: inline-block;
+      font-size: 1.0625rem;
+      font-weight: 700;
+      line-height: 1.4375rem;
+      margin: 0;
+      padding: 5px 10px;
+      width: 100%;
+    }
+    .field.field_utexas_quick_links {
+      padding-bottom: 20px;
+    }
+    .field.field_utexas_photo_content_area {
+      padding-bottom: 20px !important;
+    }
+    .field_contact_info {
+      background-color: transparent;
+    }
+  }
+}

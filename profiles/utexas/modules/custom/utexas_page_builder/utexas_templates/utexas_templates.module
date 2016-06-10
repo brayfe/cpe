@@ -1,0 +1,694 @@
+<?php
+/**
+ * @file
+ * UTexas Templates module.
+ *
+ * Provides the template entity data that renders page templates on various
+ * content types. This provides a basic CRUD interface. To add/change templates,
+ * add a hook_update_N function to the .install file following the logic of the
+ * arrays defined in hook_install().
+ */
+
+/**
+ * Permission for adjusting additional settings.
+ */
+define('UTEXAS_TEMPLATES_VIEW_PERMISSION', 'view templates');
+
+/**
+ * Permission for editing page layouts.
+ */
+define('UTEXAS_TEMPLATES_EDIT_PERMISSION', 'administer templates');
+
+/**
+ * Implements hook_entity_info().
+ */
+function utexas_templates_entity_info() {
+
+  $info = array();
+
+  $info['template'] = array(
+    'label' => t('Template'),
+    'base table' => 'utexas_templates',
+    'entity keys' => array(
+      'id' => 'id',
+      'label' => 'name',
+    ),
+    'module' => 'utexas_templates',
+    'entity class' => 'TemplateEntity',
+    'controller class' => 'TemplateEntityController',
+    'views controller class' => 'EntityDefaultViewsController',
+    'access callback' => 'utexas_templates_access_callback',
+    'uri callback' => 'entity_class_uri',
+    'admin ui' => array(
+      'path' => 'admin/templates',
+      'controller class' => 'EntityDefaultUIController',
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_entity_property_info().
+ */
+function utexas_templates_entity_property_info() {
+
+  $info = array();
+
+  $info['template']['properties']['id'] = array(
+    'label' => t('Template ID'),
+    'description' => t('The ID of the template.'),
+    'type' => 'integer',
+    'schema field' => 'id',
+  );
+
+  $info['template']['properties']['name'] = array(
+    'label' => t('Template name'),
+    'description' => t('Name of the template.'),
+    'type' => 'text',
+    'schema field' => 'name',
+  );
+  $info['template']['properties']['description'] = array(
+    'label' => t('Template description'),
+    'description' => t('Description of the template.'),
+    'type' => 'text',
+    'schema field' => 'description',
+  );
+  $info['template']['properties']['image_filename'] = array(
+    'label' => t('Template Thumbnail'),
+    'description' => t('The image the depicts the template layout'),
+    'type' => 'text',
+    'schema field' => 'image_filename',
+  );
+  $info['template']['properties']['template_filename'] = array(
+    'label' => t('Template File'),
+    'description' => t('The tpl.php file that renders this layout'),
+    'type' => 'text',
+    'schema field' => 'template_filename',
+  );
+  $info['template']['properties']['content_types'] = array(
+    'label' => t('Content Types Allowed'),
+    'description' => t('The content types on which the template is available.'),
+    'type' => 'text',
+    'schema field' => 'content_types',
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function utexas_templates_permission() {
+  // Define a permission that allows users to edit page layouts.
+  return array(
+    UTEXAS_TEMPLATES_VIEW_PERMISSION => array(
+      'title' => t('View Templates'),
+      'description' => t('Allow users to view available templates'),
+    ),
+    UTEXAS_TEMPLATES_EDIT_PERMISSION => array(
+      'title' => t('Edit & Delete page layouts'),
+      'description' => t('Allow users to edit & delete templates'),
+    ),
+  );
+}
+
+/**
+ * Access callback for template entities.
+ */
+function utexas_templates_access_callback($op, $project = NULL, $account = NULL) {
+  if ($op == 'view' && user_access('view templates')) {
+    return TRUE;
+  }
+  elseif (($op == 'update' || $op == 'create' || $op == 'delete') && user_access('administer templates')) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function utexas_templates_menu() {
+  // Menu items.
+  $items = array();
+
+  $items['template/%'] = array(
+    'title' => 'Template',
+    'page callback' => '_utexas_templates_view_template',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Callback function for displaying the individual template page.
+ */
+function _utexas_templates_view_template($id) {
+
+  $templates = entity_load('template', array($id));
+  $template = $templates[$id];
+
+  drupal_set_title($template->name);
+  $output = entity_view('template', array($template));
+
+  return $output;
+
+}
+
+/**
+ * Extends the EntityAPIController for the Template entity.
+ */
+class TemplateEntityController extends EntityAPIController {
+  /**
+   * Extends buildContent().
+   */
+  public function buildContent($entity, $view_mode = 'full', $langcode = NULL, $content = array()) {
+    $build = parent::buildContent($entity, $view_mode, $langcode, $content);
+    // Our additions to the $build render array.
+    $build['name'] = array(
+      '#type' => 'markup',
+      '#markup' => check_plain($entity->name),
+      '#prefix' => '<h1>',
+      '#suffix' => '</h1><a href="/admin/templates/manage/' . $entity->id . '">Edit</a> | <a href="/admin/templates/manage/' . $entity->id . '/delete">Delete</a>',
+    );
+
+    // Check if the template is present in the registry.
+    $template_exists = '';
+    if (isset($entity->template_filename)) {
+      $template_name   = str_replace('.tpl.php', '', str_replace('-', '_', $entity->template_filename));
+      $templates = theme_get_registry();
+      if (isset($templates[$template_name])) {
+        $template_location = $templates[$template_name]['path'] . '/';
+        $template_exists = '<div class="messages status">Present in ' . $template_location . '</div>';
+      }
+      else {
+        $template_exists = '<div class="messages warning">Missing</div>';
+      }
+    }
+
+    // Check if the file is present in the filesystem.
+    global $theme;
+    $machine_name = str_replace('.svg', '', $entity->image_filename);
+    $theme_location = drupal_get_path('theme', $theme) . '/page_builder_layouts/' . $machine_name . '/';
+    $module_location = drupal_get_path('module', 'utexas_templates') . '/page_builder_layouts/' . $machine_name . '/';
+    $image_url = '//placehold.it/100x150';
+    $image_exists = '';
+    // Grab the image.
+    if (isset($entity->image_filename)) {
+      if (file_exists($theme_location . $entity->image_filename)) {
+        // Use the svg defined in the active theme (if present).
+        $image_url = $theme_location . $entity->image_filename;
+        $image_exists = '<div class="messages status">Present</div>';
+      }
+      elseif (file_exists($module_location)) {
+        // Use the svg defined in utexas_templates (if present).
+        $image_url = $module_location . $entity->image_filename;
+      }
+      elseif (isset($template_location) and file_exists($template_location . $entity->image_filename)) {
+        // Use the svg defined in the template file's directory.
+        $image_url = $template_location . $entity->image_filename;
+        $image_exists = '<div class="messages status">Present in ' . $template_location . '</div>';
+      }
+      else {
+        $image_exists = '<div class="messages warning">Missing</div>';
+      }
+    }
+
+    $build['image_display'] = array(
+      '#type' => 'markup',
+      '#markup' => theme('image', array(
+        'path' => $image_url,
+        'alt' => $entity->name . ' ' . t('icon'),
+        'width' => 100,
+        'height' => 150,
+        'attributes' => array('class' => array('right')),
+      )),
+    );
+
+    $build['description'] = array(
+      '#type' => 'markup',
+      '#markup' => check_plain($entity->description),
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    );
+
+    $build['image_filename'] = array(
+      '#type' => 'markup',
+      '#markup' => $theme_location . $entity->image_filename,
+      '#prefix' => '<h3>Location for custom thumbnail:</h3>',
+      '#suffix' => $image_exists,
+    );
+
+    $build['template_filename'] = array(
+      '#type' => 'markup',
+      '#markup' => $theme_location . $entity->template_filename,
+      '#prefix' => '<h3>Location for custom template:</h3>',
+      '#suffix' => $template_exists,
+    );
+
+    return $build;
+
+  }
+
+}
+
+/**
+ * Template entity class extending the Entity class.
+ */
+class TemplateEntity extends Entity {
+
+  /**
+   * Change the default URI from default/id to template/id.
+   */
+  protected function defaultUri() {
+    return array('path' => 'template/' . $this->identifier());
+  }
+
+}
+
+/**
+ * Form definition for adding / editing a Template entity.
+ */
+function template_form($form, &$form_state, $instance = NULL) {
+  // This JS generates the machine names for tpl.php and image files.
+  $form['#attached']['js'][] = drupal_get_path('module', 'utexas_templates') . '/js/utexas_templates.js';
+  // This CSS grays out read-only fields.
+  $form['#attached']['css'][] = drupal_get_path('module', 'utexas_templates') . '/css/utexas_templates.css';
+
+  $form['name'] = array(
+    '#title' => t('Template name'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->name) ? $instance->name : '',
+    '#required' => TRUE,
+    '#description' => t('The name used to identify the template on content
+      types.'),
+  );
+
+  $form['description'] = array(
+    '#title' => t('Template description'),
+    '#type' => 'textfield',
+    '#size' => 200,
+    '#default_value' => isset($instance->description) ? $instance->description : '',
+    '#required' => TRUE,
+  );
+
+  $form['template_filename'] = array(
+    '#title' => t('Filename for .tpl.php'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->template_filename) ? $instance->template_filename : '',
+    '#attributes' => array('readonly' => 'readonly', 'class' => array('readonly')),
+    '#description' => t('Name your template file as shown above. Place it in sites/all/themes/YOUR-THEME/page_builder_templates/TEMPLATE-NAME'),
+  );
+
+  $form['image_filename'] = array(
+    '#title' => t('Thumbnail filename'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->image_filename) ? $instance->image_filename : '',
+    '#attributes' => array('readonly' => 'readonly', 'class' => array('readonly')),
+    '#description' => 'The image file must be .svg. Place it in sites/all/themes/YOUR-THEME/page_builder_templates/TEMPLATE-NAME',
+  );
+
+  $default_fields = array(
+    'field_utexas_hero_photo',
+    'field_wysiwyg_a',
+    'field_wysiwyg_b',
+    'field_utexas_flex_content_area_a',
+    'field_utexas_flex_content_area_b',
+    'field_utexas_promo_units',
+    'field_utexas_promo_list',
+    'field_utexas_quick_links',
+    'field_gift_link',
+    'field_utexas_image_link_a',
+    'field_utexas_image_link_b',
+    'field_utexas_social_links',
+    'field_utexas_contact_info',
+    'field_utexas_twitter_widget',
+    'field_utexas_featured_highlight',
+    'field_utexas_photo_content_area',
+  );
+  $disallowed = array('field_page_layout', 'field_template');
+  $content_types = field_info_instances('node');
+
+  foreach ($content_types as $type => $fields) {
+    foreach ($fields as $field => $data) {
+
+      if (!in_array($field, $disallowed)) {
+        $available_fields[] = $field;
+      }
+    }
+  }
+  $all_fields = array_merge($default_fields, $available_fields);
+  $fields = array_keys(array_flip($all_fields));
+
+  // Get the maximum number of fields.
+  $max_delta = count($fields);
+
+  // Create the form options.
+  $form['fields'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Field Settings'),
+    '#theme' => 'utexas_templates_field_table',
+    '#prefix' => '<div id="field-table">',
+    '#suffix' => '</div>',
+  );
+
+  // Attach the fields to the form.
+  $count = 0;
+  $existing = isset($instance->fields) ? unserialize($instance->fields) : array();
+
+  // Make sure the values haven't changed.
+  foreach ($fields as $field) {
+    $options[$field]['widget']['weight'] = isset($existing{$field}) ? $existing{$field}['_weight'] : 99;
+  }
+  // Sort by weight.
+  uasort($options, function($a, $b) {
+    $a_weight = (is_array($a) && isset($a['widget']['weight'])) ? $a['widget']['weight'] : 0;
+    $b_weight = (is_array($b) && isset($b['widget']['weight'])) ? $b['widget']['weight'] : 0;
+                     if ($a_weight == $b_weight) {
+                       return 0;
+                     }
+    return ($a_weight < $b_weight) ? -1 : 1;
+  });
+  // Create the fields.
+  foreach ($options as $field_name => $field) {
+    // Figure out setting.
+    if (isset($form_state['input']) and empty($form_state['input'])) {
+      // Grab from saved.
+      $setting = (!empty($existing[$field_name])) ? $existing[$field_name] : array();
+    }
+    else {
+      // Grab from input.
+      $setting = array();
+    }
+
+    $setting['disabled'] = TRUE;
+    if (isset($setting['enabled']) and $setting['enabled']) {
+      $setting['disabled'] = FALSE;
+    }
+
+    // Set a container.
+    $form['fields'][$field_name] = array(
+      '#type' => 'fieldset',
+      $field_name . '[name]' => array(
+        '#type' => 'hidden',
+        '#value' => $field_name,
+      ),
+      $field_name . '[machine_name]' => array(
+        '#type' => 'hidden',
+        '#value' => $field_name,
+      ),
+      $field_name . '[enabled]' => array(
+        '#type' => 'checkbox',
+        '#title_display' => 'invisible',
+        '#title' => t('Enabled'),
+        '#default_value' => (isset($setting['enabled']) and $setting['enabled']) ? $setting['enabled'] : FALSE,
+        '#ajax' => array(
+          'event' => 'change',
+          'wrapper' => 'field-table',
+        ),
+      ),
+      $field_name . '[locked]' => array(
+        '#type' => 'checkbox',
+        '#title_display' => 'invisible',
+        '#title' => t('Locked'),
+        '#default_value' => (isset($setting['locked']) and $setting['locked']) ? $setting['locked'] : FALSE,
+      ),
+      $field_name . '[_weight]' => array(
+        '#type' => 'weight',
+        '#delta' => $max_delta,
+        '#default_value' => (isset($setting['_weight'])) ? $setting['_weight'] : ($max_delta - $count) * -1,
+        '#title_display' => 'invisible',
+        '#title' => t('Weight'),
+      ),
+    );
+
+    // Attach a checked if necessary.
+    if (isset($setting['enabled']) and $setting['enabled']) {
+      $form['fields'][$field_name][$field_name . '[enabled]']['#attributes'] = array('checked' => 'checked');
+    }
+    if (isset($setting['locked']) and $setting['locked']) {
+      $form['fields'][$field_name][$field_name . '[locked]']['#attributes'] = array('checked' => 'checked');
+    }
+    // Increment.
+    $count++;
+  }
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => isset($instance->id) ? t('Update template') : t('Save template'),
+    '#weight' => 50,
+  );
+
+  return $form;
+}
+
+/**
+ * Theme process function to put page edit fields into a draggable table.
+ */
+function theme_utexas_templates_field_table(&$variables) {
+  $element = $variables['element'];
+  $output = '';
+
+  $table_id = drupal_html_id($element['#id'] . '_values');
+  $order_class = $element['#id'] . '-delta-order';
+
+  $header = array(
+    array('data' => t('Field'), 'colspan' => 2),
+    t('Enabled on Page Template'),
+    t('Locked to Region'),
+    t('Weight'),
+  );
+  $rows = array();
+
+  // Sort links according to weight.
+  $fields = array();
+  foreach (element_children($element) as $key) {
+    $fields[$key] = &$element[$key];
+  }
+
+  // Add the links as table rows.
+  foreach ($fields as $field_name => $field) {
+    $field[$field_name . '[_weight]']['#attributes']['class'] = array($order_class);
+    $delta_element = drupal_render($field[$field_name . '[_weight]']);
+    $cells = array(
+      array('data' => drupal_render($field[$field_name . '[machine_name]']), 'class' => array('field-multiple-drag')),
+      array('data' => $field[$field_name . '[name]']['#value']),
+      array('data' => drupal_render($field[$field_name . '[enabled]'])),
+      array('data' => drupal_render($field[$field_name . '[locked]'])),
+      array('data' => $delta_element, 'class' => array('delta-order')),
+    );
+    $rows[] = array(
+      'data' => $cells,
+      'class' => array('draggable'),
+      'id' => $table_id . '-' . $key,
+    );
+  }
+
+  // Create the table drag.
+  $output  = '<div class="field-table">';
+  $output .= theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array('id' => $table_id),
+  ));
+  $output .= '</div>';
+
+  // // Order the table drag.
+  drupal_add_tabledrag($table_id, 'order', 'sibling', $order_class);
+
+  return $output;
+}
+
+/**
+ * Helper function to convert field values into keyed value array.
+ *
+ * @param array $input
+ *   Input array.
+ *
+ * @return array
+ *   A serialized object.
+ */
+function _utexas_templates_process_field_values(array $input) {
+  $return = array();
+  foreach ($input as $key => $value) {
+    if ((strpos($key, 'field_') !== FALSE or $key == 'body') and is_array($value)) {
+      $return[$key] = array(
+        'machine_name' => $value['machine_name'],
+        '_weight' => $value['_weight'],
+        'enabled' => (isset($value['enabled'])) ? TRUE : FALSE,
+        'locked' => (isset($value['locked'])) ? TRUE : FALSE,
+      );
+    }
+  }
+
+  return serialize($return);
+}
+
+/**
+ * Implements entity_form_validate().
+ */
+function template_form_validate(&$form, &$form_state) {
+  // Check if the template filename already exists.
+  $existing_templates = array();
+  $templates = entity_load('template');
+  foreach ($templates as $key => $template) {
+    $existing_templates[$key] = $template->template_filename;
+  }
+  // If the current filename does not yet exist AND (for templates being edited)
+  // the previous value was not already in the existing templates.
+  if (in_array($form_state['input']['template_filename'], $existing_templates) and !in_array($form['template_filename']['#default_value'], $existing_templates)) {
+    form_error($form['name'], t('The title %value conflicts with an existing template.', array('%value' => $form_state['input']['name'])));
+  }
+}
+
+/**
+ * Submit handler for the Template entity add/edit form.
+ */
+function template_form_submit($form, &$form_state) {
+  $entity = entity_ui_form_submit_build_entity($form, $form_state);
+  // Combine the field definitions into a serialized array for storage.
+  $entity->fields = _utexas_templates_process_field_values($form_state['input']);
+  $entity->save();
+  drupal_set_message(t('The template: @name has been saved.', array('@name' => $entity->name)));
+  if ($form['name']['#default_value'] !== '' && $form_state['input']['name'] != $form['name']['#default_value']) {
+    // Notify the user of the template name changes.
+    drupal_set_message(t('Note: the name @old was changed to @new. Make sure
+      that your template file is @template and your image file is @image. You
+      will also need to reassign this template to the existing content types.',
+      array(
+        '@new' => $entity->name,
+        '@old' => $form['name']['#default_value'],
+        '@template' => $entity->template_filename,
+        '@image' => $entity->image_filename,
+      )
+    ), 'warning');
+  }
+  $form_state['redirect'] = 'admin/templates';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add "Available Templates" choices to all content type forms.
+ */
+function utexas_templates_form_node_type_form_alter(&$form, $form_state) {
+  if (isset($form['type'])) {
+
+    $templates = entity_load('template');
+    $template_options = array();
+    foreach ($templates as $key => $template) {
+      $template_options[$template->name] = $template->name;
+    }
+
+    $form['page_builder'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Available Templates'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#group' => 'additional_settings',
+      '#attributes' => array(
+        'class' => array('page-builder-node-type-settings-form'),
+      ),
+    );
+
+    $form['page_builder']['page_builder_template'] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Available templates on this content type'),
+      '#default_value' => variable_get('page_builder_template_' . $form['#node_type']->type, array()),
+      '#options' => $template_options,
+      '#description' => 'To activate templates, assign the existing "field_template" and "field_page_layout" fields (all widget settings are default).',
+    );
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ *
+ * Make any templates in this module available to the theme registry.
+ */
+function utexas_templates_theme_registry_alter(&$theme_registry) {
+  // Defined path to the current module.
+  $module_path = drupal_get_path('module', 'utexas_templates');
+  // Find all .tpl.php files in this module's folder recursively.
+  $template_file_objects = drupal_find_theme_templates($theme_registry, '.tpl.php', $module_path);
+  // Iterate through all found template file objects.
+  foreach ($template_file_objects as $key => $template_file_object) {
+    // If the template has not already been overridden by a theme.
+    if (!isset($theme_registry[$key]['theme path']) || !preg_match('#/themes/#', $theme_registry[$key]['theme path'])) {
+      // Alter the theme path and template elements.
+      $theme_registry[$key]['theme path'] = $module_path;
+      $theme_registry[$key] = array_merge($theme_registry[$key], $template_file_object);
+      $theme_registry[$key]['type'] = 'module';
+    }
+  }
+}
+
+/**
+ * Implements theme_preprocess_page().
+ *
+ * Loads the appropriate page.tpl.php file for page display.
+ */
+function utexas_templates_preprocess_page(&$variables) {
+  // Make sure we're only doing these actions on a noad "admin" callback.
+  if (isset($variables['node']) and !path_is_admin(current_path())) {
+    // If we're on a node page, grab the object for use later.
+    $node = $variables['node'];
+
+    // If the node type has the field_template field, add extra theme wrappers.
+    if (isset($node->field_template['und'][0]['target_id'])) {
+
+      // Grab a taxonomy term for this page node.
+      if ($template = field_get_items('node', $node, 'field_template')) {
+        $template = entity_load('template', array($template[0]['target_id']));
+
+        // Save the term for later use.
+        $term = key($template);
+
+        // Use the loaded entity to attach a theme hook suggestion.
+        $template_name   = str_replace('.tpl.php', '', str_replace('-', '_', $template[$term]->template_filename));
+        // Attach new theme hook suggestions.
+        $old_suggestions = $variables['theme_hook_suggestions'];
+        $new_suggestions = array($template_name);
+        $variables['theme_hook_suggestions'] = array_merge($new_suggestions, $old_suggestions);
+
+        // Strip out the node wildcard, just in case.
+        if ($wildcard_key = array_search('page__node__%', $variables['theme_hook_suggestions'])) {
+          unset($variables['theme_hook_suggestions'][$wildcard_key]);
+        }
+
+        // Get a listing of all fields that we've set as locked to the template
+        // for this template choice.
+        $variables['locked_fields'] = array();
+        $fields = array();
+        if (isset($template[$term]->fields)) {
+          $available_fields = unserialize($template[$term]->fields);
+          foreach ($available_fields as $field) {
+            if ($field['enabled'] and $field['locked']) {
+              $fields[] = $field['machine_name'];
+            }
+          }
+        }
+        // Attach locked fields to the page variables.
+        foreach ($fields as $field_name) {
+          $values = array();
+          if ($items = field_get_items('node', $node, $field_name, $node->language)) {
+            foreach ($items as &$item) {
+              $values[] = field_view_value('node', $node, $field_name, $item, $node->language);
+            }
+
+            // Wrap the field in its class name.
+            $values['#prefix'] = '<div class="' . $field_name . '">';
+            $values['#suffix'] = '</div>';
+
+            $variables['locked_fields'][$field_name] = $values;
+          }
+        }
+      }
+    }
+  }
+}

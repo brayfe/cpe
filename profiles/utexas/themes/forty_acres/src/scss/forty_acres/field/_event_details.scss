@@ -1,0 +1,149 @@
+.field_event_details{
+	.event-block {
+		margin-bottom: 10px;
+
+		color: $burntGrey;
+		overflow: hidden;
+
+		.event-details-top{
+			display: display;
+			overflow: hidden;
+			width: 100%;
+			margin-bottom: 20px;
+			
+		}
+
+		.post-image {
+			float: left;
+			display: inline-block;
+			width: 22%;
+			overflow: hidden;
+
+			img{
+				width: 100%;
+				height: auto;
+				margin-right: 15px;
+			}
+		}
+
+		.event-details{
+			float: left;
+			display: inline-block;
+			width: 72%;
+			height: auto;
+			margin-left: 10px;
+
+			@include respond(medium){
+				margin-left: 20px;
+			}
+		}
+
+		.event-headline {
+			font-size: rem-calc(16);
+			font-weight: bold;
+			margin: 3px 0 4px 0;
+
+			@include respond(large){
+				font-size: rem-calc(28);
+				line-height: rem-calc(34);
+				margin-bottom: 5px;
+			}
+		}
+
+		.event-date {
+			font-size: rem-calc(14);
+			background-color: $navy;
+			display: inline-block;
+			padding: 8px 10px;
+			color: #fff;
+			font-style: italic;
+			margin-bottom: 6px;
+
+			@include respond(medium){
+				font-size: rem-calc(15);
+				margin-bottom: 12px;
+			}
+		}
+
+		.event-time:after{
+			content: " | "
+		}
+
+		.event-time, .event-location{
+			font-size: rem-calc(12);
+			margin-bottom: 2px;
+			font-weight: 200;
+			color: $lightGreyText;
+			display: inline;
+
+			@include respond(medium){
+				font-size: rem-calc(15);
+				line-height: rem-calc(22);
+			}
+		}
+
+		.export-links{
+			margin: 8px 0 8px 0;
+			@include respond(large){
+				margin-top: 15px; 
+			}
+
+			@include respond(small-only){
+				display: block;
+				overflow: hidden;
+				float: left;
+			}
+		}
+
+		button {
+			background-color: #fff;
+			border: 1px solid #e1ddd2;
+			padding: 4px 10px;
+			margin-bottom: 5px;
+			margin-right: 5px;
+
+			&:hover{
+				background-color: darken(#f8f8f8, 5%);
+			}
+
+			.export{
+				font-size: rem-calc(13);
+				@include respond(medium){
+					font-size: rem-calc(14);
+				}
+			}
+			
+			&:focus {
+				outline-width: 5px;
+			}
+		}
+
+		.event-text {
+			font-size: rem-calc(16);
+			line-height: rem-calc(24);
+			margin: 0 0 20px 0;
+			display: block;
+
+			@include respond(medium){
+				font-size: rem-calc(17);
+				line-height: rem-calc(26);
+				margin: 0 0 rem-calc(20) 0;
+			}
+		}
+
+		.post-cta-link {
+			font-style: italic;
+			font-size: 14px;
+
+			@include respond(large){
+				font-size: 16px;
+			}
+		}
+
+	}
+
+	.event-block + .event-block{
+		border-top: 1px solid #cbcbcb;
+		padding-top: 10px;
+	}
+}

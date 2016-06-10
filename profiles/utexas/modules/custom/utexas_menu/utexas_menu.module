@@ -1,0 +1,108 @@
+<?php
+/**
+ * @file
+ * The UTexas Menu module.
+ *
+ * Defines the template which the main menu uses.
+ */
+
+/**
+ * Implements hook_theme().
+ *
+ * Defines the menu template and the feature.
+ */
+function utexas_menu_theme() {
+  return array(
+    'utexas_menu_feature' => array(
+      'template' => 'menu-feature',
+      'variables' => array(
+        'block' => NULL,
+      ),
+    ),
+    'utexas_menu' => array(
+      'template' => 'main-menu',
+      'variables' => array(
+        'menu' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ *
+ * Defines the menu block.
+ */
+function utexas_menu_block_info() {
+  $blocks = array();
+
+  // Main Menu block.
+  $blocks['utexas_main_menu'] = array(
+    'info' => 'Main Menu Block',
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * Builds the menu block.
+ */
+function utexas_menu_block_view($delta = '') {
+  // Get the block array.
+  $block = array();
+
+  switch ($delta) {
+    case 'utexas_main_menu':
+      // Set the contents.
+      $menu_choice = variable_get('menu_main_links_source', 'main-menu');
+      $block['subject'] = t('Main Menu');
+      $block['content'] = array(
+        '#markup' => theme('utexas_menu', array(
+          'menu' => menu_tree($menu_choice),
+        )),
+      );
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Recursive function to build menu structures from an array.
+ *
+ * @param array $menu
+ *   An array representing a menu structure.
+ * @param string $menu_name
+ *   A string representing the machine name of the menu.
+ * @param int $plid
+ *   An integer representing the parent menu id.
+ */
+function utexas_menu_builder(array $menu, $menu_name, $plid = 0) {
+  $weight = 0;
+  foreach ($menu as $menu_item) {
+    // Create a new menu item for saving.
+    $item = array(
+      'menu_name' => $menu_name,
+      'link_title' => $menu_item['link_title'],
+      'link_path' => $menu_item['link_path'],
+      'plid' => $plid,
+      'weight' => $weight,
+      'expanded' => (isset($menu_item['expanded'])) ? $menu_item['expanded'] : TRUE,
+      'customized' => 1,
+    );
+
+    // Save the menu item.
+    $mlid = menu_link_save($item);
+
+    // If there are children, recurse into those menus as well.
+    if (isset($menu_item['#children']) and !empty($menu_item['#children'])) {
+      utexas_menu_builder($menu_item['#children'], $menu_name, $mlid);
+    }
+
+    // Increment the weight.
+    $weight++;
+  }
+}

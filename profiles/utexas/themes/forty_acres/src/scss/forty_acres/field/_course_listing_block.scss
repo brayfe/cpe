@@ -1,0 +1,181 @@
+.field_course_listing_block{
+	padding-bottom: 20px;
+	.course-search{
+		margin-bottom: 20px;
+		height: 40px;
+		width: 100%;
+		display: block;
+		position: relative;
+
+		@include respond(medium){
+			max-width: 600px;
+		}
+
+		input{
+			height: 50px;
+			font-size: rem-calc(16);
+		}
+
+		button{
+			position: absolute;
+			top: 0px;
+			right: 0px;
+			background-color: $burntOrange;
+			height: 50px;
+			margin-bottom: 0;
+
+			.icon-search{
+				position: relative;
+				top: -2px;
+			}
+
+			&:hover{
+				background-color: $burntOrangeAccent; 
+			}
+		}
+	}
+
+	.result-total{
+		margin: 0px 0 25px 0;
+		color: #6a6a6a;
+		font-size: rem-calc(14);
+		line-height: rem-calc(20);
+
+		#search-term{
+			font-style: italic;
+		}
+	}
+
+	.course-sort{
+		padding-top: 4px;
+		padding-bottom: 8px;
+		border-bottom: 2px solid #d6d6d6;
+		
+		label{
+			display: block;
+			font-weight: 700;
+			font-size: rem-calc(14);
+			margin-right: 20px;
+
+			@include respond(medium){
+				display: inline;
+			}
+		}
+		ul{
+			display: inline;
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+		}
+		li{
+			display: inline-block;
+			font-size: rem-calc(13);
+			padding-right: 2px;
+
+			@include respond(medium){
+				font-size: rem-calc(14);
+				padding-right: 6px;
+			}
+
+			&:after{
+				content: " / ";
+				padding-left: 2px;
+				@include respond(medium){
+					padding-left: 10px;
+					padding-right: 10px;
+				}
+			}
+
+			&:last-child{
+				&:after{
+					content: " ";
+				}
+			}
+		}
+
+		a{
+			text-decoration: none;
+			color: $burntGrey;
+			&:hover{
+				text-decoration: underline;
+			}
+			&.active{
+				color: $burntOrange;
+				text-decoration: underline;
+			}
+		}
+	}
+	.course-listing{
+		ul{
+			margin:0 5px 0 5px;
+			padding: 0;
+			list-style-type: none;
+
+			@include respond(medium){
+				margin:0 10px 0 10px;
+			}
+
+			li{
+				margin-bottom: 10px;
+				@include respond(medium){
+					margin-bottom: 14px;
+				}
+			}
+		}
+		h3{
+			font-size: rem-calc(18);
+			line-height: rem-calc(19);
+			margin: 18px 0 12px 0;
+			color: #382F2D;
+			font-weight: 700;
+
+			@include respond(small-only){
+				padding: 0 5px;
+				margin-bottom: 10px;
+				font-size: rem-calc(16);
+				line-height: rem-calc(19);
+			}
+
+			a{
+				color: inherit;
+			}
+		}
+		.course-number, .professor{
+			display: inline;
+			font-size: rem-calc(15);
+			color: $lightGreyText;
+		}
+		.professor{
+			&:before{
+				content: " • ";
+			}
+		}
+		.day-time, .location{
+			display: inline;
+			font-size: rem-calc(14);
+			@include respond(medium){
+				font-size: rem-calc(15);
+			}
+		}
+		.location{
+			&:before{
+				content: " | ";
+			}
+		}
+		
+		p{
+			font-size: rem-calc(16);
+			line-height: rem-calc(24);
+			margin: 0 5px rem-calc(20) 5px;
+			color: $bodyCopy;
+
+			@include respond(medium){
+				margin: 0 10px rem-calc(20) 10px;
+			}
+		}
+	}
+
+	.course-listing + .course-listing{
+		border-top: 1px solid #d6d6d6;
+	}
+}

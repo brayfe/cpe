@@ -1,0 +1,9 @@
+name = Promo List Field
+description = Defines promo list compound field area
+core = 7.x
+version = 7.x-1.1
+package = UTexas
+
+dependencies[] = smartcrop
+dependencies[] = media
+dependencies[] = field_collection

@@ -1,0 +1,71 @@
+///// Global Imports & Styles used by Core and News
+
+// Functions and Mixins
+@import "../settings";
+@import "../variables";
+@import "normalize";
+@import "../mixins/responsive";
+@import "../mixins/icons";
+
+// Fonts
+@import "../fonts/opensans";
+@import "../fonts/charissil";
+
+// Foundation Elements
+@import "foundation/components/block-grid";
+@import	"foundation/components/grid";
+@import "foundation/components/inline-lists";
+@import	"foundation/components/visibility";
+@import	"foundation/components/breadcrumbs";
+@import	"foundation/components/pagination";
+@import	"foundation/components/global";
+@import	"foundation/components/side-nav";
+@import	"foundation/components/magellan";
+@import	"foundation/components/buttons";
+@import	"foundation/components/forms";
+@import	"foundation/components/flex-video";
+
+// Global Layout
+@import "../layout/general";
+@import "../layout/typography";
+@import "../layout/pagination";
+@import "../layout/top";
+@import "../layout/bottom";
+@import "../layout/main-content";
+@import "../layout/sidebar-content";
+@import "../layout/sidebar-module";
+@import "../layout/search";
+
+// Global Components
+@import "../components/cta";
+@import "../components/nav-grids";
+@import "../components/breadcrumbs";
+
+// @import "foundation";
+// Or selectively include components
+// @import
+//   "foundation/components/accordion",
+//   "foundation/components/alert-boxes",
+//   "foundation/components/button-groups",
+//   "foundation/components/clearing",
+//   "foundation/components/dropdown",
+//   "foundation/components/dropdown-buttons",
+//   "foundation/components/joyride",
+//   "foundation/components/keystrokes",
+//   "foundation/components/labels",
+//   "foundation/components/orbit",
+//   "foundation/components/panels",
+//   "foundation/components/pricing-tables",
+//   "foundation/components/progress-bars",
+//   "foundation/components/reveal",
+//   "foundation/components/split-buttons",
+//   "foundation/components/sub-nav",
+//   "foundation/components/switch",
+//   "foundation/components/tables",
+//   "foundation/components/tabs",
+//   "foundation/components/thumbs",
+//   "foundation/components/tooltips",
+//   "foundation/components/top-bar",
+//   "foundation/components/type",
+//   "foundation/components/offcanvas",
+//   "foundation/components/visibility";

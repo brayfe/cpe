@@ -1,0 +1,24 @@
+fieldset .half-width .fieldset-wrapper div.form-item {
+  display: inline-block;
+  margin-right: 30px;
+}
+fieldset .half-width .fieldset-wrapper div.form-item input {
+  width: 100%;
+}
+.field_utexas_photo_content_area .links {
+  border: 0px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.field_utexas_photo_content_area .links ul {
+  margin-top: 0px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.field_utexas_photo_content_area img {
+  width: 100%;
+  height: auto;
+}

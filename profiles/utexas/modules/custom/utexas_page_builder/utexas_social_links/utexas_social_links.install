@@ -1,0 +1,37 @@
+<?php
+/**
+ * @file
+ * Install file for Social Links module. Used to install a field schema
+ * for the Social Links compound field.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines the schema for Social Links fields.
+ */
+function utexas_social_links_field_schema($field) {
+  $columns = array();
+
+  switch ($field['type']) {
+    case 'utexas_social_links':
+      $columns['headline'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores headline for the social link area.',
+      );
+      $columns['links'] = array(
+        'type' => 'blob',
+        'size' => 'normal',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+        'description' => 'Stores serialized array of links for the social links compound field.',
+      );
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+  );
+}

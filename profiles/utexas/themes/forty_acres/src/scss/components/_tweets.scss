@@ -1,0 +1,121 @@
+.tweet {
+	//Divider Line
+	&+&{
+		border-top: 1px solid $lightGreyDivider;
+	}
+
+	position: relative;
+	padding: 10px;
+	color: $burntGrey;
+	overflow: hidden;
+
+	@include respond(large){
+		padding: 15px 15px;
+	}
+
+	.tweet-image {
+		float: left;
+		width: 35px;
+		border: 1px solid $lightGreyDivider;
+		margin: 0 10px 10px 0;
+
+		@include respond(medium){
+			width: 50px;
+		}
+
+		img {
+			width: 100%;
+		}
+	}
+
+	.tweet-follow {
+		display: block;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 42px;
+		height: 25px;
+		background: url('../img/tweets/follow.png') center center no-repeat;
+		background-size: 100%;
+
+		@include respond(medium){
+			top: 15px;
+			right: 15px;
+		}
+	}
+
+	.tweet-author {
+		font-size: 13px;
+		font-weight: bold;
+
+		@include respond(medium){
+			font-size: 16px;
+		}
+	}
+
+	.tweet-username {
+		font-size: 11px;
+		margin: 3px 0;
+
+		@include respond(medium){
+			margin: 5px 0;
+			font-size: 14px;
+		}
+	}
+
+	.tweet-text {
+		clear: left;
+		font-size: 13px;
+		line-height: 17px;
+		margin-bottom: 15px;
+
+		@include respond(medium){
+			font-size: 15px;
+			line-height: 20px;
+			margin-bottom: 15px;
+		}
+	}
+
+	.tweet-time {
+		float: left;
+		font-size: 11px;
+		font-style: italic;
+
+		@include respond(medium){
+			font-size: 15px;
+		}
+	}
+
+	.tweet-actions {
+		float: right;
+		margin: 0;
+
+		.tweet-action {
+			display: inline-block;
+			
+		}
+
+		.action-link {
+			width: 20px;
+			height: 15px;
+			margin: 0 3px;
+			display: block;
+		}
+
+		.action-reply {
+			background: url('../img/tweets/reply.png') center center no-repeat;
+			background-size: 100%;
+		}
+
+		.action-retweet {
+			background: url('../img/tweets/retweet.png') center center no-repeat;
+			background-size: 100%;
+		}
+
+		.action-favorite {
+			background: url('../img/tweets/favorite.png') center center no-repeat;
+			background-size: 100%;
+		}
+	}
+
+}

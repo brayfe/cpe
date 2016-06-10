@@ -1,0 +1,13 @@
+diff --git a/profiles/utexas/modules/contrib/taxonomy_permissions/taxonomy_permissions.module b/profiles/utexas/modules/contrib/taxonomy_permissions/taxonomy_permissions.module
+index 2349f52..c76c62f 100644
+--- a/profiles/utexas/modules/contrib/taxonomy_permissions/taxonomy_permissions.module
++++ b/profiles/utexas/modules/contrib/taxonomy_permissions/taxonomy_permissions.module
+@@ -74,7 +74,7 @@ function taxonomy_permissions_query_term_access_alter(QueryAlterableInterface $q
+  */
+ function taxonomy_permissions_field_access($op, $field, $entity_type, $entity, $account) {
+   // Remove taxonomy_term_reference fields for disallowed vocabularies.
+-  if ($field['type'] == 'taxonomy_term_reference') {
++  if (isset($field['type']) and $field['type'] == 'taxonomy_term_reference') {
+     foreach ($field['settings']['allowed_values'] as $tree) {
+       if ($vocabulary = taxonomy_vocabulary_machine_name_load($tree['vocabulary'])) {
+         if (!user_access('view terms in ' . $vocabulary->vid, $account)) {

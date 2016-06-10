@@ -1,0 +1,117 @@
+// featured highlight field relies on highlight.scss styles
+.field_utexas_featured_highlight{
+	.highlight-text p a {
+		text-decoration: underline;
+	}
+	// Color Themes
+	.dark{
+		background-color: #6a6361;
+		color: #efefef;
+		h2, p{
+			color: inherit;
+		}
+		.cta-link{
+			color: #efefef;
+		}
+	}
+
+	.light{
+		background-color: #d6d2c4;
+		color: $burntGrey;
+		h2, p{
+			color: inherit;
+		}
+		.cta-link{
+			color: $burntGrey;
+		}
+		.highlight-text p a {
+			color: $burntGrey;
+		}
+	}
+
+    .navy {
+      background-color: #333f48;
+      color: #fff;
+      h2, p{
+        color: #fff;
+      }
+      .cta-link{
+        color: #fff;
+      }
+    }
+  .has_image {
+    .featured-highlight-content {
+      padding-left: 0;
+      text-align: center;
+      display: block;
+      @include respond(medium){
+        padding-left: 30px;
+        text-align: left;
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+  }
+  .no_image {
+    .featured-highlight-content {
+      max-width: 90%;
+      margin: auto;
+      @include respond(medium) {
+        max-width: 80%;
+
+      }
+    }
+  }
+  h2.highlight-headline {
+    margin-top: 0;
+  }
+  .highlight-headline .highlight-headline {
+    margin-top: 0;
+    @include respond(small-only) {
+      font-size: rem-calc(30);
+      line-height: rem-calc(36);
+    }
+  }
+}
+
+.highlight-image.template-highlight{
+  display: block;
+  padding-bottom: 20px;
+  @include respond(medium){
+    padding-bottom: 0;
+    display: table-cell;
+    vertical-align: middle;
+    max-width: 330px;
+    min-width: 330px;
+
+  }
+  @media (min-width: 641px) and (max-width: 860px){
+    max-width: 250px;
+    min-width: 250px;
+  }
+  @include respond(small-only){
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+  }
+  .flex-video {
+    padding-bottom: 45.5%;
+    margin-bottom: 0;
+    @include respond(medium){
+      padding-bottom: 48.5%;
+    }
+  }
+}
+.container.container-highlight.field_utexas_featured_highlight {
+  display: block;
+  width: 100%;
+  @include respond(medium){
+    display: table;
+  }
+  .container-highlight-table-row {
+    display: block;
+    @include respond(medium){
+      display:table-row;
+    }
+  }
+}

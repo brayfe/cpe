@@ -1,0 +1,111 @@
+<?php
+
+/**
+ * @file
+ * Qualtrics form filter.
+ */
+
+/**
+ * Implements hook_filter_info().
+ */
+function utexas_qualtrics_filter_filter_info() {
+  $filters = array();
+  $filters['qualtrics_filter'] = array(
+    'title' => t('Qualtrics Filter'),
+    'description' => t('Substitutes an embed item with an iframe.'),
+    'process callback' => '_qualtrics_filter_process',
+    'settings callback' => '_qualtrics_filter_settings',
+    'default settings' => array(
+      'qualtrics_filter_height' => 500,
+      'qualtrics_filter_title' => 'Qualtrics form',
+    ),
+    'tips callback' => '_qualtrics_filter_tips',
+    'weight' => -1,
+  );
+  return $filters;
+}
+
+/**
+ * Tips callback function.
+ */
+function _qualtrics_filter_tips($filter, $format, $long = FALSE) {
+  return t('Insert Qualtrics forms with the <code>[embed] Qualtrics URL [/embed]</code> shortcode.
+    Set the height and title with <code>[embed] URL | height:500 | title=X [/embed]</code>.');
+}
+
+/**
+ * Settings callback function.
+ */
+function _qualtrics_filter_settings($form, &$form_state, $filter, $format, $defaults, $filters) {
+  $filter->settings += $defaults;
+  $settings['qualtrics_filter_height'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Default height setting (in pixels)'),
+    '#default_value' => isset($filter->settings['qualtrics_filter_height']) ? $filter->settings['qualtrics_filter_height'] : $defaults['qualtrics_filter_height'],
+    '#maxlength' => 4,
+    '#required' => TRUE,
+    '#element_validate' => array('element_validate_integer_positive'),
+  );
+  $settings['qualtrics_filter_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Default title setting'),
+    '#default_value' => isset($filter->settings['qualtrics_filter_title']) ? $filter->settings['qualtrics_filter_title'] : $defaults['qualtrics_filter_title'],
+    '#maxlength' => 140,
+    '#required' => TRUE,
+  );
+
+  return $settings;
+}
+
+/**
+ * Process callback function.
+ */
+function _qualtrics_filter_process($text, $filter = NULL) {
+  if ($filter === NULL) {
+    $filter = new stdClass();
+  }
+
+  // Do nothing if there is no oembed objects in the body field.
+  if (!strpos($text, "qualtrics.com")) {
+    return $text;
+  }
+
+  if (preg_match_all('/\[embed\]((.+qualtrics.com.+))?( .+)?\[\/embed\]/iU', $text, $matches_code)) {
+    foreach ($matches_code[0] as $ci => $code) {
+      $form = array(
+        'source' => $matches_code[2][$ci],
+      );
+
+      // Override default attributes.
+      if ($matches_code[3][$ci] && preg_match_all('/\|\s*([a-zA-Z_]+)\:(\s*)?([0-9a-zA-Z \/]+)(\s*)/i', $matches_code[3][$ci], $matches_attributes)) {
+        foreach ($matches_attributes[0] as $ai => $value) {
+          $form[$matches_attributes[1][$ai]] = $matches_attributes[3][$ai];
+        }
+      }
+
+      $form['height'] = filter_var(isset($form['height']), FILTER_VALIDATE_INT) ? trim($form['height']) : $filter->settings['qualtrics_filter_height'];
+      $form['title'] = check_plain(isset($form['title']) ? trim($form['title']) : $filter->settings['qualtrics_filter_title']);
+
+      if (!$replacement = utexas_qualtrics_filter_iframe($form)) {
+        // Invalid callback.
+        $replacement = '<!-- QUALTRICS FILTER - INVALID CALLBACK IN: ' . $code . ' -->';
+      }
+      $text = str_replace($code, $replacement, $text);
+    }
+  }
+  return $text;
+}
+
+/**
+ * Wrapper that calls the theme function.
+ */
+function utexas_qualtrics_filter_iframe($form) {
+  if (!filter_var($form['source'], FILTER_VALIDATE_URL) === false) {
+    $output = '<iframe src="' . $form['source'] . '" width="100%" scrolling="auto" name="Qualtrics"
+    align="center" height="' . $form['height'] . '" frameborder="no" title="' . $form['title'] . '" ></iframe>';
+    return $output;
+  }
+  else {
+    return false;
+  }
+}

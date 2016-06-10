@@ -1,0 +1,81 @@
+<?php
+/**
+ * @file
+ * Installation file for the Promo Field module.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines promo content type field schema.
+ */
+function utexas_promo_field_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+    case 'utexas_promo_field':
+      $columns['title'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores title for promo unit collection',
+      );
+      $columns['headline'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores headline for individual promo',
+      );
+      $columns['copy_value'] = array(
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+        'description' => 'Stores copy value for individual promo',
+      );
+      $columns['copy_format'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores copy text format for individual promo',
+      );
+      $foreign_keys['copy_format'] = array(
+        'table' => 'filter_format',
+        'columns' => array('copy_format' => 'format'),
+      );
+      $columns['image_fid'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => FALSE,
+        'description' => 'The {file_managed}.fid for a promo unit image',
+      );
+      $foreign_keys['image_fid'] = array(
+        'table' => 'file_managed',
+        'columns' => array('image_fid' => 'fid'),
+      );
+      $columns['link'] = array(
+        'type' => 'varchar',
+        'length' => 2048,
+        'not null' => FALSE,
+        'description' => 'Stores optional link to either internal or external promo content',
+      );
+      $columns['cta'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores optional call to action for either internal or external promo content',
+      );
+      $columns['size_option'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores the machine name of the image style to be used',
+      );
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+    'foreign keys' => $foreign_keys,
+  );
+}

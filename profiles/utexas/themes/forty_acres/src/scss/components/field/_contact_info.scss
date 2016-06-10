@@ -1,0 +1,46 @@
+.field_contact_info{
+	background-color: #fff;
+	padding: 10px;
+	border: 1px solid $light-grey-border;
+	margin: 0;
+	@include respond(medium){
+		padding: 10px;
+	}
+
+	h4{
+		margin: 0px 0 10px 0;
+		color: $burntGrey;
+		font-style: italic;
+		font-size: rem-calc(17);
+		line-height: rem-calc(23);
+		border-bottom: 1px solid $light-grey-border;
+		padding-bottom: 10px;
+		font-weight: 500;
+		text-align: center;
+	}
+
+	p{
+		color: #474541;
+		font-size: rem-calc(15);
+		line-height: rem-calc(22);
+	}
+
+	.address{
+		margin: 20px 0;
+		p{
+			margin: 0;
+		}
+		a{
+			color: #474541;
+			text-decoration: underline;
+		}
+		.label{
+			color: $burntOrange;
+			font-size: rem-calc(14);
+			line-height: rem-calc(19);
+			font-style: normal;
+			font-weight: 600;
+			margin-bottom: 2px;
+		}
+	}
+}

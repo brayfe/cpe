@@ -1,0 +1,13 @@
+name = UTexas Menu
+description = Provides an interface for the main UT menu
+core = 7.x
+version = 7.x-1.0
+package = UTexas
+
+configure = admin/config/utexas/utexas_menu
+
+dependencies[] = menu
+dependencies[] = block
+dependencies[] = utexas_admin
+
+stylesheets[all][] = utexas_menu.css

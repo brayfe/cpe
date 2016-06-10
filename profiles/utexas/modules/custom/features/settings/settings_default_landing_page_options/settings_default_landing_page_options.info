@@ -1,0 +1,11 @@
+name = Settings: Default Landing Page Options
+description = Default Landing Page Options
+core = 7.x
+package = Settings
+version = 7.x-1.0
+dependencies[] = ctools
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[variable][] = node_options_landing_page
+project path = profiles/utexas/modules/custom/features/settings

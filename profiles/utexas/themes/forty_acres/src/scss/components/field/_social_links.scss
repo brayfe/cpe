@@ -1,0 +1,63 @@
+.field_utexas_social_links{
+	background-color: #ffffff;
+	border: 1px solid $light-grey-border;
+	@include respond(medium){
+		padding: 10px;
+		margin: 0;
+	}
+
+	h4{
+		text-align: center;
+		margin: 0px 0 10px 0;
+		color: $burntGrey;
+		font-style: italic;
+		font-size: rem-calc(17);
+		line-height: rem-calc(23);
+		border-bottom: 1px solid $light-grey-border;
+		padding-bottom: 10px;
+		font-weight: 500;
+	}
+
+	.connect-links {
+		font-size: rem-calc(40);
+		padding: 2px 0 0 0px;
+		text-align: center;
+		span{
+			color: $burntOrange;
+		}
+
+		span:hover{
+			color: $burntOrangeAccent;
+		}
+
+		li {
+			padding-bottom: 3px;
+		}
+	}
+
+	.connect-link {
+		color: #392f2d;
+		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			color: #6a6361;
+		}
+	}
+}
+
+.container-top{
+	.field_utexas_social_links{
+		margin: 10px 0 0 0px;
+		padding: 15px;
+		@include respond(medium){
+			margin-top: 0px;
+			padding: 20px;
+		}
+	}
+}
+
+.container.container-bottom.accent .field_utexas_social_links {
+  background-color: #fff;
+  border: 1px solid #333f48;
+}
