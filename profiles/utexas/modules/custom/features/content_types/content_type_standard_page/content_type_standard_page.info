@@ -1,7 +1,7 @@
 name = Content Type : Standard Page
 core = 7.x
 package = Content Types
-version = 7.x-1.1
+version = 7.x-1.2
 project = content_type_standard_page
 dependencies[] = context_field
 dependencies[] = entityreference
@@ -79,7 +79,7 @@ features[variable][] = field_bundle_settings_node__standard_page
 features[variable][] = fieldblock-node-standard_page-default
 features[variable][] = menu_options_standard_page
 features[variable][] = menu_parent_standard_page
-features[variable][] = node_options_standard_page
 features[variable][] = node_preview_standard_page
 features[variable][] = node_submitted_standard_page
 features[variable][] = page_builder_template_standard_page
+features_exclude[variable][node_options_standard_page] = node_options_standard_page
