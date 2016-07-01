@@ -3,9 +3,15 @@
 /sites/*/private
 /files/*
 /cache
+/profiles/utexas/tests/config.sh
+/profiles/utexas/tests/credentials.php
+/profiles/utexas/tests/failures/*
+/profiles/utexas/tests/regressions/*
+!/profiles/utexas/tests/regressions/baselines/*
+/profiles/utexas/tests/logs/*
 
-# Ignore local-settings file
-/sites/default/local-settings.php
+# Never commit local-settings.php
+/sites/*/local-settings.php
 
 # ** Only works in OSs that support newer versions of fnmatch (Bash 4+)
 /sites/default/**/files
