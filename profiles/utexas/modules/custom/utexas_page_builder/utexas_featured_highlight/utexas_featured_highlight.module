@@ -90,7 +90,7 @@ function utexas_featured_highlight_field_widget_form(&$form, &$form_state, $fiel
         '#title' => t('Highlight Image'),
         '#tree' => TRUE,
         '#field_name' => 'file_upload',
-        '#description' => t('Upload an image, or select one from the library.'),
+        '#description' => t('Upload an image, or select one from the library. Images will be automatically scaled and cropped to 560 x 340. Use an image with an aspect ratio equal to 560 x 340 to avoid cropping.'),
         '#extended' => TRUE,
         '#media_options' => array(
           'global' => array(

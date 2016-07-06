@@ -77,7 +77,7 @@ function utexas_promo_list_field_widget_form(&$form, &$form_state, $field, $inst
         '#title' => t('Promo List Image'),
         '#tree' => TRUE,
         '#field_name' => 'utexas_promo_list_image',
-        '#description' => t('Upload an image, or select one from the library.'),
+        '#description' => t('Upload an image, or select one from the library. Image will be scaled and cropped to 170 x 170. Upload an image with an aspect ratio equal to 170 x 170 to avoid image cropping.'),
         '#extended' => TRUE,
         '#media_options' => array(
           'global' => array(
@@ -109,7 +109,7 @@ function utexas_promo_list_field_widget_form(&$form, &$form_state, $field, $inst
       $element['link'] = array(
         '#type' => 'textfield',
         '#title' => t('Link'),
-        '#description' => t('A valid URL for this promo list.'),
+        '#description' => t('A valid URL for this promo list. If present, the item headline and image will become links.'),
         '#size' => 60,
         '#maxlength' => 2048,
         '#default_value' => $link,
@@ -189,6 +189,11 @@ function utexas_promo_list_field_presave($entity_type, $entity, $field,
     $item['copy_format'] = isset($item['copy']['format']) ? $item['copy']['format'] : $item['copy_format'];
     $item['copy_value'] = isset($item['copy']['value']) ? $item['copy']['value'] : $item['copy_value'];
     unset($item['copy']);
+
+    // Provide informative messages about possibly misleading populated fields.
+    if (!empty($item['link']) && empty($item['copy_value']) && empty($item['image_fid'])) {
+      drupal_set_message(t('Note: one of the Promo Lists has a link still defined, but since no other fields have values, nothing will be displayed.'));
+    }
 
   }
 }
@@ -382,5 +387,35 @@ function template_preprocess_utexas_promo_list(&$variables) {
   }
   else {
     $variables['headline'] = FALSE;
+  }
+}
+
+/**
+ * Implements template_preprocess_entity().
+ */
+function utexas_promo_list_preprocess_entity(&$variables, $hook) {
+  $function = 'utexas_promo_list_preprocess_promo_list_item';
+  if (isset($variables['field_utexas_promo_list_item']) && function_exists($function)) {
+    $function($variables, $hook);
+  }
+}
+
+/**
+ * Field Collection-specific implementation of template_preprocess_entity().
+ */
+function utexas_promo_list_preprocess_promo_list_item(&$variables) {
+  // Set default style type, in case the user has entered N/A.
+  // This equates to choosing " Two lists, side-by-side".
+  $variables['promo_list_style'] = 'one-column small-12 large-6 end';
+  $variables['promo_list_class'] = '';
+
+  if (isset($variables['field_utexas_promo_list_style'][0]['value'])) {
+    if ($variables['field_utexas_promo_list_style'][0]['value'] == 'Single list responsive (2 items per row)') {
+      $variables['promo_list_style'] = 'two-column';
+      $variables['promo_list_class'] = 'columns small-12 large-6 end';
+    }
+    elseif ($variables['field_utexas_promo_list_style'][0]['value'] == 'Single list full (1 item per row)') {
+      $variables['promo_list_style'] = 'one-column-full-width small-12 end ';
+    }
   }
 }

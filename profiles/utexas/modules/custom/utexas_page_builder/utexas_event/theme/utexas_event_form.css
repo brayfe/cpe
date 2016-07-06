@@ -1,0 +1,14 @@
+.container-inline-date {
+  display:inline;
+
+}
+
+.date-fields {
+  background:#f2f2f2;
+  float:right;
+  width:50%;
+}
+
+#edit-detail-text-format {
+  display: none;
+}

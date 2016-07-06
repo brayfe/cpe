@@ -52,7 +52,7 @@ function utexas_image_links_field_widget_form(&$form, &$form_state, $field,
         '#title' => t('Image'),
         '#tree' => TRUE,
         '#field_name' => 'utexas_image_link_image',
-        '#description' => t('Add an image with an optional link.'),
+        '#description' => t('Add an image with an optional link. This image will display at its original dimensions.'),
         '#extended' => TRUE,
         '#media_options' => array(
           'global' => array(

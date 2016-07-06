@@ -17,6 +17,7 @@
 <ul class="connect-links">
 <?php
   foreach ($links as $name => $link) :
+    $name = ($name == 'Vimeo') ? 'Vimeo2' : $name;
     echo '<li><a href="' . $link . '" class="connect-link" title="' . $name . '"><span class="icon-' .
     strtolower($name) . '"><span class="hiddenText">' . $name .
     '</span></span></a></li>';

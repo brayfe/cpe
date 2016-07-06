@@ -30,3 +30,33 @@
 .container-top .field.field_utexas_twitter_widget .sidebar-module {
   padding: 0px;
 }
+.retweet-eyebrow .icon-retweet:before {
+  background: #19cf86 none repeat scroll 0 0;
+  border-radius: 2px;
+  color: white;
+  display: inline-block;
+  line-height: 1.1;
+  margin-right: 8px;
+  padding: 1px 2px;
+  font-size: 12px;
+}
+.retweet-eyebrow {
+  margin-bottom: 5px;
+  margin-left: 32px;
+}
+@media only screen and (max-width: 40.063em) {
+  .retweet-eyebrow {
+    margin-bottom: 5px;
+    margin-left: 17px;
+  }
+  .pretty-link {
+    font-size: 13px;
+  }
+}
+.tweet-actions .action-link:hover {
+  text-decoration: none;
+  color: #555;
+}
+.tweet-actions .action-link {
+  color: #2d2a28;
+}
