@@ -1,7 +1,7 @@
 name = Content Type : Standard Page
 core = 7.x
 package = Content Types
-version = 7.x-1.2
+version = UTEXAS_DISTRO_VERSION
 project = content_type_standard_page
 dependencies[] = context_field
 dependencies[] = entityreference
@@ -9,6 +9,7 @@ dependencies[] = features
 dependencies[] = field_collection
 dependencies[] = list
 dependencies[] = options
+dependencies[] = settings_default_standard_page_options
 dependencies[] = strongarm
 dependencies[] = taxonomy
 dependencies[] = text
