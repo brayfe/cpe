@@ -1,16 +1,16 @@
-# features/site_builder.feature
+# features/site_manager.feature
 
 @api
-Feature: Site Builder
+Feature: Site Manager
   In order to build sites
-  As a site builder
-  I need to be able to perform the tasks associated with site-building
+  As a site manager
+  I need to be able to perform the tasks associated with site managing
 
 @javascript
-Scenario: Perform actions with site-builder permissions
+Scenario: Perform actions with site manager permissions
 
   # Validate login
-  Given I am logged in as a user with the "site builder, standard page editor, site manager" role
+  Given I am logged in as a user with the "site builder, standard page editor" role
   When I go to "node/add/standard-page"
   Then I should see the css element ".toolbar-menu"
   And I set browser window size to "1200" x "900"
@@ -22,12 +22,14 @@ Scenario: Perform actions with site-builder permissions
   Then I should see the text "Create Standard Page" in the "branding" region
   And I fill in "Standard Page Test" for "edit-title" in the "form_item_title" region
 
-  # Verify Site Managers can create standard Drupal blocks
+  # Verify Site Managers can create standard Drupal blocks with script.
+  Given I am logged in as a user with the "site manager" role
   When I go to "/admin/structure/block/add"
   And I fill in "Test Block" for "Block title"
   And I fill in "Test Block" for "Block description"
   And I select "Plain text" from "Text format"
-  And I fill in "Cat ipsum dolor sit amet, give attitude for spread kitty litter all over house. Hack up furballs stare at the wall, play with food and get confused by dust and mew attack feet run in circles. Caticus cuteicus paw at your fat belly yet missing until dinner time, or sit by the fire." for "Block body"
+  And I fill in "<script type='text/javascript' src='https://iq-analytics.austin.utexas.edu/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 752px; height: 402px;'><object class='tableauViz' width='775' height='401'  scrolling='no' style='display:none;'><param name='host_url' value='https%3A%2F%2Fiq-analytics.austin.utexas.edu%2F' /> <param name='site_root' value='' /><param name='name' value='PurchasingTransparencyReportList&#47;Dashboard' /><param name='tabs' value='no' /><param name='toolbar' value='no' /><param name='showVizHome' value='n' /></object></div>" for "Block body"
+  And I select "Filtered HTML for Blocks" from "Text format"
   And I click on the element "#edit-submit"
   And I click "Home"
 
@@ -41,7 +43,7 @@ Scenario: Perform actions with site-builder permissions
   And I click "Done" in the "context_editor" region
   And I press the "Save" button
   # Verify custom block presence on page
-  Then I should see the text "Cat ipsum dolor sit amet, give attitude for spread kitty litter all over house. Hack up furballs stare at the wall, play with food and get confused by dust and mew attack feet run in circles. Caticus cuteicus paw at your fat belly yet missing until dinner time, or sit by the fire." in the "top_left_region" region
+  Then I should see HTML '\<script type=\"text/javascript\" src=\"https://iq-analytics.austin.utexas.edu/javascripts/api/viz_v1.js"\>\</script\>' in the "#block-block-1" region
 
   # Administer theme settings
   When I go to "/admin/appearance/settings/forty_acres"

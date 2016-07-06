@@ -73,6 +73,10 @@ Scenario: Perform actions with site-builder permissions
   Then I should see "You are not authorized to access this page." in the "page" region
   When I go to "/admin/appearance/settings/forty_acres"
   Then I should see "You are not authorized to access this page." in the "page" region
+  When I go to "/admin/structure/taxonomy/tags"
+  Then I should see "Tags" in the "page_title" region
+  When I go to "/admin/structure/taxonomy/team_member_group"
+  Then I should see "Access denied" in the "page_title" region
   When I go to "/node/add"
   Then I should not see "Landing Page" in the "page" region
   And I should not see "Team Member" in the "page" region

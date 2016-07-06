@@ -14,9 +14,9 @@ Scenario: Enable the starterkit to make some theme-settings changes
   Given I run drush "vset theme_default STARTERKIT -y"
   Then drush output should contain 'theme_default was set to "STARTERKIT".'
 
-@javascript @drush
+@javascript @drush @api
 Scenario: Test theme-settings and verify starterkit is default theme
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   Then I go to "admin/appearance"
   And I should see "STARTERKIT" in the "theme_default" region
   Then I go to "admin/appearance/settings/STARTERKIT"

@@ -7,9 +7,9 @@ Feature: Social Links
   As a site-builder
   I need to be able to create, update, and delete social links
 
-@javascript
+@javascript @api
 Scenario: User with correct permissions can add fields
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I go to "node/add/standard-page"
   And I fill in "test form" for "edit-title" in the "form_item_title" region

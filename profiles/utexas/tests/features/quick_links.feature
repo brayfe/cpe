@@ -7,9 +7,9 @@ Feature: Quick Links
   As a site-builder
   I need to be able to supply populated quick link fields to a page
 
-@javascript
+@javascript @api
 Scenario: User with correct permissions can add fields
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I go to "node/add/standard-page"
   And I fill in "test form" for "edit-title" in the "form_item_title" region
@@ -34,9 +34,9 @@ Scenario: User with correct permissions can add fields
   And I click "Done" in the "context_editor" region
   Then I should see "behat quick_link test" in the "quick_links_block" region
 
-@javascript
+@javascript @api
 Scenario: User can enter more than 5 quick links
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "test form" for "edit-title" in the "form_item_title" region
   And I click "Quick Links" in the "vertical_tabs" region
@@ -72,9 +72,9 @@ Scenario: User can enter more than 5 quick links
   And I wait for css element ".field.field_utexas_quick_links" to "appear"
   Then I should see the link "behat test link title6" in the "quick_links_block" region
 
-@javascript
+@javascript @api
 Scenario: When a link is entered without a title, an absolute URL displays
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "Quick Links Test" for "edit-title" in the "form_item_title" region
   And I click "Quick Links" in the "vertical_tabs" region

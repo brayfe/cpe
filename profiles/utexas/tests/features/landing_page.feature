@@ -8,7 +8,7 @@ Feature: Landing Page Content Type
   I need to be able to place content on a landing page
 
 Scenario: User adds available content to landing page
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   When I click "Add content"
   And I click "Landing Page"
   # Quick Links #
