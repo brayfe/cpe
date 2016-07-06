@@ -9,7 +9,7 @@
  * Helper function to install a default page.
  */
 
-  $pages[] = array(
+  $video_pages[] = array(
     'uid' => 1,
     'title' => 'Video Filter Embedding Demo',
     'log' => '',
@@ -240,7 +240,7 @@
     'date' => '2015-12-04 22:19:29 +0000',
   );
 
-  foreach ($pages as $page) {
+  foreach ($video_pages as $page) {
     $node = new stdClass();
     $node->title = $page['title'];
     $node->type = 'standard_page';
@@ -332,3 +332,5 @@
     context_save($context);
   }
 
+// Prevent this data from being acted on during a later operation.
+unset($video_pages);
