@@ -316,5 +316,11 @@
         span {
           color: $burntOrangeAccent;
         }
+				.utexas-flex-content {
+					background: #f5f4f0;
+					@include respond(small-only) {
+						height: inherit!important;
+					}
+				}
     }
 }

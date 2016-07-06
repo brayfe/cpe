@@ -103,3 +103,7 @@
       </div> <!-- container-nav-phase2 -->
     </div> <!-- nav-wrapper -->
   </header><!-- /header -->
+<!-- alert -->
+<?php if (module_exists('utexas_announcement') && file_exists($partial_announcement) && $display_announcement == TRUE):
+  require_once $partial_announcement;
+endif; ?>

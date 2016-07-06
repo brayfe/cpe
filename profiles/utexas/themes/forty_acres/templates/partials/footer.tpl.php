@@ -2,12 +2,19 @@
 /**
  * @file
  * Partial file to display the footer.
- *
- * @todo ITS to update this file when Subscribe to our Newsletter module has
- *   been completed.
  */
-
 ?>
+    <?php if ($show_date): ?>
+      <div class="container container-updated">
+        <div class="row last_updated">
+          <div class="column small-12">
+            <div class="right caption">
+              <div class="caption-copy"><?php print $show_date; ?></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <?php endif; ?>
     <div class="container container-footer footer-theme2">
       <div class="row">
         <div class="column small-12 medium-4">
