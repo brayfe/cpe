@@ -1,0 +1,244 @@
+<?php
+/**
+ * @file
+ * Module implementation for the announcement.
+ */
+
+/**
+ * Administration configuration path for the module.
+ */
+define('UTEXAS_ANNOUNCEMENT_ADMIN_MENU_PATH', 'admin/config/utexas/utexas_announcement');
+
+/**
+ * Implements hook_help().
+ */
+function utexas_announcement_help($path, $arg) {
+  $page = array();
+
+  switch ($path) {
+    case 'admin/help#utexas_announcement':
+      $page[] .= '<h2>' . t('Announcement') . '</h2>';
+      $page[] .= '<p>' . t('The Announcement module provides configuration options for a styled announcement that can be displayed on the homepage or all pages.') . '</p>';
+      // Display the administration help, if the user can
+      // administer the homepage.
+      if (user_access('administer utexas announcement')) {
+        $page[] .= '<p><strong>TODO: </strong>Indicate what parts of this module are administrable</p>';
+      }
+
+      break;
+
+    case UTEXAS_ANNOUNCEMENT_ADMIN_MENU_PATH:
+      $page[] .= '<p>' . t('The Announcement module provides configuration options for a styled announcement that can be displayed on the homepage or all pages. Any changes made to this form will take effect immediately.') . '</p>';
+      break;
+
+  }
+
+  return implode($page);
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * Defines a permission for administering the homepage.
+ */
+function utexas_announcement_permission() {
+  return array(
+    'administer utexas announcement' => array(
+      'title' => t('Administer Announcement'),
+      'description' => t('Perform administration tasks for announcement module.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Defines the utexas_announcement theme function.
+ *
+ * @see template_preprocess_utexas_announcement()
+ */
+function utexas_announcement_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_announcement' => array(
+      'template' => 'utexas-announcement',
+      'variables' => array(
+        'announcement_title' => NULL,
+        'announcement_body' => NULL,
+        'display_announcement' => NULL,
+        'announcement_call_to_action' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * Defines an administration path for the module.
+ */
+function utexas_announcement_menu() {
+  // Menu items.
+  $items = array();
+
+  // Admin page.
+  $items[UTEXAS_ANNOUNCEMENT_ADMIN_MENU_PATH] = array(
+    'title' => 'Announcement Configuration',
+    'description' => 'Display announcements on the homepage or site-wide.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('utexas_announcement_config_form'),
+    'access arguments' => array('administer utexas announcement'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements drupal_get_form().
+ *
+ * Used to generate the administration form for the module.
+ */
+function utexas_announcement_config_form($form, &$form_state) {
+  $module_path = drupal_get_path('module', 'utexas_announcement');
+
+  $form['utexas_announcement_fields'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Add an announcement to the homepage or all pages.'),
+  );
+
+  // Homepage announcement active.
+  $form['utexas_announcement_fields']['utexas_announcement_active'] = array(
+    '#type' => 'radios',
+    '#title' => t('Announcement status'),
+    '#options' => array(
+      0 => t('Inactive'),
+      1 => t('Active on front page only'),
+      2 => t('Active on all pages.'),
+    ),
+    '#default_value' => variable_get('utexas_announcement_active', 0),
+    '#description' => t('Specify if the announcement will appear on the homepage or all pages.'),
+  );
+
+  // Announcement title.
+  $form['utexas_announcement_fields']['utexas_announcement_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Announcement title'),
+    '#maxlength' => 128,
+    '#default_value' => variable_get('utexas_announcement_title', 'Announcement'),
+    '#description' => t('Enter the text that should appear as the main headline on top of the announcement.'),
+  );
+
+  // Add title icon.
+  $form['utexas_announcement_fields']['utexas_announcement_title_icon'] = array(
+    '#type' => 'radios',
+    '#title' => t('Select an icon to display next to the title.'),
+    '#default_value' => variable_get('utexas_announcement_title_icon', 'icon-announcement'),
+    '#options' => array(
+      'icon-announcement' => 'Megaphone <span class="announcement-icon megaphone"></span>',
+      'icon-warning' => 'Exclamation point <span class="announcement-icon exclamation"></span>',
+      'icon-beacon' => 'Beacon <span class="announcement-icon beacon"></span>',
+    ),
+  );
+
+  // Add background color.
+  $form['utexas_announcement_fields']['utexas_announcement_background'] = array(
+    '#type' => 'radios',
+    '#title' => t('Select a background color for the announcement.'),
+    '#default_value' => variable_get('utexas_announcement_background', 'yellow-background'),
+    '#options' => array(
+      'yellow-background' => 'Yellow <span class="yellow swatch"></span>',
+      'orange-background' => 'Orange <span class="orange swatch"></span>',
+      'green-background' => 'Green <span class="green swatch"></span>',
+      'grey-background' => 'Grey <span class="grey swatch"></span>',
+    ),
+  );
+
+  // Announcement body.
+  $form['utexas_announcement_fields']['utexas_announcement_body'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Announcement body'),
+    '#default_value' => variable_get('utexas_announcement_body', ''),
+    '#description' => t('Enter the text that should appear as the main message of the announcement.<br>Allowed html tags: &ltbr>&lta>'),
+  );
+
+  // Get the CTA.
+  $form['utexas_announcement_fields']['utexas_announcement_cta'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Call to action caption'),
+    '#default_value' => variable_get('utexas_announcement_cta', FALSE),
+    '#description' => t('Enter an optional call-to-action caption.'),
+  );
+
+  // Get the destination URL.
+  $form['utexas_announcement_fields']['utexas_announcement_destination_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Call to action destination URL'),
+    '#default_value' => variable_get('utexas_announcement_destination_url', FALSE),
+    '#description' => t('Enter the call-to-action destination. %http_notice.', array('%http_notice' => 'Must include http://')),
+    '#attributes' => array(
+      'placeholder' => 'http://',
+    ),
+  );
+
+  // Custom form submission actions.
+  $form['#submit'][] = 'utexas_announcement_config_form_submit';
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Perform alterations before the announcement form is rendered.
+ */
+function utexas_announcement_form_utexas_announcement_config_form_alter(&$form, &$form_state, $form_id) {
+  $form['#attached']['css'][] = drupal_get_path('module', 'utexas_announcement') . '/theme/announcement-config.css';
+}
+
+/**
+ * Retrieves, populates, and processes a form.
+ *
+ * This function allows you to supply values for form elements and submit a
+ * form for processing. Compare to drupal_get_form(), which also builds and
+ * processes a form, but does not allow you to supply values.
+ */
+function utexas_announcement_config_form_submit($form, &$form_state) {
+  cache_clear_all(NULL, 'cache_page');
+}
+
+/**
+ * Implements template_preprocess_page().
+ *
+ * Preprocessor for utexas-announcement.tpl.php.
+ *
+ * Proceesses data and creates variables for use in utexas-announcement.tpl.php.
+ */
+function utexas_announcement_preprocess_page(&$variables, $hook) {
+  // Set default values.
+  $variables['display_announcement'] = FALSE;
+  $variables['partial_announcement'] = '';
+  // Only pass variables if the announcement is active.
+  if (variable_get('utexas_announcement_active') == 1 || variable_get('utexas_announcement_active') == 2) {
+    $module_path = drupal_get_path('module', 'utexas_announcement');
+    $variables['partial_announcement'] = $module_path . '/theme/utexas-announcement.tpl.php';
+    if (drupal_is_front_page() || variable_get('utexas_announcement_active') == 2) {
+      $variables['display_announcement'] = TRUE;
+    }
+    drupal_add_css($module_path . '/theme/announcement.css');
+    // Find the call to action.
+    $call_to_action = FALSE;
+    if ($url = variable_get('utexas_announcement_destination_url', FALSE) and $cta = variable_get('utexas_announcement_cta', FALSE)) {
+      $call_to_action = l('<span>' . $cta . '</span>', $url, array(
+        'absolute' => TRUE,
+        'external' => TRUE,
+        'html' => TRUE,
+        'attributes' => array(
+          'class' => array('cta'),
+        ),
+      ));
+    }
+    $variables['announcement_title'] = variable_get('utexas_announcement_title', 'Announcement');
+    $variables['title_icon'] = variable_get('utexas_announcement_title_icon', 'megaphone');
+    $variables['announcement_background_color'] = variable_get('utexas_announcement_background', 'yellow');
+    $variables['announcement_call_to_action'] = ($call_to_action) ? $call_to_action : FALSE;
+    $variables['announcement_body'] = strip_tags(variable_get('utexas_announcement_body', ''), '<br><a>');
+  }
+}
