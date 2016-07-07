@@ -138,6 +138,9 @@ function _utexas_install_text_formats() {
  */
 function _utexas_install_settings() {
 
+  // Disable users from changing the timezone.
+  variable_set('configurable_timezones', 0);
+
   // Enable clean URLs.
   variable_set('clean_url', 1);
 
