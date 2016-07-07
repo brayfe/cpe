@@ -150,6 +150,10 @@ function _utexas_install_settings() {
   // Pathauto settings.
   variable_set('pathauto_node_pattern', '[node:title]');
 
+  // Set pathologic to be relative to server root.
+  variable_set('pathologic_protocol_style', 'path');
+
+  // Menu block settings.
   variable_set('menu_block_suppress_core', '1');
   variable_set('menu_block_menu_order', array('main-menu' => ''));
 
