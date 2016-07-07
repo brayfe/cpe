@@ -1,4 +1,4 @@
-UT Drupal Kit 7.x-2.3, 2016-07-07
+UT Drupal Kit 7.x-2.3, 2016-07-13
 ---------------------------------
 [MC-246] - Add lock icon to icon fonts
 [MC-250] - Add "Announcement" functionality
