@@ -185,6 +185,8 @@ function _utexas_install_settings() {
   // Set Special Menu Item nolink value to work with mega menu.
   variable_set('special_menu_items_nolink_tag', '<a href="#">');
 
+  // Restrict new account creation to authorized users.
+  variable_set('user_register', 0);
 }
 
 /**
