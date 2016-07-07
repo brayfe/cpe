@@ -221,20 +221,23 @@ function utexas_utdk_deploy_update_7109() {
 /**
  * Implements hook_update_N().
  *
- * Update text formats.
+ * Enable UTexas Announcement module.
  */
 function utexas_utdk_deploy_update_7110() {
-
-  utexas_admin_text_formats('save');
-  utexas_admin_ckeditor_profile('save', 'CKEditor Global Profile');
-  utexas_admin_ckeditor_profile('save', 'Advanced');
+  module_enable(array('utexas_announcement'));
 }
 
 /**
  * Implements hook_update_N().
  *
- * Enable UTexas Announcement module.
+ * Enables new node_options features, conditionally, and does a features_revert.
  */
-function utexas_utdk_deploy_update_7111() {
-  module_enable(array('utexas_announcement'));
+function utexas_mcms_deploy_update_7111() {
+  if (module_exists('view_unpublished')) {
+    module_enable(array('view_unpublished'));
+    $update = TRUE;
+  }
+  features_rebuild();
+  features_revert();
+  node_access_rebuild();
 }
