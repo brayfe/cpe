@@ -1,5 +1,5 @@
 name = UT Drupal Kit Deployment
 description = Deploys code updates via hook_update_N
 core = 7.x
-version = 7.x-1.2
+version = UTEXAS_DISTRO_VERSION
 package = UTexas
