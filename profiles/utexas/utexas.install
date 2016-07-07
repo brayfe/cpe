@@ -174,6 +174,13 @@ function _utexas_install_settings() {
   // CKEditor Link File settings.
   variable_set('ckeditor_link_file_link_method', 'url');
   variable_set('ckeditor_link_type_name', 'Page title or filename on this site.');
+
+  // Global Redirect settings.
+  variable_set('globalredirect_settings',
+    array(
+      'frontpage_redirect' => 0,
+    )
+  );
 }
 
 /**
