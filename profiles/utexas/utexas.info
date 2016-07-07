@@ -74,6 +74,7 @@ dependencies[] = special_menu_items
 dependencies[] = token
 dependencies[] = video_filter
 dependencies[] = views
+dependencies[] = view_unpublished
 
 ; UTexas Dependencies
 dependencies[] = utexas_admin
