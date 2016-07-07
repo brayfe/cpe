@@ -349,9 +349,6 @@ function _utexas_install_blocks() {
  */
 function _utexas_install_menus() {
 
-  // Set special menu items to work with mega menu.
-  variable_set('special_menu_items_nolink_tag', '<a href="#">');
-
   // Create the menu if it doesn't exist.
   if (!menu_load('menu-header')) {
     $menu = array(
