@@ -77,6 +77,7 @@ dependencies[] = views
 
 ; UTexas Dependencies
 dependencies[] = utexas_admin
+dependencies[] = utexas_announcement
 dependencies[] = utexas_beacon
 dependencies[] = utexas_contact_info
 dependencies[] = utexas_fonts
