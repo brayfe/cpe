@@ -181,6 +181,10 @@ function _utexas_install_settings() {
       'frontpage_redirect' => 0,
     )
   );
+
+  // Set Special Menu Item nolink value to work with mega menu.
+  variable_set('special_menu_items_nolink_tag', '<a href="#">');
+
 }
 
 /**
