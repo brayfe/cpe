@@ -138,6 +138,9 @@ function _utexas_install_text_formats() {
  */
 function _utexas_install_settings() {
 
+  // Disable users from changing the timezone.
+  variable_set('configurable_timezones', 0);
+
   // Enable clean URLs.
   variable_set('clean_url', 1);
 
@@ -147,6 +150,10 @@ function _utexas_install_settings() {
   // Pathauto settings.
   variable_set('pathauto_node_pattern', '[node:title]');
 
+  // Set pathologic to be relative to server root.
+  variable_set('pathologic_protocol_style', 'path');
+
+  // Menu block settings.
   variable_set('menu_block_suppress_core', '1');
   variable_set('menu_block_menu_order', array('main-menu' => ''));
 
@@ -167,6 +174,19 @@ function _utexas_install_settings() {
   // CKEditor Link File settings.
   variable_set('ckeditor_link_file_link_method', 'url');
   variable_set('ckeditor_link_type_name', 'Page title or filename on this site.');
+
+  // Global Redirect settings.
+  variable_set('globalredirect_settings',
+    array(
+      'frontpage_redirect' => 0,
+    )
+  );
+
+  // Set Special Menu Item nolink value to work with mega menu.
+  variable_set('special_menu_items_nolink_tag', '<a href="#">');
+
+  // Restrict new account creation to authorized users.
+  variable_set('user_register', 0);
 }
 
 /**
@@ -328,9 +348,6 @@ function _utexas_install_blocks() {
  * Helper function to add default menus.
  */
 function _utexas_install_menus() {
-
-  // Set special menu items to work with mega menu.
-  variable_set('special_menu_items_nolink_tag', '<a href="#">');
 
   // Create the menu if it doesn't exist.
   if (!menu_load('menu-header')) {
