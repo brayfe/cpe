@@ -48,6 +48,7 @@ function utexas_final_tasks() {
 
   features_rebuild();
   features_revert();
+  node_access_rebuild();
   cache_clear_all();
 }
 
@@ -91,9 +92,10 @@ function install_utexas_preferences() {
     include_once 'default_content/default_menu.inc';
   }
 
+  utexas_remove_message('Pantheon defaults');
   utexas_remove_message('clone', 'error');
   utexas_remove_message('context', 'error');
-  utexas_remove_message('Pantheon defaults');
+  utexas_remove_message('Metatag support has been enabled');
 
 }
 
@@ -243,6 +245,7 @@ function utexas_form_install_configure_form_alter(&$form, $form_state) {
   $form['server_settings']['date_default_timezone']['#default_value'] = 'America/Chicago';
   unset($form['server_settings']['date_default_timezone']['#attributes']);
 
+  // Provide value of "1" as clean URL setting.
   $form['server_settings']['clean_url']['#default_value'] = '1';
 }
 
