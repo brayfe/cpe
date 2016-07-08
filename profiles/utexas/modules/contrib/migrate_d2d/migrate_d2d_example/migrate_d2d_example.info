@@ -7,11 +7,12 @@ hidden = TRUE
 dependencies[] = migrate
 dependencies[] = migrate_d2d
 
+files[] = migrate_d2d_example.migrate.inc
 files[] = node.inc
 
-; Information added by Drupal.org packaging script on 2014-12-01
-version = "7.x-2.1-beta1+43-dev"
+; Information added by Drupal.org packaging script on 2015-02-09
+version = "7.x-2.1"
 core = "7.x"
 project = "migrate_d2d"
-datestamp = "1417455234"
+datestamp = "1423523588"
 
