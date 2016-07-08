@@ -1,0 +1,3 @@
+[submodule "profiles/utexas/modules/custom/utlogin"]
+	path = profiles/utexas/modules/custom/utlogin
+	url = git@bitbucket.org:utexas-its-drupal/utlogin_drupal.git
