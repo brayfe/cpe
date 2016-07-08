@@ -1,9 +1,14 @@
 meta.foundation-version {
-	font-family: "/5.4.7/";
+	font-family: "/5.5.3/";
 }
 
 meta.foundation-mq-small {
 	font-family: "/only screen/";
+	width: 0em;
+}
+
+meta.foundation-mq-small-only {
+	font-family: "/only screen and (max-width: 40em)/";
 	width: 0em;
 }
 
@@ -12,13 +17,28 @@ meta.foundation-mq-medium {
 	width: 40.063em;
 }
 
+meta.foundation-mq-medium-only {
+	font-family: "/only screen and (min-width:40.063em) and (max-width:64em)/";
+	width: 40.063em;
+}
+
 meta.foundation-mq-large {
 	font-family: "/only screen and (min-width:64.063em)/";
 	width: 64.063em;
 }
 
+meta.foundation-mq-large-only {
+	font-family: "/only screen and (min-width:64.063em) and (max-width:68.8125rem)/";
+	width: 64.063em;
+}
+
 meta.foundation-mq-xlarge {
 	font-family: "/only screen and (min-width:68.8125rem)/";
+	width: 68.8125rem;
+}
+
+meta.foundation-mq-xlarge-only {
+	font-family: "/only screen and (min-width:68.8125rem) and (max-width:120em)/";
 	width: 68.8125rem;
 }
 
@@ -50,14 +70,14 @@ body {
 body {
 	background: #fff;
 	color: #222;
-	padding: 0;
-	margin: 0;
-	font-family: open_sans, "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-	font-weight: normal;
-	font-style: normal;
-	line-height: 1.5;
-	position: relative;
 	cursor: auto;
+	font-family: open_sans, "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1.5;
+	margin: 0;
+	padding: 0;
+	position: relative;
 }
 
 a:hover {
@@ -78,7 +98,10 @@ img {
 #map_canvas object,
 .map_canvas img,
 .map_canvas embed,
-.map_canvas object {
+.map_canvas object,
+.mqa-display img,
+.mqa-display embed,
+.mqa-display object {
 	max-width: none !important;
 }
 
@@ -101,8 +124,7 @@ img {
 }
 
 .hide {
-	display: none !important;
-	visibility: hidden;
+	display: none;
 }
 
 .invisible {
@@ -129,19 +151,20 @@ select {
 }
 
 .inline-list {
-	margin: 0 auto 1.0625rem auto;
+	list-style: none;
+	margin-top: 0;
+	margin-bottom: 1.0625rem;
 	margin-left: -1.375rem;
 	margin-right: 0;
-	padding: 0;
-	list-style: none;
 	overflow: hidden;
+	padding: 0;
 }
 
 .inline-list > li {
-	list-style: none;
-	float: left;
-	margin-left: 1.375rem;
 	display: block;
+	float: left;
+	list-style: none;
+	margin-left: 1.375rem;
 }
 
 .inline-list > li > * {
@@ -525,6 +548,7 @@ select {
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
 	color: #FFF;
+	-webkit-transition: 0.2s ease-in-out;
 	transition: 0.2s ease-in-out; /* Landscape phones and down */ /* Landscape phones and down */ /* Landscape phones and down */
 }
 
@@ -548,6 +572,7 @@ select {
 	transform: translateX(0);
 	-webkit-transform: translate3d(0%, 0, 0);
 	transform: translate3d(0%, 0, 0);
+	-webkit-transition: 0.2s ease-in-out;
 	transition: 0.2s ease-in-out;
 }
 
@@ -642,22 +667,23 @@ select {
 }
 
 .container-footer .connect-links {
-	margin: 0 auto 1.0625rem auto;
+	list-style: none;
+	margin-top: 0;
+	margin-bottom: 1.0625rem;
 	margin-left: -1.375rem;
 	margin-right: 0;
-	padding: 0;
-	list-style: none;
 	overflow: hidden;
+	padding: 0;
 	margin-left: -0.625rem;
 	margin-bottom: 0;
 	font-size: 2.5rem;
 }
 
 .container-footer .connect-links > li {
-	list-style: none;
-	float: left;
-	margin-left: 1.375rem;
 	display: block;
+	float: left;
+	list-style: none;
+	margin-left: 1.375rem;
 }
 
 .container-footer .connect-links > li > * {
@@ -814,6 +840,7 @@ header {
 	line-height: 2.0625rem;
 	font-weight: 700;
 	letter-spacing: -0.09375rem;
+	-webkit-box-decoration-break: clone;
 	box-decoration-break: clone;
 	box-shadow: 10px 0 0 #fff, -10px 0 0 #fff, 10px 1px 0 #fff, -10px 1px 0 #fff; /* Landscape phones and down */
 }
@@ -860,7 +887,7 @@ header {
 
 .container-hero1-1 {
 	padding: 30px 5px;
-	background: url('../img/forty_acres/texture3.jpg');
+	background: url("../img/forty_acres/texture3.jpg");
 	background-position: top center;
 	background-repeat: no-repeat;
 	background-size: cover; /* Landscape phones and down */
@@ -1007,7 +1034,7 @@ header {
 
 .container-related {
 	padding: 40px 5px;
-	background: url('../img/forty_acres/clock.jpg') bottom left no-repeat;
+	background: url("../img/forty_acres/clock.jpg") bottom left no-repeat;
 	background-size: cover; /* Landscape phones and down */
 }
 
@@ -1179,22 +1206,23 @@ header {
 }
 
 .footer-theme2 .connect-links {
-	margin: 0 auto 1.0625rem auto;
+	list-style: none;
+	margin-top: 0;
+	margin-bottom: 1.0625rem;
 	margin-left: -1.375rem;
 	margin-right: 0;
-	padding: 0;
-	list-style: none;
 	overflow: hidden;
+	padding: 0;
 	margin-left: -0.625rem;
 	margin-bottom: 0;
 	font-size: 2.25rem;
 }
 
 .footer-theme2 .connect-links > li {
-	list-style: none;
-	float: left;
-	margin-left: 1.375rem;
 	display: block;
+	float: left;
+	list-style: none;
+	margin-left: 1.375rem;
 }
 
 .footer-theme2 .connect-links > li > * {
@@ -1679,6 +1707,7 @@ textarea {
 	height: 50px;
 	background: #fff;
 	z-index: 100;
+	-webkit-transition: 0.2s ease-in-out;
 	transition: 0.2s ease-in-out;
 	border-bottom: 1px solid #EBE8E2;
 	margin-left: auto;
@@ -1698,8 +1727,7 @@ textarea {
 }
 
 .container-logo-p2 .p2-logo {
-	position: absolute;
-	height: 100px; /* Landscape phones and down */ /* Landscape phones and down */
+	position: absolute; /* Landscape phones and down */ /* Landscape phones and down */
 }
 
 .container-logo-p2 .main_logo {
@@ -2205,7 +2233,7 @@ textarea {
 	right: 10px;
 	width: 42px;
 	height: 25px;
-	background: url('../img/tweets/follow.png') center center no-repeat;
+	background: url("../img/tweets/follow.png") center center no-repeat;
 	background-size: 100%; /* Landscape phones and down */
 }
 
@@ -2249,17 +2277,17 @@ textarea {
 }
 
 .tweet .tweet-actions .action-reply {
-	background: url('../img/tweets/reply.png') center center no-repeat;
+	background: url("../img/tweets/reply.png") center center no-repeat;
 	background-size: 100%;
 }
 
 .tweet .tweet-actions .action-retweet {
-	background: url('../img/tweets/retweet.png') center center no-repeat;
+	background: url("../img/tweets/retweet.png") center center no-repeat;
 	background-size: 100%;
 }
 
 .tweet .tweet-actions .action-favorite {
-	background: url('../img/tweets/favorite.png') center center no-repeat;
+	background: url("../img/tweets/favorite.png") center center no-repeat;
 	background-size: 100%;
 }
 
@@ -2309,7 +2337,7 @@ hr {
 	padding: 0;
 }
 
-@media only screen and (min-width:40.063em) {
+@media only screen and (min-width: 40.063em) {
 
 .ct--sidebar-tabs .ct--article-details {
 	padding: 0 15px 2px 15px;
@@ -2366,6 +2394,7 @@ hr {
 	position: fixed;
 	left: 0;
 	right: 0;
+	top: 0;
 }
 
 .UT-header + .UT-page {
@@ -2652,7 +2681,7 @@ hr {
 
 }
 
-@media only screen and (min-width:40.063em) and (max-width:64em) {
+@media only screen and (min-width: 40.063em) and (max-width: 64em) {
 
 .UT-header .nav-wrapper {
 	width: 16.5625rem;
@@ -2710,7 +2739,7 @@ body #toolbar {
 
 }
 
-@media only screen and (min-width:64.063em) {
+@media only screen and (min-width: 64.063em) {
 
 .tabs .tab-title a {
 	padding: 8px 6px;
@@ -2823,21 +2852,22 @@ body #toolbar {
 }
 
 .container-topnav .mobile-links {
-	margin: 0 auto 1.0625rem auto;
+	list-style: none;
+	margin-top: 0;
+	margin-bottom: 1.0625rem;
 	margin-left: -1.375rem;
 	margin-right: 0;
-	padding: 0;
-	list-style: none;
 	overflow: hidden;
+	padding: 0;
 	margin-bottom: 0;
 	float: right;
 }
 
 .container-topnav .mobile-links > li {
-	list-style: none;
-	float: left;
-	margin-left: 1.375rem;
 	display: block;
+	float: left;
+	list-style: none;
+	margin-left: 1.375rem;
 }
 
 .container-topnav .mobile-links > li > * {
@@ -2894,21 +2924,22 @@ body #toolbar {
 }
 
 .container-topnav .topnav-links {
-	margin: 0 auto 1.0625rem auto;
+	list-style: none;
+	margin-top: 0;
+	margin-bottom: 1.0625rem;
 	margin-left: -1.375rem;
 	margin-right: 0;
-	padding: 0;
-	list-style: none;
 	overflow: hidden;
+	padding: 0;
 	margin-bottom: 0;
 	float: right;
 }
 
 .container-topnav .topnav-links > li {
-	list-style: none;
-	float: left;
-	margin-left: 1.375rem;
 	display: block;
+	float: left;
+	list-style: none;
+	margin-left: 1.375rem;
 }
 
 .container-topnav .topnav-links > li > * {
@@ -3025,6 +3056,12 @@ body #toolbar {
 	width: 100%;
 }
 
+.container-nav-phase2 .nav-link.nolink:hover {
+	color: #2d2a28;
+	text-decoration: none;
+	cursor: default;
+}
+
 .container-nav-phase2 .nav-link:hover {
 	color: #BF5700;
 	text-decoration: underline;
@@ -3112,6 +3149,10 @@ body #toolbar {
 	color: #BF5700;
 }
 
+.container-nav-phase2 .sub-nav-link.nolink:hover {
+	color: #2d2a28;
+}
+
 .container-nav-phase2 .sub-nav-link:before {
 	display: none;
 }
@@ -3183,6 +3224,14 @@ body #toolbar {
 
 .tweet {
 	padding: 15px 15px;
+}
+
+}
+
+@media only screen and (min-width: 64.063em) and (min-width: 40.063em) {
+
+.container-nav-phase2 .sub-nav-wrapper {
+	margin-top: 9px;
 }
 
 }
@@ -3297,7 +3346,6 @@ body #toolbar {
 
 .container-logo-p2 .p2-logo {
 	top: 0;
-	height: 100px;
 	max-width: 100%;
 }
 

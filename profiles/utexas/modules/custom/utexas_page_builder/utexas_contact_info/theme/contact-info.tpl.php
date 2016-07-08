@@ -36,8 +36,8 @@ if ($content['has_address']) :
   echo '</div>';
   echo '</div>';
 endif;
-echo $content['phone'] ? '<div class="field field_phone"> <p class="label">Phone:</p> <a href="tel:' . $content['phone'] . '">' . $content['phone'] . '</a> </div>' : '';
 echo $content['email'] ? '<div class="field field_email"> <p class="label">Email:</p> <a href="mailto:' . $content['email'] . '">' . $content['email'] . '</a> </div>' : '';
+echo $content['phone'] ? '<div class="field field_phone"> <p class="label">Phone:</p> <a href="tel:' . $content['phone'] . '">' . $content['phone'] . '</a> </div>' : '';
 echo $content['fax'] ? '<div class="field field_fax"> <p class="label">Fax:</p> <div class="field field_fax">' . $content['fax'] . '</div> </div>' : '';
 echo $content['website'] ? '<div class="field field_website"> <p class="label">Website:</p> <a href="' . $content['website'] . '">' . $content['website'] . '</a> </div>' : '';
 echo '</div>';

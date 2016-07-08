@@ -316,7 +316,7 @@ function utexas_promo_field_field_widget_form(&$form, &$form_state, $field, $ins
       $element['size_option'] = array(
         '#type' => 'radios',
         '#title' => t('Image Style'),
-        '#description' => t('Select what size picture you would like. <em>This field is required.</em>'),
+        '#description' => t('Select what size picture you would like. Images will be automatically cropped to the dimensions listed above. Use an image with the same aspect ratio as the style you have selected to avoid cropping. <em>This field is required.</em>'),
         '#required' => TRUE,
         '#options' => $options,
         '#default_value' => (isset($items[$delta]['size_option'])) ? $items[$delta]['size_option'] : 'utexas_promo_unit_landscape_image',

@@ -49,10 +49,12 @@
       <div class="column medium-10 large-9 medium-centered">
         <h1 class="page-title">Search</h1>
         <div class="search">
-          <div class="div-search-404">
+          <div class="search">
           <?php
             if (isset($search_cse)) :
              print $search_cse;
+             print $google_logo;
+             print '<div class="search_logo_text">Custom Search</div>';
             else :
               print $drupal_search;
             endif;
@@ -65,3 +67,4 @@
   </div>
   <?php if (file_exists($partial_footer)): require_once $partial_footer; endif;  ?>
 </div>
+<?php render($page['content']); ?>

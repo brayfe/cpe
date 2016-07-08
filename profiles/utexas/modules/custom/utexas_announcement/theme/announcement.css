@@ -1,0 +1,93 @@
+.container-announcement {
+  background-color: #ffeb63;
+	text-align: center;
+	padding: 30px 0px;
+  margin-bottom: 20px;
+}
+.yellow-background {
+  background-color: #ffeb63;
+}
+.yellow-background a {
+  text-decoration: underline;
+  color: #282828!important;
+}
+.orange-background a {
+  text-decoration: underline;
+  color: #282828!important;
+}
+.orange-background {
+  background-color: #f2a900;
+}
+.green-background {
+  background-color: #43695b;
+}
+.green-background .announcement, .green-background .announcement-text {
+  color: #ffffff!important;
+}
+.green-background .announcement a, .green-background .announcement-text a {
+  color: #ffffff!important;
+  text-decoration: underline;
+}
+.grey-background {
+  background-color: #666666;
+}
+.grey-background .announcement, .grey-background .announcement-text {
+  color: #ffffff!important;
+}
+.grey-background .announcement a, .grey-background .announcement-text a {
+  color: #ffffff!important;
+  text-decoration: underline;
+}
+.container-announcement .announcement {
+	color: #2d2a28;
+	font-size: 1.75rem;
+	line-height: 2.125rem;
+	font-weight: 500;
+	margin-bottom: 20px; /* Landscape phones and down */
+}
+.container-announcement .announcement span {
+	margin-right: 15px;
+}
+.container-announcement .announcement-text {
+	color: #282828;
+	margin-bottom: 20px;
+	font-size: 1rem;
+	line-height: 1.5rem;
+	font-weight: 400; /* Landscape phones and down */
+}
+.container-announcement .announcement-text {
+	color: #282828;
+}
+.container-announcement .announcement-text:hover {
+	color: #000;
+}
+.announcement-text > br {
+    margin-bottom: 10px;
+}
+@media only screen and (min-width: 40.063em) {
+  .container-announcement .announcement {
+  	font-size: 2.25rem;
+  	line-height: 2.625rem;
+  }
+  .container-announcement .announcement-text {
+  	font-size: 1.25rem;
+  	line-height: 1.625rem;
+  }
+}
+@media only screen and (min-width: 64.063em) {
+  .container-announcement {
+    margin-bottom: 40px;
+  }
+}
+@media only screen and (min-width: 40.063em) and (max-width: 64.063em) {
+  .container-announcement {
+    margin-top: 82px;
+  }
+  .UT-header.theme1.tall_logo + .container-announcement {
+    margin-top: 102px;
+  }
+}
+.container-announcement .cta {
+  color: white!important;
+  text-decoration: none;
+}

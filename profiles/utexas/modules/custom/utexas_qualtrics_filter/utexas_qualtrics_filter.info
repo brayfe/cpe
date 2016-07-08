@@ -2,5 +2,7 @@ name = Qualtrics Filter
 description = Filter to include qualtrics forms.
 core = 7.x
 package = Input filters
-version = "7.x-1.0"
+version = UTEXAS_DISTRO_VERSION
 project = "utexas_qualtrics_filter"
+
+files[] = tests/utexas_qualtrics_filter.test

@@ -178,3 +178,24 @@ button.secondary, .button.secondary {
 		}
 	}
 }
+// Styles for last-updated text.
+.container.container-updated {
+	margin-bottom: 5px;
+}
+.container.container-updated.has_accent {
+	margin-top: -50px;
+	.right.caption {
+		background: rgba(50, 50, 50, .5);
+	}
+	.caption-copy {
+		margin:0;
+		text-align: center;
+		padding: 5px 10px;
+		color: #fff;
+	}
+}
+.accented-container-wrapper.has_updated_date {
+	.container.container-bottom.accent {
+		padding-bottom: 30px;
+	}
+}

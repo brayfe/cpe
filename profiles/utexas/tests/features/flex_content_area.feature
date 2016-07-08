@@ -6,11 +6,11 @@ Feature: Flex Content Area
   As a site builder
   I need to be able to add the flex content area field to a page
 
-@javascript
+@javascript @api
 Scenario: Validating and creating a node with Flex Content Area.
 
   # Validate CTA or Links.
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "Test FCA" for "edit-title" in the "form_item_title" region
   And I click "Flex Content Area A" in the "vertical_tabs" region

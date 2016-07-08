@@ -8,10 +8,10 @@
  * Implements hook_form_system_theme_settings_alter().
  */
 function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
-
   // Disable the Toggle Display section.
   unset($form['theme_settings']);
-
+  // Disable the favicon UI section.
+  unset($form['favicon']);
   // Main navigation settings.
   $form['utexas_main_nav_theme_settings'] = array(
     '#type' => 'fieldset',
@@ -71,7 +71,6 @@ function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
   else {
     $form['utexas_main_nav_theme_settings']['secondary_menu']['#default_value'] = (theme_get_setting('secondary_menu') == 'social_accounts') ? 'header_menu' : theme_get_setting('secondary_menu');
   }
-
   $form['utexas_main_nav_theme_settings']['utexas_searchbar_theme_settings'] = array(
     '#type' => 'radios',
     '#title' => t('Search bar display options'),
@@ -106,6 +105,12 @@ function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
       '#default_value' => theme_get_setting('display_social_icons'),
     );
   }
+  $form['utexas_footer_theme_settings']['footer_menu_grid'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Would you like the footer menu to display in two columns?'),
+    '#description' => t('Note: Leave this box unchecked for the footer menu to print in one column. If you select two columns, be sure to test how the menu looks at various screen widths.'),
+    '#default_value' => theme_get_setting('footer_menu_grid'),
+  );
   $form['utexas_footer_theme_settings']['newsletter_exists'] = array(
     '#type' => 'checkbox',
     '#title' => t('Would you like to provide a link to a newsletter subscription form in the footer?'),
@@ -126,12 +131,54 @@ function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
     '#default_value' => theme_get_setting('newsletter_url'),
     '#maxlength' => 256,
   );
+
+  // Fieldsets containing options for custom 403 and 404 text.
+  $form['utexas_403_and_404_contact'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Contact information for "Access Denied" and "Page Not Found" pages'),
+  );
+  $form['utexas_403_and_404_contact']['contact_403_checkbox'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Would you like to add custom text on the "Access Denied" page?'),
+    '#default_value' => theme_get_setting('contact_403_checkbox'),
+  );
+  $form['utexas_403_and_404_contact']['contact_403_container'] = array(
+    '#type' => 'container',
+    '#states' => array(
+      'invisible' => array(
+        'input[name="contact_403_checkbox"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+  $form['utexas_403_and_404_contact']['contact_403_container']['contact_403'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Enter text you would like to appear on the "Access Denied" page.'),
+    '#default_value' => theme_get_setting('contact_403'),
+  );
+  $form['utexas_403_and_404_contact']['contact_404_checkbox'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Would you like to add custom text on the "Page Not Found" page?'),
+    '#default_value' => theme_get_setting('contact_404_checkbox'),
+  );
+  $form['utexas_403_and_404_contact']['contact_404_container'] = array(
+    '#type' => 'container',
+    '#states' => array(
+      'invisible' => array(
+        'input[name="contact_404_checkbox"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+  $form['utexas_403_and_404_contact']['contact_404_container']['contact_404'] = array(
+    '#type' => 'textarea',
+    '#title' =>  t('Enter the text you would like to appear on the "Page Not Found" page.'),
+    '#default_value' => theme_get_setting('contact_404'),
+  );
+
   // Option to load supplemental foundation javascript files.
   $form['utexas_extra_foundation_js'] = array(
     '#type' => 'fieldset',
     '#title' => t('Supplemental Foundation Elements'),
   );
-  $base_url = $GLOBALS['base_url'];
   $form['utexas_extra_foundation_js']['display_demo_page'] = array(
     '#type' => 'item',
     '#title' => t('Visit a <a href="/demo/foundation-extra-libraries">demonstration page</a> to see the foundation extra libraries in action.'),
@@ -151,5 +198,15 @@ function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
       'tooltip' => 'Tooltips (<a href="http://foundation.zurb.com/sites/docs/v/5.5.3/components/tooltips.html" target="_blank">see here for more information</a>)',
     ),
     '#default_value' => theme_get_setting('foundation_files') ? theme_get_setting('foundation_files') : array(),
+  );
+
+  $form['font_demo_page'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Forty Acres Icon Font Demo Page',
+  );
+  $form['font_demo_page']['font_demo_page_info'] = array(
+    '#type' => 'item',
+    '#title' => t('Visit a <a href="/demo/fortyacres-icon-font">demonstration page</a> to see a list of icons available in the Forty Acres icon font.'),
+    '#description' => t('Note: this page is only visible to authenticated users.'),
   );
 }

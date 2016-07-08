@@ -23,6 +23,11 @@ Drupal.behaviors.utexasGeneralBehavior = {
         }
     }
     $(window).scroll(headerScroll);
+    // Add classes for theming last_updated text.
+    if ($('.container.container-updated').length && $('.accented-container-wrapper > .container.container-bottom').hasClass('accent')) {
+      $('.container.container-updated').addClass('has_accent');
+      $('.accented-container-wrapper').addClass('has_updated_date');
+    }
   }
 };
 

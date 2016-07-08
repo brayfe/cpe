@@ -1,0 +1,852 @@
+<?php
+/**
+ * @file
+ * UTexas Event module.
+ *
+ * Provides the "Event" entity, which stores date, location, and detail about
+ * given events.
+ */
+
+/**
+ * Permission for viewing available events.
+ */
+define('UTEXAS_EVENT_VIEW_PERMISSION', 'view events');
+
+/**
+ * Permission for editing events.
+ */
+define('UTEXAS_EVENT_EDIT_PERMISSION', 'administer events');
+
+/**
+ * Internal path to Event entities.
+ */
+define('UTEXAS_EVENT_CALLBACK', 'admin/content/events');
+
+/**
+ * The time format, used in the display form, and processed in validation.
+ */
+define('UTEXAS_EVENT_TIME_DISPLAY', 'g:i a');
+
+/**
+ * The day format, used in the display form, and processed in validation.
+ */
+define('UTEXAS_EVENT_DAY_DISPLAY', 'l j M Y');
+
+/**
+ * Implements hook_permission().
+ */
+function utexas_event_permission() {
+  // Define a permission that allows users to edit events.
+  return array(
+    UTEXAS_EVENT_VIEW_PERMISSION => array(
+      'title' => t('View Events'),
+      'description' => t('Allow users to view events'),
+    ),
+    UTEXAS_EVENT_EDIT_PERMISSION => array(
+      'title' => t('Edit, Clone & Delete Events'),
+      'description' => t('Allow users to edit & delete events'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function utexas_event_menu() {
+  $items = array();
+  $items['admin/content/events/configure'] = array(
+    'title' => 'Configure events',
+    'description' => 'Control the various settings of site events.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('utexas_event_configuration'),
+    'access arguments' => array(UTEXAS_EVENT_EDIT_PERMISSION),
+    'file' => 'utexas_event.admin.inc',
+    'type' => MENU_LOCAL_ACTION,
+  );
+  $items['admin/config/utexas/events'] = array(
+    'title' => 'Events configuration',
+    'description' => 'Control the various settings of site events.',
+    'page callback' => 'utexas_event_configuration_alias',
+    'access arguments' => array(UTEXAS_EVENT_EDIT_PERMISSION),
+  );
+  $items['events/%'] = array(
+    'title' => 'Event',
+    'page callback' => '_utexas_event_view_page',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+  );
+  $items['events/%/view'] = array(
+    'title' => 'View',
+    'page callback' => '_utexas_event_view_redirect',
+    'page arguments' => array(1),
+    'access arguments' => array(UTEXAS_EVENT_EDIT_PERMISSION),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+  $items['admin/content/events/manage/%/view'] = array(
+    'title' => 'View',
+    'page callback' => '_utexas_event_view_redirect',
+    'page arguments' => array(4),
+    'access arguments' => array(UTEXAS_EVENT_EDIT_PERMISSION),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -10,
+  );
+  $items['events/%/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => '_utexas_event_edit_redirect',
+    'page arguments' => array(1),
+    'access arguments' => array(UTEXAS_EVENT_EDIT_PERMISSION),
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['events/%/ical'] = array(
+    'title' => 'Event',
+    'page callback' => '_utexas_event_ical_export',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+  );
+  return $items;
+}
+
+/**
+ * Helper function to redirect a link at events/%/edit to the edit page.
+ */
+function _utexas_event_edit_redirect($id) {
+  drupal_goto('/admin/content/events/manage/' . $id);
+}
+
+/**
+ * Helper function to redirect events/%/view to events/%.
+ */
+function _utexas_event_view_redirect($id) {
+  drupal_goto('/events/' . $id);
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function utexas_event_theme_registry_alter(&$theme_registry) {
+  if (!module_exists('utexas_page_builder')) {
+    // Defined path to the current module.
+    $module_path = drupal_get_path('module', 'utexas_event');
+    // Find all .tpl.php files in this module's folder recursively.
+    $template_file_objects = drupal_find_theme_templates($theme_registry, '.tpl.php', $module_path);
+    // Iterate through all found template file objects.
+    foreach ($template_file_objects as $key => $template_file_object) {
+      // If the template has not already been overridden by a theme.
+      if (!isset($theme_registry[$key]['theme path']) || !preg_match('#/themes/#', $theme_registry[$key]['theme path'])) {
+        // Alter the theme path and template elements.
+        $theme_registry[$key]['theme path'] = $module_path;
+        $theme_registry[$key] = array_merge($theme_registry[$key], $template_file_object);
+        $theme_registry[$key]['type'] = 'module';
+      }
+    }
+  }
+}
+
+/**
+ * Custom page callback for configuration link.
+ */
+function utexas_event_configuration_alias() {
+  drupal_goto('admin/content/events/configure');
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function utexas_event_entity_info() {
+
+  $info = array();
+
+  $info['utexas_event'] = array(
+    'label' => t('Event'),
+    'base table' => 'utexas_event',
+    'entity keys' => array(
+      'id' => 'id',
+      'label' => 'title',
+    ),
+    'module' => 'utexas_event',
+    'entity class' => 'UtexasEventEntity',
+    'controller class' => 'UtexasEventEntityController',
+    'views controller class' => 'EntityEventViewsController',
+    'access callback' => 'utexas_event_access_callback',
+    'uri callback' => 'entity_class_uri',
+    'admin ui' => array(
+      'path' => UTEXAS_EVENT_CALLBACK,
+      'controller class' => 'UtexasEventUIController',
+    ),
+    'fieldable' => TRUE,
+    'bundles' => array(
+      'utexas_event' => array(
+        'label' => t('Events'),
+        'admin' => array(
+          'path' => UTEXAS_EVENT_CALLBACK,
+        ),
+      ),
+    ),
+    'view modes' => array(
+      'event_teaser' => array(
+        'label' => t('Teaser'),
+        'custom settings' => TRUE,
+      ),
+      'event_title' => array(
+        'label' => t('Title & date'),
+        'custom settings' => TRUE,
+      ),
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Access callback for entities.
+ */
+function utexas_event_access_callback($op, $event = NULL, $account = NULL) {
+  $url = current_path();
+  $access = FALSE;
+  if ($url == UTEXAS_EVENT_CALLBACK &&  user_access(UTEXAS_EVENT_EDIT_PERMISSION)) {
+    // Allow users with permission to view entity overview page.
+    $access = TRUE;
+  }
+  if ($op == 'view' && user_access(UTEXAS_EVENT_VIEW_PERMISSION) && $url !== UTEXAS_EVENT_CALLBACK) {
+    // Allow users with permission to view rendered entities.
+    $access = TRUE;
+  }
+  elseif (($op == 'update' || $op == 'create' || $op == 'delete') && user_access(UTEXAS_EVENT_EDIT_PERMISSION)) {
+    // Allow users with permission to modify entities.
+    $access = TRUE;
+  }
+  return $access;
+}
+
+/**
+ * Form definition for adding / editing an Event entity.
+ */
+function utexas_event_form($form, &$form_state, $instance = NULL) {
+  $form['date'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Date and Time',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#attributes' => array('class' => array('date-fields')),
+    '#prefix' => '<div id="replace_textfield_div">',
+    '#suffix' => '</div>',
+  );
+  $form['date']['start_date'] = array(
+    '#type' => 'date_popup',
+    '#date_format' => UTEXAS_EVENT_DAY_DISPLAY,
+    '#default_value' => date('Y-m-d H:i:s', isset($instance->start) ? $instance->start : time()),
+    '#title' => t('Event date'),
+    '#date_label_position' => 'invisible',
+    '#date_year_range' => '-0:+3',
+    '#required' => TRUE,
+    '#size' => 28,
+    '#prefix' => '<div class="clearfix">',
+    '#weight' => 1,
+  );
+  $form['date']['start_time'] = array(
+    '#type' => 'date_popup',
+    '#date_format' => UTEXAS_EVENT_TIME_DISPLAY,
+    '#default_value' => date('Y-m-d H:i:s', isset($instance->start) ? $instance->start : time() - (time() % 1800)),
+    '#title' => t('From'),
+    '#date_label_position' => 'invisible',
+    '#date_increment' => 15,
+    '#weight' => 2,
+    '#suffix' => (isset($instance->date_range) && $instance->date_range == 1) ? '</div>' : '',
+    '#access' => (isset($instance->all_day) && $instance->all_day == 1) ? FALSE : TRUE,
+  );
+
+  $form['date']['end_time'] = array(
+    '#type' => 'date_popup',
+    '#default_value' => date('Y-m-d H:i:s', isset($instance->end) ? $instance->end : time() - (time() % 1800)),
+    '#date_format' => UTEXAS_EVENT_TIME_DISPLAY,
+    '#title' => t('To'),
+    '#date_label_position' => 'invisible',
+    '#date_increment' => 15,
+    '#access' => (isset($instance->all_day) && $instance->all_day == 1) ? FALSE : TRUE,
+    '#weight' => (isset($instance->date_range) && $instance->date_range == 1) ? 6 : 3,
+    '#suffix' => '</div>',
+  );
+  $form['date']['date_range'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => (isset($instance->date_range)) ? $instance->date_range : 0,
+    '#title' => 'The end date is different than the start date.',
+    '#ajax' => array(
+      'callback' => '_utexas_event_form_callback',
+      'wrapper' => 'replace_textfield_div',
+      'effect' => 'fade',
+    ),
+    '#weight' => 4,
+  );
+  $form['date']['end_date'] = array(
+    '#type' => 'date_popup',
+    '#date_format' => UTEXAS_EVENT_DAY_DISPLAY,
+    '#default_value' => date('Y-m-d H:i:s', isset($instance->end) ? $instance->end : time()),
+    '#title' => t('End date'),
+    '#date_label_position' => 'invisible',
+    '#date_year_range' => '-0:+3',
+    '#size' => 28,
+    '#access' => (isset($instance->date_range) && $instance->date_range == 1) ? TRUE : FALSE,
+    '#prefix' => '<div class="clearfix">',
+    '#suffix' => (isset($instance->date_range) && $instance->date_range == 1) ? '' : '</div>',
+    '#weight' => 5,
+  );
+  $form['date']['all_day'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => (isset($instance->all_day)) ? $instance->all_day : 0,
+    '#title' => 'This is an all-day event',
+    '#weight' => 7,
+    '#ajax' => array(
+      'callback' => '_utexas_event_form_callback',
+      'wrapper' => 'replace_textfield_div',
+      'effect' => 'fade',
+    ),
+  );
+
+  // AJAX rewrite logic for "date_range" checkbox.
+  if (isset($form_state['values']['date_range'])) {
+    if ($form_state['values']['date_range'] == 1) {
+      $form['date']['end_time']['#weight'] = 6;
+      $form['date']['start_time']['#suffix'] = '</div>';
+      $form['date']['end_date']['#suffix'] = '';
+      $form['date']['end_date']['#access'] = TRUE;
+    }
+    else {
+      $form['date']['end_date']['#access'] = FALSE;
+      $form['date']['end_time']['#weight'] = 3;
+      $form['date']['start_time']['#suffix'] = '';
+      $form['date']['end_date']['#suffix'] = '</div>';
+    }
+  }
+  // AJAX rewrite logic for "all_day" checkbox.
+  if (isset($form_state['values']['all_day'])) {
+    if ($form_state['values']['all_day'] == 1) {
+      $form['date']['start_time']['#access'] = FALSE;
+      $form['date']['end_time']['#access'] = FALSE;
+    }
+    else {
+      $form['date']['start_time']['#access'] = TRUE;
+      $form['date']['end_time']['#access'] = TRUE;
+    }
+
+  }
+
+  // Add additional information if this is a cloned event.
+  $title = isset($instance->title) ? $instance->title : '';
+  $form['title'] = array(
+    '#title' => t('Title'),
+    '#type' => 'textfield',
+    '#default_value' => $title,
+    '#required' => TRUE,
+    '#description' => t('The title for the event.'),
+    '#weight' => 0,
+  );
+
+  // Retrieve ECK field elements.
+  field_attach_form('utexas_event', $instance, $form, $form_state);
+
+  $form['field_event_location'][LANGUAGE_NONE]['#description'] = t('Optional; comma-separated. Start typing to retrieve items from !locations.', array('!locations' => l(t('Event Locations'), '/admin/structure/taxonomy/event_location')));
+  $form['field_event_tags'][LANGUAGE_NONE]['#description'] = t('Optional; comma-separated. Use to group similar events for targeted display.');
+  $form['featured'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => (isset($instance->featured)) ? $instance->featured : 0,
+    '#title' => 'Display this in the "Featured Events" block.',
+    '#weight' => 3,
+  );
+  $form['image_fid'] = array(
+    '#type' => 'media',
+    '#title' => t('Image'),
+    '#tree' => TRUE,
+    '#extended' => TRUE,
+    '#media_options' => array(
+      'global' => array(
+        'file_extensions' => 'gif png jpg jpeg',
+        'file_directory' => 'event-image',
+        'types' => array('image'),
+      ),
+    ),
+    '#default_value' => array('fid' => isset($instance->image_fid) ? $instance->image_fid : 0),
+    '#weight' => 4,
+  );
+  $form['summary_text'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Event Summary'),
+    '#default_value' => isset($instance->summary_text) ? $instance->summary_text : '',
+    '#rows' => 2,
+    '#description' => 'Displayed on events listing pages and on iCal/Google Calendar exports. Limit to 500 characters.',
+    '#weight' => 5,
+  );
+  $form['detail_text'] = array(
+    '#type' => 'text_format',
+    '#title' => t('Event Details'),
+    '#default_value' => isset($instance->detail_text) ? $instance->detail_text : '',
+    '#format' => NULL,
+    '#rows' => 8,
+    '#details' => 'Displayed on the individual event page.',
+    '#weight' => 6,
+  );
+  $form['#attached']['js'] = array(
+    drupal_get_path('module', 'utexas_event') . '/js/utexas_event_popup.js' => array(
+      'scope' => 'footer',
+    ),
+  );
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'utexas_event') . '/theme/utexas_event_form.css' => array(
+      'scope' => 'footer',
+    ),
+  );
+  $button = isset($instance->id) ? t('Update') : t('Save');
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => $button,
+    '#weight' => 50,
+  );
+
+  return $form;
+}
+
+/**
+ * Helper function to relay user info back to the form via AJAX.
+ */
+function _utexas_event_form_callback($form, $form_state) {
+  return $form['date'];
+}
+
+/**
+ * Implements entity_form_validate().
+ */
+function utexas_event_form_validate(&$form, &$form_state) {
+
+  $all_day = $form['date']['all_day']['#value'];
+  $date_range = $form['date']['date_range']['#value'];
+  $start_date = $form['date']['start_date']['#value']['date'];
+  // Unless a date range has been specified, use the start date as the end date.
+  $end_date = $date_range == TRUE ? $form['date']['end_date']['#value']['date'] : $start_date;
+  $start_time = $all_day == TRUE ? '12:00 am' : $form['date']['start_time']['#value']['time'];
+  $end_time = $all_day == TRUE ? '11:59 pm' : $form['date']['end_time']['#value']['time'];
+  $start = _utexas_event_get_combined_time($start_date, $start_time);
+  $end = _utexas_event_get_combined_time($end_date, $end_time);
+
+  if ($date_range == TRUE && $start > $end) {
+    form_set_error('end_date', t('The end date must the same as or later than the start date.'));
+  }
+  if ($all_day != TRUE && $start > $end) {
+    form_set_error('end_time', t('The end time must be the same as or later than the start time.'));
+  }
+
+  $summary = $form['summary_text']['#value'];
+  if ($summary && (strcmp($summary, strip_tags($summary)))) {
+    form_set_error('summary_text', t('The event summary may only use plain text.'));
+  }
+  if (strlen($summary) > 500) {
+    form_set_error('summary_text', t('The event summary may not exceed 500 characters. It currently has @characters characters.', array('@characters' => strlen($summary))));
+  }
+
+  // Add the two UNIX timestamps to $form_state['storage'] for use in
+  // hook_form_submit().
+  $form_state['storage']['validated_start_date'] = $start;
+  $form_state['storage']['validated_end_date'] = $end;
+}
+
+/**
+ * Submit handler for the Event entity add/edit form.
+ */
+function utexas_event_form_submit($form, &$form_state) {
+  // Function courtesy of EntityDefaultUIController.
+  $entity = entity_ui_form_submit_build_entity($form, $form_state);
+
+  $old_entity = new stdClass();
+  $old_items = array();
+  if (isset($entity->id) && $entity->id != '0') {
+    // This is an existing entity. Load it to compare FIDs after entity->save.
+    $loaded = entity_load('utexas_event', array($entity->id));
+    $old_entity = $loaded[$entity->id];
+    $old_items[] = array(
+      'image_fid' => $old_entity->image_fid,
+    );
+  }
+
+  // Assemble the UNIX start & end times from the start date and start time.
+  $entity->start = $form_state['storage']['validated_start_date'];
+  $entity->end = $form_state['storage']['validated_end_date'];
+
+  if (isset($entity->image_fid['fid'])) {
+    $entity->image_fid = $entity->image_fid['fid'];
+  }
+
+  if (isset($entity->detail_text['value'])) {
+    $entity->detail_format = $entity->detail_text['format'];
+    $entity->detail_text = $entity->detail_text['value'];
+  }
+
+  // Combine the field definitions into a serialized array for storage.
+  entity_get_controller('utexas_event')->save($entity);
+
+  // Update the file usage, if necessary.
+  $items[] = array(
+    'image_fid' => $entity->image_fid,
+  );
+  if ((!isset($old_entity->image_fid) || $old_entity->image_fid == 0) && $entity->image_fid != 0) {
+    // A new image is being added to a new entity.
+    utexas_admin_field_insert_custom('utexas_event', $entity, 'image_fid', array(), NULL, $items, 'utexas_event');
+  }
+  elseif (isset($old_entity->image_fid) && $old_entity->image_fid != 0 && $entity->image_fid == 0) {
+    // The image is being deleted.
+    utexas_admin_field_delete_custom('utexas_event', $old_entity, 'image_fid', array(), NULL, $old_items, 'utexas_event');
+  }
+  elseif (isset($old_entity->image_fid) && $old_entity->image_fid != 0 && $entity->image_fid !== $old_entity->image_fid) {
+    // The image is being replaced.
+    utexas_admin_field_delete_custom('utexas_event', $old_entity, 'image_fid', array(), NULL, $old_items, 'utexas_event');
+    utexas_admin_field_insert_custom('utexas_event', $entity, 'image_fid', array(), NULL, $items, 'utexas_event');
+  }
+
+  drupal_set_message(t('The event: @name has been saved.', array('@name' => $entity->title)));
+  $form_state['redirect'] = UTEXAS_EVENT_CALLBACK;
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function utexas_event_preprocess_page(&$variables) {
+  // Unset the display of the page title on page.tpl.php.
+  if (isset($variables['page']['content']['system_main']['utexas_event'])) {
+    $variables['no_title'] = TRUE;
+  }
+  if (current_path() == UTEXAS_EVENT_CALLBACK) {
+    // Hide descriptions on exposed filters on Events overview page.
+    drupal_add_css('#views-exposed-form-events-page div.description { display:none; }', array('type' => 'inline'));
+  }
+  $path = arg();
+  if ($path[0] == 'events' && isset($path[1]) && is_numeric($path[1]) && !isset($path[2])) {
+    $parent = 'Events';
+    $link = variable_get('utexas_events_url', 'events');
+    if ($link != '') {
+      $parent = l($parent, $link);
+    }
+    utexas_event_breadcrumb($parent);
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function utexas_event_preprocess_block(&$variables) {
+  if (in_array($variables['block']->bid, array('views-events-block_2', 'views-events-block_3'))) {
+    $variables['theme_hook_suggestions'][] = 'block__utexas_events_titles';
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ *
+ * Passes user-defined block title to View display.
+ */
+function utexas_event_block_view_alter(&$data, $block) {
+  switch ($block->bid) {
+    case 'views-events-block_1':
+    case 'views-events-block_2':
+      $data['subject'] = check_plain(variable_get('utexas_events_upcoming_block_title', 'Upcoming Events'));
+      break;
+
+    case 'views-events-block_3':
+    case 'views-events-block_4':
+      $data['subject'] = check_plain(variable_get('utexas_events_featured_block_title', 'Featured Events'));
+      break;
+
+    default:
+      break;
+  }
+}
+
+/**
+ * Implements hook_views_pre_build().
+ *
+ * Passes user-defined event count to View display.
+ */
+function utexas_event_views_pre_build(&$view) {
+  if ($view->name == 'events') {
+    switch ($view->current_display) {
+      case 'block_1':
+      case 'block_2':
+        $count = (int) variable_get('utexas_events_upcoming_block_count', 5);
+        $view->set_items_per_page($count);
+        break;
+
+      case 'block_3':
+      case 'block_4':
+        $count = (int) variable_get('utexas_events_featured_block_count', 5);
+        $view->set_items_per_page($count);
+        break;
+
+      default:
+        break;
+    }
+
+  }
+}
+
+
+/**
+ * Page callback for displaying individual events.
+ */
+function _utexas_event_view_page($id) {
+  if ($events = entity_load('utexas_event', array($id))) {
+    $event = $events[$id];
+    drupal_set_title($event->title);
+    // View data is defined in buildContent().
+    $output = entity_view('utexas_event', array($event));
+    return $output;
+  }
+  return MENU_NOT_FOUND;
+}
+
+/**
+ * Page callback for cloning events.
+ */
+function _utexas_event_clone_entity() {
+  $id = arg(4);
+  if (isset($id) && is_numeric($id)) {
+    $entity = entity_load('utexas_event', array($id));
+    if ($entity) {
+      $clone = entity_ui_clone_entity('utexas_event', $entity[$id]);
+      $clone->title = 'Clone of ' . $clone->title;
+      $clone->save();
+      drupal_set_message(t('%title successfully created. Edit and save this clone as needed.', array('%title' => $clone->title)));
+      drupal_goto(UTEXAS_EVENT_CALLBACK . '/manage/' . $clone->id);
+    }
+  }
+  return MENU_NOT_FOUND;
+}
+
+/**
+ * Adds our theme specifications to the Theme Registry.
+ */
+function utexas_event_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_event' => array(
+      'variables' => array('element' => NULL),
+      'template' => 'utexas-event',
+      'path' => drupal_get_path('module', 'utexas_event') . '/theme',
+    ),
+  );
+}
+
+/**
+ * Helper function to create Google Calendar link.
+ */
+function _utexas_event_get_google_calendar_link($event) {
+  $ical = new UtexasEventICal($event);
+  $base_url = 'http://www.google.com/calendar/event?action=TEMPLATE';
+  $url = '&dates=' . $ical->data->startDate . '/' . $ical->data->endDate;
+  $url .= '&text=' . $ical->data->summary;
+  $url .= '&location=' . $ical->data->location;
+  $url .= '&details=' . $ical->data->description;
+
+  return l(t('Add to Google Calendar'), $base_url . $url, array(
+    'external' => TRUE,
+    'attributes' => array(
+      'class' => array('export'),
+      'target' => '_blank',
+    ),
+  ));
+}
+
+/**
+ * Page callback for displaying individual events.
+ */
+function _utexas_event_ical_export($id) {
+  // Retrieve an event entity object, if valid ID.
+  $events = entity_load('utexas_event', array($id));
+  if ($events) {
+    $event = $events[$id];
+    $ical = new UtexasEventICal($event);
+
+    header('Content-type: text/calendar; charset=utf-8');
+    header('Content-Disposition: attachment; filename=utexas_event_' . $event->id . '.ics');
+    echo $ical->export();
+  }
+  else {
+    return MENU_NOT_FOUND;
+  }
+}
+
+
+/**
+ * Helper class to create a valid iCal export file.
+ */
+class UtexasEventICal {
+  /**
+   * Generate a formatted object for use in the iCal export.
+   */
+  public function __construct($event) {
+    global $base_url;
+    $this->data = new stdClass();
+    $site_name = variable_get('site_name', '');
+    $this->data->prodID = '-//' . $site_name . '//';
+    $this->data->startDate = $this->dateToCal($event->start);
+    $this->data->endDate = $this->dateToCal($event->end);
+    $this->data->uri = $base_url . '/events/' . $event->id;
+    $this->data->now = $this->dateToCal(time());
+    $location_name = _utexas_event_get_location($event, FALSE, 'Unspecified');
+    $this->data->location = $this->escapeString($location_name);
+    $this->data->summary = $this->escapeString($event->title);
+    $this->data->description = $this->escapeString($event->summary_text);
+    $this->data->uniqueID = uniqid();
+  }
+
+  /**
+   * Escape a string of characters.
+   */
+  protected function escapeString($string) {
+    return strip_tags($string);
+  }
+
+  /**
+   * Render iCal date format.
+   */
+  protected function dateToCal($timestamp) {
+    $timezone = date_default_timezone();
+    $date = new DateTime("now", new DateTimeZone($timezone));
+    $date->setTimestamp($timestamp);
+    return $date->format('Ymd\THis');
+  }
+
+  /**
+   * Return iCal filedata.
+   */
+  public function export() {
+    return 'BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:' . $this->data->prodID . '
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+DTEND:' . $this->data->endDate . '
+UID:' . $this->data->uniqueID . '
+DTSTAMP:' . $this->data->now . '
+LOCATION:' . $this->data->location . '
+DESCRIPTION:' . $this->data->description . '
+URL;VALUE=URI:' . $this->data->uri . '
+SUMMARY:' . $this->data->summary . '
+DTSTART:' . $this->data->startDate . '
+END:VEVENT
+END:VCALENDAR';
+  }
+}
+
+/**
+ * Helper class to obtain human readable location(s).
+ */
+function _utexas_event_get_location($entity, $link = FALSE, $default_text = FALSE) {
+  $location = $default_text;
+  $names = array();
+  // Provide the location name, linked if descriptive text is present.
+  $lang = field_language('utexas_event', 'utexas_event', 'field_event_location');
+  if (isset($entity->field_event_location[$lang][0])) {
+    foreach ($entity->field_event_location[$lang] as $location) {
+      global $base_url;
+      $term = taxonomy_term_load($location['tid']);
+      if ($term) {
+        $name = $term->name;
+        if (isset($term->link) && $link == TRUE) {
+          $name = l(check_plain($name), $base_url . '/taxonomy/term/' . $term->tid);
+        }
+        $names[] = $name;
+      }
+    }
+    $location = implode(' | ', $names);
+  }
+  return $location;
+}
+
+/**
+ * Helper function to populate demo content.
+ *
+ * @param int $events
+ *   The number of events to create.
+ */
+function _utexas_event_add_demo_content($events = 1) {
+  $inc = 0;
+  while ($inc < $events) {
+    $entity_type = 'utexas_event';
+    $e = entity_create($entity_type, array('type' => $entity_type));
+    $ew = entity_metadata_wrapper($entity_type, $e);
+    $ew->title->set(UtexasLorem::create($style = UtexasLorem::TYPE_PLAIN, $count = 4, $type = UtexasLorem::TYPE_WORD, $end = ''));
+    // Add a random location.
+    if ($vocabulary = taxonomy_vocabulary_machine_name_load('event_location')) {
+      $building = strtoupper(UtexasLorem::create($style = UtexasLorem::TYPE_PLAIN, $count = 3, $type = UtexasLorem::TYPE_CHAR, $end = ''));
+      $number = rand(100, 400);
+      $term = new stdClass();
+      $term->name = $building . ' ' . $number;
+      $term->vid = $vocabulary->vid;
+      taxonomy_term_save($term);
+      $ew->field_event_location = array(0 => $term->tid);
+    }
+    // Add a random event tag.
+    if ($vocabulary = taxonomy_vocabulary_machine_name_load('event_tags')) {
+      $event_tids = array();
+      $terms = (taxonomy_get_tree($vocabulary->vid));
+      foreach ($terms as $term) {
+        $event_tids[] = $term->tid;
+      }
+      if (!empty($event_tids)) {
+        $options = array(0,1,2);
+        $choice = array_rand($options, 1);
+        $tid = $event_tids[$choice];
+        $ew->field_event_tags = array(0 => $tid);
+      }
+    }
+    if ($file = file_load(rand(1, 4))) {
+      if ($file->type == 'image') {
+        $ew->image_fid->set($file->fid);
+      }
+    }
+    // Get a start date that is rounded to the nearest half hour in the future.
+    $start = time() - (time() % 1800) + rand(0, 2) * 60 * 60 * 24;
+    // Generate an end date that is 1-4 days and 1-3 hours in the future.
+    $end = $start + rand(1, 4) * 3600 * 24 + rand(1, 3) * 3600;
+    $ew->start->set($start);
+    $ew->end->set($end);
+    $ew->summary_text->set(UtexasLorem::create($style = UtexasLorem::TYPE_PLAIN, $count = 1, $type = UtexasLorem::TYPE_PARAGRAPH, $end = '...'));
+    $ew->detail_text->set(UtexasLorem::create($style = UtexasLorem::TYPE_HTML, $count = 4, $type = UtexasLorem::TYPE_PARAGRAPH, $end = ''));
+    $ew->detail_format->set('filtered_html');
+    $ew->save();
+    $inc++;
+  }
+}
+
+/**
+ * Helper function to merge date & time fields into one UNIX timestamp.
+ *
+ * @param string $day
+ *   The formatted time as determined by UTEXAS_EVENT_TIME_DISPLAY
+ *
+ * @param string $time
+ *   The values retrieved from the database.
+ */
+function _utexas_event_get_combined_time($day, $time) {
+  $d = DateTime::createFromFormat(UTEXAS_EVENT_DAY_DISPLAY, $day, new DateTimeZone(date_default_timezone()));
+  $t = DateTime::createFromFormat(UTEXAS_EVENT_TIME_DISPLAY, $time, new DateTimeZone(date_default_timezone()));
+  if ($d && $t) {
+    $unix_time = $t->getTimestamp();
+    $unix_day = $d->getTimestamp();
+    $midnight_day = strtotime('0:00', $unix_day);
+    $midnight_time = strtotime('0:00', $unix_time);
+    $hours = $unix_time - $midnight_time;
+    $combined_time = $midnight_day + $hours;
+    return $combined_time;
+  }
+  return FALSE;
+}
+
+/**
+ * Adds breadcrumb trails for admin pages.
+ *
+ * @param string $breadcrumb
+ *   An array of links to add to the breadcrumb trail.
+ */
+function utexas_event_breadcrumb($breadcrumb) {
+  $current = drupal_get_breadcrumb();
+  $current[] = $breadcrumb;
+  $current[] = '';
+  drupal_set_breadcrumb($current);
+}

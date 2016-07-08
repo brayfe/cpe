@@ -255,6 +255,13 @@ function utexas_google_tag_manager_page_build(&$page) {
     }
   }
 
+  // For sites hosted on Pantheon only, do not include on non-live ENVs.
+  if ($pantheon_environment = variable_get('pantheon_environment', FALSE)) {
+    if ($pantheon_environment != 'live') {
+      $include_embed_code = FALSE;
+    }
+  }
+
   if ($include_embed_code && $embed_code = utexas_google_tag_manager_generate_embed_code()) {
     $page['page_bottom']['utexas_google_tag_manager'] = array(
       '#markup' => $embed_code,

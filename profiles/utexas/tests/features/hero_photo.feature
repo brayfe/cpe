@@ -6,9 +6,9 @@ Feature: UTexas Hero Photo
   As a site builder
   I need to be able to create, review, update and delete existing hero photos standard pages and landing pages
 
-@javascript
+@javascript @api
 Scenario: Verify themed output for standard hero photo
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   When I visit "node/add/standard-page"
   And I fill in "Rawrrr!" for "edit-title" in the "form_item_title" region
   And I click "Hero Photo"
@@ -29,9 +29,9 @@ Scenario: Verify themed output for standard hero photo
   And I should see the css selector ".field_utexas_hero_photo img" with the attribute "title" with the exact value "Placeholder Title"
   And I should see the text "YAWWWWN" in the "hero_caption" region
   And I should see the text "Photo by Associated Kitty Press." in the "caption_copy" region
-@javascript
+@javascript @api
 Scenario: Verify user can save all fields on hero photo *full* display, hero style 1
-  Given I am logged in as a user with the "view the administration theme,create landing_page content,access media browser,administer files,create files" permission
+  Given I am logged in as a user with the "complete" permissions on this site
   When I visit "node/add/landing-page"
   And I fill in "Test full-width Hero Photo" for "edit-title" in the "form_item_title" region
   And I click "Browse"
@@ -52,9 +52,9 @@ Scenario: Verify user can save all fields on hero photo *full* display, hero sty
   And I should see "Heading text" in the "hero_callout" region
   And I should not see "Subheading" in the "hero_callout" region
   And I should see the link "Call to Action" in the "hero_callout" region
-@javascript
+@javascript @api
 Scenario: Verify user can save all fields on hero photo *full* display, hero style 2
-  Given I am logged in as a user with the "view the administration theme,create landing_page content,access media browser,administer files,create files" permission
+  Given I am logged in as a user with the "complete" permissions on this site
   When I visit "node/add/landing-page"
   And I fill in "Test full-width Hero Photo" for "edit-title" in the "form_item_title" region
   And I select the radio button "2: Headline on light background, floated right"
@@ -74,9 +74,9 @@ Scenario: Verify user can save all fields on hero photo *full* display, hero sty
   And I should not see "Subheading" in the "hero_callout" region
   And I should see the link "Call to Action" in the "hero_callout" region
 
-@javascript
+@javascript @api
 Scenario: Verify user can save all fields on hero photo *full* display, hero style 3
-  Given I am logged in as a user with the "view the administration theme,create landing_page content,edit any landing_page content,access media browser,administer files,create files" permission
+  Given I am logged in as a user with the "complete" permissions on this site
   When I visit "node/add/landing-page"
   And I fill in "Test full-width Hero Photo" for "edit-title" in the "form_item_title" region
   And I select the radio button "3: Opaque bottom pane with heading, subheading and burnt orange call-to-action"

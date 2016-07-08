@@ -6,11 +6,11 @@ Feature: Resource
   As a site builder
   I need to be able to add the resource field to a page
 
-  @javascript
+  @javascript @api
   Scenario: Validating and creating a node with Resource.
 
     # Validate Links.
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the "complete" permissions on this site
     When I go to "node/add/standard-page"
     And I fill in "test resource" for "edit-title" in the "form_item_title" region
     And I click "Resource" in the "vertical_tabs" region

@@ -44,7 +44,7 @@
 <html lang="<?php print $language->language; ?>" dir="<?php print $language->dir; ?>">
 <head>
   <?php print $head; ?>
-  <title><?php print $head_title; ?> | The University of Texas at Austin</title>
+  <title><?php print $head_title; ?> The University of Texas at Austin</title>
   <?php print $styles; ?>
   <?php print $head_scripts; ?>
 </head>

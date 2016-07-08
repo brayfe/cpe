@@ -7,9 +7,9 @@ Feature: Qualtrics Filter
   As a site-builder
   I need to be able to supply populated quick link fields to a page
 
-@javascript
+@javascript @api
 Scenario: User can add a Qualtrics form and fulfill it.
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I go to "node/add/standard-page"
   And I fill in "test form" for "edit-title" in the "form_item_title" region

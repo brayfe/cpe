@@ -125,8 +125,7 @@ class DrupalPicture6Migration extends DrupalFile6Migration {
     }
 
     // Override these mappings to use 'picture' instead of 'filepath'.
-    $this->addFieldMapping('value', 'picture', FALSE)
-         ->callbacks(array($this, 'fixUri'));
+    $this->addFieldMapping('value', 'picture', FALSE);
     $this->addFieldMapping('destination_file', 'picture', FALSE)
       ->callbacks(array($this, 'fixUri'));
 

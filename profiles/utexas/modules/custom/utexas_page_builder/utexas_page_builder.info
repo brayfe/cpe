@@ -1,7 +1,7 @@
 name = Page Builder
 description = Defines rules to reorganize the 'page' content type node edit screen.
 core = 7.x
-version = 7.x-1.1
+version = UTEXAS_DISTRO_VERSION
 package = UTexas
 
 ; Contrib dependencies

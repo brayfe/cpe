@@ -21,7 +21,7 @@
  * @ingroup themeable
  */
 ?>
-<div class="utexas-flex-content">
+<div class="utexas-flex-content" <?php print $attributes; ?>>
   <?php if ($image): ?>
     <div class="utexas-flex-content-area-image-wrapper">
       <?php print $image; ?>

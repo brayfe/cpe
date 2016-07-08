@@ -8,7 +8,7 @@ Feature: Sub-navigation menu block
   I need to be able to place a sub navigation menu block on a page
 
 Scenario: User adds subnav to standard page
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I click "Structure"
   And I click "Blocks"

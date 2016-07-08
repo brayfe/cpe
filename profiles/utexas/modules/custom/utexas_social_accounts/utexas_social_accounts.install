@@ -15,4 +15,7 @@ function utexas_social_accounts_enable() {
   variable_set('utexas_social_accounts_linkedin', 'https://www.linkedin.com/edu/the-university-of-texas-at-austin-19518');
   variable_set('utexas_social_accounts_youtube', 'http://www.youtube.com/utaustintexas');
   variable_set('utexas_social_accounts_googleplus', 'https://plus.google.com/+UTAustin');
+  variable_set('utexas_social_accounts_flickr', 'https://www.flickr.com/photos/utaustin/');
+  variable_set('utexas_social_accounts_tumblr', 'http://utaustin.tumblr.com/');
+  variable_set('utexas_social_accounts_vimeo', 'https://vimeo.com/utaustin');
 }

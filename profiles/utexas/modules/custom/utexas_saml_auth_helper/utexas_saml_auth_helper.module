@@ -1,0 +1,117 @@
+<?php
+
+/**
+ * @file
+ * UTexas SAML Authenitcation helper module for Drupal.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function utexas_saml_auth_helper_form_alter(&$form, $form_state, $form_id) {
+
+  // These alterations don't apply to User 1.
+  if (isset($form['#user']) && $form['#user']->uid == 1) {
+    return;
+  }
+  // For new user registrations, remove the password field and make it not
+  // required, and enforce enabling the SAML option.
+  if ($form_id == "user_register_form") {
+    $form['saml']['#default_value'] = TRUE;
+    $form['saml']['#disabled'] = TRUE;
+    $form['saml']['#title'] = 'This is a UTLogin account.';
+
+    // Password is not required and may not be set (the field will be hidden).
+    // NOTE: password already removed when *editing* the profile of an existing
+    // user that has SAML enabled, so in this module we only need to disable it
+    // for user registrations.
+    $form['account']['pass']['#access'] = FALSE;
+    $form['account']['pass']['#required'] = FALSE;
+  }
+
+  $is_user_account_form = (($form_id == 'user_profile_form') && ($form['#user_category'] == 'account'));
+
+  // For non-registration forms, disable editing the username.
+  if ($is_user_account_form) {
+    $form['account']['name']['#disabled'] = TRUE;
+  }
+
+  // For all user profile edits, remove email field and make it not required.
+  if ($form_id == "user_register_form" || $is_user_account_form) {
+    $form['account']['name']['#title'] = t('Username (UT EID)');
+
+    // Email address is not required.
+    $form['account']['mail']['#required'] = FALSE;
+    $form['account']['mail']['#disabled'] = TRUE;
+    $form['account']['mail']['#description'] = t("The user's e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive certain news or notifications by e-mail. This field cannot be modified manually; it will be filled in from UT EID attributes when the user logs in.");
+
+    // The email address can't actually be blank, so we use a custom validate
+    // function to set it to *something*.
+    array_unshift($form['#validate'], 'utexas_saml_auth_helper_user_account_form_validate');
+  }
+
+}
+
+
+/**
+ * Form validation handler for user_account_form().
+ *
+ * This form validation handler should run before user_account_form_validate().
+ *
+ * It will a) check that the username is a valid UT EID, b) set the email
+ * field using the EID and the IID domain (defaults to eid.utexas.edu), and c)
+ * doule check that SAML authentication is enabled for the account.
+ *
+ * @see _utexas_saml_auth_helper_user_validate_name()
+ */
+function utexas_saml_auth_helper_user_account_form_validate($form, &$form_state) {
+  if ($form['#user_category'] == 'account' || $form['#user_category'] == 'register') {
+    // Validate UT EID.
+    if (isset($form_state['values']['name'])) {
+      // Trim whitespace and force UT EID to lowercase.
+      $name = trim(strtolower($form_state['values']['name']));
+      form_set_value($form['account']['name'], $name, $form_state);
+      if ($error = _utexas_saml_auth_helper_user_validate_name($form_state['values']['name'])) {
+        form_set_error('name', $error);
+      }
+    }
+
+    // Validate / cleanup the email address - Have to have an email address,
+    // so we'll use the IID (Institutional IDentifier).
+    $utexas_iid_domain = variable_get('utexas_saml_auth_helper_iid_domain', 'eid.utexas.edu');
+    if (!$form_state['values']['mail']) {
+      $form_state['values']['mail'] = $form_state['values']['name'] . "@" . $utexas_iid_domain;
+    }
+
+    // Enforce the SAML setting
+    // We already set this in our _form_alter, but make sure it stays set.
+    $form_state['values']['saml'] = TRUE;
+  }
+}
+
+/**
+ * Custom validation for a user's name (UT EID).
+ *
+ * This function performs the following checks on a given name:
+ * - is non-empty
+ * - matches the regular pattern /^[a-z0-9][a-z0-9._-]{1,7}$/
+ *
+ * Borrowed from the UTLogin module.
+ *
+ * @param string $name
+ *   The name to be checked.
+ *
+ * @return string|null
+ *   NULL if the given name passes all checks, or an error string otherwise.
+ */
+function _utexas_saml_auth_helper_user_validate_name($name) {
+  // Check that the name is non-empty.
+  if (!$name) {
+    return t('You must enter a UT EID.');
+  }
+
+  // Check that the name matches the UT EID regular pattern.
+  if (!preg_match('/^[a-z0-9][a-z0-9._-]{1,7}$/', $name)) {
+    return t('The entered UT EID is not valid.');
+  }
+}

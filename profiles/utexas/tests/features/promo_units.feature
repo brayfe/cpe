@@ -9,7 +9,7 @@ Feature: UTexas Promo Units
 
 Scenario: 1. Validating Copy needed when Headline filled 2. Creating a valid Promo Unit.
   # Validating Copy needed when Headline filled
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "test form" for "edit-title" in the "form_item_title" region
   And I click "Promo Units" in the "vertical_tabs" region

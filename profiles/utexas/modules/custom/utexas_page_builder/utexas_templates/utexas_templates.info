@@ -1,7 +1,7 @@
 name = UTexas Templates
 description = Defines available page templates for use on various content types
 core = 7.x
-version = 7.x-1.2
+version = UTEXAS_DISTRO_VERSION
 package = UTexas
 
 dependencies[] = entity

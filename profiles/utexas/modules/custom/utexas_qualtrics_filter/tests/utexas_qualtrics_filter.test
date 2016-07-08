@@ -1,0 +1,89 @@
+<?php
+/**
+ * @file
+ * UTexas Qualtrics Filter Unit Tests.
+ */
+
+/**
+ * Tests the functionality of the Utexas Events module.
+ */
+class UtexasQualtricsFilterTestCase extends DrupalWebTestCase {
+  protected $profile = 'utexas';
+
+  /**
+   * Extends getInfo().
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'UTexas Qualtrics Filter',
+      'description' => 'Ensure Qualtrics filter renders iframe properly',
+      'group' => 'UTexas',
+    );
+  }
+
+  /**
+   * Extends setUp().
+   */
+  public function setUp() {
+    // Enable any modules required for the test. No user is needed to execute
+    // the existing tests.
+    parent::setUp(array('utexas_page_builder', 'token'));
+  }
+
+  /**
+   * Test the _qualtrics_filter_process() function.
+   */
+  public function testUTexasQualtricsFilterProcess() {
+    $tests = array(
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ[/embed]' => 'none',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ | title:hello[/embed]'  => 'title',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ | title:hello [/embed]'  => 'title',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ | height:10[/embed]'  => 'height',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ | height:10 [/embed]' => 'height',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ | title:hello | height:10[/embed]'  => 'both',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ | title:hello | height:10 [/embed]'  => 'both',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ | title:hello |height:10 [/embed]'  => 'both',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ | title:hello|height:10 [/embed]'  => 'both',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ |title:hello|height:10[/embed]'  => 'both',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ |title: hello|height:10[/embed]'  => 'both',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ |height:10|title:hello[/embed]'  => 'both',
+      '[embed]https://utexas.qualtrics.com/SE/?SID=SV_af1Gk9JWK2khAEJ |height:10|malicious:hello[/embed]'  => 'malicious',
+    );
+    foreach ($tests as $data => $type) {
+      $test = FALSE;
+      $result = _qualtrics_filter_process($data, NULL);
+      $title = strpos($result, 'title="hello"');
+      $height = strpos($result, 'height="10"');
+      $malicious = strpos($result, 'malicious');
+
+      if ($type == 'none') {
+        if ($title === FALSE && $height === FALSE) {
+          $test = TRUE;
+        }
+      }
+      if ($type == 'title') {
+        if ($title !== FALSE && $height === FALSE) {
+          $test = TRUE;
+        }
+      }
+      if ($type == 'height') {
+        if ($title === FALSE && $height !== FALSE) {
+          $test = TRUE;
+        }
+      }
+      if ($type == 'both') {
+        if ($title !== FALSE && $height !== FALSE) {
+          $test = TRUE;
+        }
+      }
+      if ($type == 'malicious') {
+        if ($malicious === FALSE) {
+          $test = TRUE;
+        }
+      }
+      // Show the input and output for easy comparison.
+      $message = format_string('Input %data results in %result', array('%data' => $data, '%result' => $result));
+      $this->assertTrue($test, $message);
+    }
+  }
+}

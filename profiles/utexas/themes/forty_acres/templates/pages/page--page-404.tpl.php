@@ -50,9 +50,6 @@
       <div class="column medium-10 large-9 medium-centered">
         <h1 class="page-title">Page Not Found</h1>
         <div class="not-found search">
-          <p>We’re sorry, but we can’t find the page you're looking for.<br/>Please use our site navigation or search form to see if similar content is available on another page.</p>
-          <br/>
-
           <div class="div-search-404">
            <?php
               if (isset($search_cse)) :
@@ -62,21 +59,17 @@
               endif;
             ?>
           </div>
+          <?php if (($contact_404_checkbox == 1) && ($contact_404 != '')): ?>
+            <div class="field_wysiwyg_a">
+              <br>
+                <p><?php print ($contact_404); ?></p>
+              <br>
+            </div>
+          <?php endif; ?>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container container-bottom">
-    <div class="row">
-      <div class="column medium-10 large-9 medium-centered">
-        <section class="main-content">
-          <div class="field_wysiwyg_a">
-            <p>Please feel free to also use our <?php print l(t('Contact Form'), 'https://utexas.qualtrics.com/jfe/form/SV_4SzJOrpl0XIL737'); ?> to report this broken link to our administrators.</p>
-          </div>
-        </section>
       </div>
     </div>
   </div>
   <?php if (file_exists($partial_footer)): require_once $partial_footer; endif;  ?>
 </div>
+<?php render($page['content']); ?>

@@ -6,22 +6,22 @@ Feature: Featured Highlight
 #  As a site builder
 #  I need to be able to add fully formatted highlights to a page
 
-@javascript
+@javascript @api
 Scenario: Validate copy field and URL field
-#  Given I am logged in as a user with the "view the administration theme,create standard_page content" permission
-#  When I go to "node/add/standard-page"
-#  And I fill in "Test Featured Highlight" for "edit-title" in the "form_item_title" region
-#  And I click on the element "#featured_highlight"
-#  And I wait for css element "#edit-field-utexas-featured-highlight-und-0-headline" to "appear"
-#  And I fill in "Test Featured Highlight" for "edit-field-utexas-featured-highlight-und-0-headline" in the "featured_highlight_widget" region
-#  And I fill in "nonexistent-link" for "edit-field-utexas-featured-highlight-und-0-call-link" in the "featured_highlight_widget" region
-#  And I press the "Save" button
-#  Then I should see the error message "Featured Highlight: Copy field is required."
-#  And I should see the error message "Featured Highlight: The path provided is not a valid URL alias or external link."
+  Given I am logged in as a user with the "complete" permissions on this site
+  When I go to "node/add/standard-page"
+  And I fill in "Test Featured Highlight" for "edit-title" in the "form_item_title" region
+  And I click on the element "#featured_highlight"
+  And I wait for css element "#edit-field-utexas-featured-highlight-und-0-headline" to "appear"
+  And I fill in "Test Featured Highlight" for "edit-field-utexas-featured-highlight-und-0-headline" in the "featured_highlight_widget" region
+  And I fill in "nonexistent-link" for "edit-field-utexas-featured-highlight-und-0-call-link" in the "featured_highlight_widget" region
+  And I press the "Save" button
+  Then I should see the error message "Featured Highlight: Copy field is required."
+  And I should see the error message "Featured Highlight: The path provided is not a valid URL alias or external link."
 
-@javascript
+@javascript @api
 Scenario: Verify themed output
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "Test Featured Highlight" for "edit-title" in the "form_item_title" region
   And I click on the element "#featured_highlight"

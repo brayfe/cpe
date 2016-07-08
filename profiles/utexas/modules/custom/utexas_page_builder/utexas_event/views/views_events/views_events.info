@@ -1,0 +1,15 @@
+name = Views : Events
+description = Views associated with the Events entity
+core = 7.x
+package = Views
+version = UTEXAS_DISTRO_VERSION
+dependencies[] = date_popup
+dependencies[] = date_views
+dependencies[] = utexas_page_builder
+dependencies[] = views_bulk_operations
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = events
+features_exclude[dependencies][views] = views
+features_exclude[dependencies][entity] = entity
+project path = profiles/utexas/modules/custom/utexas_page_builder/utexas_event/views

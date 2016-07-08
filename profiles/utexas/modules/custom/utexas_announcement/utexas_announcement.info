@@ -1,0 +1,9 @@
+name = Announcement
+description = Places an announcement on the home page or all pages.
+core = 7.x
+version = UTEXAS_DISTRO_VERSION
+package = UTexas
+
+configure = admin/config/utexas/utexas_announcement
+
+dependencies[] = utexas_admin
