@@ -44,7 +44,7 @@ function utexas_tablesaw_filter_menu() {
 function utexas_tablesaw_filter_admin_form($form, &$form_state) {
 
   $form['introductory_text'] = array(
-    '#markup' => '<p>' . t('Enable responsive tables in WYSIWYG fields by going to !text_formats and checking "Make tables responsive" for the desired text format(s).', array('!text_formats' => l(t('Text Formats'), '/admin/config/content/formats'))) . '</p><hr />',
+    '#markup' => '<p>' . t('Enable responsive tables in WYSIWYG fields by going to !text_formats and checking "Make tables responsive" for the desired text format(s).  Note: this will only affect the active theme, not the admin theme.', array('!text_formats' => l(t('Text Formats'), '/admin/config/content/formats'))) . '</p><hr />',
   );
 
   // Add a checkbox to indicate if GTM should be included on admin paths.
@@ -73,10 +73,11 @@ function utexas_tablesaw_filter_admin_form($form, &$form_state) {
  * Implements hook_init().
  */
 function utexas_tablesaw_filter_init() {
+  // Is this page request using the default theme?
   // If CSS/JS aggregation is on, add tablesaw on every page for aggregration.
   // If aggregation is off, responsive_tables_filter_preprocess_page()
   // conditionally adds it on a per-page basis.
-  if (variable_get('preprocess_css', 0) == 1 && variable_get('preprocess_js', 0) == 1) {
+  if (_utexas_tablesaw_is_theme_default() && variable_get('preprocess_css', 0) == 1 && variable_get('preprocess_js', 0) == 1) {
     _responsive_tables_filter_add_js_css(TRUE);
   }
 }
@@ -135,7 +136,8 @@ function _tablesaw_filter($text, $filter, $format, $langcode, $cache, $cache_id)
  * Adds tablesaw JS when tables present and CSS/JS aggregation is off.
  */
 function utexas_tablesaw_filter_preprocess_page(&$variables) {
-  if (isset($variables['node']) && (variable_get('preprocess_css', 0) == 0 || variable_get('preprocess_js', 0) == 0)) {
+  // Is this page request using the default theme && we are on a node page?
+  if (_utexas_tablesaw_is_theme_default() && isset($variables['node']) && (variable_get('preprocess_css', 0) == 0 || variable_get('preprocess_js', 0) == 0)) {
     $formats_with_tablesaw = array();
     // Get text formats that have "tablesaw filter" enabled.
     $result = db_query('SELECT n.format FROM {filter} n WHERE n.module = :module AND n.status = 1', array(':module' => 'utexas_tablesaw_filter'));
@@ -168,8 +170,8 @@ function utexas_tablesaw_filter_preprocess_page(&$variables) {
  * Adds tablesaw JS when tables present and CSS/JS aggregation is off to table.
  */
 function utexas_tablesaw_filter_preprocess_views_view_table(&$variables) {
-  // Check if this has been enabled in the config page.
-  if (variable_get(UTEXAS_TABLESAW_FILTER_VIEWS, TRUE)) {
+  // Is this page using the default theme & are Views tables enabled?
+  if (_utexas_tablesaw_is_theme_default() && variable_get(UTEXAS_TABLESAW_FILTER_VIEWS, TRUE)) {
     // Add tablesaw classes & attribute.
     $variables['classes_array'][] = 'tablesaw';
     $variables['classes_array'][] = 'tablesaw-stack';
@@ -180,6 +182,18 @@ function utexas_tablesaw_filter_preprocess_views_view_table(&$variables) {
       _responsive_tables_filter_add_js_css(TRUE);
     }
   }
+}
+
+/**
+ * Check whether we are on a page using the default theme.
+ *
+ * @return bool
+ *   Whether or not this page uses the default theme.
+ */
+function _utexas_tablesaw_is_theme_default() {
+  global $theme;
+  $theme_default = variable_get('theme_default', 'forty_acres');
+  return $theme == $theme_default;
 }
 
 /**

@@ -8,6 +8,32 @@
  * Implements hook_install().
  */
 function utexas_devel_install() {
+
+  $roles = user_roles();
+  unset($roles[1]);
+  unset($roles[2]);
+  $site_builder = user_role_load_by_name('Site Builder');
+  foreach ($roles as $rid => $name) {
+    $email = uniqid() . '@test.com';
+    // Create test users.
+    $new_user = array(
+      'name' => $name,
+      'pass' => 'test',
+      'mail' => $email,
+      'signature_format' => 'filtered_html',
+      'status' => 1,
+      'language' => 'en',
+      'timezone' => 'America/Chicago',
+      'init' => 'Email',
+      'roles' => array(
+        DRUPAL_AUTHENTICATED_RID => 'authenticated user',
+        $site_builder->rid => $site_builder->name,
+        $rid => $name,
+      ),
+    );
+    $account = user_save(NULL, $new_user);
+  }
+
   if (!node_load('1')) {
     include_once DRUPAL_ROOT . '/profiles/utexas/default_content/default_standard_page.inc';
   }

@@ -7,9 +7,9 @@ Feature: UT News
   As a site-builder
   I need to be able to add a categorized feed of UT News items to a page
 
-@javascript
+@javascript @api
 Scenario: User adds a Newsreel with defaults
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I go to "node/add/standard-page"
   And I fill in "UT Newsreel Test" for "edit-title" in the "form_item_title" region
@@ -30,7 +30,7 @@ Scenario: User adds a Newsreel with defaults
 
 @javascript
 Scenario: User can customize and place a UT Newsreel
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "UT Newsreel Test" for "edit-title" in the "form_item_title" region
   And I click "UT Newsreel" in the "vertical_tabs" region

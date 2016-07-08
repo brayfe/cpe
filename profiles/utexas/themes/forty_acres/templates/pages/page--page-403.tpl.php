@@ -62,12 +62,9 @@
         <section class="main-content">
           <div class="field_wysiwyg_a">
             <p>Have an ID? Please <?php print l(t('Log in'), 'user/login', array('query' => array('destination' => request_path()))); ?>.</p>
-            <?php if (empty($page['menus']['core_helpful_links'])): ?>
-              <p>If you feel you have reached this page in error, please <?php print l(t('contact us'), '<front>'); ?>. You may also search in the site header.</p>
-            <?php else: ?>
-              <p>If you feel you have reached this page in error, please <?php print l(t('contact us'), '<front>'); ?>. You may also search in the site header or view the helpful links below.</p>
-              <h3>Helpful Links</h3>
-              <?php print render($page['menus']['core_helpful_links']); ?>
+            <?php if (($contact_403_checkbox == 1) && ($contact_403)): ?>
+              <p><?php print ($contact_403); ?></p>
+              <br>
             <?php endif; ?>
           </div>
         </section>
@@ -76,3 +73,4 @@
   </div>
   <?php if (file_exists($partial_footer)): require_once $partial_footer; endif;  ?>
 </div>
+<?php render($page['content']); ?>

@@ -46,11 +46,13 @@
   <div class="container container-top">
     <?php if (file_exists($partial_breadcrumbs)) : require_once $partial_breadcrumbs; endif; ?>
     <?php if (file_exists($partial_page_top)) : require_once $partial_page_top; endif; ?>
-    <div class="row">
-      <div class="column small-12">
-        <h1 class="page-title"><?php print $title; ?></h1>
+    <?php if (!isset($no_title)): ?>
+      <div class="row">
+        <div class="column small-12">
+          <h1 class="page-title"><?php print $title; ?></h1>
+        </div>
       </div>
-    </div>
+    <?php endif; ?>
   </div>
   <div class="container">
     <?php if($page['header']):?>

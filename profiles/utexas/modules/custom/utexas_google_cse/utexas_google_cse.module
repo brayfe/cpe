@@ -14,8 +14,16 @@ function utexas_google_cse_menu() {
   // Here we set up the page where the results will display:
   $items['search-results'] = array(
     'title' => 'Search',
-    'description' => 'My Google Custom Search',
+    'description' => 'Google Custom Search Results',
     'page callback' => 'utexas_google_cse_searchpage',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  // Google CSE search page.
+  $items['search'] = array(
+    'title' => 'Search',
+    'description' => 'Google Custom Search',
+    'page callback' => 'utexas_google_cse_search_page',
     'access callback' => TRUE,
     'type' => MENU_NORMAL_ITEM,
   );
@@ -32,18 +40,6 @@ function utexas_google_cse_menu() {
 }
 
 /**
- * Implements hook_theme().
- */
-function utexas_google_cse_theme() {
-  return array(
-    'utexas_google_cse_searchpage' => array(
-      'template' => 'node--utexas-google-cse',
-    ),
-  );
-}
-
-
-/**
  * Implements hook_permission().
  */
 function utexas_google_cse_permission() {
@@ -55,10 +51,19 @@ function utexas_google_cse_permission() {
 }
 
 /**
- * Implements custom searchpage() function.
+ * Implements custom search results() function.
  */
 function utexas_google_cse_searchpage() {
-  return theme('utexas_google_cse_searchpage');
+  global $base_url;
+  return '<gcse:searchresults-only resultsUrl = "' . $base_url . '/search-results"  queryParameterName="query"></gcse:searchresults-only>';
+}
+
+/**
+ * Implements custom search page() function.
+ */
+function utexas_google_cse_search_page() {
+  // A callback function is required to return the search page.
+  return array();
 }
 
 /**
@@ -89,7 +94,9 @@ function utexas_google_cse_theme_registry_alter(&$theme_registry) {
 function utexas_google_cse_block_info_alter(&$blocks, $theme, $code_blocks) {
   // Disable default search and navigation blocks.
   $blocks['system']['navigation']['status'] = 0;
-  $blocks['search']['form']['status'] = 0;
+  if (module_exists('search')) {
+    $blocks['search']['form']['status'] = 0;
+  }
 }
 
 /**
@@ -141,55 +148,31 @@ function utexas_google_cse_init() {
  * in both the 404 pages and the header.
  */
 function utexas_google_cse_preprocess_page(&$variables) {
-  $placeholder = get_current_search_terms();
-  // Google custom search bars.
-  global $base_url;
-  $google_logo = $base_url . '/profiles/utexas/themes/forty_acres/src/img/general/google-logo.png';
-
   $variables['search_cse'] = "
   <label for='search-desktop' class='hiddenText'>Search this site</label>
   <form action='/search-results' method='get' id='cse_searchbox'>
-    <input type='text' name='query' id='search-desktop' placeholder='" . $placeholder . "' class='search-page-input' title='Search this site' aria-labelledby='desktopSearchLabel'>
+    <input type='text' name='query' id='search-mobile-header' placeholder='Search this site' class='search-page-input' title='Search this site' aria-labelledby='desktopSearchLabel'>
     <button class='nav-search-button'><span class='hiddenText'>Search</span><span class='icon-search'></span></button>
-  </form>
-  <p class='custom-search'>
-    <img src='" . $google_logo . "'>
-    Custom Search
-  </p>";
+  </form>";
 
   $variables['header_search_cse'] = "
   <div class='nav-search-container'>
     <form action='/search-results' method='get' id='cse_searchbox'>
-      <input type='text' name='query' id='search-desktop' placeholder='Search' class='nav-search-input' title='Search this site' aria-labelledby='desktopSearchLabel'>
+      <input type='text' name='query' placeholder='Search' class='nav-search-input' title='Search this site' aria-labelledby='desktopSearchLabel'>
       <button class='nav-search-button'><span class='hiddenText'>Search</span><span class='icon-search'></span></button>
     </form>
   </div>";
-}
 
-/**
- * Helper function to retrieve search terms in URL for search form placeholder.
- */
-function get_current_search_terms() {
-  // Only do this once per request.
-  static $return;
-  if (!isset($return) && isset($_GET['query']) && $_GET['query'] != "") {
-    // Gets the path after base url.
-    $path = explode('/', $_GET['q'], 3);
-    // Gets the query keywords that will be set to the placeholder.
-    $query = explode('/', $_GET['query'], 3);
-
-    // Only if the path is search-results
-    // (if you have a different search url, please modify).
-    if (count($path) == 1 && $path[0] == "search-results") {
-      $return = $query["0"];
-    }
-  }
-  else {
-    $keys = empty($_REQUEST['keys']) ? 'Search' : $_REQUEST['keys'];
-    $return = $keys;
-  }
-  // Replacing white spaces with special character so
-  // the placeholder can be printed correctly in the tpl file.
-  $return = str_replace(' ', '&nbsp;', $return);
-  return $return;
+  $variables['google_logo'] = '';
+  $theme_path = drupal_get_path('theme', 'forty_acres');
+  $img_attributes = array(
+    'path' => 'profiles/utexas/themes/forty_acres/img/general/google-logo.png',
+    'alt' => 'Google logo',
+    'title' => 'Google Logo',
+    'width' => '51px',
+    'height' => '15px',
+    'attributes' => array('class' => 'google_logo'),
+    );
+  $img = theme('image', $img_attributes);
+  $variables['google_logo'] = (file_exists($theme_path . '/img/general/google-logo.png')) ? $img : '';
 }

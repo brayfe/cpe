@@ -8,43 +8,43 @@ Feature: Responsive Tablesaw behavior
   I need to be able to place a WYSIWYG with table in a region and have it respond.
 
 Scenario: A Drupal Views table is responsive with aggregation on and off
-Given I am logged in as a user with the "administrator" role on this site
-And I set browser window size to "1200" x "900"
-And I run drush "en views_ui -y"
-When I visit "/admin/structure/views/add"
-And I fill in "Tablesaw Test" for "human_name"
-And I fill in "Tablesaw Test" for "page[title]"
-And I fill in "tablesaw-test" for "page[path]"
-And I check the box "edit-block-create"
-And I select "table" from "page[style][style_plugin]"
-And I select "table" from "block[style][style_plugin]"
-And I press the "Continue & edit" button
-And I wait for css element "#edit-actions-save" to appear
-And I press the "Save" button
-And I visit "/tablesaw-test"
-Then I should see the css element "table" with the attribute "class" with the value containing "tablesaw tablesaw-stack"
-And I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "none"
-When I set browser window size to "350" x "900"
-And I wait for 2 seconds
-Then I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "block"
-When I set browser window size to "1200" x "900"
-And I run drush "vset 'preprocess_css' 0"
-And I run drush "vset 'preprocess_js' 0"
-And I run drush "cache-clear all"
-And I wait for 5 seconds
-When I visit "/tablesaw-test"
-Then I should see the css element "table" with the attribute "class" with the value containing "tablesaw tablesaw-stack"
-And I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "none"
-When I set browser window size to "350" x "900"
-And I wait for 2 seconds
-Then I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "block"
-# Clean up the view for subsequent test iterations.
-Then I visit "/admin/structure/views/view/tablesaw_test/delete"
-And I press the "Delete" button
+  Given I am logged in as a user with the "complete" permissions on this site
+  And I set browser window size to "1200" x "900"
+  And I run drush "en views_ui -y"
+  When I visit "/admin/structure/views/add"
+  And I fill in "Tablesaw Test" for "human_name"
+  And I fill in "Tablesaw Test" for "page[title]"
+  And I fill in "tablesaw-test" for "page[path]"
+  And I check the box "edit-block-create"
+  And I select "table" from "page[style][style_plugin]"
+  And I select "table" from "block[style][style_plugin]"
+  And I press the "Continue & edit" button
+  And I wait for css element "#edit-actions-save" to appear
+  And I press the "Save" button
+  And I visit "/tablesaw-test"
+  Then I should see the css element "table" with the attribute "class" with the value containing "tablesaw tablesaw-stack"
+  And I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "none"
+  When I set browser window size to "350" x "900"
+  And I wait for 2 seconds
+  Then I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "block"
+  When I set browser window size to "1200" x "900"
+  And I run drush "vset 'preprocess_css' 0"
+  And I run drush "vset 'preprocess_js' 0"
+  And I run drush "cache-clear all"
+  And I wait for 5 seconds
+  When I visit "/tablesaw-test"
+  Then I should see the css element "table" with the attribute "class" with the value containing "tablesaw tablesaw-stack"
+  And I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "none"
+  When I set browser window size to "350" x "900"
+  And I wait for 2 seconds
+  Then I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "block"
+  # Clean up the view for subsequent test iterations.
+  Then I visit "/admin/structure/views/view/tablesaw_test/delete"
+  And I press the "Delete" button
 
 Scenario: User adds table to Page Builder page
- Given I am logged in as a user with the "administrator" role on this site
- And I set browser window size to "1200" x "900"
+  Given I am logged in as a user with the "complete" permissions on this site
+  And I set browser window size to "1200" x "900"
   When I click "Add content"
   And I click "Landing Page"
   And I fill in "Tablesaw Test" for "edit-title" in the "form_item_title" region
@@ -82,7 +82,7 @@ Scenario: User adds table to Page Builder page
   Then I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "block"
 
 Scenario: Demonstrate adding a plain table to a body field with CSS/JS aggregation disabled
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   And I run drush "vset 'preprocess_css' 0"
   And I run drush "vset 'preprocess_js' 0"
@@ -103,7 +103,7 @@ Scenario: Demonstrate adding a plain table to a body field with CSS/JS aggregati
   Then I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "block"
 
 Scenario: Demonstrate table filter works with pre-existing attributes and encoded characters
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I go to "node/add/page"
   And I fill in "Tablesaw Test" for "edit-title" in the "form_item_title" region
@@ -122,7 +122,7 @@ Scenario: Demonstrate table filter works with pre-existing attributes and encode
   Then I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "block"
 
 Scenario: Demonstrate table filter works with CSS/JS Aggregation enabled
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   And I run drush "vset preprocess_css 1"
   And I run drush "vset preprocess_js 1"

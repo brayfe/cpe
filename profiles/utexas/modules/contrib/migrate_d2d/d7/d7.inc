@@ -140,6 +140,7 @@ class DrupalVersion7 extends DrupalVersion {
         }
       }
     }
+    $columns[$field_name . ':language'] = 'language';
     return $columns;
   }
 

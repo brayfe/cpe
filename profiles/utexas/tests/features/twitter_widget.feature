@@ -7,7 +7,7 @@ Feature: UTexas Twitter Widget
   I need to be able to add customizable twitter feeds
 
 Scenario: Validate required fields
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I go to "admin/content"
   And I click "Twitter Widgets"
@@ -17,7 +17,7 @@ Scenario: Validate required fields
   And I should see the error message "Twitter Account field is required."
 
 Scenario: Add Twitter configuration
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content"
   And I click "Twitter Widgets"
   And I click "Twitter Configuration"
@@ -28,7 +28,7 @@ Scenario: Add Twitter configuration
   Then I should see the error message "Could not authenticate you. The form has not been updated; any previously valid data you entered will remain active."
 
 Scenario: Add Twitter configuration
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content"
   And I click "Twitter Widgets"
   And I click "Twitter Configuration"
@@ -40,7 +40,7 @@ Scenario: Add Twitter configuration
   Then I should see the message "The configuration options have been saved."
 
 Scenario: Validate account name
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content"
   And I click "Twitter Widgets"
   And I click "Add twitter widget"
@@ -51,7 +51,7 @@ Scenario: Validate account name
   Then I should see the error message "The Twitter username invalid_twitter_handle does not appear to be valid."
 
 Scenario: Validate timeline list
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content"
   And I click "Twitter Widgets"
   And I click "Add twitter widget"
@@ -63,7 +63,7 @@ Scenario: Validate timeline list
   Then I should see the error message "The Twitter timeline list invalid_timeline_list does not appear to be valid."
 
 Scenario: Add Twitter widget data
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content"
   And I click "Twitter Widgets"
   And I click "Add twitter widget"
@@ -77,7 +77,7 @@ Scenario: Add Twitter widget data
   Then I should see the message "The widget: Test Twitter Widget has been saved."
 
 Scenario: Prevent duplicate Twitter widget names
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content"
   And I click "Twitter Widgets"
   And I click "Add twitter widget"
@@ -90,7 +90,7 @@ Scenario: Prevent duplicate Twitter widget names
   Then I should see the error message "The title Test Twitter Widget is already being used. Choose something else so that each widget can be easily identified."
 
 Scenario: Assign widget to page
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "Test Page" for "edit-title" in the "form_item_title" region
   And I click "Twitter Widget" in the "vertical_tabs" region
@@ -116,7 +116,7 @@ Scenario: Assign widget to page
   Then I should see "Test Headline" in the "twitter_widget_block" region
 
 Scenario: Delete a twitter widget
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content/twitter"
   And I click "delete"
   And I press the "Confirm" button

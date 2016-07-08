@@ -974,3 +974,6 @@ foreach ($landing_pages as $page) {
   // Save the context.
   context_save($export[$node->title]);
 }
+
+// Prevent this data from being acted on during a later operation.
+unset($landing_pages);

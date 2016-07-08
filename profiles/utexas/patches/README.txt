@@ -24,10 +24,16 @@ layout editor. Since we don't want generic Site Builder roles to have access to
 Context UI, we redefine the permission requirement relative to page builder.
 https://utexas-digx.atlassian.net/browse/MC-192
 
-5. video-filter-modal-autoplay-fix.patch
-There are 3 big issues with the latest version of the video_filter module. The
-first one is that the "autoplay" option does not work. The second one is that
-the logic of the modal window that opens when you want to paste a new video URL
-is deprecated on Chrome, so this patch fix both issues. The last one is removing
-a php warning appearing when you add a youtube URL by using the modal on a
-WYSIWYG.
+5. workbench_contextual_link_notice.patch
+When views_ui is not enabled, as it will not be in QuickSites instances, a
+notice is produced due to an assumption, as reported at
+https://www.drupal.org/node/1727284. The provided patch fixes this problem.
+
+7. ckeditor_xss_caching_2069871.patch
+If/when CKEditor's XSS logic receives no header response, caching is improperly
+triggered, which results in the CKEditor toolbar not rendering. This workaround
+simply disables CKEditor caching; this is only meant as a temporary fix until
+CKEditor module maintainers provide a better solution. The problem is difficult
+to reproduce, but both Henry Tijerina and John Kotarski reported it on UT Web
+installs of UT Drupal Kit. See tickets 490232 and 488316.
+See https://www.drupal.org/node/2069871

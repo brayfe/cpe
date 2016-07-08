@@ -15,7 +15,8 @@ module.exports = {
       '<%= path.dist %>/css/foundation.dropdown.css': '<%= path.src %>/scss/build/dropdown.scss',
       '<%= path.dist %>/css/foundation.reveal.css': '<%= path.src %>/scss/build/reveal.scss',
       '<%= path.dist %>/css/foundation.tab.css': '<%= path.src %>/scss/build/tab.scss',
-      '<%= path.dist %>/css/foundation.tooltip.css': '<%= path.src %>/scss/build/tooltip.scss'
+      '<%= path.dist %>/css/foundation.tooltip.css': '<%= path.src %>/scss/build/tooltip.scss',
+      '<%= path.dist %>/css/search_page.css': '<%= path.src %>/scss/build/search_page.scss'
     }
   },
   dist: {
@@ -28,7 +29,8 @@ module.exports = {
       '<%= path.dist %>/css/foundation.dropdown.css': '<%= path.src %>/scss/build/dropdown.scss',
       '<%= path.dist %>/css/foundation.reveal.css': '<%= path.src %>/scss/build/reveal.scss',
       '<%= path.dist %>/css/foundation.tab.css': '<%= path.src %>/scss/build/tab.scss',
-      '<%= path.dist %>/css/foundation.tooltip.css': '<%= path.src %>/scss/build/tooltip.scss'
+      '<%= path.dist %>/css/foundation.tooltip.css': '<%= path.src %>/scss/build/tooltip.scss',
+      '<%= path.dist %>/css/search_page.css': '<%= path.src %>/scss/build/search_page.scss'
     }
   }
 }

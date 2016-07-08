@@ -81,8 +81,14 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     );
     $user->mail = "{$user->name}@example.com";
     $this->userCreate($user);
-    // Create and assign a temporary role with given permissions.
-    $permissions = explode(',', $permissions);
+    if ($permissions == 'complete') {
+      // Assign all permissions.
+      $permissions = array_keys(user_permission_get_modules());
+    }
+    else {
+      $permissions = explode(',', $permissions);
+      // Create and assign a temporary role with given permissions.
+    }
     $rid = $this->getDriver()->roleCreate($permissions);
     $this->getDriver()->userAddRole($user, $rid);
     $this->roles[] = $rid;
@@ -489,16 +495,29 @@ JS;
   }
 
   /**
+   * @When I select the checkbox with class :class
+   */
+  public function iSelectTheCheckboxWithClass($class) {
+    $found_elements = $this->getSession()->getPage()->findAll('css', 'input.' . $class);
+    if (NULL === $found_elements) {
+      throw new \InvalidArgumentException(sprintf('Could not find element: "%s"', $element));
+    }
+    foreach ($found_elements as $element) {
+      $element->check();
+    }
+  }
+
+  /**
    * @When I wait for :arg1 seconds
    */
   public function iWaitForSeconds($seconds) {
-    $this->getSession()->wait($seconds*1000);
+    $this->getSession()->wait($seconds * 1000);
   }
 
   /**
    * Helper function; Execute a function until it return TRUE or timeouts.
    *
-   * @param $fn
+   * @param int $fn
    *   A callable to invoke.
    * @param int $timeout
    *   The timeout period. Defaults to 10 seconds.

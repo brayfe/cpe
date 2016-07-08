@@ -3,3 +3,30 @@
  * @file
  * Module file for the UTexas Fonts module.
  */
+
+ /**
+  * Implements hook_menu().
+  *
+  * Defines the demo page for the font icon.
+  */
+ function utexas_fonts_menu() {
+   $items = array();
+
+   $items['demo/fortyacres-icon-font'] = array(
+     'title' => 'Forty Acres Icon Font',
+     'page callback' => 'utexas_fortyacres_icon_font_demo',
+     'access arguments' => array('access administration pages'),
+   );
+
+   return $items;
+ }
+
+ /**
+  * Page callback for icon font demo page.
+  *
+  * Defaults to nothing (page content is built out at the theme level).
+  */
+ function utexas_fortyacres_icon_font_demo() {
+   $output = '';
+   return $output;
+ }

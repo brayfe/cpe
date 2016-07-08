@@ -410,13 +410,12 @@ function contact_info_form($form, &$form_state, $instance = NULL) {
     '#required' => FALSE,
     '#description' => t('Enter a 5 or 9-digit number with dashes (e.g., "78123" or "78123-5678").'),
   );
-
-  $form['field_url'] = array(
-    '#title' => t('Website'),
+  $form['field_email'] = array(
+    '#title' => t('Email'),
     '#type' => 'textfield',
-    '#default_value' => isset($instance->field_url) ? $instance->field_url : '',
+    '#default_value' => isset($instance->field_email) ? $instance->field_email : '',
     '#required' => FALSE,
-    '#description' => t('Enter a valid URL (e.g., "http://validurl.com").'),
+    '#description' => t('Enter an email address (e.g., "email@domain.com").'),
   );
   $form['field_phone'] = array(
     '#title' => t('Phone'),
@@ -432,14 +431,13 @@ function contact_info_form($form, &$form_state, $instance = NULL) {
     '#required' => FALSE,
     '#description' => t('Enter a 10-digit number with dashes (e.g., "123-456-7890").'),
   );
-  $form['field_email'] = array(
-    '#title' => t('Email'),
+  $form['field_url'] = array(
+    '#title' => t('Website'),
     '#type' => 'textfield',
-    '#default_value' => isset($instance->field_email) ? $instance->field_email : '',
+    '#default_value' => isset($instance->field_url) ? $instance->field_url : '',
     '#required' => FALSE,
-    '#description' => t('Enter an email address (e.g., "email@domain.com").'),
+    '#description' => t('Enter a valid URL (e.g., "http://validurl.com").'),
   );
-
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => isset($instance->id) ? t('Update') : t('Save'),
@@ -543,7 +541,7 @@ class ContactInfoEntityController extends EntityAPIController {
       }
       if ($field == 'field_location_zip' && !empty($value) && !empty($entity->field_location_state) ||
         $field == 'field_location_zip' && !empty($value) && !empty($entity->field_location_city)) {
-        $entity->field_location_zip = ", " . $entity->field_location_zip;
+        $entity->field_location_zip = " " . $entity->field_location_zip;
       }
       // Validating the city, state, zip for address.
       if ($field == 'field_address_state' && !empty($value) && !empty($entity->field_address_city)) {
@@ -551,7 +549,7 @@ class ContactInfoEntityController extends EntityAPIController {
       }
       if ($field == 'field_address_zip' && !empty($value) && !empty($entity->field_address_state) ||
         $field == 'field_address_zip' && !empty($value) && !empty($entity->field_address_city)) {
-        $entity->field_address_zip = ", " . $entity->field_address_zip;
+        $entity->field_address_zip = " " . $entity->field_address_zip;
       }
     }
 
@@ -587,15 +585,14 @@ class ContactInfoEntityController extends EntityAPIController {
  * Callback function for displaying the individual form page.
  */
 function _utexas_contact_info_view_form($id) {
-
-  $contact_forms = entity_load('contact_info', array($id));
-  $contact_form = $contact_forms[$id];
-
-  drupal_set_title($contact_form->name);
-  // View data is defined in buildContent().
-  $output = entity_view('contact_info', array($contact_form));
-
-  return $output;
+  if ($contact_forms = entity_load('contact_info', array($id))) {
+    $contact_form = $contact_forms[$id];
+    drupal_set_title($contact_form->name);
+    // View data is defined in buildContent().
+    $output = entity_view('contact_info', array($contact_form));
+    return $output;
+  }
+  return MENU_NOT_FOUND;
 }
 
 /**

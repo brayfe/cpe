@@ -296,17 +296,6 @@ function utexas_page_builder_page_build(&$page) {
  */
 function utexas_page_builder_form_alter(&$form, &$form_state, $form_id) {
   switch ($form_id) {
-    // If it's a home_features form, make some modifications.
-    case 'home_features_node_form':
-      // Attach the CSS.
-      $form['#attached']['css'][] = drupal_get_path('module', 'utexas_page_builder') . '/css/utexas_page_builder.css';
-
-      // Change the filtered format.
-      if (isset($form['body'])) {
-        _utexas_page_builder_element_children_all_set_text_format($form['body'], 'filtered_html');
-      }
-      break;
-
     // If it's the context ui form, perform some modifications to increase
     // clarity.
     case 'context_ui_editor':
@@ -364,14 +353,6 @@ function utexas_page_builder_form_alter(&$form, &$form_state, $form_id) {
       $form['#submit'][] = 'utexas_page_builder_hide_context_field_admin_ui_submit';
 
       break;
-
-    // If it's the block admin, prevent WYSIWYG from loading.
-    case 'block_admin_configure':
-      if (isset($form['settings']['body_field']['body'])) {
-        $form['settings']['body_field']['body']['#wysiwyg'] = FALSE;
-      }
-      break;
-
   }
 
   // If the content type has the "field_template" field, style the templates.
@@ -821,6 +802,21 @@ function utexas_page_builder_preprocess_context_block_browser(&$variables) {
     'menu-block' => t('Menu Blocks'),
     'block' => t('Standard Blocks'),
   );
+  // Check if the developer has supplied alternate arrays of modules.
+  if ($remove_modules = variable_get('utexas_page_builder_remove_block_modules', FALSE)) {
+    if (is_array($remove_modules)) {
+      foreach ($remove_modules as $machine_name) {
+        if ($available_modules[$machine_name]) {
+          unset($available_modules[$machine_name]);
+        }
+      }
+    }
+  }
+  if ($add_modules = variable_get('utexas_page_builder_add_block_modules', FALSE)) {
+    if (is_array($add_modules)) {
+      $available_modules = array_merge($available_modules, $add_modules);
+    }
+  }
 
   // Reassign blocks based on available modules.
   $modules = array_keys($available_modules);
@@ -890,7 +886,7 @@ function utexas_page_builder_preprocess_context_block_browser(&$variables) {
   }
   // Change the categories.
   $categories = array(
-    0 => '<' . t('all components') . '>',
+    0 => t('All components'),
   );
   foreach ($available_modules as $id => $data) {
     $categories[$id] = $data;

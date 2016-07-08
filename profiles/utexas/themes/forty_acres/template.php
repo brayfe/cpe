@@ -13,12 +13,6 @@ function forty_acres_html_head_alter(&$head_elements) {
   // Strip the generator link.
   unset($head_elements['system_meta_generator']);
 
-  // Strip the default favicon.
-  unset($head_elements['drupal_add_html_head_link:shortcut icon:http://forty_acres.dev/misc/favicon.ico']);
-
-  // Strip the RSS link.
-  unset($head_elements['drupal_add_html_head_link:alternate:http://forty_acres.dev/rss.xml']);
-
   // Unset the dafault favicon.
   foreach ($head_elements as $key => $element) {
     if (!empty($element['#attributes'])) {
@@ -29,79 +23,6 @@ function forty_acres_html_head_alter(&$head_elements) {
       }
     }
   }
-}
-
-/**
- * Theme override for menu links for the core helpful links menu.
- */
-function forty_acres_menu_link__menu_core_helpful_links(array $variables) {
-  // Grab the element (represents the <a> element) from the variables array.
-  $element = $variables['element'];
-
-  // Add classes attribute for the element.
-  $element['#localized_options']['attributes']['class'] = array('cta-link', 'sans');
-
-  // Create the menu link using the Drupal l function.
-  $output = l($element['#title'], $element['#href'], $element['#localized_options']);
-
-  // Return the link embedded in a list element.
-  return '<li>' . $output . "</li>\n";
-}
-
-/**
- * Theme override for the menu tree for the core helpful links menu.
- */
-function forty_acres_menu_tree__menu_core_helpful_links($variables) {
-  // We don't want a wrapper for this menu, so just return the tree.
-  return '<ul>' . $variables['tree'] . '</ul>';
-}
-
-/**
- * Theme override for theme_menu_link().
- */
-function forty_acres_menu_link__menu_directory(array $variables) {
-  // Grab the element (represents the <a> element) from the variables array.
-  $element = $variables['element'];
-
-  // Add a class attribute for the element.
-  $element['#localized_options']['attributes']['class'] = array('nav-link');
-
-  // Grab the position.
-  $position = $element['#attributes']['class'][0];
-
-  // Set class based on the position.
-  switch ($position) {
-    case 'first':
-      $link_class = 'first';
-      break;
-
-    case 'last':
-      $link_class = 'last';
-      break;
-
-    case 'leaf':
-      $link_class = 'mid';
-      break;
-
-    default:
-      $link_class = '';
-      break;
-  }
-
-  // Create the menu link using the Drupal l function.
-  $output = l($element['#title'], $element['#href'], $element['#localized_options']);
-
-  // Return the link embedded in a list element with the the set list item
-  // class.
-  return '<li class="nav-item nav-item-info ' . $link_class . '" role="menuitem">' . $output . "</li>\n";
-}
-
-/**
- * Theme override for theme_menu_tree().
- */
-function forty_acres_menu_tree__menu_directory($variables) {
-  // We don't need a wrapper for this menu, so just return the tree.
-  return $variables['tree'];
 }
 
 /**
@@ -125,8 +46,13 @@ function forty_acres_menu_link__menu_footer(array $variables) {
  * Theme override for theme_menu_tree().
  */
 function forty_acres_menu_tree__menu_footer($variables) {
-  // Add classes to the wrapper and return with the menu tree.
-  return '<ul class="helpful-links" role="menu">' . $variables['tree'] . '</ul>';
+  // Create variable for two-column layout on footer menu.
+  $two_column_class = '';
+  if (theme_get_setting('footer_menu_grid') == TRUE) {
+    $two_column_class = 'large-block-grid-2';
+  }
+    // Add classes to the wrapper and return with the menu tree.
+  return '<ul class="helpful-links ' . $two_column_class . '" role="menu">' . $variables['tree'] . '</ul>';
 }
 
 /**
@@ -155,34 +81,6 @@ function forty_acres_menu_link__menu_header(array $variables) {
 function forty_acres_menu_tree__menu_header($variables) {
   // Add a class to the wrapper.
   return '<ul class="topnav-constituents" role="menu">' . $variables['tree'] . '</ul>';
-}
-
-/**
- * Theme override for theme_menu_link().
- */
-function forty_acres_menu_link__menu_secondary_navigation(array $variables) {
-  // Grab the element (represents the <a> element) from the variables array.
-  $element = $variables['element'];
-
-  // Add classes attribute for the element.
-  $element['#localized_options']['attributes']['class'] = array(
-    'nav-link',
-    'nav-link-button',
-  );
-
-  // Create the menu link using the Drupal l function.
-  $output = l($element['#title'], $element['#href'], $element['#localized_options']);
-
-  // Return the link embedded in a list element.
-  return '<li class="nav-item nav-item-button show-for-large-up" role="menuitem">' . $output . "</li>\n";
-}
-
-/**
- * Theme override for theme_menu_tree().
- */
-function forty_acres_menu_tree__menu_secondary_navigation($variables) {
-  // We don't want a wrapper for this menu so just return the tree.
-  return $variables['tree'];
 }
 
 /**
@@ -216,7 +114,12 @@ function forty_acres_breadcrumb($variables) {
         $pos = strpos($breadcrumb[2], '>');
 
         // Create a new link by combining the 1st and second breadcrumbs.
-        $new_link = substr_replace($breadcrumb[2], strip_tags($breadcrumb[1]) . ' : ', $pos + 1, 0);
+        if ($breadcrumb[2] != '') {
+          $new_link = substr_replace($breadcrumb[2], strip_tags($breadcrumb[1]) . ' : ', $pos + 1, 0);
+        }
+        else {
+          $new_link = $breadcrumb[1];
+        }
 
         // Add the new link to the array.
         $trail[] = $new_link;
@@ -346,22 +249,6 @@ function forty_acres_item_list($variables) {
 }
 
 /**
- * Implements template_preprocess_block().
- *
- * @todo ITS to override twitter component on this page after writing the new
- *   Twitter feed module.
- */
-function forty_acres_preprocess_block(&$variables) {
-  // Custom override for twitter block.
-  // @todo ITS to revise this section, as needed.
-  if ($variables['block']->module == 'forty_acres_home_twitter') {
-    $classes = array_diff($variables['classes_array'], array('sidebar-default-style'));
-    $classes[] = 'sidebar-twitter-style';
-    $variables['classes_array'] = array_values($classes);
-  }
-}
-
-/**
  * The name of the field collection item entity.
  */
 define('FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE', 'field_collection_item');
@@ -397,95 +284,7 @@ function forty_acres_preprocess_entity(&$variables) {
       if ($items) {
         // Throw the items into a sub array.
         foreach ($items as $item) {
-          // Custom validation.
-          switch ($field) {
-            // Display the markup for embed codes.
-            case 'field_embed_code':
-              $value[] = check_markup($item['value'], 'embeds');
-              break;
-
-            // Pass in the markup for the photo.
-            case 'field_photo':
-              // Grab the alt tag.
-              $entity = file_load($item['fid']);
-              $alt_tag = field_get_items('file', $entity, 'field_alt_tag');
-              if ($alt_tag) {
-                $alt_tag = field_view_value('file', $entity, 'field_alt_tag', $alt_tag[0]);
-                $alt_tag = drupal_render($alt_tag);
-              }
-
-              // Grab the photo credit.
-              $credit = field_get_items('file', $entity, 'field_photo_credit');
-              if ($credit) {
-                $credit = field_view_value('file', $entity, 'field_photo_credit', $credit[0]);
-                $credit = drupal_render($credit);
-              }
-
-              // Check the uri.
-              if ($field_info[$field]['settings']['file_directory'] == 'photo-content-area') {
-                $info = image_get_info($entity->uri);
-                $image = theme('image_style', array(
-                  'style_name' => 'photo_content_area_image',
-                  'path' => $entity->uri,
-                  'width' => $info['width'],
-                  'height' => $info['height'],
-                  'alt' => $alt_tag,
-                ));
-              }
-              elseif ($field_info[$field]['settings']['file_directory'] == 'hero-photos') {
-                $info = image_get_info($entity->uri);
-                $image = theme('image_style', array(
-                  'style_name' => 'hero_photo_image',
-                  'path' => $entity->uri,
-                  'width' => $info['width'],
-                  'height' => $info['height'],
-                  'alt' => $alt_tag,
-                ));
-              }
-              else {
-                $image = theme('image', array(
-                  'path' => $entity->uri,
-                  'alt' => $alt_tag ? $alt_tag : NULL,
-                ));
-              }
-
-              // Build the image.
-              $value[] = array(
-                'image' => array(
-                  '#markup' => $image,
-                  '#access' => TRUE,
-                ),
-                'credit' => array(
-                  '#markup' => $credit,
-                  '#access' => TRUE,
-                ),
-              );
-
-              break;
-
-            case 'field_date':
-              // If we're setting a format type, reformat to strip out invalid
-              // RDF tags.
-              if (isset($view['settings']['format_type'])) {
-                $format = $view['settings']['format_type'];
-
-                // Attach the value.
-                $value[] = array(
-                  '#markup' => '<time datetime="' . $item['value'] . '">' . format_date(strtotime($item['value']), $format) . '</time>',
-                  '#access' => field_access('view', $field_info[$field], 'node'),
-                );
-              }
-              else {
-                // Use a default viewer.
-                $value[] = field_view_value(FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE, $collection, $field, $item, $view);
-              }
-              break;
-
-            // Display the default view for the field type.
-            default:
-              $value[] = field_view_value(FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE, $collection, $field, $item, $view);
-              break;
-          }
+          $value[] = field_view_value(FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE, $collection, $field, $item, $view);
         }
       }
 
@@ -523,6 +322,7 @@ function forty_acres_preprocess_field_collection_view(&$variables) {
 function forty_acres_preprocess_html(&$variables) {
   // Attach favicons to the page.
   $path = base_path() . drupal_get_path('theme', 'forty_acres') . '/img/favicon/';
+  $active_theme_path = base_path() . drupal_get_path('theme', $GLOBALS['theme']);
   $apple_icons = array(
     '',
     '57x57',
@@ -559,21 +359,12 @@ function forty_acres_preprocess_html(&$variables) {
     }
   }
 
-  // Attach favicon.
-  drupal_add_html_head(array(
-    '#tag' => 'link',
-    '#attributes' => array(
-      'rel' => 'icon',
-      'href' => $path . 'favicon.ico',
-    ),
-  ), 'favicon-png');
-
   // Set the IE 6-9 favicon. IE10 defaults to /favicon.ico.
   drupal_add_html_head(array(
     '#tag' => 'link',
     '#attributes' => array(
       'rel' => 'shortcut icon',
-      'href' => $path . 'favicon.ico',
+      'href' => $active_theme_path . 'favicon.ico',
     ),
     '#prefix' => '<!--[if IE]>',
     '#suffix' => '<![endif]-->',
@@ -612,6 +403,11 @@ function forty_acres_preprocess_html(&$variables) {
       'content' => t('UT Austin'),
     ),
   ), 'apple-mobile-web-app-title');
+
+  // Append | to $head title if not on the front page.
+  if (!drupal_is_front_page()) {
+    $variables['head_title'] = $variables['head_title'] . ' |';
+  }
 }
 
 /**
@@ -653,15 +449,21 @@ function forty_acres_preprocess_page(&$variables, $hook) {
     'weight' => 5,
   ));
 
+  // Add CSS for search pages.
+  if ((arg(0) == 'search') || (arg(0) == 'search-results')) {
+    drupal_add_css($path . '/css/search_page.css', array(
+      'group' => CSS_DEFAULT,
+      'every_page' => FALSE,
+      'media' => 'all',
+    ));
+  }
+
   // Get easily accessible menus into the page variable.
   $utexas_main_menu = module_invoke('utexas_menu', 'block_view', 'utexas_main_menu');
   $variables['page']['menus'] = array(
-    'core_directory' => menu_tree('menu-directory'),
     'footer' => menu_tree('menu-footer'),
     'header' => menu_tree('menu-header'),
-    'core_secondary' => menu_tree('menu-secondary-navigation'),
     'core_main' => $utexas_main_menu['content'],
-    'core_helpful_links' => menu_tree('menu-core-helpful-links'),
   );
 
   // Sets partial variables for use on the template.tpl.php pages.
@@ -670,7 +472,7 @@ function forty_acres_preprocess_page(&$variables, $hook) {
     'footer' => 'footer.tpl.php',
     'header' => 'header.tpl.php',
     'page_top' => 'page-top.tpl.php',
-    'search_result'=> 'search-result.tpl.php',
+    'search_result' => 'search-result.tpl.php',
     'search_results' => 'search-results.tpl.php',
   );
   $current_theme_path = drupal_get_path('theme', $GLOBALS['theme']);
@@ -680,7 +482,8 @@ function forty_acres_preprocess_page(&$variables, $hook) {
     $current_templates = file_scan_directory($current_theme_path . '/templates', '/\.tpl.php/', $options = array('key' => 'filename'));
   }
   foreach ($partials_list as $name => $file_name) {
-    // If we are using a subtheme and a partial is defined anywhere in the templates directory, set the partial variable to that template.
+    // If we are using a subtheme and a partial is defined anywhere in the
+    // templates directory, set the partial variable to that template.
     $variables['partial_' . $name] = (($GLOBALS['theme'] != 'forty_acres') && (isset($current_templates[$file_name]))) ? $current_templates[$file_name]->uri : drupal_get_path('theme', 'forty_acres') . '/templates/partials/' . $file_name;
   }
 
@@ -700,7 +503,15 @@ function forty_acres_preprocess_page(&$variables, $hook) {
       }
     }
   }
-  $foundation_libraries = array('abide', 'accordion', 'alert', 'dropdown', 'reveal', 'tab', 'tooltip');
+  $foundation_libraries = array(
+    'abide',
+    'accordion',
+    'alert',
+    'dropdown',
+    'reveal',
+    'tab',
+    'tooltip',
+  );
   if (arg(0) == 'demo' && arg(1) == 'foundation-extra-libraries' && drupal_valid_path('demo/foundation-extra-libraries')) {
     foreach ($foundation_libraries as $library) {
       if (file_exists($forty_acres_path . '/js/foundation.' . $library . '.js')) {
@@ -721,34 +532,19 @@ function forty_acres_preprocess_page(&$variables, $hook) {
       case '403 Forbidden':
         // Set the page template for 403 page.
         $variables['theme_hook_suggestions'][] = 'page__page_403';
+        $variables['contact_403_checkbox'] = theme_get_setting('contact_403_checkbox');
+        $variables['contact_403'] = check_markup(theme_get_setting('contact_403'), 'filtered_html');
         break;
 
       case '404 Not Found':
       default:
         // Set the page template for 404 page.
         $variables['theme_hook_suggestions'][] = 'page__page_404';
+        $variables['contact_404_checkbox'] = theme_get_setting('contact_404_checkbox');
+        $variables['contact_404'] = check_markup(theme_get_setting('contact_404'), 'filtered_html');
         break;
     }
   }
-  // Building the 404 drupal search form.
-  $search_form = drupal_get_form('search_block_form');
-  $form_build_id = '';
-  $form_token = '';
-  if (!empty($search_form['form_build_id']['#value'])) {
-    $form_build_id = $search_form['form_build_id']['#value'];
-  }
-  if (!empty($search_form['form_token']['#default_value'])) {
-    $form_token = $search_form['form_token']['#default_value'];
-  }
-  $variables['drupal_search'] = "
-  <label for='search-desktop' class='hiddenText'>Search UT Austin News</label>
-  <form action='' method='post' id='search-block-form--2' accept-charset='UTF-8'>
-    <input title='Enter the terms you wish to search for.'' type='text' name='search_block_form' placeholder='Search' value='' size='15' maxlength='128' id='search-desktop' class='search-page-input'>
-    <button class='nav-search-button'><span class='hiddenText'>Search</span><span class='icon-search'></span></button>
-    <input type='hidden' name='form_build_id' value=" . $form_build_id . ">
-    <input type='hidden' name='form_token' value=" . $form_token . ">
-    <input type='hidden' name='form_id' value='search_block_form'>
-  </form>";
 
   // Random off-chance that the user reaches page/404 or page/403, return
   // content for those as well.
@@ -760,6 +556,9 @@ function forty_acres_preprocess_page(&$variables, $hook) {
       $variables['theme_hook_suggestions'][] = 'page__page_403';
     }
   }
+  if (arg(0) == 'search-results') {
+    $variables['theme_hook_suggestions'][] = 'page__search';
+  }
 
   $variables['newsletter_display'] = theme_get_setting('newsletter_url');
   $variables['footer_text'] = check_markup(theme_get_setting('footer_text_area'), 'filtered_html');
@@ -767,7 +566,7 @@ function forty_acres_preprocess_page(&$variables, $hook) {
   $variables['display_header_menu'] = theme_get_setting('secondary_menu');
   $variables['newsletter_exists'] = theme_get_setting('newsletter_exists');
   $variables['newsletter_url'] = check_url(theme_get_setting('newsletter_url'));
-  $variables['parent_link_title'] = theme_get_setting('parent_link_title');
+  $variables['parent_link_title'] = check_plain(theme_get_setting('parent_link_title'));
   $variables['parent_link'] = theme_get_setting('parent_link');
   $variables['parent_entity'] = FALSE;
   if ($variables['parent_link_title'] != '' && $variables['parent_link'] != '') {
@@ -811,6 +610,11 @@ function forty_acres_preprocess_page(&$variables, $hook) {
     $variables['display_search'] = FALSE;
     drupal_add_css('#main-nav {margin: 0;}.container-nav-phase2 .nav-item:first-child{border-top: none!important;}', 'inline');
   }
+
+  // Decrease padding if user selects two-column footer menu.
+  if (theme_get_setting('footer_menu_grid') == TRUE) {
+    drupal_add_css('@media only screen and (min-width:64.063em) {.footer-theme2 .footer-secondary{padding-left:5%!important;padding-right:5%!important;}}', 'inline');
+  }
 }
 
 /**
@@ -821,21 +625,6 @@ function forty_acres_process_html(&$variables) {
   $variables['head_scripts'] = drupal_get_js('head_scripts');
   $variables['foot_scripts'] = drupal_get_js('foot_scripts');
 }
-
-/**
- * Implements hook_form_alter().
- */
-function forty_acres_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'search_form') {
-    // Hide the default search form in favor of our custom one; see $search_form
-    $form['#access'] = FALSE;
-  }
-}
-
-/**
- * @file
- * Style overrides for pagers.
- */
 
 /**
  * Theme override for theme_pager().

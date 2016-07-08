@@ -1,0 +1,232 @@
+<?php
+
+/**
+ * @file
+ * UTexas Event install profile.
+ *
+ * Add hook_update_N() functions here to update Event schema.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function utexas_event_schema() {
+
+  $schema = array();
+
+  $schema['utexas_event'] = array(
+    'description' => 'The base table for the Event entity',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key of the Event entity',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'title' => array(
+        'description' => 'Event Title',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'all_day' => array(
+        'description' => '1 = yes, 0 = no',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'date_range' => array(
+        'description' => '1 = yes, 0 = no',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'featured' => array(
+        'description' => '1 = yes, 0 = no',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'start' => array(
+        'description' => 'The Unix timestamp when event starts',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'end' => array(
+        'description' => 'The Unix timestamp when event end',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'detail_text' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+        'description' => 'Stores detail text.',
+      ),
+      'detail_format' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Stores text format for the detail text.',
+      ),
+      'summary_text' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+        'description' => 'Stores summary text.',
+      ),
+      'image_fid' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The {file_managed}.fid for an event image',
+      ),
+    ),
+    'primary key' => array('id'),
+    'foreign_keys' => array(
+      'image_fid' => array(
+        'table' => 'file_managed',
+        'columns' => array('image_fid' => 'fid'),
+      ),
+      'detail_format' => array(
+        'table' => 'filter_format',
+        'columns' => array('detail_format' => 'format'),
+      ),
+    ),
+  );
+
+  return $schema;
+
+}
+
+/**
+ * Implements hook_install().
+ */
+function utexas_event_install() {
+  // Set the initial value for the schema version so we can
+  // run updates after install.
+  drupal_set_installed_schema_version('utexas_event', 7100);
+
+  $location = (object) array(
+    'name' => 'Event Location',
+    'description' => 'Used to list and retrieve locations associated with events.',
+    'machine_name' => 'event_location',
+  );
+  taxonomy_vocabulary_save($location);
+
+  $tags = (object) array(
+    'name' => 'Event Tags',
+    'description' => 'Used to categories events into semantically related groups.',
+    'machine_name' => 'event_tags',
+  );
+  taxonomy_vocabulary_save($tags);
+
+  $permissions = array(
+    'view events',
+  );
+  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, $permissions);
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $permissions);
+
+  $categories = array('Students', 'Visiting Lecture Series', 'Outreach');
+  if ($vocabulary = taxonomy_vocabulary_machine_name_load('event_tags')) {
+    foreach ($categories as $category) {
+      $term = new stdClass();
+      $term->name = $category;
+      $term->vid = $vocabulary->vid;
+      taxonomy_term_save($term);
+    }
+  }
+}
+
+/**
+ * Implements hook_enable().
+ */
+function utexas_event_enable() {
+  $fields = array(
+    'Event Tags' => -1,
+    'Event Location' => -1,
+  );
+  foreach ($fields as $label => $cardinality) {
+    $machine_name = str_replace(' ', '_', strtolower($label));
+    $field_name = 'field_' . $machine_name;
+    if (!field_info_field($field_name)) {
+      $field = array(
+        'active' => 1,
+        'cardinality' => $cardinality,
+        'deleted' => 0,
+        'entity_types' => array(),
+        'field_name' => $field_name,
+        'indexes' => array(
+          'tid' => array(
+            0 => 'tid',
+          ),
+        ),
+        'instance_settings' => array(
+          'allowed_values' => array(
+            0 => array(
+              'vocabulary' => $machine_name,
+              'parent' => 0,
+            ),
+          ),
+        ),
+        'locked' => 0,
+        'module' => 'taxonomy',
+        'settings' => array(
+          'allowed_values' => array(
+            0 => array(
+              'vocabulary' => $machine_name,
+              'parent' => 0,
+            ),
+          ),
+        ),
+        'translatable' => 0,
+        'type' => 'taxonomy_term_reference',
+      );
+      field_create_field($field);
+    }
+    if (!field_info_instance('utexas_event', $field_name, 'utexas_event')) {
+      $instance = array(
+        'field_name' => $field_name,
+        'entity_type' => 'utexas_event',
+        'bundle' => 'utexas_event',
+        'label' => $label,
+        'required' => FALSE,
+        'widget' => array(
+          'weight' => 1,
+          'type' => 'taxonomy_autocomplete',
+          'module' => 'taxonomy',
+        ),
+      );
+      field_create_instance($instance);
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Performs cleanup actions when the module is uninstalled.
+ */
+function utexas_event_uninstall() {
+  if (db_table_exists('utexas_event')) {
+    db_drop_table('utexas_event');
+  }
+  if ($vocabulary = taxonomy_vocabulary_machine_name_load('event_location')) {
+    taxonomy_vocabulary_delete($vocabulary->vid);
+  }
+  if ($vocabulary = taxonomy_vocabulary_machine_name_load('event_tags')) {
+    taxonomy_vocabulary_delete($vocabulary->vid);
+  }
+  if (field_info_field('field_event_tags')) {
+    field_delete_field('field_event_tags');
+  }
+  if (field_info_field('field_event_location')) {
+    field_delete_field('field_event_location');
+  }
+  module_disable(array('views_events'));
+}

@@ -1,0 +1,37 @@
+.swatch {
+  display: inline-block;
+  height: 17px;
+  vertical-align: middle;
+  width: 100px;
+  margin-left: 10px;
+}
+.yellow {
+  background: #ffeb63 none repeat scroll 0 0;
+}
+.orange {
+  background: #f2a900 none repeat scroll 0 0;
+}
+.green {
+  background: #43695b none repeat scroll 0 0;
+}
+.grey {
+  background: #666666 none repeat scroll 0 0;
+}
+.announcement-icon {
+  background-repeat: no-repeat !important;
+  background-size: 90% 90% !important;
+  display: inline-block;
+  height: 18px;
+  margin-left: 10px;
+  vertical-align: middle;
+  width: 20px;
+}
+.megaphone {
+  background: url("../assets/images/megaphone.png");
+}
+.exclamation {
+  background: url("../assets/images/exclamation.png");
+}
+.beacon {
+  background: url("../assets/images/beacon.png");
+}

@@ -1,7 +1,7 @@
 name = Photo Content Area
 description = Defines photo content area compound field
 core = 7.x
-version = 7.x-1.2
+version = UTEXAS_DISTRO_VERSION
 package = UTexas
 
 dependencies[] = smartcrop

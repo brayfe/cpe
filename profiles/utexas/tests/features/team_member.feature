@@ -16,9 +16,17 @@ Scenario: Site builder can enable team members
   Given I run drush "cache-clear all"
   Then drush output should contain "'all' cache was cleared"
 
-@javascript
+@javascript @api
+Scenario: Team Member Editor can access Team Member Group taxonomy
+  Given I am logged in as a user with the "Team Member Editor" role
+  When I go to "/admin/structure/taxonomy/tags"
+  Then I should see "Access Denied" in the "page_title" region
+  When I go to "/admin/structure/taxonomy/team_member_group"
+  Then I should see "Team Member Group" in the "page_title" region
+
+@javascript @api
 Scenario: Validating empty fields
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   And I click "Add content"
   And I click "Team Member"
@@ -42,9 +50,9 @@ Scenario: Validating empty fields
   And I press the "Save" button
   Then I should see the error message "Related Links: The path provided is not a valid URL alias or external link."
 
-@javascript
+@javascript @api
 Scenario: User can add available content to a team member, and display them in the Team Member view block
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   When I click "Add content"
   And I click "Team Member"
   # Add Basic Info #

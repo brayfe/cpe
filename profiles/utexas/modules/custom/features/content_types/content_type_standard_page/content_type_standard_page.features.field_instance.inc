@@ -83,7 +83,7 @@ function content_type_standard_page_field_default_field_instances() {
     'bundle' => 'field_utexas_promo_list',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '<p>Choose \'Single list full\' for a one-column list of items that spans the width of its container.<br>Choose \'Single list responsive\' to produce a two-column list that spans the width of its container.<br>Choose \'Two lists, side-by-side\' to produce a one-column list that spans half the width of its container.<br>*note: two lists need to be entered with \'Two lists, side-by-side\' style selected to fill a container</p>',
+    'description' => '<p>Choose \'Single list full\' for a one-column list of items that spans the width of its container.<br>Choose \'Single list responsive\' to produce a two-column list that spans the width of its container.<br>Choose \'Two lists, side-by-side\' to produce a one-column list that spans half the width of its container.<br>*note: two lists need to be entered with \'Two lists, side-by-side\' style selected to fill a container<br>Choose "N/A" (along with removing all other field data) to completely remove the Promo List from the page.</p>',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -96,7 +96,7 @@ function content_type_standard_page_field_default_field_instances() {
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_utexas_promo_list_style',
     'label' => 'Promo List Style',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -929,7 +929,7 @@ function content_type_standard_page_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('<p>Choose \'Single list full\' for a one-column list of items that spans the width of its container.<br>Choose \'Single list responsive\' to produce a two-column list that spans the width of its container.<br>Choose \'Two lists, side-by-side\' to produce a one-column list that spans half the width of its container.<br>*note: two lists need to be entered with \'Two lists, side-by-side\' style selected to fill a container</p>');
+  t('<p>Choose \'Single list full\' for a one-column list of items that spans the width of its container.<br>Choose \'Single list responsive\' to produce a two-column list that spans the width of its container.<br>Choose \'Two lists, side-by-side\' to produce a one-column list that spans half the width of its container.<br>*note: two lists need to be entered with \'Two lists, side-by-side\' style selected to fill a container<br>Choose "N/A" (along with removing all other field data) to completely remove the Promo List from the page.</p>');
   t('A comma-separated list of terms from site <a href="/admin/structure/taxonomy/tags">Tags</a>. Existing tags will autocomplete as you type.');
   t('Add an image that is clickable to a URL. This is ideal for small ad units that do not need captions or additional calls to action.');
   t('Add your hero photo and give it a caption. It will appear at the top of your page. Please upload the high resolution version of the image for best results.');

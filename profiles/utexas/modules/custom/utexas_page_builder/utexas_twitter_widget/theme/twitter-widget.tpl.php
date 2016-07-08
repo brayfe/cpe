@@ -25,6 +25,11 @@ if ($content['tweets'] !== FALSE) :
   echo '<div class="module-content">';
   foreach ($content['tweets'] as $count => $tweet) :
     echo '<div class="tweet" id="tweet-' . $count . '">';
+      if ($tweet['retweet_eyebrow']) {
+        echo '<div class="retweet-eyebrow">';
+          echo $tweet['retweet_eyebrow'];
+        echo '</div>';
+      }
       echo '<div class="tweet-image">' . $tweet['image'] . '</div>';
       echo '<div class="tweet-author">' . $tweet['author'] . '</div>';
       echo '<div class="tweet-username">' . $tweet['username'] . '</div>';

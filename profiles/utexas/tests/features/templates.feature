@@ -6,9 +6,9 @@ Feature: UTexas Templates Behavior
   As a site builder
   I need to be able to create, review, update and delete existing templates
 
-@javascript
+@javascript @api
 Scenario: View Templates provided by module installation
-  Given I am logged in as a user with the "administer templates,view templates" permission on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I click "Templates in the "toolbar"
   Then I should see the link "Hero Image & Sidebars" in the "content" region
@@ -31,9 +31,9 @@ Scenario: Authenticated user restricted from viewing
   When I visit "admin/templates/manage/1"
   Then I should see the text "Access Denied" in the "page_title" region
 
-@javascript
+@javascript @api
 Scenario: Add new template
-  Given I am logged in as a user with the "administer templates,view templates" permission on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I visit "admin/templates/add"
   And I fill in "Behat Test" for "edit-name" in the "form_item_name" region
   And I fill in "Behat Test description" for "edit-description" in the "form_item_description" region
@@ -45,9 +45,9 @@ Scenario: Add new template
   And I should see the warning message "Missing"
   And I should see the text "page_builder_layouts/behat-test/page--behat-test.tpl.php" in the "content" region
 
-@javascript
+@javascript @api
 Scenario: Avoid duplicate templates
-  Given I am logged in as a user with the "administer templates,view templates" permission on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I visit "admin/templates/add"
   And I fill in "Behat Test" for "edit-name" in the "form_item_name" region
   And I fill in "Behat Test description" for "edit-description" in the "form_item_description" region
@@ -55,9 +55,9 @@ Scenario: Avoid duplicate templates
   And I press the "Save template" button
   Then I should see the error message "The title Behat Test conflicts with an existing template."
 
-@javascript
+@javascript @api
 Scenario: Edit existing template
-  Given I am logged in as a user with the "administer templates,view templates" permission on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I visit "admin/templates"
   And I click "Behat Test"
   And I click "Edit"
@@ -66,8 +66,9 @@ Scenario: Edit existing template
   Then I should see the message "The template: Name Change has been saved."
   And I should see the message "Note: the name Behat Test was changed to Name Change. Make sure that your template file is page--name-change.tpl.php and your image file is name-change.svg. You will also need to reassign this template to the existing content types."
 
+@javascript @api
 Scenario: Delete a template
-  Given I am logged in as a user with the "administer templates,view templates" permission on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I visit "admin/templates"
   And I click "Name Change"
   And I click "Delete"
