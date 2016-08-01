@@ -1,3 +1,96 @@
 /***********************************************************************/
 /***********************   Custom CSS overrides   **********************/
 /***********************************************************************/
+.alert {
+  color: #A20000;
+}
+
+h3.orangeblock {
+  background: #bf5700;
+  padding: 20px;
+  color: #ffffff;
+}
+
+/****** E-Commerce theming ******/
+
+.cart {
+    float: right;
+    width: auto;
+    margin-left: 10px;
+    color: #2D2A28;
+    font-size: 80%;
+  
+}
+
+.cart.mobile {
+    margin-top: 10px;
+}
+
+@media only screen and (min-width: 64.063em) {
+.cart.mobile {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+    position: absolute;
+}
+}
+
+.cart.bump {
+    margin-top: -9px;   
+}
+
+
+.cartno {
+   font-size: 80%;
+    margin-top: -8px;
+}
+
+.cartimage {
+    position: relative;
+    top: 5px; 
+    width: 25px;
+    height: 25px;
+}
+
+.cart form {
+      
+}
+
+
+
+form.inline {
+    display: inline;   
+}
+
+.button.small {
+    padding: 5px;
+}
+
+.button.tiny {
+    padding: 5px;
+    background: #005f86;
+    margin: 0;
+  
+}
+
+.section {
+    background: #f4f4f4; padding: 0px; margin-bottom: 20px;   
+}
+
+.section-header {
+    background: #005f86; color: #ffffff; padding: 15px;
+}
+
+@media only screen and (min-width: 64.063em) {
+.container-topnav .nav-search-container {  
+    width: 180px;
+    margin-left: 20px;
+
+}
+}
+
+/*Article Styling*/
+
+.promo-copy.news-date {
+    font-style: italic;   
+}
