@@ -1,0 +1,72 @@
+# This file contains default .gitignore rules. To use it, copy it to .gitignore,
+# and it will cause files like your settings.php and user-uploaded files to be
+# excluded from Git version control. This is a common strategy to avoid
+# accidentally including private information in public repositories and patch
+# files.
+#
+# Because .gitignore can be specific to your site, this file has a different
+# name; updating Drupal core will not override your custom .gitignore file.
+
+# Ignore configuration files that may contain sensitive information.
+/sites/*/settings*.php
+
+# Ignore paths that contain user-generated content.
+/sites/*/files
+/sites/*/private
+/files/*
+/cache
+
+# Never commit local-settings.php
+/sites/*/local-settings.php
+
+# ** Only works in OSs that support newer versions of fnmatch (Bash 4+)
+/sites/default/**/files
+/sites/default/**/private
+
+# Ignore testing files specific to the UT Drupal Kit
+/profiles/utexas/tests/config.sh
+/profiles/utexas/tests/credentials.php
+/profiles/utexas/tests/failures/*
+/profiles/utexas/tests/regressions/*
+!/profiles/utexas/tests/regressions/baselines/*
+/profiles/utexas/tests/logs/*
+
+
+# Packages #
+############
+*.7z
+*.dmg
+*.gz
+*.bz2
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.tgz
+
+# Logs and databases #
+######################
+*.log
+*.sql
+
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Icon
+
+Thumbs.db
+._*
+
+# Vim generated files #
+######################
+*.un~
+
+# SASS #
+##########
+.sass-cache
+
+# PHPStorm .idea files #
+########################
+.idea
