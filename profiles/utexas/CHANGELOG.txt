@@ -1,3 +1,8 @@
+UT Drupal Kit 7.x-2.3.1, 2016-08-04
+---------------------------------
+[UDK-66] - Update Admin Views to 7.x-1.6 (Security)
+[UDK-67] - Replace missing example gitignore file
+
 UT Drupal Kit 7.x-2.3, 2016-07-13
 ---------------------------------
 [MC-246] - Add lock icon to icon fonts
