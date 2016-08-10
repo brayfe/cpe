@@ -1,3 +1,7 @@
+UT Drupal Kit 7.x-2.3.2, 2016-08-10
+---------------------------------
+[UDK-68] - Re-apply Context module patch
+
 UT Drupal Kit 7.x-2.3.1, 2016-08-04
 ---------------------------------
 [UDK-66] - Update Admin Views to 7.x-1.6 (Security)
