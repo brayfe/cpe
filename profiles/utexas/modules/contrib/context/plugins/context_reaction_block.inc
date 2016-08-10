@@ -278,7 +278,7 @@ class context_reaction_block extends context_reaction {
     static $requirements;
     if (!isset($requirements) || $reset) {
       global $user;
-      if ($user->uid && user_access('administer contexts') && variable_get('context_ui_dialog_enabled', FALSE)) {
+      if ($user->uid && (user_access('administer contexts') || user_access('edit page layouts')) && variable_get('context_ui_dialog_enabled', FALSE)) {
         $requirements = TRUE;
         drupal_add_library('system', 'ui.droppable');
         drupal_add_library('system', 'ui.sortable');
