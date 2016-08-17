@@ -28,14 +28,14 @@
             queries[i[0].toString()] = i[1].toString();
             // If there is a "query" string in the URL, proceed.
             if (i[0] == 'query') {
-              var placeholder_text = i[1].split("+").join(" ");
+              var value_text = i[1].split("+").join(" ");
               // Get all input tags.
               var input = document.getElementsByTagName("input");
               for (var j = 0; j < input.length; j++) {
                 var classname = input[j].getAttribute("class");
                 if ( classname == "nav-search-input" || classname == "search-page-input") {
                   // Set the placeholder text.
-                  input[j].placeholder = placeholder_text;
+                  input[j].value = value_text;
                 }
               }
             }
