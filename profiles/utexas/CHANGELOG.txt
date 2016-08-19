@@ -1,3 +1,8 @@
+UT Drupal Kit 7.x-2.3.3, 2016-08-20
+---------------------------------
+[UDK-70] - Convert search input text from placeholder to value
+[UDK-71] - Update Panels to 7.x-3.6 (Security Update)
+
 UT Drupal Kit 7.x-2.3.2, 2016-08-10
 ---------------------------------
 [UDK-68] - Re-apply Context module patch
