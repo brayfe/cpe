@@ -1,5 +1,6 @@
 UT Drupal Kit 7.x-2.3.3, 2016-08-20
 ---------------------------------
+[UDK-69] - Add taxonomy_access_fix module to codebase
 [UDK-70] - Convert search input text from placeholder to value
 [UDK-71] - Update Panels to 7.x-3.6 (Security Update)
 
