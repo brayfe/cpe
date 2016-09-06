@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Enables theme/site configuration for the utexas profile site installation.
@@ -111,8 +112,7 @@ function install_utexas_page_builder() {
     'content_type_landing_page',
     'settings_default_standard_page_options',
     'settings_default_landing_page_options',
-    )
-  );
+  ));
 
   if ($install_state['parameters']['default_page'] == 1) {
     include_once 'default_content/default_standard_page.inc';
@@ -146,9 +146,14 @@ function install_utexas_page_builder() {
 function install_utexas_welcome($form, &$form_state, &$install_state) {
   // Set up the "Welcome" message.
   drupal_set_title(st('Welcome to the UT Drupal Kit'));
-  $message = '<p>' . st('<strong>The goal of the UT Drupal Kit is to simplify deployment of University-affiliated websites while keeping all of the extensibility of Drupal\'s platform.</strong>') . '</p>';
-  $message .= '<div class="messages warning">' . st('<h2>Special note for UT Web users</h2> <p>If you are installing the UT Drupal Kit on the UT Web service, please see the ' . l(t('Installation on UT Web'), 'https://wikis.utexas.edu/display/UTDK/Installation+on+UT+Web')) . ' documentation for important configuration guidelines.</p></div>';
-  $message .= '<p>' . st('The Kit includes a custom login module which allows authentication via UTLogin, the centralized authentication service. This module requires configuration of a Web Policy Agent. For installation instructions, see ') . l(t('the UTLogin module documentation'), 'https://wikis.utexas.edu/display/UTDK/UTLogin+Module+Installation+and+Configuration') . '.</p>';
+  $message = '<p>' . st('<strong>The goal of the UT Drupal Kit is to simplify deployment of University-affiliated websites while keeping the extensibility of Drupal\'s platform.</strong>') . '</p>';
+  if (isset($conf['pantheon_environment'])) {
+    $message .= '<p>' . st('The Kit supports authentication via UTLogin, the centralized authentication service. This functionality requires additional configuration. For instructions, see ') . l(t('UT Drupal Kit SAML page'), 'https://wikis.utexas.edu/display/UTDK/Login+via+SAML') . '.</p>';
+  }
+  else {
+    $message .= '<div class="messages warning">' . st('<h2>Special note for UT Web users</h2> <p>If you are installing the UT Drupal Kit on the UT Web service, please see the ' . l(t('Installation on UT Web'), 'https://wikis.utexas.edu/display/UTDK/Installation+on+UT+Web')) . ' documentation for important configuration guidelines.</p></div>';
+    $message .= '<p>' . st('The Kit includes a custom login module which allows authentication via UTLogin, the centralized authentication service. This module requires configuration of a Web Policy Agent. For installation instructions, see ') . l(t('the UTLogin module documentation'), 'https://wikis.utexas.edu/display/UTDK/UTLogin+Module+Installation+and+Configuration') . '.</p>';
+  }
   $message .= '<p>' . st('For full documentation on installation and site building, visit the ' . l(t('UT Drupal Kit documentation'), 'https://wikis.utexas.edu/display/UTDK') . '. Contact the Drupal Kit support team at ' . l(t('drupal-kit-support@utlists.utexas.edu'), 'mailto:drupal-kit-support@utlists.utexas.edu') . '.');
 
   // The rest of the task (form).
@@ -266,4 +271,3 @@ function utexas_remove_message($partial_message, $type = 'status') {
     }
   }
 }
-
