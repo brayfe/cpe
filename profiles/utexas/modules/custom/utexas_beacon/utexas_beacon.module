@@ -31,40 +31,45 @@ function utexas_beacon_mail($key, &$message, $email_params) {
  * Builds array of site info.
  */
 function _utexas_beacon_prepare_data() {
+  // Make sure the installation API is available.
+  include_once DRUPAL_ROOT . '/includes/install.inc';
+
   $site_data = array();
-  $site_data['site_name'] = variable_get('site_name', 'none');
+  $site_data['site_name'] = variable_get('site_name', '');
   $site_data['base_url'] = $GLOBALS['base_url'];
   $site_data['ip_address'] = ip_address();
   $site_data['hostname'] = gethostname();
-  $site_data['admin_email'] = variable_get('site_mail', 'none');
+  $site_data['admin_email'] = variable_get('site_mail', '');
   $site_data['drupal_version'] = VERSION;
   $site_data['php_version'] = phpversion();
+  $site_data['page_builder_enabled'] = 0;
+  $site_data['utlogin_enabled'] = 0;
 
   $install_profile_info = install_profile_info(drupal_get_profile());
   $site_data['active_installation_profile'] = $install_profile_info['name'];
   $site_data['active_installation_profile_distribution_name'] = $install_profile_info['distribution_name'];
   $site_data['active_installation_profile_version'] = $install_profile_info['version'];
 
-  $site_data['current_theme'] = variable_get('theme_default', 'none');
+  $site_data['current_theme'] = variable_get('theme_default', '');
   if ($site_data['current_theme'] == 'forty_acres') {
     $forty_acres_info = system_get_info('theme', 'forty_acres');
     $site_data['forty_acres_version'] = $forty_acres_info['version'];
   }
   if (module_exists('utexas_page_builder')) {
-    $site_data['page_builder_enabled'] = 'yes';
+    $site_data['page_builder_enabled'] = 1;
     $page_builder_info = system_get_info('module', 'utexas_page_builder');
     $site_data['page_builder_version'] = $page_builder_info['version'];
   }
-  else {
-    $site_data['page_builder_enabled'] = 'no';
-  }
   if (module_exists('utlogin')) {
-    $site_data['utlogin_enabled'] = 'yes';
+    $site_data['utlogin_enabled'] = 1;
     $utlogin_info = system_get_info('module', 'utlogin');
     $site_data['utlogin_version'] = $utlogin_info['version'];
   }
-  else {
-    $site_data['utlogin_enabled'] = 'no';
+  if (module_exists('utexas_google_cse')) {
+    $site_data['google_cse_id'] = variable_get('utexas_google_cse_id', '');
+  }
+  if (module_exists('utexas_google_tag_manager')) {
+    $site_data['google_tag_manager_code'] = variable_get('utexas_google_tag_manager_gtm_code', '');
   }
   return $site_data;
 }
@@ -75,14 +80,19 @@ function _utexas_beacon_prepare_data() {
  * Prepares info and sends email via drupal_mail() once a day.
  */
 function utexas_beacon_cron() {
-  $site_data_for_mail = _utexas_beacon_prepare_data();
-  // Check time of last cron run.
-  $cron_last = variable_get('cron_last');
-  // Only send email once a day.
-  if (isset($cron_last) && date('ymd', $cron_last) != date('ymd', time())) {
+  // Retrieve time of last cron run, or default to timestamp of 1 day in past.
+  $cron_last = variable_get('cron_last', time() - 24 * 60 * 60);
+  // $cron_day is the midnight-time of the day that the last cron ran.
+  $cron_day = strtotime('0:00', $cron_last);
+  // $today is the midnight-time of the current day.
+  $today = strtotime('0:00', time());
+  if ($cron_last && $today > $cron_day) {
+    // Prepare the data.
+    $site_data_for_mail = _utexas_beacon_prepare_data();
     $email_params = array(
       'subject' => 'Utexas distribution installed at ' . $site_data_for_mail['base_url'] . ' phoning home.',
     );
+    $email_params['body'] = '';
     foreach ($site_data_for_mail as $key => $value) {
       $email_params['body'] .= $key . ': ';
       $email_params['body'] .= $value . "\r\n";

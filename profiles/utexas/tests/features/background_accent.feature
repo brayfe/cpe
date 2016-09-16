@@ -7,7 +7,7 @@ Feature: Background Accent
   I need to be able to add a background image to the related content region
 
 Scenario: Demonstrate adding an image and its presence on a page
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/landing-page"
   And I fill in "Test Background Image" for "edit-title" in the "form_item_title" region
   And I click on the link "Background Accent" in the ".vertical-tabs-list" region

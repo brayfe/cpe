@@ -63,6 +63,9 @@ function _qualtrics_filter_settings($form, &$form_state, $filter, $format, $defa
 function _qualtrics_filter_process($text, $filter = NULL) {
   if ($filter === NULL) {
     $filter = new stdClass();
+    $filters = filter_get_filters();
+    $filter->settings['qualtrics_filter_title'] = $filters['qualtrics_filter']['default settings']['qualtrics_filter_title'];
+    $filter->settings['qualtrics_filter_height'] = $filters['qualtrics_filter']['default settings']['qualtrics_filter_height'];
   }
 
   // Do nothing if there is no oembed objects in the body field.
@@ -100,12 +103,12 @@ function _qualtrics_filter_process($text, $filter = NULL) {
  * Wrapper that calls the theme function.
  */
 function utexas_qualtrics_filter_iframe($form) {
-  if (!filter_var($form['source'], FILTER_VALIDATE_URL) === false) {
+  if (!filter_var($form['source'], FILTER_VALIDATE_URL) === FALSE) {
     $output = '<iframe src="' . $form['source'] . '" width="100%" scrolling="auto" name="Qualtrics"
     align="center" height="' . $form['height'] . '" frameborder="no" title="' . $form['title'] . '" ></iframe>';
     return $output;
   }
   else {
-    return false;
+    return FALSE;
   }
 }

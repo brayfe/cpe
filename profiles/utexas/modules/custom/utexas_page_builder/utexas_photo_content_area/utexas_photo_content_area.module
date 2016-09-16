@@ -82,7 +82,7 @@ function utexas_photo_content_area_field_widget_form(&$form, &$form_state, $fiel
         '#title' => t('Photo Image'),
         '#tree' => TRUE,
         '#field_name' => 'utexas_photo_content_area_image',
-        '#description' => t('Add a photo with brief copy and any links you need to accompany it.'),
+        '#description' => t('Add a photo with brief copy and any links you need to accompany it. Images will be automatically scaled and cropped to 450 x 600. Use an image with an aspect ration equal to 450 x 600 to avoid cropping.'),
         '#extended' => TRUE,
         '#media_options' => array(
           'global' => array(

@@ -24,7 +24,7 @@
   </div>
 <?php endif; ?>
 <div id="<?php print $block_html_id; ?>" class="<?php print $classes; ?> <?php print 'fieldblock_' . $elements['#field_name']; ?>"<?php print $attributes; ?>>
-  <div class="field_utexas_flex_content_area_b row">
+  <div class="field_utexas_flex_content_area_b row" data-equalizer>
     <?php foreach ($field_items as $item): ?>
       <div class="columns small-12 medium-3">
         <?php print render($item); ?>

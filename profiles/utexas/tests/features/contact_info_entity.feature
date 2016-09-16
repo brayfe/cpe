@@ -8,7 +8,7 @@ Feature: UTexas Contact Info
 
 
 Scenario: Validate Required Title field. Validate Location and Address Zip Codes only to allow "11111" or "11111-1111" format. Validate Website, Phone, Fax and Email fields and Creating a valid Contact Info Form
-  Given I am logged in as a user with the "view the administration theme,access content overview,access content,administer nodes,view contact info forms,administer contact info forms" permission on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I go to "admin/content"
   And I click "Contact Info"
@@ -59,7 +59,7 @@ Scenario: Validate Required Title field. Validate Location and Address Zip Codes
   Then I should see the message "The contact info form: Contact Info has been saved."
 
 Scenario: Prevent duplicate Contact Info names
-  Given I am logged in as a user with the "view the administration theme,access content overview,access content,administer nodes,view contact info forms,administer contact info forms" permission on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content"
   And I click "Contact Info"
   And I click "Add contact info"
@@ -68,7 +68,7 @@ Scenario: Prevent duplicate Contact Info names
   Then I should see the error message "The title Contact Info is already being used. Choose something else so that each form can be easily identified."
 
 Scenario: Assign contact info to a page
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "Test Page" for "edit-title" in the "form_item_title" region
   And I click "Contact Info" in the "vertical_tabs" region
@@ -93,7 +93,7 @@ Scenario: Assign contact info to a page
   Then I should see "Contact Info" in the "field_contact_info" region
 
 Scenario: Delete a Contact Info Form
-  Given I am logged in as a user with the "administrator" role on this site
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content/contact_info"
   Given I click "delete" in the "Contact Info" row
   And I press the "Confirm" button

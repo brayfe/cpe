@@ -9,7 +9,7 @@ Feature: UTexas Promo List
 
 Scenario: 1. Validating Promo List Style. Creating a valid Promo List.
   # Validating Copy needed when Headline filled
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "test form" for "edit-title" in the "form_item_title" region
   And I click "Promo List" in the "vertical_tabs" region

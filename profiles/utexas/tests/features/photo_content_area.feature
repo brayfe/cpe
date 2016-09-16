@@ -6,9 +6,9 @@ Feature: Photo Content Area
   As a site builder
   I need to be able to add the photo content area field to a page
 
-@javascript
+@javascript @api
 Scenario: Validate CTA Title
-  Given I am logged in as a user with the "administrator" role
+  Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "Test PCA" for "edit-title" in the "form_item_title" region
   And I click on the element "#featured_highlight"

@@ -1,7 +1,7 @@
 name = Center for Professional Education
 description = subtheme based off of the Forty Acres UT theme
 core = 7.x
-version = 2.0
+version = UTEXAS_DISTRO_VERSION
 base theme = forty_acres
 
 stylesheets[all][] = css/custom.css

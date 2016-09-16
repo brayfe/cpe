@@ -38,14 +38,12 @@
 
 	.p2-logo {
       position: absolute;
-      height: 100px;
       @include respond(large){
         top: 52.5px;
         height: auto;
       }
       @include respond(small-only) {
         top: 0;
-        height: 100px;
         max-width: 100%;
       }
 	}

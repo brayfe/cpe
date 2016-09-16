@@ -59,7 +59,7 @@ function utexas_hero_photo_field_widget_form(&$form, &$form_state, $field,
         '#title' => t('HERO PHOTO'),
         '#tree' => TRUE,
         '#field_name' => 'utexas_hero_photo_image',
-        '#description' => t('On the "Hero Image & Sidebars" template, this appears automatically at the top left of page content. On other templates, it is positionable. Recommended minimum dimensions: 840 x 450px.'),
+        '#description' => t('On the "Hero Image & Sidebars" template, this appears automatically at the top left of page content. On other templates, it is positionable. This image will automatically be scaled and cropped to 1740 x 940. Use an image with an aspect ratio equal to 1740 x 940 to avoid cropping.'),
         '#extended' => TRUE,
         '#media_options' => array(
           'global' => array(

@@ -448,6 +448,8 @@ foreach ($pages as $page) {
 
   node_save($node);
 }
+// Prevent this data from being acted on during a later operation.
+unset($pages);
 
 $context['name'] = 'context_field-node-1';
 $context['description'] = 'custom';

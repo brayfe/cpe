@@ -474,7 +474,13 @@ function twitter_widget_form_submit($form, &$form_state) {
   $entity = entity_ui_form_submit_build_entity($form, $form_state);
   // Combine the field definitions into a serialized array for storage.
   $entity->save();
+  // Performs cache-clearing to reflect any widget settings changes immediately.
+  $account = check_plain($entity->account);
+  $list = isset($entity->timeline_list) ? check_plain($entity->timeline_list) : '';
+  $cache_name  = $account . $list;
   drupal_set_message(t('The widget: @name has been saved.', array('@name' => $entity->name)));
+  cache_clear_all('utexas_twitter:' . $cache_name, 'cache', TRUE);
+
   $form_state['redirect'] = UTEXAS_TWITTER_WIDGET_CALLBACK;
 }
 
@@ -506,9 +512,9 @@ class TwitterWidgetEntityController extends EntityAPIController {
     $inc = 0;
     // Used to create the Tweet action links.
     $actions = array(
-      'Reply' => '//twitter.com/intent/tweet?in_reply_to=',
-      'Retweet' => '//twitter.com/intent/retweet?tweet_id=',
-      'Favorite' => '//twitter.com/intent/favorite?tweet_id=',
+      'reply2' => '//twitter.com/intent/tweet?in_reply_to=',
+      'retweet' => '//twitter.com/intent/retweet?tweet_id=',
+      'star' => '//twitter.com/intent/favorite?tweet_id=',
     );
 
     // Set a value that the template can use to decide to display content.
@@ -519,6 +525,29 @@ class TwitterWidgetEntityController extends EntityAPIController {
       foreach ($tweets as $tweet) {
         $inc++;
         $tweet_actions = '';
+        $tweet->retweet_eyebrow = FALSE;
+
+        // If this is a retweet, us the API-provided sub-element.
+        if (isset($tweet->retweeted_status)) {
+          $id = $tweet->retweeted_status->id;
+          $retweet_user = $tweet->retweeted_status->user->screen_name;
+          $original_user = $tweet->user->name;
+          $original_screen_name = $tweet->user->screen_name;
+          $retweet_link = l('<span class="hiddenText">retweet</span>',
+            '//twitter.com/' . $retweet_user . '/status/' . $id,
+            array('html' => TRUE, 'attributes' => array('class' => array('action-link action-retweet icon-retweet')))
+          );
+          $user_link = l(
+            $original_user . ' ' . t('Retweeted'),
+            '//twitter.com/' . $original_screen_name,
+            array('attributes' => array('class' => array('pretty-link')))
+          );
+          // Switch $tweet object to its sub-element.
+          $tweet = $tweet->retweeted_status;
+          // Add the retweet eyebrow.
+          $tweet->retweet_eyebrow = $retweet_link . $user_link;
+        }
+
         // Prepare the Tweet Action links, based on $tweet->id.
         foreach ($actions as $action => $link) {
           $tweet_actions .=
@@ -529,7 +558,7 @@ class TwitterWidgetEntityController extends EntityAPIController {
                 'html' => TRUE,
                 'external' => TRUE,
                 'attributes' => array(
-                  'class' => array('action-link', 'action-' . strtolower($action)),
+                  'class' => array('action-link', 'icon-' . strtolower($action)),
                 ),
               )
             )
@@ -538,10 +567,11 @@ class TwitterWidgetEntityController extends EntityAPIController {
         $tweets_filtered[] = array(
           'id'        => (int) $tweet->id,
           'image'     => theme('image', array(
-              'path' => $tweet->user->profile_image_url,
+              'path' => schema_free_link($tweet->user->profile_image_url),
               'alt' => $tweet->user->name,
             )
           ),
+          'retweet_eyebrow' => $tweet->retweet_eyebrow,
           'author'    => $tweet->user->name,
           'username'  => $tweet->user->screen_name,
           'text'      => _utexas_twitter_widget_parse_twitter_links($tweet->text),
@@ -731,15 +761,14 @@ function _utexas_twitter_widget_time_ago($timestamp = 0, $levels = 2) {
  * Callback function for displaying the individual widget page.
  */
 function _utexas_twitter_widget_view_widget($id) {
-
-  $widgets = entity_load('twitter_widget', array($id));
-  $widget = $widgets[$id];
-
-  drupal_set_title($widget->headline);
-  // View data is defined in buildContent().
-  $output = entity_view('twitter_widget', array($widget));
-
-  return $output;
+  if ($widgets = entity_load('twitter_widget', array($id))) {
+    $widget = $widgets[$id];
+    drupal_set_title($widget->headline);
+    // View data is defined in buildContent().
+    $output = entity_view('twitter_widget', array($widget));
+    return $output;
+  }
+  return MENU_NOT_FOUND;
 }
 
 /**
@@ -758,7 +787,7 @@ function utexas_twitter_widget_theme($existing, $type, $theme, $path) {
 /**
  * Generates a twitter widget on the site, mainly for testing purposes.
  *
- * This requires configuration in profiles/utexas/tests/credentials.php
+ * This requires configuration in profiles/utexas/tests/credentials.php.
  */
 function generate_twitter_widget() {
   $file_name = DRUPAL_ROOT . '/profiles/utexas/tests/credentials.php';

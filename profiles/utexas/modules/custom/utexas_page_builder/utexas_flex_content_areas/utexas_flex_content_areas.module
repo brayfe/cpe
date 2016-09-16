@@ -83,7 +83,7 @@ function utexas_flex_content_areas_field_widget_form(&$form, &$form_state, $fiel
         '#title' => t('Flex Content Area Image'),
         '#tree' => TRUE,
         '#field_name' => 'utexas_flex_content_area_image',
-        '#description' => t('Upload an image, or select one from the library.'),
+        '#description' => t('Upload an image, or select one from the library. Images will be automatically scaled and cropped to 500 x 333. Use an image with an aspect ratio equal to 500 x 333 to avoid cropping.'),
         '#extended' => TRUE,
         '#media_options' => array(
           'global' => array(
@@ -699,6 +699,10 @@ function template_preprocess_utexas_flex_content_area(&$variables) {
   $headline = check_plain($variables['item']['headline']);
   $links = !empty($variables['item']['links']) ? unserialize($variables['item']['links']) : array();
 
+  // Add data-equalizer if flex-content area is in 4-column region.
+  if (($variables['flex_content_area_a_region'] == 'content_top_four_pillars') || ($variables['flex_content_area_b_region'] == 'content_top_four_pillars')) {
+    $variables['attributes_array']['data-equalizer-watch'] = '';
+  }
   // Unset unneeded variables.
   unset($variables['item']);
 

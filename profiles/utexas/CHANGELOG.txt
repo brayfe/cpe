@@ -1,3 +1,66 @@
+UT Drupal Kit 7.x-2.3.3, 2016-08-20
+---------------------------------
+[UDK-69] - Add taxonomy_access_fix module to codebase
+[UDK-70] - Convert search input text from placeholder to value
+[UDK-71] - Update Panels to 7.x-3.7 (Security Update)
+
+UT Drupal Kit 7.x-2.3.2, 2016-08-10
+---------------------------------
+[UDK-68] - Re-apply Context module patch
+
+UT Drupal Kit 7.x-2.3.1, 2016-08-04
+---------------------------------
+[UDK-66] - Update Admin Views to 7.x-1.6 (Security)
+[UDK-67] - Replace missing example gitignore file
+
+UT Drupal Kit 7.x-2.3, 2016-07-13
+---------------------------------
+[MC-246] - Add lock icon to icon fonts
+[MC-250] - Add "Announcement" functionality
+[MC-373] - Add "Last Updated" documentation
+[MC-378] - Refactor UTexas Social Links code to work properly with "deltas"
+[MC-390] - Add documentation regarding image sizing
+[MC-399] - Prevent persistence of "empty" promo lists
+[MC-404] - Improve accessibility of Twitter widgets
+[MC-408] - Set per user configuration of timezone to "off" initially
+[MC-409] - Properly retrieve Team Member display type value
+[MC-413] - Remove Tablesaw from admin theme
+[MC-414] - Improve user account messaging for SAML authentication
+[MC-423] - Update to Pantheon Drops 7.44
+[MC-424] - Update to Views 7.x-3.14
+[MC-402] - Provide documentation for adding/removing users
+[MC-405] - Add "View Unpublished" module
+[MC-407] - Add alt tag to Google CSE logo
+[MC-416] - Add cache clear on submit handler for social accounts config
+[MC-421] - Change versioning policy
+[MC-14]  - Add "Event Details" functionality
+[MC-357] - Add "Event Listings" Functionality
+[MC-375] - Add Tag-Based Contextual View Page for Events
+[MC-394] - Fix Team Member requirement of headshot to activate link
+[MC-235] - Add Google Tag Manager behat test
+[MC-341] - Update Site Manager and Site Builder permissions
+[MC-346] - Support Workflow Moderation
+[MC-356] - Display Twitter Retweet metadata on retweets
+[MC-363] - Fix CKEditor toolbar display problem due to recursion
+[MC-366] - Fix Favicon not changing in Chrome
+[MC-368] - Make Blocks available to page builder user-configurable
+[MC-369] - Set Default Timezone to America/Chicago
+[MC-377] - Update contrib modules for beta2 release
+[MC-380] - Delegate taxonomy access more granularly
+[MC-383] - Disable "Update" module and define admin email as setting
+[MC-386] - Make Metatags load in footer region to display properly
+[MC-387] - Add Pathologic module
+[MC-388] - Replace temporary favicon in STARTERKIT
+[MC-389] - Upgrade current version of Foundation
+[MC-395] - Add iframe to Filtered HTML for Blocks format
+[MC-397] - Fix clean URL value on browser install
+[MC-398] - Fix Text Format Weight
+[MC-349] - For Pantheon sites, redirect www to bare domain by default
+[MC-382] - Allow footer links to be displayed in two columns
+[MC-384] - Whitelist <object> and <param> tags in Filtered HTML for Blocks
+[MC-385] - Add Flickr to site-wide social media config
+[MC-392] - Add Tumblr to site-wide social media config
+
 UT Drupal Kit 7.x-2.2, 2016-03-16
 ---------------------------------
 [MC-262] - Properly Handle DomDocument for HTML5 tags in CKEditor Link File
@@ -6,7 +69,7 @@ UT Drupal Kit 7.x-2.2, 2016-03-16
 [MC-267] - Change link color in promo units to burnt orange
 [MC-269] - Change inline link color in featured highlight to white
 [MC-271] - Resolve empty array error when enabling STARTERKIT
-[MC-274] - Fix broken L1 menu links on Android 
+[MC-274] - Fix broken L1 menu links on Android
 [MC-276] - Fix landing page template 1 hero image title alignment on tablet view
 [MC-279] - Make Quick Links validate/display properly on Team Member
 [MC-280] - Update custom entity admin page permissions
@@ -16,7 +79,7 @@ UT Drupal Kit 7.x-2.2, 2016-03-16
 [MC-293] - Update file upload limit on custom media/file fields to default value
 [MC-301] - Underline Subscribe to Newsletter on hover
 [MC-303] - Remediate "too much recursion/Stack Overflow" error with CKEditor
-[MC-324] - Remove some Foundation elements 
+[MC-324] - Remove some Foundation elements
 [MC-296] - Add informative message about PHP 5.4 minimum
 [MC-297] - Fix text format filter ordering
 [MC-298] - Enable Metatag module in installation
@@ -29,15 +92,15 @@ UT Drupal Kit 7.x-2.2, 2016-03-16
 [MC-299] - Implement new fix for Tablesaw-fixed approach
 [MC-300] - Enable and configure Video Filter Module
 [MC-302] - Create demo page for Foundation extra libraries
-[MC-304] - Cleanup debugging code 
+[MC-304] - Cleanup debugging code
 [MC-305] - Update utexas_deploy installed schema version (7104)
 [MC-307] - Create default video_filter content and behat feature
-[MC-308] - Fix color-contrast issues with foundation extra libraries 
+[MC-308] - Fix color-contrast issues with foundation extra libraries
 [MC-309] - Update to Drops 7.43
 [MC-311] - Hide Metatag installation message
 [MC-312] - Allow Team Member default content independent of installation
 [MC-313] - Fix excess spacing error with WYSIWYG + Promo Units
-[MC-317] - Improve Qualtrics Regex 
+[MC-317] - Improve Qualtrics Regex
 [MC-318] - Revert .gitignore file
 [MC-320] - Make Tablesaw library & CSS part of "foot_scripts"
 [MC-321] - Allow Site Manager to use Filtered HTML for Blocks
@@ -101,7 +164,7 @@ UT Drupal Kit 7.x-1.2, 2015-03-25
 - Applying core and contrib updates
 
 UT Drupal Kit 7.x-1.1, 2015-02-18
---------------------------------- 
+---------------------------------
 - Applying contrib updates
 
 UT Drupal Kit 7.x-1.0, 2015-01-28

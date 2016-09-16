@@ -10,7 +10,7 @@
 function utexas_utdk_deploy_install() {
   // Set the initial value for the schema version so we can run updates after
   // install.
-  drupal_set_installed_schema_version('utexas_utdk_deploy', 7109);
+  drupal_set_installed_schema_version('utexas_utdk_deploy', 7110);
 }
 
 /**
@@ -209,11 +209,23 @@ function utexas_utdk_deploy_update_7108() {
 /**
  * Implements hook_update_N().
  *
- * Update text formats.
+ * Enable UTexas Announcement module.
  */
 function utexas_utdk_deploy_update_7109() {
+  module_enable(array('utexas_announcement'));
+}
 
-  utexas_admin_text_formats('save');
-  utexas_admin_ckeditor_profile('save', 'CKEditor Global Profile');
-  utexas_admin_ckeditor_profile('save', 'Advanced');
+/**
+ * Implements hook_update_N().
+ *
+ * Enables new node_options features, conditionally, and does a features_revert.
+ */
+function utexas_mcms_deploy_update_7110() {
+  if (module_exists('view_unpublished')) {
+    module_enable(array('view_unpublished'));
+    $update = TRUE;
+  }
+  features_rebuild();
+  features_revert();
+  node_access_rebuild();
 }

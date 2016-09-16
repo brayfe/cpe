@@ -88,3 +88,4 @@
   <?php endif; ?>
   <?php if (file_exists($partial_footer)): require_once $partial_footer; endif;  ?>
 </div>
+<?php render($page['content']); ?>

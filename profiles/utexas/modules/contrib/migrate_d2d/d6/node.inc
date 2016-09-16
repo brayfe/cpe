@@ -165,11 +165,13 @@ class DrupalNode6Migration extends DrupalNodeMigration {
       if (isset($row->$data_field)) {
         $data = unserialize($row->$data_field);
         $base_field = substr($data_field, 0, strpos($data_field, '_data'));
-        foreach ($data as $key => $value) {
-          $field_name = $base_field . '_' . $key;
-          $row->$field_name = $value;
+        if (!empty($data)) {
+          foreach ($data as $key => $value) {
+            $field_name = $base_field . '_' . $key;
+            $row->$field_name = $value;
+          }
+          unset($row->$data_field);
         }
-        unset($row->$data_field);
       }
     }
     // Convert the default field names to the nice-looking ones.

@@ -117,7 +117,48 @@ function utexas_social_accounts_admin() {
     '#description' => t('The Google+ URL that you want to set on the site (e.g. https://plus.google.com/+UTAustin)'),
     '#required' => FALSE,
   );
+
+  $form['utexas_social_accounts_flickr'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Flickr'),
+    '#default_value' => variable_get('utexas_social_accounts_flickr', ''),
+    '#size' => 100,
+    '#maxlength' => 100,
+    '#description' => t('The Flickr URL that you want to set on the site (e.g. https://www.flickr.com/photos/utaustin/)'),
+    '#required' => FALSE,
+  );
+
+  $form['utexas_social_accounts_tumblr'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Tumblr'),
+    '#default_value' => variable_get('utexas_social_accounts_tumblr', ''),
+    '#size' => 100,
+    '#maxlength' => 100,
+    '#description' => t('The Tumblr URL that you want to set on the site (e.g. http://utaustin.tumblr.com/)'),
+    '#required' => FALSE,
+  );
+
+    $form['utexas_social_accounts_vimeo'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Vimeo'),
+      '#default_value' => variable_get('utexas_social_accounts_vimeo', ''),
+      '#size' => 100,
+      '#maxlength' => 100,
+      '#description' => t('The Vimeo URL that you want to set on the site (e.g. https://vimeo.com/)'),
+      '#required' => FALSE,
+    );
+
+  $form['#submit'][] = "_social_accounts_cache_clear";
+
   return system_settings_form($form);
+}
+
+/**
+ * Additional submit handler that triggers a cache clear for immediate update.
+ */
+function _social_accounts_cache_clear(&$form, $form_state) {
+  cache_clear_all(NULL, 'cache_block');
+  cache_clear_all(NULL, 'cache_page');
 }
 
 /**
@@ -178,6 +219,18 @@ function utexas_social_accounts_form_validate($form, &$form_state) {
     && !empty($form_state['values']['utexas_social_accounts_googleplus'])) {
     form_set_error('utexas_social_accounts_googleplus', t('You have to set a valid URL for your Google+ account'));
   }
+  if (filter_var($form_state['values']['utexas_social_accounts_flickr'], FILTER_VALIDATE_URL) === FALSE
+    && !empty($form_state['values']['utexas_social_accounts_flickr'])) {
+    form_set_error('utexas_social_accounts_flickr', t('You have to set a valid URL for your Flickr account'));
+  }
+  if (filter_var($form_state['values']['utexas_social_accounts_tumblr'], FILTER_VALIDATE_URL) === FALSE
+    && !empty($form_state['values']['utexas_social_accounts_tumblr'])) {
+    form_set_error('utexas_social_accounts_tumblr', t('You have to set a valid URL for your Tumblr account'));
+  }
+  if (filter_var($form_state['values']['utexas_social_accounts_vimeo'], FILTER_VALIDATE_URL) === FALSE
+    && !empty($form_state['values']['utexas_social_accounts_vimeo'])) {
+    form_set_error('utexas_social_accounts_vimeo', t('You have to set a valid URL for your Vimeo account'));
+  }
 }
 
 /**
@@ -227,6 +280,18 @@ function social_accounts_block_view() {
   $gp = variable_get('utexas_social_accounts_googleplus', '');
   if (!empty($gp)) {
     $content .= '<li><a href="' . $gp . '" class="connect-link"><span class="icon-googleplus"><span class="hiddenText">Google+</span></span></a></li>';
+  }
+  $fl = variable_get('utexas_social_accounts_flickr', '');
+  if (!empty($fl)) {
+    $content .= '<li><a href="' . $fl . '" class="connect-link"><span class="icon-flickr"><span class="hiddenText">Flickr</span></span></a></li>';
+  }
+  $tm = variable_get('utexas_social_accounts_tumblr', '');
+  if (!empty($tm)) {
+    $content .= '<li><a href="' . $tm . '" class="connect-link"><span class="icon-tumblr"><span class="hiddenText">Tumblr</span></span></a></li>';
+  }
+  $vm = variable_get('utexas_social_accounts_vimeo', '');
+  if (!empty($vm)) {
+    $content .= '<li><a href="' . $vm . '" class="connect-link"><span class="icon-vimeo2"><span class="hiddenText">Vimeo</span></span></a></li>';
   }
   $content .= '</ul>';
 
