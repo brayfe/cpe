@@ -57,55 +57,9 @@
 			//border-left: 1px solid #cbcbcb;
 		}
 
-		.footer-headline {
-			font-size: rem-calc(16);
-			color: $navy;
-			font-weight: bold;
-			margin: 0 0 10px 0;
-
-			@include respond(medium){
-				font-size: rem-calc(18);
-				margin: 0 0 20px 0;
-			}
-		}
-
-		.newsletter-form {
-			height: 38px;
-			border: 1px solid $lightGreyDivider;
-			position: relative;
-
-			@include respond(medium){
-				margin-bottom: 40px;
-			}
-		}
-
 		.newsletter{
 			border-bottom: 0px;
 			margin: 0 0 6px 0;
-
-			input.newsletter-input{
-				background-color: #fff;
-				height: 36px;
-			}
-
-			.footer-headline {
-				@include respond(medium){
-					font-size: rem-calc(18);
-					margin: 0 0 12px 0;
-				}
-			}
-		}
-	}
-
-	.footer-headline {
-		font-size: rem-calc(16);
-		color: $navy;
-		font-weight: bold;
-		margin: 0 0 10px 0;
-
-		@include respond(medium){
-			font-size: rem-calc(20);
-			margin: 0 0 20px 0;
 		}
 	}
 
