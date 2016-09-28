@@ -16,7 +16,9 @@
     <?php if (is_numeric($key)): ?>
       <li class="nav-item" role="menuitem">
         <?php
+          $fragment = isset($item['#localized_options']['fragment']) ? $item['#localized_options']['fragment'] : '';
           print l($item['#title'], $item['#href'], array(
+            'fragment' => $fragment,
             'attributes' => array(
               'class' => array(
                 'nav-link',
@@ -28,6 +30,7 @@
         <?php
           print l('<span class="icon-chevron-down"><span class="hiddenText">' . t('Expand') . '</span></span>', $item['#href'], array(
             'html' => TRUE,
+            'fragment' => $fragment,
             'attributes' => array(
               'class' => array(
                 'caret',
@@ -44,7 +47,17 @@
                 <?php foreach ($item['#below'] as $subkey => $subitem): ?>
                   <?php if (isset($subitem['#title']) and isset($subitem['#href'])): ?>
                     <li class="sub-nav-item">
-                      <?php print l('<span>' . check_plain($subitem['#title']) . '</span>', $subitem['#href'], array('html' => TRUE, 'attributes' => array('class' => array('sub-nav-link')))); ?>
+                      <?php $fragment = isset($subitem['#localized_options']['fragment']) ? $subitem['#localized_options']['fragment'] : ''; ?>
+                      <?php
+                        print l('<span>' . check_plain($subitem['#title']) . '</span>', $subitem['#href'], array(
+                          'html' => TRUE,
+                          'fragment' => $fragment,
+                          'attributes' => array(
+                            'class' => array(
+                              'sub-nav-link',
+                            ),
+                          ),
+                        )); ?>
                     </li>
                   <?php endif; ?>
                 <?php endforeach; ?>
