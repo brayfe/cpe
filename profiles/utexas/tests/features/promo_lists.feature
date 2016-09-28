@@ -15,10 +15,6 @@ Scenario: 1. Validating Promo List Style. Creating a valid Promo List.
   And I click "Promo List" in the "vertical_tabs" region
   And I wait for css element "#edit-field-utexas-promo-list-und-0-field-utexas-promo-list-item-und-0-image-browse-button" to "appear"
   And I fill in "Headline PL 1" for "edit-field-utexas-promo-list-und-0-field-utexas-promo-list-headline-und-0-value" in the "field_utexas_promo_list_values" region
-  And I press the "Save" button
-  Then I should see the error message "Promo List Style field is required."
-
-  # Now filling the Promo List normally. Creating PL 1 Item 1
   And I fill in "Headline Item 1" for "edit-field-utexas-promo-list-und-0-field-utexas-promo-list-item-und-0-headline" in the "field_utexas_promo_list_values" region
   When I select the radio button "Single list full (1 item per row)" with the id "edit-field-utexas-promo-list-und-0-field-utexas-promo-list-style-und-single-list-full-1-item-per-row"
   And I click "edit-field-utexas-promo-list-und-0-field-utexas-promo-list-item-und-0-image-browse-button" in the "field_utexas_promo_list_values" region
@@ -29,7 +25,7 @@ Scenario: 1. Validating Promo List Style. Creating a valid Promo List.
   And I fill in "Placeholder Title" for "edit-field-file-image-title-text-und-0-value"
   And I press the "Save" button
   And I fill in "Copy Field for Promo List Item 1" for "edit-field-utexas-promo-list-und-0-field-utexas-promo-list-item-und-0-copy-value" in the "field_utexas_promo_list_values" region
-  And I fill in "http://www.google.com" for "edit-field-utexas-promo-list-und-0-field-utexas-promo-list-item-und-0-link" in the "field_utexas_promo_list_values" region
+  And I fill in "/profiles/utexas/themes/forty_acres/screenshot.png" for "edit-field-utexas-promo-list-und-0-field-utexas-promo-list-item-und-0-link" in the "field_utexas_promo_list_values" region
 
   # Creating PL 1 Item 2
   When I click on the element "#edit-field-utexas-promo-list-und-0-field-utexas-promo-list-item-und-add-more"

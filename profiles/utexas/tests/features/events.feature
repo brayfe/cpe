@@ -53,16 +53,16 @@ Scenario: Validating empty fields
   And I click "Find content"
   And I click "Events"
   And I click "Edit"
-  And I fill in "Monday 15 Aug 2016" for "edit-start-date-datepicker-popup-0"
+  And I fill in "Monday 15 Aug 2017" for "edit-start-date-datepicker-popup-0"
   And I fill in "11:45 pm" for "start_time[time]"
   And I press the "Update" button
   Then I should see the error message "The end time must be the same as or later than the start time."
   And I check the box "The end date is different than the start date."
   Then I wait for 3 seconds
-  And I fill in "Sunday 14 Aug 2016" for "edit-end-date-datepicker-popup-0"
+  And I fill in "Sunday 14 Aug 2017" for "edit-end-date-datepicker-popup-0"
   And I press the "Update" button
   Then I should see the error message "The end date must the same as or later than the start date."
-  And I fill in "Wednesday 17 Aug 2016" for "edit-end-date-datepicker-popup-0"
+  And I fill in "Wednesday 17 Aug 2017" for "edit-end-date-datepicker-popup-0"
   Then I check the box "This is an all-day event"
   Then I wait for 3 seconds
   And I press the "Update" button

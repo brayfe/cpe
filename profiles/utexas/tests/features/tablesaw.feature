@@ -54,6 +54,7 @@ Scenario: User adds table to Page Builder page
   And I fill in "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<table><thead><tr><th>Header One<th>Header Two<tbody><tr><td>Easily add tables with the WYSIWYG toolbar<td>Styled to match the brand<tr><td>Tables respond to display on smaller screens<td>Fully accessible to screen readers</table>" in WYSIWYG editor "wysiwyg_a"
   # Add UT Newsreel #
   And I click on the link "UT Newsreel" in the ".vertical-tabs-list" region
+  And I check the box "edit-field-utexas-newsreel-und-0-type-press-releases"
   And I fill in "Headline Text" for "edit-field-utexas-newsreel-und-0-headline"
   And I check the box "edit-field-utexas-newsreel-und-0-category-science-and-technology"
   And I fill in "View all Test" for "edit-field-utexas-newsreel-und-0-view-all"
@@ -143,6 +144,14 @@ Scenario: Demonstrate table filter works with CSS/JS Aggregation enabled
   And I wait for 2 seconds
   Then I should see the "b.tablesaw-cell-label" css selector with css property "display" containing "block"
 
-
-
-
+Scenario: Verify HTML is not mangled by libXML
+  Given I am logged in as a user with the "complete" permissions on this site
+  And I set browser window size to "1200" x "900"
+  When I go to "node/add/page"
+  And I fill in "LibXML Test" for "edit-title" in the "form_item_title" region
+  And I the set the iframe located in element with an id of "cke_edit-body-und-0-value" to "ckeditor_body"
+  And I fill in "<h3>Heading</h3><ul><li>List item 1</li><li>List item 2</li></ul><p>And a paragraph</p><table><thead><tr><th>Header One<th>Header Two<tbody><tr><td>Easily add tables with the WYSIWYG toolbar<td>Styled to match the brand<tr><td>Tables respond to display on smaller screens<td>Fully accessible to screen readers</table>" in WYSIWYG editor "ckeditor_body"
+  And I press the "Save" button
+  # Verify themed output #
+  Then I should see the heading "LibXML Test"
+  And I should see HTML '\<h3\>Heading\<\/h3\>' in the '#block-system-main' region

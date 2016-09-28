@@ -77,7 +77,7 @@ Scenario: User can add available content to a team member, and display them in t
   And I fill in "Cat ipsum dolor sit amet, give attitude for spread kitty litter all over house. Hack up furballs stare at the wall, play with food and get confused by dust and mew attack feet run in circles. Caticus cuteicus paw at your fat belly yet missing until dinner time, or sit by the fire." in WYSIWYG editor "utexas_member_bio_copy"
   # Add Contact Info #
   And I click on the link "Contact Info" in the ".vertical-tabs-list" region
-  And I select the radio button "Example Contact Form"
+  And I select the radio button "Example widget label"
   # Add Related Links #
   And I click on the link "Related Links" in the ".vertical-tabs-list" region
   And I fill in "Related Links" for "edit-field-utexas-quick-links-und-0-headline"
