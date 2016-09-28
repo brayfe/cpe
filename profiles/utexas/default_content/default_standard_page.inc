@@ -69,6 +69,7 @@ $promo_list_style_2 = array(
 // Creating contact info form.
 $entity_type = 'contact_info';
 $entity = entity_create($entity_type, array(
+  'label' => 'Example widget label',
   'name' => 'Example Contact Form',
   'field_location_1' => '795 E Dragon',
   'field_location_2' => 'Trlr. 123',
