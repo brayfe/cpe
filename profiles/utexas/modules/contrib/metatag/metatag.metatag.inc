@@ -388,7 +388,6 @@ function metatag_metatag_info() {
     'class' => 'DrupalTextMetaTag',
     'group' => 'advanced',
     'weight' => ++$weight,
-    'is_language' => TRUE,
     'element' => array(
       '#theme' => 'metatag_http_equiv',
     ),
