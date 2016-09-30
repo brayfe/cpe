@@ -116,11 +116,10 @@ function utexas_promo_field_field_validate($entity_type, $entity, $field, $insta
       }
 
       // Check to make sure valid link.
-      $target = drupal_get_normal_path($item['link']);
-      if (!empty($item['link']) and !drupal_valid_path($target)) {
+      if (!utexas_admin_drupal_path_exists($item['link'])) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'link_invalid',
-          'message' => t('%link: Link must be a valid URL.', array('%link' => $instance['label'])),
+          'message' => t('%link: ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR, array('%link' => $instance['label'])),
         );
       }
       // Bypass if coming from a migration.

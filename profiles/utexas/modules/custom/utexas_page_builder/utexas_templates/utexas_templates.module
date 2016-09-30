@@ -322,7 +322,6 @@ function template_form($form, &$form_state, $instance = NULL) {
     'field_utexas_promo_units',
     'field_utexas_promo_list',
     'field_utexas_quick_links',
-    'field_gift_link',
     'field_utexas_image_link_a',
     'field_utexas_image_link_b',
     'field_utexas_social_links',
@@ -634,7 +633,7 @@ function utexas_templates_theme_registry_alter(&$theme_registry) {
  * Loads the appropriate page.tpl.php file for page display.
  */
 function utexas_templates_preprocess_page(&$variables) {
-  // Make sure we're only doing these actions on a noad "admin" callback.
+  // Make sure we're only doing these actions on a node display page.
   if (isset($variables['node']) and !path_is_admin(current_path())) {
     // If we're on a node page, grab the object for use later.
     $node = $variables['node'];

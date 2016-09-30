@@ -224,10 +224,10 @@ function utexas_hero_photo_field_validate($entity_type, $entity, $field,
         $href = isset($item['link']['link_href']) ? $item['link']['link_href'] : $item['link_href'];
       }
 
-      if (!empty($href) and !drupal_valid_path(drupal_get_normal_path($href))) {
+      if (isset($href) and !utexas_admin_drupal_path_exists($href)) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'utexas_hero_photo_bad_href',
-          'message' => t('%field: A valid URL is required for a link.',
+          'message' => t('%field: ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR,
             array('%field' => $instance['label'])),
         );
       }

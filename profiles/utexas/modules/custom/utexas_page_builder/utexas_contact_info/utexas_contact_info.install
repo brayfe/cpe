@@ -23,11 +23,19 @@ function utexas_contact_info_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
+      'label' => array(
+        'description' => 'Internal entity name',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'required' => TRUE,
+      ),
       'name' => array(
         'description' => 'Contact Info Label',
         'type' => 'varchar',
         'length' => 255,
         'not null' => FALSE,
+        'required' => TRUE,
       ),
       'field_location_1' => array(
         'description' => 'First location field',
@@ -139,11 +147,49 @@ function utexas_contact_info_schema() {
 function utexas_contact_info_install() {
   // Set the initial value for the schema version so we can
   // run updates after install.
-  drupal_set_installed_schema_version('utexas_contact_info', 7100);
+  drupal_set_installed_schema_version('utexas_contact_info', 7102);
 
   $permissions = array(
     'view contact info forms',
   );
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, $permissions);
   user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $permissions);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adds internal label to contact info entities.
+ */
+function utexas_contact_info_update_7101() {
+  $spec = array(
+    'description' => 'Stores internal label for contact info entities',
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => FALSE,
+  );
+
+  $data_table_name = 'utexas_contact_info';
+  $field_name = 'label';
+
+  db_add_field($data_table_name, $field_name, $spec);
+
+  drupal_set_message(t('Label field added to contact info entities.'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ *  Set the label on any existing entities to the current name.
+ */
+function utexas_contact_info_update_7102() {
+  $entities = entity_load('contact_info', FALSE, array(), FALSE);
+  foreach ($entities as $value) {
+    // Update field values manually.
+    $q = db_update('utexas_contact_info');
+    $q->fields(array('label' => $value->name));
+    $q->condition('id', $value->id);
+    $q->execute();
+  }
+  drupal_set_message(t('New label field values set to current name.'));
 }

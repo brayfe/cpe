@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @file
  * Custom field definition for the Promo List form element.
  */
-
 
 /**
  * Implements hook_field_info().
@@ -129,18 +129,16 @@ function utexas_promo_list_field_widget_form(&$form, &$form_state, $field, $inst
  *
  * Used to make sure all fields have valid data in them.
  */
-function utexas_promo_list_field_validate($entity_type, $entity, $field,
-  $instance, $langcode, $items, &$errors) {
+function utexas_promo_list_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
   // Loop through the values, making sure all check out.
   foreach ($items as $delta => $item) {
     if (!empty($item) and !utexas_promo_list_field_is_empty($item, $field)) {
 
       // Make sure link is valid.
-      $target = drupal_get_normal_path($item['link']);
-      if (!empty($item['link']) and !drupal_valid_path($target)) {
+      if (!utexas_admin_drupal_path_exists($item['link'])) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'link_invalid',
-          'message' => t('%link: The path provided is not a valid URL alias or external link..', array('%link' => $instance['label'])),
+          'message' => t('%link:', array('%link' => $instance['label'])) . ' ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR,
         );
       }
     }
@@ -168,8 +166,7 @@ function utexas_promo_list_field_widget_error($element, $error, $form, &$form_st
  *
  * Adjust copy format+value and handle images.
  */
-function utexas_promo_list_field_presave($entity_type, $entity, $field,
-  $instance, $langcode, &$items) {
+function utexas_promo_list_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
   // Throw copy format & copy value into separate files & adjust other values.
   foreach ($items as $delta => &$item) {
 
@@ -218,20 +215,17 @@ function utexas_promo_list_file_download($uri) {
  *
  * Increment file usage.
  */
-function utexas_promo_list_field_insert($entity_type, $entity, $field,
-  $instance, $langcode, &$items) {
+function utexas_promo_list_field_insert($entity_type, $entity, $field, $instance, $langcode, &$items) {
   utexas_admin_field_insert_custom($entity_type, $entity, $field,
   $instance, $langcode, $items, 'utexas_promo_list');
 }
-
 
 /**
  * Implements hook_field_update().
  *
  * Adjust copy format+value and handle images.
  */
-function utexas_promo_list_field_update($entity_type, $entity, $field,
-  $instance, $langcode, &$items) {
+function utexas_promo_list_field_update($entity_type, $entity, $field, $instance, $langcode, &$items) {
   utexas_admin_field_update_custom($entity_type, $entity, $field,
   $instance, $langcode, $items, 'utexas_promo_list');
 }
@@ -265,8 +259,7 @@ function utexas_promo_list_field_is_empty($item, $field) {
  *
  * Builds the formatter view for the Promo List.
  */
-function utexas_promo_list_field_formatter_view($entity_type, $entity,
-  $field, $instance, $langcode, $items, $display) {
+function utexas_promo_list_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
   $settings = $display['settings'];
 
@@ -278,7 +271,8 @@ function utexas_promo_list_field_formatter_view($entity_type, $entity,
           '#markup' => theme('utexas_promo_list', $item),
           '#attached' => array(
             'css' => array(drupal_get_path('module', 'utexas_promo_list')
-              . '/theme/utexas_promo_list.css'),
+              . '/theme/utexas_promo_list.css',
+            ),
           ),
         );
       }
@@ -392,6 +386,13 @@ function template_preprocess_utexas_promo_list(&$variables) {
 
 /**
  * Implements template_preprocess_entity().
+ *
+ * We're wanting to grab all of the
+ * fields per entity to expose as a simple value in a
+ * field-collection-item.tpl.php template.
+ *
+ * @see template_preprocess_entity()
+ * @see field-collection-item--field-utexas-promo-list.tpl.php
  */
 function utexas_promo_list_preprocess_entity(&$variables, $hook) {
   $function = 'utexas_promo_list_preprocess_promo_list_item';
@@ -418,4 +419,35 @@ function utexas_promo_list_preprocess_promo_list_item(&$variables) {
       $variables['promo_list_style'] = 'one-column-full-width small-12 end ';
     }
   }
+
+  $entity_type = 'field_collection_item';
+  $collection = $variables[$entity_type];
+
+  // Get the field names.
+  $field_info = field_info_instances($entity_type, $collection->field_name);
+  $fields = array_keys($field_info);
+  $temp = array();
+
+  // Iterate over the fields.
+  foreach ($fields as $field) {
+    // Grab the items of the field.
+    $items = field_get_items($entity_type, $collection, $field);
+    $value = array();
+    $view  = $field_info[$field]['display']['default'];
+
+    // Only continue if there are items stored in the field.
+    if ($items) {
+      // Throw the items into a sub array.
+      foreach ($items as $item) {
+        $value[] = field_view_value($entity_type, $collection, $field, $item, $view);
+      }
+    }
+
+    // Associate for the field.
+    $temp[$field] = $value;
+  }
+
+  // Assign back to the array. This element is used in the theme's
+  // field-collection-item--field-utexas-promo-list.tpl.php .
+  $variables['values'] = $temp;
 }
