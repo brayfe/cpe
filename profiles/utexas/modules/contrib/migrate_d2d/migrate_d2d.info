@@ -1,9 +1,9 @@
 name = "Drupal-to-Drupal migration"
-description = "Migration from one Drupal site to another"
+description = "Migration from one Drupal site to another, using migration mappings provided by CSV files"
 package = "Migration"
 core = 7.x
 
-dependencies[] = migrate (>=7.x-2.7)
+dependencies[] = migrate (>7.x-2.5)
 
 files[] = migrate_d2d.migrate.inc
 
@@ -54,9 +54,9 @@ files[] = d7/role.inc
 files[] = d7/taxonomy.inc
 files[] = d7/user.inc
 
-; Information added by Drupal.org packaging script on 2015-02-09
-version = "7.x-2.1"
+; Information added by Drupal.org packaging script on 2014-12-01
+version = "7.x-2.1-beta1+43-dev"
 core = "7.x"
 project = "migrate_d2d"
-datestamp = "1423523588"
+datestamp = "1417455234"
 
