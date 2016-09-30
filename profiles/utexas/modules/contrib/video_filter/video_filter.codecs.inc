@@ -697,23 +697,8 @@ function video_filter_google($video) {
  * @see video_filter_codec_info()
  */
 function video_filter_instagram($video) {
-  $html = &drupal_static(__FUNCTION__);
-  $id = $video['codec']['matches'][1];
-  if ($cache = cache_get('video_filter_instagram:' . $id)) {
-    $html = $cache->data;
-  }
-  else {
-    $endpoint = 'https://api.instagram.com/oembed';
-    $options = array(
-      'url' => 'http://instagr.am/p/' . $id,
-    );
-    $data = video_filter_oembed_request($endpoint, $options);
-    if (!empty($data['html'])) {
-      $html = $data['html'];
-    } 
-    cache_set('video_filter_instagram:' . $id, $html, 'cache');
-  }
-  return $html;
+  $video['source'] = '//www.instagram.com/p/' . $video['codec']['matches'][1] . '/embed';
+  return video_filter_iframe($video);
 }
 
 /**
