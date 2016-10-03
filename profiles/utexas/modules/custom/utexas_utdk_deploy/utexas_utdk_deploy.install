@@ -10,7 +10,7 @@
 function utexas_utdk_deploy_install() {
   // Set the initial value for the schema version so we can run updates after
   // install.
-  drupal_set_installed_schema_version('utexas_utdk_deploy', 7110);
+  drupal_set_installed_schema_version('utexas_utdk_deploy', 7111);
 }
 
 /**
@@ -228,4 +228,16 @@ function utexas_mcms_deploy_update_7110() {
   features_rebuild();
   features_revert();
   node_access_rebuild();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable utexas_navigation404 and set initial value for site_404 variable.
+ */
+function utexas_mcms_deploy_update_7111() {
+  if (module_exists('utexas_navigation404')) {
+    $modules = array('utexas_navigation404');
+    module_enable($modules);
+  }
 }
