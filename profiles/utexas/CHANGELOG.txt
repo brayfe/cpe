@@ -1,3 +1,26 @@
+UT Drupal Kit 7.x-2.4, 2016-10-03
+---------------------------------
+[MC-256] - Add option to toggle breadcrumbs on landing page/standard page
+[MC-367] - Audit / clean up Page Builder & UTexas Templates code
+[MC-422] - Make admin forms for social accounts and social links draggable tables
+[MC-437] - Remove unused CSS
+[MC-443] - Prevent mangled HTML in Tablesaw libXML method
+[MC-449] - Change search input text from placeholder to value
+[MC-451] - Update Events Behat test to use future date
+[MC-452] - Make weighted & draggable UTexas Social Links
+[MC-457] - Update icons mixin in Starterkit
+[MC-459] - Update Instagram icon
+[MC-401] - Editorial UX enhancements for Contact info widgets
+[MC-406] - Enable admin_views module
+[MC-411] - Undefined variable if google_cse module is disabled
+[MC-432] - Support relative file links in compound field link buckets
+[MC-433] - Prevent certain admin pages going outside margins
+[MC-434] - Investigate centered table elements dispaly as left-aligned
+[MC-435] - Update to Drops 7.50
+[MC-438] - Provide documentation for announcement functionality
+[MC-441] - Add pinterest to social accounts configuration
+[MC-444] - Prevent anchor tags in menu items from being stripped out 
+
 UT Drupal Kit 7.x-2.3.3, 2016-08-20
 ---------------------------------
 [UDK-69] - Add taxonomy_access_fix module to codebase
