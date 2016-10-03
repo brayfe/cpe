@@ -233,11 +233,17 @@ function utexas_mcms_deploy_update_7110() {
 /**
  * Implements hook_update_N().
  *
- * Enable utexas_navigation404 and set initial value for site_404 variable.
+ * Enable utexas_navigation404 and reverts standard and landing page content type features. 
  */
 function utexas_mcms_deploy_update_7111() {
   if (module_exists('utexas_navigation404')) {
     $modules = array('utexas_navigation404');
     module_enable($modules);
+  }
+  if (module_exists('content_type_standard_page')) {
+    features_revert(array('module' => array('content_type_standard_page')));
+  }
+  if (module_exists('content_type_landing_page')) {
+    features_revert(array('module' => array('content_type_landing_page')));
   }
 }
