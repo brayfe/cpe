@@ -14,9 +14,8 @@ UT Drupal Kit 7.x-2.4, 2016-10-03
 [MC-406] - Enable admin_views module
 [MC-411] - Undefined variable if google_cse module is disabled
 [MC-432] - Support relative file links in compound field link buckets
-[MC-433] - Prevent certain admin pages going outside margins
-[MC-434] - Investigate centered table elements dispaly as left-aligned
-[MC-435] - Update to Drops 7.50
+[MC-433] - Prevent certain admin pages extending beyond margins
+[MC-434] - Prevent centered table elements from displaying as left-aligned
 [MC-438] - Provide documentation for announcement functionality
 [MC-441] - Add pinterest to social accounts configuration
 [MC-444] - Prevent anchor tags in menu items from being stripped out 
