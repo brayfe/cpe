@@ -482,14 +482,6 @@ function utexas_page_builder_form_alter(&$form, &$form_state, $form_id) {
           'field_utexas_flex_content_area_b',
           'field_contact_info',
         ),
-        'simple_html' => array(
-          'field_utexas_featured_highlight',
-          'field_utexas_promo_list',
-          'field_utexas_promo_units',
-          'field_utexas_quick_links',
-          'field_utexas_photo_content_area',
-          'field_timely_announcement',
-        ),
       );
 
       // Loop through each field, creating the sub wrapper.
@@ -510,10 +502,6 @@ function utexas_page_builder_form_alter(&$form, &$form_state, $form_id) {
             // Attach text formats.
             if (in_array($field_name, $field_filters['filtered_html'])) {
               _utexas_page_builder_element_children_all_set_text_format($form[$field_name], 'filtered_html');
-            }
-            if (in_array($field_name, $field_filters['simple_html'])) {
-              _utexas_page_builder_element_children_all_set_text_format($form[$field_name], 'simple_html');
-              $form[$field_name]['#attributes']['class'][] = 'no-wysiwyg';
             }
             // Create a fieldset for the field.
             $title = isset($form[$field_name][$form[$field_name]['#language']]['#title']) ? $form[$field_name][$form[$field_name]['#language']]['#title'] : $form[$field_name][$form[$field_name]['#language']][0]['#title'];
@@ -929,7 +917,7 @@ function utexas_page_builder_preprocess_block(&$variables) {
       $variables['page_builder_node'] = TRUE;
     }
   }
-  // Attach a theme hook suggestions for fieldblocks based on the content in
+  // Attach theme hook suggestions for fieldblocks based on the content in
   // the field.
   if (isset($variables['block']) and $variables['block']->module == 'fieldblock' and isset($variables['elements']['#field_name'])) {
     // Attach some extra theme hooks for extended customization.
@@ -964,7 +952,7 @@ function utexas_page_builder_preprocess_block(&$variables) {
     // Make sure we're not adding this to content areas.
     $variables['classes_array'][] = 'sidebar-module';
 
-    // Set certain regions to be default to no sidebar style.
+    // Set certain fields to default to no sidebar style.
     $no_default = array(
       'field_utexas_flex_content_area_a',
       'field_utexas_flex_content_area_b',
@@ -974,7 +962,6 @@ function utexas_page_builder_preprocess_block(&$variables) {
       'field_utexas_social_links',
       'field_utexas_image_link_a',
       'field_utexas_image_link_b',
-      'field_gift_link',
       'field_utexas_promo_list',
       'field_utexas_resource',
       'field_utexas_promo_units',
@@ -988,8 +975,7 @@ function utexas_page_builder_preprocess_block(&$variables) {
       $variables['theme_hook_suggestions'] = array_values($hooks);
     }
 
-    // If it's a non-field (i.e. news block or localist block), attach the
-    // default style as well.
+    // If it's a non-fieldblock, attach the default style as well.
     if (!isset($variables['elements']['#field_name']) && ($variables['block']->module) != 'menu_block') {
       $variables['classes_array'][] = 'sidebar-default-style';
       $variables['theme_hook_suggestions'][] = 'block__' . $variables['block']->region . '__default_style';

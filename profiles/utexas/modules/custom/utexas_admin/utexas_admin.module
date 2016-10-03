@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Module definition for the UTexas Admin module.
@@ -11,6 +12,11 @@
  * UTexas administration permission.
  */
 define('UTEXAS_ADMIN_ADMINISTER_UTEXAS_SETTINGS', 'administer utexas settings');
+
+/**
+ * Shared validation message for path validation.
+ */
+define('UTEXAS_ADMIN_PATH_VALIDATION_ERROR', 'The path provided is not a valid URL alias or external link. If linking to a file in the system, make sure to include a leading slash (e.g., /sites/default/files/{filename})');
 
 /**
  * Implements hook_permission().
@@ -39,6 +45,28 @@ function utexas_admin_schema_alter(&$schema) {
     'not null' => TRUE,
     'default' => 1,
   );
+  // Make Drupal aware of our custom node column. Node save handles the rest.
+  $schema['node']['fields']['show_breadcrumb'] = array(
+    'description' => t('Custom publishing option to display breadcrumb'),
+    'type' => 'int',
+    'not null' => FALSE,
+    'default' => NULL,
+  );
+}
+
+/**
+ * Helper that generates a machine name using a provided human readable name.
+ *
+ * @param string $name
+ *   Human readable name.
+ *
+ * @return string
+ *   Machine name cleaned-up of any special chars.
+ */
+function _utexas_admin_machine_name($name) {
+  $machine_name = strtolower($name);
+  $machine_name = preg_replace('@[^a-z0-9_]+@', '_', $machine_name);
+  return $machine_name;
 }
 
 /**
@@ -225,6 +253,14 @@ function utexas_admin_form_node_form_alter(&$form, &$form_state, $form_id) {
       '#title' => 'Show last updated date',
       '#default_value' => $default_value,
     );
+    if (in_array($node->type, array('standard_page', 'landing_page'))) {
+      $default_value = (isset($node->show_breadcrumb)) ? $node->show_breadcrumb : theme_get_setting('utexas_' . $node->type . '_breadcrumb', $current_theme);
+      $form['options']['show_breadcrumb'] = array(
+        '#type' => 'checkbox',
+        '#title' => 'Show breadcrumb at top of page',
+        '#default_value' => $default_value,
+      );
+    }
   }
 }
 
@@ -266,7 +302,10 @@ function utexas_admin_filter_process_format($element) {
   }
   // Set the default value to the user's Drupal-ordered text format.
   $user_formats = array_keys($options);
-  $element['#format'] = $user_formats[0];
+  if ($element['#format'] == 'filtered_html_for_blocks') {
+    // Default to the first option only if filtered_html_for_blocks is set.
+    $element['#format'] = $user_formats[0];
+  }
 
   $element['format']['format'] = array(
     '#type' => 'select',
@@ -456,8 +495,13 @@ function utexas_admin_jquery_backup(array &$javascript, $path) {
  *
  * Increment file usage.
  */
-function utexas_admin_field_insert_custom($entity_type, $entity, $field,
-  $instance, $langcode, $items, $module) {
+function utexas_admin_field_insert_custom($entity_type,
+  $entity,
+  $field,
+  $instance,
+  $langcode,
+  $items,
+  $module) {
   list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
 
   // Permanently save new images.
@@ -474,8 +518,13 @@ function utexas_admin_field_insert_custom($entity_type, $entity, $field,
  *
  * Adjust copy format+value and handle images.
  */
-function utexas_admin_field_update_custom($entity_type, $entity, $field,
-  $instance, $langcode, $items, $module) {
+function utexas_admin_field_update_custom($entity_type,
+  $entity,
+  $field,
+  $instance,
+  $langcode,
+  $items,
+  $module) {
   list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
 
   // Get an original entity.
@@ -530,6 +579,7 @@ function utexas_admin_field_delete_custom($entity_type, $entity, $field, $instan
     }
   }
 }
+
 /**
  * Strip 'http://' and 'https://' from a url, and replace it for '//'.
  */
@@ -759,7 +809,7 @@ function utexas_admin_ckeditor_profile($operation = NULL, $profile = 'Advanced')
     switch ($operation) {
       case 'save':
         db_merge('ckeditor_settings')
-        ->key(array('name' => $profile))
+          ->key(array('name' => $profile))
           ->fields(array(
             'name' => $profile,
             'settings' => serialize($ckeditor_profiles[$profile]['settings']),
@@ -774,10 +824,10 @@ function utexas_admin_ckeditor_profile($operation = NULL, $profile = 'Advanced')
                 'name' => $profile,
                 'format' => $format,
               ))
-            ->execute();
+              ->execute();
           }
         }
-        watchdog('utexas_admin', 'CKEditor profile ' . $profile . ' was saved.', NULL, WATCHDOG_INFO);
+        watchdog('utexas_admin', 'CKEditor profile @profile was saved.', array('@profile' => $profile), WATCHDOG_INFO);
         break;
 
       default:
@@ -880,7 +930,7 @@ function utexas_admin_text_formats($operation) {
       case 'save':
         foreach ($formats as $type => $settings) {
           filter_format_save($settings);
-          watchdog('utexas_admin', 'Filter format ' . $settings->name . ' was saved.', NULL, WATCHDOG_INFO);
+          watchdog('utexas_admin', 'Filter format @name was saved.', array('@name' => $settings->name), WATCHDOG_INFO);
         }
 
         break;
@@ -1015,6 +1065,21 @@ function utexas_brand_guidelines_date_format($input, $display) {
   return $results;
 }
 
+/**
+ * Helper function to check if a drupal path exists or is in the filesystem.
+ */
+function utexas_admin_drupal_path_exists($path = FALSE) {
+  $result = FALSE;
+  $target = drupal_get_normal_path($path);
+  if (!$path or ($path and (drupal_valid_path($target) or file_exists(getcwd() . $path)))) {
+    $result = TRUE;
+  }
+  return $result;
+}
+
+/**
+ * Helper class to generate random text.
+ */
 class UtexasLorem {
   const TYPE_WORD = 1;
   const TYPE_CHAR = 2;
@@ -1023,6 +1088,7 @@ class UtexasLorem {
   const TYPE_HTML = 'html';
   static private $plain = 'Lorem ipsum dolor sit amet consectetur adipiscing elit praeclare hoc quidem tecum optime deinde etiam mediocri amico duo reges constructio interrete haec para/doca illi nos admirabilia dicamus praeteritis inquit gaudeo hoc simile tandem est quis enim redargueret';
   static private $html = '<strong>Lorem ipsum dolor sit amet</strong> consectetur adipiscing elit. Praeclare hoc quidem tecum optime deinde etiam mediocri amico. Duo reges <a href="#">constructio interrete Haec</a> para/doca illi nos admirabilia dicamus Praeteritis inquit gaudeo Hoc simile tandem est quis enim redargueret.';
+
   /**
    * Generate random lorem ipsum text.
    */
@@ -1068,4 +1134,5 @@ class UtexasLorem {
     }
     return $out . $end;
   }
+
 }

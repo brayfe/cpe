@@ -10,6 +10,7 @@
  */
 ?>
 <?php
+echo $content['contact_info_details'];
 echo '<div class="field_contact_info">';
 echo '<h4>' . $content['title'] . '</h4>';
 echo '<div class="address">';

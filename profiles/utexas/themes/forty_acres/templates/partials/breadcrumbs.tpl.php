@@ -6,8 +6,7 @@
  * Available variables:
  *  - $breadcrumb: The rendered breadcrumb for the page.
  */
-
-if ($breadcrumb) :
+if ($display_breadcrumb && $breadcrumb) :
   ?>
   <div class="row">
     <div class="column small-12 show-for-medium-up">

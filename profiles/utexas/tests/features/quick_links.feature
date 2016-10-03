@@ -16,10 +16,10 @@ Scenario: User with correct permissions can add fields
   And I click "Quick Links" in the "vertical_tabs" region
   And I fill in "behat quick_link test" for "edit-field-utexas-quick-links-und-0-headline"
   And I fill in "behat test link title" for "edit-field-utexas-quick-links-und-0-links-0-link-title"
-  And I fill in "google.com" for "edit-field-utexas-quick-links-und-0-links-0-link-url"
+  And I fill in "profiles/utexas/themes/forty_acres/screenshot.png" for "edit-field-utexas-quick-links-und-0-links-0-link-url"
   And I press the "Save" button
   Then I should see the error message "Quick Links: The path provided is not a valid URL alias or external link."
-  And I fill in "http://www.google.com" for "edit-field-utexas-quick-links-und-0-links-0-link-url"
+  And I fill in "/profiles/utexas/themes/forty_acres/screenshot.png" for "edit-field-utexas-quick-links-und-0-links-0-link-url"
   And I press the "Save" button
   Then I should see the message "Standard Page test form has been created."
   Then I should see the text "test form" in the "page_title" region

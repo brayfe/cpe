@@ -9,3 +9,4 @@ configure = admin/config/utexas
 dependencies[] = menu
 dependencies[] = smartcrop
 dependencies[] = utexas_beacon
+files[] = tests/utexas_admin.test

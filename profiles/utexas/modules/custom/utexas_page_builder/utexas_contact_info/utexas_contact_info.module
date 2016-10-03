@@ -34,7 +34,7 @@ function utexas_contact_info_entity_info() {
     'base table' => 'utexas_contact_info',
     'entity keys' => array(
       'id' => 'id',
-      'label' => 'name',
+      'label' => 'label',
     ),
     'module' => 'utexas_contact_info',
     'entity class' => 'ContactInfoEntity',
@@ -63,6 +63,12 @@ function utexas_contact_info_entity_property_info() {
     'description' => t('The ID of the contact form.'),
     'type' => 'integer',
     'schema field' => 'id',
+  );
+  $info['contact_info']['properties']['label'] = array(
+    'label' => t('Contact Info Widget Internal Label'),
+    'description' => t('The internal label of the contact form widget.'),
+    'type' => 'text',
+    'schema field' => 'label',
   );
   $info['contact_info']['properties']['name'] = array(
     'label' => t('Contact Info Form Title'),
@@ -206,6 +212,8 @@ function utexas_contact_info_menu() {
     'page callback' => '_utexas_contact_info_view_form',
     'page arguments' => array(1),
     'access arguments' => array('view contact info'),
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
   );
 
   return $items;
@@ -220,7 +228,7 @@ class ContactInfoUIController extends EntityDefaultUIController {
    */
   public function hook_menu() {
     $items = parent::hook_menu();
-    $items[$this->path]['title'] = t('Contact Info');
+    $items[$this->path]['label'] = t('Contact Info');
     $items[$this->path]['description'] = t('Manage Contact Info');
     $items[$this->path]['type'] = MENU_LOCAL_TASK;
     return $items;
@@ -300,12 +308,19 @@ function contact_info_form($form, &$form_state, $instance = NULL) {
     'Wyoming' => 'Wyoming',
   );
 
+  $form['label'] = array(
+    '#title' => t('Widget label'),
+    '#type' => 'textfield',
+    '#default_value' => isset($instance->label) ? $instance->label : '',
+    '#required' => TRUE,
+    '#description' => t('Identifies this contact info on administration pages. It should be descriptive and unique.'),
+  );
   $form['name'] = array(
     '#title' => t('Title'),
     '#type' => 'textfield',
     '#default_value' => isset($instance->name) ? $instance->name : '',
     '#required' => TRUE,
-    '#description' => t('Identifies this contact info within the site. It should be descriptive and unique.'),
+    '#description' => t('The displayed title on your contact info widget.'),
   );
   $form['location'] = array(
     '#type' => 'fieldset',
@@ -488,19 +503,6 @@ function contact_info_form_validate(&$form, &$form_state) {
     form_set_error('field_url', t('Not a valid URL (e.g, http://validurl.com)'));
   }
 
-  // Check if the contact form name already exists, so that any entity reference
-  // field shows unique form names.
-  $existing_forms = array();
-  $forms = entity_load('contact_info');
-  foreach ($forms as $key => $contact_form) {
-    $existing_forms[$key] = $contact_form->name;
-  }
-  // If the current form does not yet exist AND (for forms being edited)
-  // the previous value was not already in the existing forms.
-  if (in_array($form_state['input']['name'], $existing_forms) and !in_array($form['name']['#default_value'], $existing_forms)) {
-    form_error($form['name'], t('The title %value is already being used. Choose something else so that each form can be easily identified.', array('%value' => $form_state['input']['name'])));
-  }
-
 }
 
 /**
@@ -511,7 +513,7 @@ function contact_info_form_submit($form, &$form_state) {
   $entity = entity_ui_form_submit_build_entity($form, $form_state);
   // Combine the field definitions into a serialized array for storage.
   $entity->save();
-  drupal_set_message(t('The contact info form: @name has been saved.', array('@name' => $entity->name)));
+  drupal_set_message(t('The contact info form: @label has been saved.', array('@label' => $entity->label)));
   $form_state['redirect'] = UTEXAS_CONTACT_INFO_CALLBACK;
 }
 
@@ -556,6 +558,7 @@ class ContactInfoEntityController extends EntityAPIController {
     $build['#attached']['css'][] = drupal_get_path('module', 'utexas_contact_info') . '/theme/contact-info.css';
     // Send data to template.
     $build += array(
+      'label' => check_plain($entity->label),
       'title' => check_plain($entity->name),
       'location_1' => check_plain($entity->field_location_1),
       'location_2' => check_plain($entity->field_location_2),
@@ -576,7 +579,14 @@ class ContactInfoEntityController extends EntityAPIController {
       'has_location' => $has_location,
       'has_address' => $has_address,
     );
-
+    // Add variable to edit contact info details.
+    $build['contact_info_details'] = '';
+    $perm = 'administer contact info forms';
+    if (user_access($perm, $account = NULL)) {
+      $base_path = base_path();
+      $path = current_path();
+      $build['contact_info_details'] = '<div class="edit-links" style="margin-top:0;"><a href="' . $base_path . 'admin/content/contact_info/manage/' . $entity->id . '?destination=' . $path . ' ">Edit Contact Info</a></div>';
+    }
     return $build;
   }
 
@@ -587,7 +597,7 @@ class ContactInfoEntityController extends EntityAPIController {
 function _utexas_contact_info_view_form($id) {
   if ($contact_forms = entity_load('contact_info', array($id))) {
     $contact_form = $contact_forms[$id];
-    drupal_set_title($contact_form->name);
+    drupal_set_title($contact_form->label);
     // View data is defined in buildContent().
     $output = entity_view('contact_info', array($contact_form));
     return $output;

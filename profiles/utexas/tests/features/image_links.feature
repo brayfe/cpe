@@ -21,7 +21,7 @@ Feature: Image Links
     And I fill in "Placeholder Image" for "edit-field-file-image-alt-text-und-0-value"
     And I fill in "Placeholder Title" for "edit-field-file-image-title-text-und-0-value"
     And I press the "Save" button
-    And I fill in "http://www.google.com" for "edit-field-utexas-image-link-a-und-0-link-link-href" in the "image_links_edit" region
+    And I fill in "/profiles/utexas/themes/forty_acres/screenshot.png" for "edit-field-utexas-image-link-a-und-0-link-link-href" in the "image_links_edit" region
     And I fill in "image link test title" for "edit-field-utexas-image-link-a-und-0-link-link-title" in the "image_links_edit" region
     And I press the "Save" button
     Then I should see the message "Standard Page test form has been created."

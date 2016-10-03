@@ -1,8 +1,31 @@
 <?php
+
 /**
  * @file
  * Module file for the Background Accent module.
  */
+
+/**
+ * Constant for newsreel categories.
+ */
+define('UTEXAS_NEWSREEL_CATEGORIES', serialize(array(
+  'arts-and-humanities' => 'Arts and Humanities',
+  'business-and-economy' => 'Business and Economy',
+  'campus-and-community' => 'Campus and Community',
+  'education-and-leadership' => 'Education and Leadership',
+  'health-and-wellness' => 'Health and Wellness',
+  'policy-and-law' => 'Policy and Law',
+  'science-and-technology' => 'Science and Technology',
+)));
+
+/**
+ * Constant for newsreel types.
+ */
+define('UTEXAS_NEWSREEL_TYPES', serialize(array(
+  'news' => 'Features',
+  'press-releases' => 'Press Releases',
+  'texas-perspectives' => 'Opinions',
+)));
 
 /**
  * Implements hook_field_info().
@@ -41,51 +64,43 @@ function utexas_newsreel_field_widget_info() {
  *
  * Form definition for the field widget.
  */
-function utexas_newsreel_field_widget_form(&$form, &$form_state, $field,
-  $instance, $langcode, $items, $delta, $element) {
+function utexas_newsreel_field_widget_form(&$form,
+  &$form_state,
+  $field,
+  $instance,
+  $langcode,
+  $items,
+  $delta,
+  $element) {
   switch ($instance['widget']['type']) {
     case 'utexas_newsreel':
       $element['headline'] = array(
         '#title' => t('Headline'),
         '#type' => 'textfield',
-        '#default_value' => (isset($items[$delta]['headline'])) ? $items[$delta]['headline'] : 'Latest from UTNews',
-        '#required' => TRUE,
+        '#default_value' => (isset($items[$delta]['headline'])) ? $items[$delta]['headline'] : '',
         '#description' => t('The text that serves as the block header.'),
       );
 
+      $type_options = unserialize(UTEXAS_NEWSREEL_TYPES);
       // Unserialize stored user-defined categories.
-      $types = (is_string($items[$delta]['type'])) ? unserialize($items[$delta]['type']) : $items[$delta]['type'];
+      $types = (isset($items[$delta]['type'])) ? unserialize($items[$delta]['type']) : array();
 
       $element['type'] = array(
         '#type' => 'checkboxes',
         '#title' => t('Article Types'),
         '#default_value' => $types,
-        '#options' => array(
-          'news' => t('News'),
-          'press-releases' => t('Press Releases'),
-          'texas-perspectives' => t('Texas Perspectives'),
-        ),
+        '#options' => $type_options,
         '#description' => t('Choose which types of articles to display.'),
       );
 
-      $available_categories = array(
-        'arts-and-humanities' => 'Arts and Humanities',
-        'business-and-economy' => 'Business and Economy',
-        'campus-and-community' => 'Campus and Community',
-        'education-and-leadership' => 'Education and Leadership',
-        'health-and-wellness' => 'Health and Wellness',
-        'policy-and-law' => 'Policy and Law',
-        'science-and-technology' => 'Science and Technology',
-      );
-
-      $categories = (is_string($items[$delta]['category'])) ? unserialize($items[$delta]['category']) : $items[$delta]['category'];
+      $available_categories = unserialize(UTEXAS_NEWSREEL_CATEGORIES);
+      $categories = (isset($items[$delta]['category'])) ? unserialize($items[$delta]['category']) : array();
 
       $element['category'] = array(
         '#type' => 'checkboxes',
         '#title' => t('Categories'),
         '#default_value' => $categories,
         '#options' => $available_categories,
-        '#required' => TRUE,
         '#description' => t('The primary categories from which to display items.'),
       );
 
@@ -93,7 +108,6 @@ function utexas_newsreel_field_widget_form(&$form, &$form_state, $field,
         '#title' => t('Tags'),
         '#type' => 'textfield',
         '#default_value' => (isset($items[$delta]['tag'])) ? $items[$delta]['tag'] : '',
-        '#required' => FALSE,
         '#description' => t('A comma-delimited list of tags to filter on (e.g., "Harry Ransom Center, Dell Medical School").'),
       );
 
@@ -142,7 +156,6 @@ function utexas_newsreel_field_widget_form(&$form, &$form_state, $field,
         '#title' => t('"View all" text'),
         '#type' => 'textfield',
         '#default_value' => (isset($items[$delta]['view_all'])) ? $items[$delta]['view_all'] : 'View all news',
-        '#required' => FALSE,
         '#description' => t('Text that links to the news.utexas.edu category. Leave blank for no link.'),
       );
 
@@ -151,15 +164,68 @@ function utexas_newsreel_field_widget_form(&$form, &$form_state, $field,
   return $element;
 }
 
-
 /**
  * Implements hook_field_validate().
  *
  * Used to validate the user input on the form.
  */
-function utexas_newsreel_field_validate($entity_type, $entity, $field,
-  $instance, $langcode, $items, &$errors) {
-  // No validation steps right now, as the field is optional.
+function utexas_newsreel_field_validate($entity_type,
+  $entity,
+  $field,
+  $instance,
+  $langcode,
+  $items,
+  &$errors) {
+  foreach ($items as $delta => $item) {
+    if (isset($item['category'])) {
+      $category_empty = TRUE;
+      foreach ($item['category'] as $category => $value) {
+        if ($value != '0') {
+          $category_empty = FALSE;
+        }
+      }
+    }
+    if (isset($item['type'])) {
+      $type_empty = TRUE;
+      foreach ($item['type'] as $type => $value) {
+        if ($value != '0') {
+          $type_empty = FALSE;
+        }
+      }
+    }
+    if ($category_empty && !$type_empty) {
+      $errors[$field['field_name']][$langcode][$delta][] = array(
+        'error' => 'newsreel_no_type',
+        'message' => t('%field: A newsreel type is set, but there are no selected news categories.', array('%field' => $instance['label'])),
+      );
+    }
+    if (!$category_empty && $type_empty) {
+      $errors[$field['field_name']][$langcode][$delta][] = array(
+        'error' => 'newsreel_no_category',
+        'message' => t('%field: A newsreel category is set, but there are no selected news types.', array('%field' => $instance['label'])),
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function utexas_newsreel_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  // Note that until https://www.drupal.org/node/222380 is merged, these won't
+  // highlight the checkbox fields, though the error will display.
+  switch ($error['error']) {
+    case 'newsreel_no_type':
+      form_error($element['type'], $error['message']);
+      break;
+
+    case 'newsreel_no_category':
+      form_error($element['category'], $error['message']);
+      break;
+  }
 }
 
 /**
@@ -199,8 +265,13 @@ function utexas_newsreel_field_formatter_info() {
  *
  * Creates the formatter for Hero Photo.
  */
-function utexas_newsreel_field_formatter_view($entity_type, $entity, $field,
-  $instance, $langcode, $items, $display) {
+function utexas_newsreel_field_formatter_view($entity_type,
+  $entity,
+  $field,
+  $instance,
+  $langcode,
+  $items,
+  $display) {
   $element = array();
   $settings = $display['settings'];
 
@@ -248,9 +319,19 @@ function template_preprocess_utexas_newsreel(&$variables) {
   $types = unserialize($variables['item']['type']);
   $all_types = TRUE;
   $valid_types = array();
+  $modified_types = array(
+    'news' => 'features',
+    'press-releases' => 'press-releases',
+    'texas-perspectives' => 'opinions',
+  );
+  // Names of the News types were changed.
+  // See https://utexas-digx.atlassian.net/browse/UTCMSX-842
+  // To accommodate sites that already have set data, this rewrites those
+  // machine names here, at the preprocess level to match UT News.
   foreach ($types as $key => $value) {
     if ($value != '0') {
-      $valid_types[] = $value;
+      // Rename the existing machine names to match updated UT News site.
+      $valid_types[] = $modified_types[$value];
     }
     else {
       $all_types = FALSE;
@@ -262,6 +343,7 @@ function template_preprocess_utexas_newsreel(&$variables) {
   $categories = unserialize($variables['item']['category']);
   $all_categories = TRUE;
   $valid_categories = array();
+
   foreach ($categories as $key => $value) {
     if ($value != '0') {
       $valid_categories[] = $value;
@@ -284,7 +366,6 @@ function template_preprocess_utexas_newsreel(&$variables) {
   $cache = cache_get('utexas_newsreel:' . $cache_name, 'cache');
   $feed_base = variable_get('news_feed_base_url', 'http://news.utexas.edu');
   $feed_url = $feed_base . '/rss/' . $types . '/' . $categories . '/' . $tag_list . '/feed.xml';
-  // Debugging: print_r($feed_url);
   if (!$cache or time() >= (int) $cache->expire) {
     $items = array();
     $result = drupal_http_request($feed_url);
@@ -305,7 +386,7 @@ function template_preprocess_utexas_newsreel(&$variables) {
     }
     else {
       // The feed didn't validate. Log an error.
-      watchdog('utexas_newsreel', 'The feed URL ' . $feed_url . ' does not appear to be valid.', NULL, WATCHDOG_ERROR);
+      watchdog('utexas_newsreel', 'The feed URL @feed_url does not appear to be valid.', array('@feed_url' => $feed_url), WATCHDOG_ERROR);
     }
     // Set the array in the cache -- expires every 5 minutes.
     // If the feed didn't validate, the cache item will still be created, but
@@ -338,10 +419,18 @@ function template_preprocess_utexas_newsreel(&$variables) {
 function utexas_newsreel_field_is_empty($item, $field) {
   switch ($field['type']) {
     case 'utexas_newsreel':
-      $empty = (isset($item['utexas_newsreel'])) ? empty($item['utexas_newsreel']['headline']) : empty($item['headline']);
-
+      $empty = TRUE;
+      $container = (isset($item['utexas_newsreel'])) ? $item['utexas_newsreel'] : $item;
+      // Determine field's "emptiness" based on whether any categories have
+      // been selected.
+      if (isset($container['category'])) {
+        foreach ($container['category'] as $category => $value) {
+          if ($value != '0') {
+            $empty = FALSE;
+          }
+        }
+      }
       return $empty;
-
   }
   return FALSE;
 }

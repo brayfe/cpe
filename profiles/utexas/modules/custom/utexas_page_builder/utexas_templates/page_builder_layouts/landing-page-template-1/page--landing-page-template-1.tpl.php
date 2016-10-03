@@ -43,6 +43,7 @@
 <?php if (file_exists($partial_header)): require_once $partial_header; endif;  ?>
 <div class="UT-page phase2_theme1" id="ut-page-content" role="main">
   <div class="container">
+    <?php if (file_exists($partial_breadcrumbs)) : require_once $partial_breadcrumbs; endif; ?>
     <?php if (file_exists($partial_page_top)) : require_once $partial_page_top; endif; ?>
     <div class="row">
       <div class="column small-12">

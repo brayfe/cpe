@@ -39,7 +39,7 @@ function utexas_admin_requirements($phase) {
 function utexas_admin_install() {
   // Set the initial value for the schema version so we can run updates after
   // install.
-  drupal_set_installed_schema_version('utexas_admin', 7101);
+  drupal_set_installed_schema_version('utexas_admin', 7102);
 
   // Add the "show_date" field to the node table.
   db_add_field('node', 'show_date', array(
@@ -47,6 +47,13 @@ function utexas_admin_install() {
     'not null' => TRUE,
     'default' => 0,
     'description' => 'Custom publishing option to display date',
+  ));
+  // Add the "show_breadcrumb" field to the node table.
+  db_add_field('node', 'show_breadcrumb', array(
+    'type' => 'int',
+    'not null' => FALSE,
+    'default' => NULL,
+    'description' => 'Custom publishing option to display breadcrumb',
   ));
 }
 
@@ -61,6 +68,21 @@ function utexas_admin_update_7101() {
     'not null' => TRUE,
     'default' => 0,
     'description' => 'Custom publishing option to display date',
+  ));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add the "show_breadcrumb" field to the node table.
+ */
+function utexas_admin_update_7102() {
+  // Add the "show_breadcrumb" field to the node table.
+  db_add_field('node', 'show_breadcrumb', array(
+    'type' => 'int',
+    'not null' => FALSE,
+    'default' => NULL,
+    'description' => 'Custom publishing option to display breadcrumb',
   ));
 }
 

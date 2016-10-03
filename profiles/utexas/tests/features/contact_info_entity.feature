@@ -11,15 +11,17 @@ Scenario: Validate Required Title field. Validate Location and Address Zip Codes
   Given I am logged in as a user with the "complete" permissions on this site
   And I set browser window size to "1200" x "900"
   When I go to "admin/content"
-  And I click "Contact Info"
+  And I click "Contact Infos"
 
   # Validating Required Title
   And I click "Add contact info"
   And I press the "Save" button
-  Then I should see the error message "Title field is required."
+  Then I should see the error message "Widget label field is required."
+  And I should see the error message "Title field is required."
 
   # Validating Location and Address Zip Codes
   And I fill in "Contact Info" for "edit-name"
+  And I fill in "Test Label" for "edit-label"
   And I fill in "781234" for "edit-field-location-zip"
   And I fill in "7812" for "edit-field-address-zip"
   And I press the "Save" button
@@ -56,23 +58,14 @@ Scenario: Validate Required Title field. Validate Location and Address Zip Codes
   And I fill in "111-111-1111" for "edit-field-fax"
   And I fill in "goodemail@email.com" for "edit-field-email"
   And I press the "Save" button
-  Then I should see the message "The contact info form: Contact Info has been saved."
-
-Scenario: Prevent duplicate Contact Info names
-  Given I am logged in as a user with the "complete" permissions on this site
-  When I go to "admin/content"
-  And I click "Contact Info"
-  And I click "Add contact info"
-  And I fill in "Contact Info" for "edit-name"
-  And I press the "Save" button
-  Then I should see the error message "The title Contact Info is already being used. Choose something else so that each form can be easily identified."
+  Then I should see the message "The contact info form: Test Label has been saved."
 
 Scenario: Assign contact info to a page
   Given I am logged in as a user with the "complete" permissions on this site
   When I go to "node/add/standard-page"
   And I fill in "Test Page" for "edit-title" in the "form_item_title" region
   And I click "Contact Info" in the "vertical_tabs" region
-  When I select the radio button "Contact Info"
+  When I select the radio button "Test Label"
   And I press the "Save" button
   And I click "Layout Editor" in the "primary_tabs" region
   And I click "Edit" in the "context_editor" region
@@ -95,6 +88,6 @@ Scenario: Assign contact info to a page
 Scenario: Delete a Contact Info Form
   Given I am logged in as a user with the "complete" permissions on this site
   When I go to "admin/content/contact_info"
-  Given I click "delete" in the "Contact Info" row
+  Given I click "delete" in the "Test Label" row
   And I press the "Confirm" button
-  Then I should see the message "Deleted Contact Info Contact Info."
+  Then I should see the message "Deleted Contact Info Test Label."

@@ -20,7 +20,7 @@ Feature: Resource
 
     # validate link with no title
     And I fill in "" for "edit-field-utexas-resource-und-0-links-0-link-title"
-    And I fill in "http://google.com" for "edit-field-utexas-resource-und-0-links-0-link-url"
+    And I fill in "/profiles/utexas/themes/forty_acres/screenshot.png" for "edit-field-utexas-resource-und-0-links-0-link-url"
     And I press the "Save" button
     Then I should see the error message "Resources: There is a link but no corresponding title."
 

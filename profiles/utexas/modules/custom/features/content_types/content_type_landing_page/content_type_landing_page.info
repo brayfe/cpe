@@ -11,6 +11,7 @@ dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = field_collection
 dependencies[] = options
+dependencies[] = settings_default_landing_page_options
 dependencies[] = strongarm
 dependencies[] = taxonomy
 dependencies[] = text

@@ -31,7 +31,7 @@ Scenario: 1. Validating Copy needed when Headline filled 2. Creating a valid Pro
   And I select the radio button "Square (140x140)"
   And I fill in "Copy field" for "edit-field-utexas-promo-units-und-0-copy-value" in the "field_utexas_promo_units_values" region
 
-  And I fill in "http://www.google.com" for "edit-field-utexas-promo-units-und-0-link" in the "field_utexas_promo_units_values" region
+  And I fill in "/profiles/utexas/themes/forty_acres/screenshot.png" for "edit-field-utexas-promo-units-und-0-link" in the "field_utexas_promo_units_values" region
   And I fill in "Read more" for "edit-field-utexas-promo-units-und-0-cta" in the "field_utexas_promo_units_values" region
   And I press the "Save" button
   Then I should see the message "Standard Page test form has been created."

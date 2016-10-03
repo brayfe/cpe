@@ -172,13 +172,12 @@ function utexas_quick_links_field_validate($entity_type, $entity, $field,
       if (is_array($item['links'])) {
         // Bypass if data is coming from a migration.
         $link_array = $item['links'];
-        foreach ($link_array as $delta => $link) {
+        foreach ($link_array as $key => $link) {
           // Validate URL.
-          $target = drupal_get_normal_path($link['link_url']);
-          if (!empty($link['link_url']) and !drupal_valid_path($target)) {
+          if (!utexas_admin_drupal_path_exists($link['link_url'])) {
             $errors[$field['field_name']][$langcode][0][] = array(
               'error' => 'link_invalid',
-              'message' => t('%field: The path provided is not a valid URL alias or external link.',
+              'message' => t('%field: ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR,
               array('%field' => $instance['label'])),
             );
           }
@@ -231,8 +230,7 @@ function utexas_quick_links_field_widget_error($element, $error, $form, &$form_s
       // Loop through the links, flagging all of the elements with a problem.
       foreach (element_children($element['links']) as $key) {
         $link = $element['links'][$key]['link_url']['#value'];
-        $target = drupal_get_normal_path($link);
-        if (!empty($link) and !drupal_valid_path($target)) {
+        if (!empty($link) and !utexas_admin_drupal_path_exists($link)) {
           form_error($element['links'][$key]['link_url'], $error['message']);
         }
       }

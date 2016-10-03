@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * Tests the functionality of the Utexas Events module.
+ */
+class UtexasAdminTestCase extends DrupalWebTestCase {
+  protected $privileged_user;
+  protected $profile = 'utexas';
+
+  public static function getInfo() {
+    return array(
+      'name' => 'UTexas Admin',
+      'description' => 'Ensure helper functions work as expected',
+      'group' => 'UTexas',
+    );
+  }
+
+  public function setUp() {
+    // Enable any modules required for the test. No user is needed to execute
+    // the existing tests.
+   parent::setUp(array('utexas_page_builder', 'token'));
+  }
+
+  /**
+   * Test the utexas_admin_drupal_path_exists() function.
+   */
+  public function testUTexasAdminDrupalPathExists() {
+
+    $node = new stdClass();
+    $node->title = 'Test';
+    $node->type = 'page';
+    node_object_prepare($node);
+    $node->language = LANGUAGE_NONE;
+    $node->status = 1;
+    $node->promote = 0;
+    $node->comment = 0;
+    $node->body = 'Test only';
+    // Add default user and creation date.
+    $node = node_submit($node);
+    node_save($node);
+
+    $scenarios = array(
+      'http://www.utexas.edu' => TRUE,
+      'node/1' => TRUE,
+      '/profiles/utexas/themes/forty_acres/screenshot.png' => TRUE,
+      'node/fail' => FALSE,
+      '/profiles/utexas/themes/forty_acres/fail.png' => FALSE,
+      '' => TRUE,
+    );
+    // The result from the function should match the $now timestamp.
+    foreach ($scenarios as $path => $expected) {
+      $result = utexas_admin_drupal_path_exists($path);
+      $message = format_string('The path %path should be %expected . Result is %result.', array('%path' => $path, '%expected' => $expected, '%result' => $result));
+      $this->assertTrue($result == $expected, $message);
+    }
+
+  }
+}
