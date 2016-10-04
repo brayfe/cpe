@@ -217,10 +217,6 @@ function _simplesaml_auth_user_login($ext_user) {
     $user = $ext_user;
   }
 
-  if (variable_get('simplesamlphp_auth_lock_saml_attrs', '0')) {
-    _simplesaml_auth_user_update($user);
-  }
-
   if (module_exists('rules')) {
     rules_invoke_all('simplesamlphp_auth_rules_event_login', $user);
   }

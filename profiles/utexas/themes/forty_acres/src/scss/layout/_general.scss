@@ -199,3 +199,13 @@ button.secondary, .button.secondary {
 		padding-bottom: 30px;
 	}
 }
+
+// Override tablesaw CSS so display respects table-cells centered in ckeditor.
+table {
+	.rtecenter {
+		text-align: center!important;
+	}
+	.rteright {
+		text-align: right!important;
+	}
+}

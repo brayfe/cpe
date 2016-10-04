@@ -99,15 +99,6 @@ header{
 		}
 	}
 
-	//Smaller hero
-	&.container-hero-small {
-		.column {
-			@include respond(medium){
-				min-height: 360px;
-			}
-		}
-	}
-
 	.hero-cta {
 		position: relative;
 		background-color: white;
@@ -133,190 +124,21 @@ header{
 	}
 }
 
-	//// Text Hero 1-1
-	.container-hero1-1{
-		padding: 30px 5px;
-		background: url('../img/forty_acres/texture3.jpg');
-		background-position: top center;
-		background-repeat: no-repeat;
-		background-size: cover;
-
-		@include respond(medium){
-			padding: 60px 10px;
-		}
-
-		.hero-headline{
-			margin-bottom: 20px;
-			font-size: rem-calc(40);
-			line-height: rem-calc(26);
-			color: #FFF;
-			font-weight: 700;
-
-			@include respond(medium){
-				margin-bottom: 20px;
-				font-size: rem-calc(50);
-				line-height: rem-calc(60);
-			}
-
-			@include respond(large){
-				margin-bottom: 20px;
-				font-size: rem-calc(60);
-				line-height: rem-calc(70);
+.container-top{
+	background-color: #fff;
+	.promo-unit{
+		@include respond(small-only){
+			.cta-link{
+				font-size: rem-calc(15);
 			}
 		}
-		.hero-subhead{
-			color: #fff;
-			font-size: rem-calc(17);
-			line-height: rem-calc(23);
-			font-weight: 200;
-			margin-bottom: 20px;
 
-			@include respond(medium){
-				font-weight: 200;
-				margin-bottom: 25px;
-				font-size: rem-calc(24);
-				line-height: rem-calc(32);
-			}
-		}
-		.hero-cta{
-			background-color: $burntOrange;
-			color: #fff;
-			float: left;
-			font-weight: 700;
-			padding: 10px 15px;
-			line-height: rem-calc(18);
-
-			@include respond(medium){
-				padding: 15px 25px;
-			}
-
-			&:hover{
-				background-color: $burntOrangeAccent;
-			}
+		// No Promo Photo
+		.promo-copy{
+			padding-left: 0px;
 		}
 	}
-
-	.container-top{
-		background-color: #fff;
-//		@include respond(small-only){
-//			padding: 0;
-//		}
-		.promo-unit{
-			@include respond(small-only){
-				.cta-link{
-					font-size: rem-calc(15);
-				}
-			}
-
-			// No Promo Photo
-			.promo-copy{
-				padding-left: 0px;
-			}
-		}
-
-		// Promo list collection is a field collection defined in UT Core, this needs to be revisited by ITS
-		.field_utexas_promo_list_collection{
-			margin-bottom: 20px;
-
-			@include respond(small-only){
-				padding: 0 5px;
-			}
-			.post-headline {
-				border-bottom: 2px solid #3c87a3;
-				margin: 0 0 20px;
-				padding-bottom: 7px;
-				font-weight: 700;
-			}
-			ul{
-				margin: 0;
-				padding: 0;
-			}
-			.promo-list{
-				padding-left: 0px;
-				padding-right: 0px;
-				padding-bottom: 20px;
-				.content a{
-					font-size: rem-calc(15);
-
-					@include respond(medium){
-						font-size: rem-calc(14);
-					}
-				}
-				img{
-					margin-right: 15px;
-					margin-left: 2px;
-				}
-			}
-
-			.utexas-promo-list-wrapper{
-				border-bottom: 1px solid #e1ddd2;
-			}
-
-			.utexas-promo-list-wrapper li{
-				overflow: hidden;
-			}
-			.pillar-cta{
-				background-color: #fff;
-				border: 1px solid $burntOrange;
-				color: $burntOrange;
-			}
-		}
-
-		.pillar-cta{
-			float: left;
-			font-weight: 700;
-			padding: 10px 20px;
-			margin: 0 auto;
-
-			@include respond(medium){
-				float: right;
-			}
-
-			&:hover{
-				background-color: $burntOrangeAccent;
-				color: white;
-			}
-		}
-	}
-
-	//// Mid
-	.container-mid{
-		padding: 40px 5px;
-		background-color: $navy;
-		text-align: center;
-
-		h2{
-			margin-top: 0;
-			font-size: rem-calc(28);
-			line-height: rem-calc(34);
-			font-weight: 300;
-			color: #fff;
-			font-weight: 400;
-			margin-bottom: 15px;
-
-			@include respond(medium){
-				font-size: rem-calc(40);
-				line-height: rem-calc(50);
-			}
-		}
-		p{
-			margin-bottom: 30px;
-			font-size: rem-calc(16);
-			line-height: rem-calc(22);
-			color: #F5F4F0;
-		}
-
-		.pillar-cta{
-			background-color: $burntOrange;
-			color: #fff;
-			font-weight: 700;
-
-			&:hover{
-				background-color: $burntOrangeAccent;
-				color: white;
-			}
-		}
-	}
+}
 
 .container-highlight{
 	text-align:center;
@@ -325,110 +147,9 @@ header{
 	}
 }
 
-	//// Related
-	.container-related{
-		padding: 40px 5px;
-		background: url('../img/forty_acres/clock.jpg') bottom left no-repeat;
-		background-size: cover;
-
-		@include respond(medium){
-			padding: 60px 10px 40px 10px;
-		}
-
-		.related-block{
-			border: 1px solid $navy;
-			background-color: rgba(248, 248, 248, .96);
-			padding: 20px;
-			margin-bottom: 20px;
-
-			@include respond(medium){
-				padding: 30px;
-				margin-right: 20px;
-				margin-bottom: 0px;
-			}
-			@include respond(large){
-				margin-right: 40px;
-			}
-
-			h2 {
-				color: $burntGrey;
-				font-weight: 200;
-				font-size: rem-calc(28);
-				line-height: rem-calc(34);
-				margin-top: 0px;
-				margin-bottom: 15px;
-
-				@include respond(medium){
-					font-size: rem-calc(40);
-					line-height: rem-calc(50);
-				}
-			}
-
-			p {
-				margin-bottom: 30px;
-				font-size: rem-calc(16);
-				line-height: rem-calc(22);
-			}
-
-			li {
-				padding-bottom: 20px;
-				font-size: rem-calc(17);
-				line-height: rem-calc(22);
-
-				@include respond(medium){
-					padding-bottom: 30px;
-				}
-			}
-			a {
-				font-weight: 600;
-				font-style: normal;
-				text-decoration: none;
-				&:hover{
-					color: $burntOrangeAccent;
-					text-decoration: underline;
-				}
-			}
-			.cta-link:after{
-				line-height: 1;
-			}
-		}
-
-		.field_contact_info{
-			border: 1px solid $navy;
-			background-color: rgba(248, 248, 248, .96);
-
-			@include respond(medium){
-				padding: 15px 20px 5px 20px;
-			}
-		}
-		.sidebar-content{
-			padding-bottom: 0px;
-		}
-		.sidebar-module{
-			@include respond(small-only){
-				margin-bottom: 0px;
-			}
-		}
-	}
-//  stuff to delete later on
-.container.container-mid1 {
-	background: blanchedalmond;
-	text-align: center;
-	padding-bottom: 20px;
-	padding-top: 10px;
-}
-.container.container-top1 {
-	padding-top: 20px;
-}
-.container-nav-forty_acres .sub-nav:after {
-    border-left: none;
-}
 .newsletter a.cta.sidebar-cta {
-margin: 0 0 20px 0;
+  margin: 0 0 20px 0;
 }
 .container.container-top.top-theme-2 {
-padding: 0 10px;
-}
-.container-bottom.no-padding .main-content, .container-bottom.no-padding .sidebar-content{
-  margin-top:0;
+  padding: 0 10px;
 }

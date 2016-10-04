@@ -1,6 +1,6 @@
 @mixin icon($name) {
 
-	font-family: 'UT_v3';
+	font-family: 'forty_acres_icons';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -12,26 +12,26 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	@if $name == links {
-		content: "\61";
-	}
-	@else if $name == buttons {
-        content: "\62";
-    }
-    @else if $name == external {
-        content: "\6e";
-    }
-    @else if $name == chevron-down {
-        content: "\69"; 
-    }
-    @else if $name == chevron-up {
-        content: "\6a";
-    }
-    @else if $name == close {
-        content: "\78";
-    }
-    @else if $name == search {
-        content: "\63";
-    }
+  @if $name == links {
+    content: "\f100";
+  }
+  @else if $name == buttons {
+    content: "\f101";
+  }
+  @else if $name == external {
+    content: "\f113";
+  }
+  @else if $name == chevron-down {
+    content: "\f108";
+  }
+  @else if $name == chevron-up {
+    content: "\f109";
+  }
+  @else if $name == close {
+    content: "\f123";
+  }
+  @else if $name == search {
+    content: "\f102";
+  }
 
 }

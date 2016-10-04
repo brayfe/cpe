@@ -208,11 +208,10 @@ function utexas_photo_content_area_field_validate($entity_type, $entity, $field,
           // Make sure links are valid links.
           if (!empty($link['link_url'])) {
             $haslink++;
-            $target = drupal_get_normal_path($link['link_url']);
-            if (!drupal_valid_path($target)) {
+            if (!utexas_admin_drupal_path_exists($link['link_url'])) {
               $errors[$field['field_name']][$langcode][$delta][] = array(
                 'error' => 'link_invalid',
-                'message' => t('%field: The path provided is not a valid URL alias or external link.',
+                'message' => t('%field: ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR,
                   array('%field' => $instance['label'])
                 ),
               );

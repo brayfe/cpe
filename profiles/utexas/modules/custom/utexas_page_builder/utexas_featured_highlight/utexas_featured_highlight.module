@@ -240,11 +240,10 @@ function utexas_featured_highlight_field_validate($entity_type, $entity, $field,
       }
 
       // Make sure link is valid.
-      $target = drupal_get_normal_path($link);
-      if (!empty($link) and !drupal_valid_path($target)) {
+      if (!utexas_admin_drupal_path_exists($link)) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'link_invalid',
-          'message' => t('%link: The path provided is not a valid URL alias or external link.', array('%link' => $instance['label'])),
+          'message' => t('%link: ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR, array('%link' => $instance['label'])),
         );
       }
     }

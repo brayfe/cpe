@@ -31,6 +31,7 @@ Scenario: User adds available content to landing page
   And I fill in "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." in WYSIWYG editor "wysiwyg_a"
   # Add UT Newsreel #
   And I click on the link "UT Newsreel" in the ".vertical-tabs-list" region
+  And I check the box "edit-field-utexas-newsreel-und-0-type-press-releases"
   And I fill in "Headline Text" for "edit-field-utexas-newsreel-und-0-headline"
   And I check the box "edit-field-utexas-newsreel-und-0-category-science-and-technology"
   And I fill in "View all Test" for "edit-field-utexas-newsreel-und-0-view-all"

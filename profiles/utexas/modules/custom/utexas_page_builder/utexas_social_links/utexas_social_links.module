@@ -1,24 +1,27 @@
 <?php
+
 /**
  * @file
  * Module file for the Social Links module.
  */
 
 /**
- * Defines which social media items are available
+ * Defines which social media items are available.
+ *
+ * The key => value represents the display name => icon class.
  */
 define('UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS', serialize(
   array(
-    'Facebook' => 'http://facebook.com/',
-    'Twitter' => 'http://twitter.com/',
-    'Instagram' => 'http://instagram.com/',
-    'LinkedIn' => 'http://linkedin.com/',
-    'YouTube' => 'http://youtube.com/',
-    'GooglePlus' => 'http://plus.google.com/',
-    'Flickr' => 'http://flickr.com/',
-    'Pinterest' => 'http://pinterest.com/',
-    'Tumblr' => 'http://tumblr.com/',
-    'Vimeo' => 'https://vimeo.com',
+    'Facebook' => 'icon-facebook',
+    'Twitter' => 'icon-twitter',
+    'Instagram' => 'icon-instagram',
+    'LinkedIn' => 'icon-linkedin',
+    'YouTube' => 'icon-youtube',
+    'GooglePlus' => 'icon-googleplus',
+    'Flickr' => 'icon-flickr',
+    'Pinterest' => 'icon-pinterest',
+    'Tumblr'  => 'icon-tumblr',
+    'Vimeo' => 'icon-vimeo2',
   )
 ));
 
@@ -61,8 +64,14 @@ function utexas_social_links_field_widget_info() {
  *
  * @see _utexas_flex_content_areas_add_link_empty_row()
  */
-function utexas_social_links_field_widget_form(&$form, &$form_state, $field,
-  $instance, $langcode, $items, $delta, $element) {
+function utexas_social_links_field_widget_form(&$form,
+  &$form_state,
+  $field,
+  $instance,
+  $langcode,
+  $items,
+  $delta,
+  $element) {
   switch ($instance['widget']['type']) {
     case 'utexas_social_links':
 
@@ -82,6 +91,7 @@ function utexas_social_links_field_widget_form(&$form, &$form_state, $field,
       $element['links'] = array(
         '#type' => 'fieldset',
         '#collapsible' => FALSE,
+        '#theme' => 'utexas_social_links_field_table',
         '#title' => t('Links'),
       );
 
@@ -89,18 +99,26 @@ function utexas_social_links_field_widget_form(&$form, &$form_state, $field,
       $stored_links = (isset($items[$delta]['links'])) ?
       unserialize($items[$delta]['links']) : FALSE;
 
+      $count = 0;
+      $max_delta = 10;
+      $accounts = unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS);
       // Define and populate the link fields.
-      foreach (unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS) as $name => $url) {
+      foreach (array_keys($accounts) as $name) {
         $element['links']{$name} = array(
           '#type' => 'textfield',
           '#title' => $name,
           '#size' => 60,
           '#maxlength' => 255,
           '#default_value' => (isset($stored_links[$name])) ? $stored_links[$name] : '',
-          '#attributes' => array(
-            'placeholder' => $url . '[account_handle]',
-          ),
         );
+        $element['links'][$name . '_weight'] = array(
+          '#type' => 'weight',
+          '#delta' => $max_delta,
+          '#default_value' => isset($stored_links[$name . '_weight']) ? $stored_links[$name . '_weight'] : (($max_delta - $count) * -1),
+          '#title_display' => 'invisible',
+          '#title' => t('Weight'),
+        );
+        $count++;
       }
       break;
   }
@@ -137,8 +155,8 @@ function _utexas_social_links_links_are_empty($links) {
   $links = is_array($links) ? $links : unserialize($links);
   if (!empty($links)) {
     // A migration can result in an empty array.
-    foreach ($links as $link) {
-      if (!empty($link)) {
+    foreach ($links as $key => $value) {
+      if (strpos($key, '_weight') === FALSE && $value != '') {
         return FALSE;
       }
     }
@@ -151,8 +169,13 @@ function _utexas_social_links_links_are_empty($links) {
  *
  * Used to validate that a Social Link has all the required field information.
  */
-function utexas_social_links_field_validate($entity_type, $entity, $field,
-  $instance, $langcode, $items, &$errors) {
+function utexas_social_links_field_validate($entity_type,
+  $entity,
+  $field,
+  $instance,
+  $langcode,
+  $items,
+  &$errors) {
   foreach ($items as $delta => $item) {
     if (!empty($item) and !utexas_social_links_field_is_empty($item, $field)) {
 
@@ -160,16 +183,18 @@ function utexas_social_links_field_validate($entity_type, $entity, $field,
       // Make sure links are valid links.
       $haslink = 0;
       $link_array = is_array($item['links']) ? $item['links'] : unserialize($item['links']);
-      foreach ($link_array as $link) {
-        if (!empty($link) and !filter_var($link, FILTER_VALIDATE_URL)) {
-          $errors[$field['field_name']][$langcode][$delta][] = array(
-            'error' => 'link_invalid',
-            'message' => t('%field: A valid URL is required for social links.',
-            array('%field' => $instance['label'])),
-          );
-        }
-        if (!empty($link)) {
-          $haslink++;
+      foreach ($link_array as $key => $url) {
+        if (strpos($key, '_weight') === FALSE) {
+          if ($url != '' and !filter_var($url, FILTER_VALIDATE_URL)) {
+            $errors[$field['field_name']][$langcode][$delta][] = array(
+              'error' => 'link_invalid',
+              'message' => t('%field: A valid URL is required for social links.',
+              array('%field' => $instance['label'])),
+            );
+          }
+          if (!empty($url)) {
+            $haslink++;
+          }
         }
       }
 
@@ -181,9 +206,8 @@ function utexas_social_links_field_validate($entity_type, $entity, $field,
             array('%field' => $instance['label'])),
         );
       }
-
       // Make sure there is at least one link if a headline is present.
-      if (isset($item['headline']) and $haslink == 0) {
+      if (isset($item['headline']) && $item['headline'] != '' and $haslink == 0) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'link_missing',
           'message' => t('%field: A headline is present without any links. Either remove the headline or add links.',
@@ -206,7 +230,7 @@ function utexas_social_links_field_widget_error($element, $error, $form, &$form_
     case 'link_invalid':
       // Loop through the links, flagging all of the elements with a problem.
       foreach (element_children($element['links']) as $key) {
-        if ($key !== 'add_more') {
+        if (strpos($key, '_weight') === FALSE) {
           $link = $element['links'][$key];
           if (!empty($link['#value']) and !filter_var($link['#value'], FILTER_VALIDATE_URL)) {
             form_error($element['links'][$key], $error['message']);
@@ -230,8 +254,12 @@ function utexas_social_links_field_widget_error($element, $error, $form, &$form_
  *
  * Adjusts field values to save copy and text format into respective columns.
  */
-function utexas_social_links_field_presave($entity_type, $entity, $field,
-  $instance, $langcode, &$items) {
+function utexas_social_links_field_presave($entity_type,
+  $entity,
+  $field,
+  $instance,
+  $langcode,
+  &$items) {
 
   foreach ($items as $delta => &$item) {
     // Serialize links to save into links column.
@@ -239,6 +267,7 @@ function utexas_social_links_field_presave($entity_type, $entity, $field,
     $item['links'] = serialize($link_array);
   }
 }
+
 /**
  * Implements hook_field_formatter_info().
  *
@@ -258,20 +287,44 @@ function utexas_social_links_field_formatter_info() {
  *
  * Creates the formatter for Social Links.
  */
-function utexas_social_links_field_formatter_view($entity_type, $entity, $field,
- $instance, $langcode, $items, $display) {
+function utexas_social_links_field_formatter_view($entity_type,
+  $entity,
+  $field,
+  $instance,
+  $langcode,
+  $items,
+  $display) {
   $element = array();
   $settings = $display['settings'];
 
   switch ($display['type']) {
     case 'utexas_social_links':
+      $accounts = unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS);
       foreach ($items as $delta => $item) {
+        // Sort link items by weight.
+        $sorted_fields = array();
+        $count = 0;
+        $links = unserialize($item['links']);
+        foreach (array_keys($accounts) as $name) {
+          $sorted_fields[$name] = isset($links[$name . '_weight']) ? $links[$name . '_weight'] : $count;
+          $count++;
+        }
+        asort($sorted_fields);
+        foreach ($sorted_fields as $key => $weight) {
+          // Store the URL from the $links array.
+          if (isset($links[$key])) {
+            $sorted_links[$key] = $links[$key];
+          }
+        }
+        // Recast the $item['links'] for display logic.
+        $item['links'] = $sorted_links;
         $element[] = array(
           '#type' => 'markup',
           '#markup' => theme('utexas_social_links', array('item' => $item)),
           '#attached' => array(
             'css' => array(drupal_get_path('module', 'utexas_social_links') .
-              '/theme/utexas_social_links.css'),
+              '/theme/utexas_social_links.css',
+            ),
           ),
         );
       }
@@ -295,7 +348,68 @@ function utexas_social_links_theme($existing, $type, $theme, $path) {
       ),
       'template' => 'theme/utexas-social-links',
     ),
+    'utexas_social_links_field_table' => array(
+      'render element' => 'form',
+    ),
   );
+}
+
+/**
+ * Theme process function to put page edit fields into a draggable table.
+ */
+function theme_utexas_social_links_field_table(&$variables) {
+  // Get the useful values.
+  $form = $variables['form'];
+  $output = '';
+
+  $table_id = drupal_html_id($form['#id'] . '_values');
+  $order_class = $form['#id'] . '-delta-order';
+
+  $header = array(
+    array('data' => t('Account'), 'colspan' => 2),
+    t('URL'),
+    t('Weight'),
+  );
+  $rows = array();
+  $accounts = unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS);
+  $sorted_fields = array();
+  foreach (array_keys($accounts) as $name) {
+    $weight = $form[$name . '_weight']['#value'];
+    $sorted_fields[$name] = $weight;
+  }
+  asort($sorted_fields);
+
+  // Add the links as table rows.
+  foreach (array_keys($sorted_fields) as $name) {
+    $machine_name = _utexas_admin_machine_name($name);
+    $form[$name . '_weight']['#attributes']['class'] = array($order_class);
+    $delta_element = drupal_render($form[$name . '_weight']);
+    $cells = array(
+      array('data' => drupal_render($form[$name . '_weight']), 'class' => array('field-multiple-drag')),
+      array('data' => $name),
+      array('data' => drupal_render($form[$name])),
+      array('data' => $delta_element, 'class' => array('delta-order')),
+    );
+    $rows[] = array(
+      'data' => $cells,
+      'class' => array('draggable'),
+      'id' => $table_id . '-' . $machine_name,
+    );
+  }
+
+  // Create the table drag.
+  $output  = '<div class="field-table">';
+  $output .= theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array('id' => $table_id),
+  ));
+  $output .= '</div>';
+
+  // Order the table drag.
+  drupal_add_tabledrag($table_id, 'order', 'sibling', $order_class);
+
+  return $output;
 }
 
 /**
@@ -308,21 +422,41 @@ function utexas_social_links_theme($existing, $type, $theme, $path) {
 function template_preprocess_utexas_social_links(&$variables) {
   // Sanitize and offer default headline.
   $output = array();
+  $accounts = unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS);
   $headline = (!empty($variables['item']['headline'])) ?
   check_plain($variables['item']['headline']) : 'Connect';
-  $links = !empty($variables['item']['links']) ? unserialize($variables['item']['links']) : array();
+  $links = !empty($variables['item']['links']) ? $variables['item']['links'] : array();
+  $items = array();
   // Filter out links without values.
   foreach ($links as $key => $link) {
     if (!empty($link)) {
       $output[$key] = $link;
+      $formatted_link = l('<span class="' . $accounts[$key] . '"><span class="hiddenText">' . $key . '</span></span>', $link, array(
+        'html' => TRUE,
+        'attributes' => array(
+          'class' => 'connect-link',
+          'title' => $key,
+        ),
+      ));
+      $items[] = array(
+        'data' => $formatted_link,
+      );
     }
   }
   // Unset unneeded variables.
   unset($variables['item']);
 
+  $attributes = array(
+    'class' => 'connect-links',
+  );
   // Reset variables.
   $variables += array(
     'headline' => $headline,
-    'links' => $output,
+    'links' => theme('item_list', array(
+      'items' => $items,
+      'title' => '',
+      'type' => 'ul',
+      'attributes' => $attributes,
+    )),
   );
 }

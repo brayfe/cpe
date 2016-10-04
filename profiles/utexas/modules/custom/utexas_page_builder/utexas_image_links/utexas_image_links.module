@@ -144,11 +144,10 @@ function utexas_image_links_field_validate($entity_type, $entity, $field,
       }
 
       // Make sure a link is a valid link.
-      $target = drupal_get_normal_path($href);
-      if (!empty($href) and !drupal_valid_path($target)) {
+      if (!utexas_admin_drupal_path_exists($href)) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'utexas_image_link_bad_href',
-          'message' => t('%field: A valid URL is required for an image link.',
+          'message' => t('%field: ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR,
             array('%field' => $instance['label'])),
         );
       }

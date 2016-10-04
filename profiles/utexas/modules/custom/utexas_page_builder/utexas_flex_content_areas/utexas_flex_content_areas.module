@@ -228,11 +228,10 @@ function utexas_flex_content_areas_field_validate($entity_type, $entity, $field,
       }
 
       // Make sure a CTA link is a valid link.
-      $target = drupal_get_normal_path($item['cta']['cta_link']);
-      if (!empty($item['cta']['cta_link']) and !drupal_valid_path($target)) {
+      if (!utexas_admin_drupal_path_exists($item['cta']['cta_link'])) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'cta_link_invalid',
-          'message' => t('%field: A valid URL is required for a call to action link.', array('%field' => $instance['label'])),
+          'message' => t('%field: ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR, array('%field' => $instance['label'])),
         );
       }
       if (isset($item['links'])) {
@@ -251,11 +250,10 @@ function utexas_flex_content_areas_field_validate($entity_type, $entity, $field,
         // Make sure links are valid links.
         if (is_array($item['links'])) {
           foreach ($item['links'] as $key => $link) {
-            $target = drupal_get_normal_path($link['link_url']);
-            if (!empty($link['link_url']) and !drupal_valid_path($target)) {
+            if (!empty($link['link_url']) and !utexas_admin_drupal_path_exists($link['link_url'])) {
               $errors[$field['field_name']][$langcode][$delta][] = array(
                 'error' => 'link_invalid',
-                'message' => t('%field: The path provided is not a valid URL alias or external link.',
+                'message' => t('%field: ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR,
                 array('%field' => $instance['label'])),
               );
             }

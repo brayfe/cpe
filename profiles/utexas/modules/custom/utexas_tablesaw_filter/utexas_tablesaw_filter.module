@@ -98,11 +98,26 @@ function utexas_tablesaw_filter_filter_info() {
  * Filter callback for tablesaw filter.
  */
 function _tablesaw_filter($text, $filter, $format, $langcode, $cache, $cache_id) {
+  // Older versions of libxml always add DOCTYPE, <html>, and <body> tags.
+  // See http://www.php.net/manual/en/libxml.constants.php.
+  // Sometimes, PHP is >= 5.4, but libxml is old enough that the constants are
+  // not defined.
+  static $new_libxml;
+  if (!isset($new_libxml)) {
+    $new_libxml = version_compare(PHP_VERSION, '5.4', '>=') && defined('LIBXML_HTML_NOIMPLIED') && defined('LIBXML_HTML_NODEFDTD');
+  }
   if ($text != '') {
     $tables = array();
     libxml_use_internal_errors(TRUE);
+    // LibXML requires that the html is wrapped in a root node.
+    $text = '<root>' . $text . '</root>';
     $dom = new DOMDocument();
-    $dom->loadHTML(mb_convert_encoding($text, 'HTML-ENTITIES', 'UTF-8'));
+    if ($new_libxml) {
+      $dom->loadHTML(mb_convert_encoding($text, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    }
+    else {
+      $dom->loadHTML(mb_convert_encoding($text, 'HTML-ENTITIES', 'UTF-8'));
+    }
     // Retrieve user-defined tables defined by xpath, or default to table tag.
     $query = variable_get('responsive_tables_filter_table_xpath', FALSE);
     if ($query) {
@@ -112,9 +127,8 @@ function _tablesaw_filter($text, $filter, $format, $langcode, $cache, $cache_id)
     else {
       $tables = $dom->getElementsByTagName('table');
     }
-    // Check if the text contains <table> tags.
+    // Find all tables in text.
     if ($tables->length !== 0) {
-      // Find all tables in text.
       foreach ($tables as $table) {
         // Find existing class attributes, if any, and append tablesaw class.
         $existing_classes = $table->getAttribute('class');
@@ -124,7 +138,19 @@ function _tablesaw_filter($text, $filter, $format, $langcode, $cache, $cache_id)
         // Force data-tablesaw-mode attribute to be "stack".
         $table->setAttribute('data-tablesaw-mode', 'stack');
       }
-      return $dom->saveHTML();
+      // Get innerHTML of root node.
+      $html = "";
+      foreach ($dom->getElementsByTagName('root')->item(0)->childNodes as $child) {
+        // Re-serialize the HTML.
+        $html .= $dom->saveHTML($child);
+      }
+      // For lower older libxml, use preg_replace to clean up DOCTYPE.
+      if (!$new_libxml) {
+        $html_start = strpos($html, '<html><body>') + 12;
+        $html_length = strpos($html, '</body></html>') - $html_start;
+        $html = substr($html, $html_start, $html_length);
+      }
+      return $html;
     }
   }
   return $text;

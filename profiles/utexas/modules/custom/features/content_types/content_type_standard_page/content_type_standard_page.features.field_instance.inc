@@ -519,30 +519,7 @@ function content_type_standard_page_field_default_field_instances() {
   // Exported field_instance: 'node-standard_page-field_utexas_newsreel'.
   $field_instances['node-standard_page-field_utexas_newsreel'] = array(
     'bundle' => 'standard_page',
-    'default_value' => array(
-      0 => array(
-        'headline' => 'Latest from UTNews',
-        'type' => array(
-          'news' => 'news',
-          'press-releases' => 'press-releases',
-          'texas-perspectives' => 'texas-perspectives',
-        ),
-        'category' => array(
-          'arts-and-humanities' => 'arts-and-humanities',
-          'business-and-economy' => 'business-and-economy',
-          'campus-and-community' => 'campus-and-community',
-          'education-and-leadership' => 'education-and-leadership',
-          'health-and-wellness' => 'health-and-wellness',
-          'policy-and-law' => 'policy-and-law',
-          'science-and-technology' => 'science-and-technology',
-        ),
-        'tag' => '',
-        'count' => 4,
-        'include_description' => 1,
-        'refresh_rate' => 1,
-        'view_all' => 'View all news',
-      ),
-    ),
+    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(

@@ -41,11 +41,11 @@ Scenario: Verify user can save all fields on hero photo *full* display, hero sty
   And I press the "Save" button
   And I fill in "Heading text" for "edit-field-utexas-hero-photo-und-0-caption"
   And I fill in "Subheading" for "edit-field-utexas-hero-photo-und-0-subhead"
-  And I fill in "invalidlink" for "edit-field-utexas-hero-photo-und-0-link-link-href"
+  And I fill in "profiles/utexas/themes/forty_acres/screenshot.png" for "edit-field-utexas-hero-photo-und-0-link-link-href"
   And I fill in "Call to Action" for "edit-field-utexas-hero-photo-und-0-link-link-title"
   And I press the "Save" button
-  Then I should see the error message "Hero Photo: A valid URL is required for a link."
-  When I fill in "<front>" for "edit-field-utexas-hero-photo-und-0-link-link-href"
+  Then I should see the error message "Hero Photo: The path provided is not a valid URL alias or external link."
+  When I fill in "/profiles/utexas/themes/forty_acres/screenshot.png" for "edit-field-utexas-hero-photo-und-0-link-link-href"
   And I press the "Save" button
   Then I should see the text "Test full-width Hero Photo" in the "page_title" region
   And I should see the ".container.container-hero" css selector with css property "background-image" containing "/utexas_hero_photo_image_full/public/hero-photos-full/"

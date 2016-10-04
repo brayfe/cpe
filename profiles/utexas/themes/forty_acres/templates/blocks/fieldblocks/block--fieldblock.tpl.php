@@ -17,7 +17,7 @@
  * @ingroup themeable.
  */
 ?>
-<?php if (isset($block->edit_links)): ?>
+<?php if (isset($block->edit_links) && ($block->title != 'Contact Info ')): ?>
   <div class="edit-links">
     <?php print $block->edit_links; ?>
   </div>

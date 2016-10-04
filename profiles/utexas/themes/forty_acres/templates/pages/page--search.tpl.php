@@ -55,8 +55,6 @@
              print $search_cse;
              print $google_logo;
              print '<div class="search_logo_text">Custom Search</div>';
-            else :
-              print $drupal_search;
             endif;
             print render($page['content']);
           ?>

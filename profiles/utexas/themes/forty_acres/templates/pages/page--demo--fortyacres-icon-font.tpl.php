@@ -58,7 +58,7 @@ ul.icon-demo {padding-top: 40px;}
     <?php if (file_exists($partial_page_top)) : require_once $partial_page_top; endif; ?>
     <?php if (!isset($no_title)): ?>
       <div class="row">
-        <div class="column small-block-grid-1">
+        <div class="column small-12">
           <h1 class="page-title"><?php print $title; ?></h1>
         </div>
       </div>
@@ -78,9 +78,23 @@ ul.icon-demo {padding-top: 40px;}
       <ul class="columns small-block-grid-1 medium-block-grid-2 large-block-grid-3 icon-demo">
           <li class="glyph fs2">
               <div class="pbs">
-                  <span class="icon-location"></span>
-                  <span class="mls"> icon-location</span>
-                  <div class="unicode">\f060</div>
+                  <span class="icon-controller-play"></span>
+                  <span class="mls"> icon-controller-play</span>
+                  <div class="unicode">\e900</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-facebook2"></span>
+                  <span class="mls"> icon-facebook2</span>
+                  <div class="unicode">\ea90</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-instagram2"></span>
+                  <span class="mls"> icon-instagram2</span>
+                  <div class="unicode">\ea92</div>
               </div>
           </li>
           <li class="glyph fs2">
@@ -99,8 +113,141 @@ ul.icon-demo {padding-top: 40px;}
           </li>
           <li class="glyph fs2">
               <div class="pbs">
-                  <span class="icon-reply2"></span>
-                  <span class="mls"> icon-reply2</span>
+                  <span class="icon-location"></span>
+                  <span class="mls"> icon-location</span>
+                  <div class="unicode">\f060</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-vimeo2"></span>
+                  <span class="mls"> icon-vimeo2</span>
+                  <div class="unicode">\eaa1</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-vimeo-square"></span>
+                  <span class="mls"> icon-vimeo-square</span>
+                  <div class="unicode">\f194</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-envelope"></span>
+                  <span class="mls"> icon-envelope</span>
+                  <div class="unicode">\f003</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-heart"></span>
+                  <span class="mls"> icon-heart</span>
+                  <div class="unicode">\f004</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-star"></span>
+                  <span class="mls"> icon-star</span>
+                  <div class="unicode">\f005</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-check"></span>
+                  <span class="mls"> icon-check</span>
+                  <div class="unicode">\f00c</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-remove"></span>
+                  <span class="mls"> icon-remove</span>
+                  <div class="unicode">\f00d</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-file"></span>
+                  <span class="mls"> icon-file</span>
+                  <div class="unicode">\f016</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-lock"></span>
+                  <span class="mls"> icon-lock</span>
+                  <div class="unicode">\f023</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-warning"></span>
+                  <span class="mls"> icon-warning</span>
+                  <div class="unicode">\f071</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-comment"></span>
+                  <span class="mls"> icon-comment</span>
+                  <div class="unicode">\f075</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-retweet"></span>
+                  <span class="mls"> icon-retweet</span>
+                  <div class="unicode">\f079</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-phone"></span>
+                  <span class="mls"> icon-phone</span>
+                  <div class="unicode">\f095</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-twitter-bird"></span>
+                  <span class="mls"> icon-twitter-bird</span>
+                  <div class="unicode">\f099</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-caret-down"></span>
+                  <span class="mls"> icon-caret-down</span>
+                  <div class="unicode">\f0d7</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-file-text"></span>
+                  <span class="mls"> icon-file-text</span>
+                  <div class="unicode">\f0f6</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-mail-reply"></span>
+                  <span class="mls"> icon-mail-reply</span>
+                  <div class="unicode">\f11a</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-calendar"></span>
+                  <span class="mls"> icon-calendar</span>
+                  <div class="unicode">\f133</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-reply"></span>
+                  <span class="mls"> icon-reply</span>
                   <div class="unicode">\e600</div>
               </div>
           </li>
@@ -190,9 +337,9 @@ ul.icon-demo {padding-top: 40px;}
           </li>
           <li class="glyph fs2">
               <div class="pbs">
-                  <span class="icon-announcement"></span>
-                  <span class="mls"> icon-announcement</span>
-                  <div class="unicode">\f114</div>
+                  <span class="icon-alert"></span>
+                  <span class="mls"> icon-alert</span>
+                  <div class="unicode">\f112</div>
               </div>
           </li>
           <li class="glyph fs2">
@@ -200,6 +347,13 @@ ul.icon-demo {padding-top: 40px;}
                   <span class="icon-external-link"></span>
                   <span class="mls"> icon-external-link</span>
                   <div class="unicode">\f113</div>
+              </div>
+          </li>
+          <li class="glyph fs2">
+              <div class="pbs">
+                  <span class="icon-announcement"></span>
+                  <span class="mls"> icon-announcement</span>
+                  <div class="unicode">\f114</div>
               </div>
           </li>
           <li class="glyph fs2">
@@ -263,118 +417,6 @@ ul.icon-demo {padding-top: 40px;}
                   <span class="icon-close"></span>
                   <span class="mls"> icon-close</span>
                   <div class="unicode">\f123</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-envelope"></span>
-                  <span class="mls"> icon-envelope</span>
-                  <div class="unicode">\f003</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-star"></span>
-                  <span class="mls"> icon-star</span>
-                  <div class="unicode">\f005</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-check"></span>
-                  <span class="mls"> icon-check</span>
-                  <div class="unicode">\f00c</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-remove"></span>
-                  <span class="mls"> icon-remove</span>
-                  <div class="unicode">\f00d</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-file"></span>
-                  <span class="mls"> icon-file</span>
-                  <div class="unicode">\f016</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-lock"></span>
-                  <span class="mls"> icon-lock</span>
-                  <div class="unicode">\f023</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-warning"></span>
-                  <span class="mls"> icon-warning</span>
-                  <div class="unicode">\f071</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-retweet"></span>
-                  <span class="mls"> icon-retweet</span>
-                  <div class="unicode">\f079</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-phone"></span>
-                  <span class="mls"> icon-phone</span>
-                  <div class="unicode">\f095</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-twitter-bird"></span>
-                  <span class="mls"> icon-twitter-bird</span>
-                  <div class="unicode">\f099</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-caret-down-solid"></span>
-                  <span class="mls"> icon-caret-down-solid</span>
-                  <div class="unicode">\f0d7</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-file-text"></span>
-                  <span class="mls"> icon-file-text</span>
-                  <div class="unicode">\f0f6</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-mail-reply"></span>
-                  <span class="mls"> icon-mail-reply</span>
-                  <div class="unicode">\f11a</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-calendar"></span>
-                  <span class="mls"> icon-calendar</span>
-                  <div class="unicode">\f133</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-vimeo-square"></span>
-                  <span class="mls"> icon-vimeo-square</span>
-                  <div class="unicode">\f194</div>
-              </div>
-          </li>
-          <li class="glyph fs2">
-              <div class="pbs">
-                  <span class="icon-vimeo2"></span>
-                  <span class="mls"> icon-vimeo2</span>
-                  <div class="unicode">\eaa1</div>
               </div>
           </li>
       </ul>
