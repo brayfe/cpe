@@ -1,6 +1,6 @@
 name = Utexas
 description = UT Drupal Kit installation profile
-version = "7.x-2.3.3"
+version = "7.x-2.4"
 core = 7.x
 php = 5.4
 
