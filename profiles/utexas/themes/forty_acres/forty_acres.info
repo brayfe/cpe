@@ -51,3 +51,6 @@ settings[secondary_menu] = 'social_accounts'
 settings[display_social_icons] = '1'
 settings[newsletter_exists] = '0'
 settings[logo_height] = 'short_logo'
+settings[utexas_standard_page_breadcrumb] = '1'
+settings[utexas_landing_page_breadcrumb] = '0'
+settings[enable_menus] = 0

@@ -19,6 +19,7 @@ Scenario: Verify
   And I fill in "Revision 1" in WYSIWYG editor "wysiwyg_a"
   # Add UT Newsreel #
   And I click on the link "UT Newsreel" in the ".vertical-tabs-list" region
+  And I check the box "edit-field-utexas-newsreel-und-0-type-press-releases"
   And I fill in "Headline Text" for "edit-field-utexas-newsreel-und-0-headline"
   And I check the box "edit-field-utexas-newsreel-und-0-category-science-and-technology"
   And I fill in "View all Test" for "edit-field-utexas-newsreel-und-0-view-all"

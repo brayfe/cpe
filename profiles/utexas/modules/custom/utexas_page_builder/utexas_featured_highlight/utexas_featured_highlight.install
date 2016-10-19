@@ -129,6 +129,6 @@ function utexas_featured_highlight_install() {
  *
  * Intentionally left blank to register an uninstall of the field.
  */
-function utexas_highlight_uninstall() {
+function utexas_featured_highlight_uninstall() {
   // Left blank to force an uninstall of the schema.
 }

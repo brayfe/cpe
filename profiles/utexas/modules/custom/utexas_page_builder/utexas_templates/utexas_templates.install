@@ -127,12 +127,6 @@ function utexas_templates_install() {
             'enabled' => TRUE,
             'locked' => FALSE,
           ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -12,
-            'enabled' => TRUE,
-            'locked' => FALSE,
-          ),
           'field_utexas_image_link_a' => array(
             'machine_name' => 'field_utexas_image_link_a',
             '_weight' => -11,
@@ -257,12 +251,6 @@ function utexas_templates_install() {
             'enabled' => TRUE,
             'locked' => FALSE,
           ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -11,
-            'enabled' => TRUE,
-            'locked' => FALSE,
-          ),
           'field_utexas_image_link_a' => array(
             'machine_name' => 'field_utexas_image_link_a',
             '_weight' => -10,
@@ -375,12 +363,6 @@ function utexas_templates_install() {
             'enabled' => TRUE,
             'locked' => FALSE,
           ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -10,
-            'enabled' => TRUE,
-            'locked' => FALSE,
-          ),
           'field_utexas_image_link_a' => array(
             'machine_name' => 'field_utexas_image_link_a',
             '_weight' => -9,
@@ -440,7 +422,7 @@ function utexas_templates_install() {
             '_weight' => 3,
             'enabled' => TRUE,
             'locked' => FALSE,
-          ), 
+          ),
         ),
         'template_icon_fid' => 'promotional-page-sidebar.svg',
       ),
@@ -496,12 +478,6 @@ function utexas_templates_install() {
           'field_utexas_hero_photo' => array(
             'machine_name' => 'field_utexas_hero_photo',
             '_weight' => -12,
-            'enabled' => TRUE,
-            'locked' => FALSE,
-          ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -11,
             'enabled' => TRUE,
             'locked' => FALSE,
           ),
@@ -635,12 +611,6 @@ function utexas_templates_install() {
             'enabled' => TRUE,
             'locked' => FALSE,
           ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -11,
-            'enabled' => TRUE,
-            'locked' => FALSE,
-          ),
           'field_utexas_image_link_a' => array(
             'machine_name' => 'field_utexas_image_link_a',
             '_weight' => -10,
@@ -765,12 +735,6 @@ function utexas_templates_install() {
             'enabled' => FALSE,
             'locked' => FALSE,
           ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -8,
-            'enabled' => FALSE,
-            'locked' => FALSE,
-          ),
           'field_utexas_image_link_a' => array(
             'machine_name' => 'field_utexas_image_link_a',
             '_weight' => -7,
@@ -886,12 +850,6 @@ function utexas_templates_install() {
           'field_utexas_photo_content_area' => array(
             'machine_name' => 'field_utexas_photo_content_area',
             '_weight' => -9,
-            'enabled' => FALSE,
-            'locked' => FALSE,
-          ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -8,
             'enabled' => FALSE,
             'locked' => FALSE,
           ),
@@ -1013,12 +971,6 @@ function utexas_templates_install() {
             'enabled' => FALSE,
             'locked' => FALSE,
           ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -7,
-            'enabled' => FALSE,
-            'locked' => FALSE,
-          ),
           'field_utexas_image_link_a' => array(
             'machine_name' => 'field_utexas_image_link_a',
             '_weight' => -6,
@@ -1131,12 +1083,6 @@ function utexas_templates_install() {
             'enabled' => TRUE,
             'locked' => TRUE,
           ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -11,
-            'enabled' => TRUE,
-            'locked' => FALSE,
-          ),
           'field_utexas_image_link_a' => array(
             'machine_name' => 'field_utexas_image_link_a',
             '_weight' => -10,
@@ -1196,6 +1142,12 @@ function utexas_templates_install() {
       'additional_settings' => array(
         'template_file' => 'page--landing-page-template-2.tpl.php',
         'fields' => array(
+          'field_utexas_featured_highlight' => array(
+            'machine_name' => 'field_utexas_featured_highlight',
+            '_weight' => -21,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
           'field_wysiwyg_a' => array(
             'machine_name' => 'field_wysiwyg_a',
             '_weight' => -20,
@@ -1249,12 +1201,6 @@ function utexas_templates_install() {
             '_weight' => -22,
             'enabled' => TRUE,
             'locked' => TRUE,
-          ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -11,
-            'enabled' => TRUE,
-            'locked' => FALSE,
           ),
           'field_utexas_image_link_a' => array(
             'machine_name' => 'field_utexas_image_link_a',
@@ -1374,12 +1320,6 @@ function utexas_templates_install() {
             '_weight' => -22,
             'enabled' => TRUE,
             'locked' => TRUE,
-          ),
-          'field_gift_link' => array(
-            'machine_name' => 'field_gift_link',
-            '_weight' => -11,
-            'enabled' => TRUE,
-            'locked' => FALSE,
           ),
           'field_utexas_image_link_a' => array(
             'machine_name' => 'field_utexas_image_link_a',

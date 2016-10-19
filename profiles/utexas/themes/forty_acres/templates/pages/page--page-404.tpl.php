@@ -54,8 +54,6 @@
            <?php
               if (isset($search_cse)) :
                 print $search_cse;
-              else :
-                print $drupal_search;
               endif;
             ?>
           </div>

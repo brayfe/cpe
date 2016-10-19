@@ -1,0 +1,5 @@
+name = UTexas Navigation 404
+description = Provide option to enable menus on 404 pages
+core = 7.x
+package = UTexas
+version = UTEXAS_DISTRO_VERSION

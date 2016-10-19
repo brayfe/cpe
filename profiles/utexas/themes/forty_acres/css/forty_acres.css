@@ -277,18 +277,6 @@ select {
 	float: none;
 }
 
-.ct--last-updated {
-	color: #6a6a6a;
-	border-top: 1px solid #cacaca;
-	width: 100%;
-}
-
-.ct--last-updated p {
-	font-size: 0.75rem;
-	margin-top: 2px;
-	float: right;
-}
-
 .events {
 	position: relative;
 	padding: 0px 0 20px 0;
@@ -334,78 +322,6 @@ select {
 
 .news .cta-link:after {
 	margin-top: 4px;
-}
-
-.ct--sign-up .headline {
-	font-size: 1.125rem;
-	font-weight: 700;
-	margin-bottom: 10px;
-}
-
-.ct--sign-up .newsletter {
-	padding: 0 10px; /* Landscape phones and down */ /* Landscape phones and down */
-}
-
-.ct--sign-up .newsletter-form {
-	height: 38px;
-	max-width: 400px;
-	border: 1px solid #a1a1a1;
-	position: relative;
-}
-
-.ct--sign-up .body-copy {
-	margin-top: 10px;
-	margin-bottom: 10px !important;
-}
-
-.ct--sign-up input.newsletter-input {
-	border: none;
-	background: #fff;
-	font-size: 1rem;
-	height: 38px;
-	float: left;
-	width: 100%;
-	padding: 0 10px;
-	outline: none;
-	border-bottom: 1px solid #afafaf;
-}
-
-.ct--sign-up input.newsletter-input.placeholder {
-	font-style: italic;
-}
-
-.ct--sign-up input.newsletter-input::-webkit-input-placeholder {
-	font-style: italic;
-}
-
-.ct--sign-up input.newsletter-input::-moz-placeholder {
-	font-style: italic;
-}
-
-.ct--sign-up input.newsletter-input:-ms-input-placeholder {
-	font-style: italic;
-}
-
-.ct--sign-up input.newsletter-input::placeholder {
-	font-style: italic;
-}
-
-.ct--sign-up .newsletter-button {
-	position: absolute;
-	top: 0;
-	right: 0;
-	background: none;
-	border: none;
-	height: 38px;
-	color: #BF5700;
-	float: right;
-	text-align: right;
-}
-
-.ct--sign-up .icon-buttons {
-	position: relative;
-	top: -8px;
-	right: -20px;
 }
 
 .sidebar-twitter-style {
@@ -872,9 +788,6 @@ header {
 	right: 15px;
 }
 
-.container-hero.container-hero-small .column { /* Landscape phones and down */
-}
-
 .container-hero .hero-cta {
 	position: relative;
 	background-color: white;
@@ -883,43 +796,6 @@ header {
 
 .container-hero .hero-cta .icon-buttons {
 	margin-left: 3px;
-}
-
-.container-hero1-1 {
-	padding: 30px 5px;
-	background: url("../img/forty_acres/texture3.jpg");
-	background-position: top center;
-	background-repeat: no-repeat;
-	background-size: cover; /* Landscape phones and down */
-}
-
-.container-hero1-1 .hero-headline {
-	margin-bottom: 20px;
-	font-size: 2.5rem;
-	line-height: 1.625rem;
-	color: #FFF;
-	font-weight: 700; /* Landscape phones and down */ /* Landscape phones and down */
-}
-
-.container-hero1-1 .hero-subhead {
-	color: #fff;
-	font-size: 1.0625rem;
-	line-height: 1.4375rem;
-	font-weight: 200;
-	margin-bottom: 20px; /* Landscape phones and down */
-}
-
-.container-hero1-1 .hero-cta {
-	background-color: #BF5700;
-	color: #fff;
-	float: left;
-	font-weight: 700;
-	padding: 10px 15px;
-	line-height: 1.125rem; /* Landscape phones and down */
-}
-
-.container-hero1-1 .hero-cta:hover {
-	background-color: #A04400;
 }
 
 .container-top {
@@ -933,97 +809,6 @@ header {
 	padding-left: 0px;
 }
 
-.container-top .field_utexas_promo_list_collection {
-	margin-bottom: 20px; /* Landscape phones and down */
-}
-
-.container-top .field_utexas_promo_list_collection .post-headline {
-	border-bottom: 2px solid #3c87a3;
-	margin: 0 0 20px;
-	padding-bottom: 7px;
-	font-weight: 700;
-}
-
-.container-top .field_utexas_promo_list_collection ul {
-	margin: 0;
-	padding: 0;
-}
-
-.container-top .field_utexas_promo_list_collection .promo-list {
-	padding-left: 0px;
-	padding-right: 0px;
-	padding-bottom: 20px;
-}
-
-.container-top .field_utexas_promo_list_collection .promo-list .content a {
-	font-size: 0.9375rem; /* Landscape phones and down */
-}
-
-.container-top .field_utexas_promo_list_collection .promo-list img {
-	margin-right: 15px;
-	margin-left: 2px;
-}
-
-.container-top .field_utexas_promo_list_collection .utexas-promo-list-wrapper {
-	border-bottom: 1px solid #e1ddd2;
-}
-
-.container-top .field_utexas_promo_list_collection .utexas-promo-list-wrapper li {
-	overflow: hidden;
-}
-
-.container-top .field_utexas_promo_list_collection .pillar-cta {
-	background-color: #fff;
-	border: 1px solid #BF5700;
-	color: #BF5700;
-}
-
-.container-top .pillar-cta {
-	float: left;
-	font-weight: 700;
-	padding: 10px 20px;
-	margin: 0 auto; /* Landscape phones and down */
-}
-
-.container-top .pillar-cta:hover {
-	background-color: #A04400;
-	color: white;
-}
-
-.container-mid {
-	padding: 40px 5px;
-	background-color: #333F48;
-	text-align: center;
-}
-
-.container-mid h2 {
-	margin-top: 0;
-	font-size: 1.75rem;
-	line-height: 2.125rem;
-	font-weight: 300;
-	color: #fff;
-	font-weight: 400;
-	margin-bottom: 15px; /* Landscape phones and down */
-}
-
-.container-mid p {
-	margin-bottom: 30px;
-	font-size: 1rem;
-	line-height: 1.375rem;
-	color: #F5F4F0;
-}
-
-.container-mid .pillar-cta {
-	background-color: #BF5700;
-	color: #fff;
-	font-weight: 700;
-}
-
-.container-mid .pillar-cta:hover {
-	background-color: #A04400;
-	color: white;
-}
-
 .container-highlight {
 	text-align: center;
 }
@@ -1032,93 +817,12 @@ header {
 	border: none;
 }
 
-.container-related {
-	padding: 40px 5px;
-	background: url("../img/forty_acres/clock.jpg") bottom left no-repeat;
-	background-size: cover; /* Landscape phones and down */
-}
-
-.container-related .related-block {
-	border: 1px solid #333F48;
-	background-color: rgba(248, 248, 248, 0.96);
-	padding: 20px;
-	margin-bottom: 20px; /* Landscape phones and down */ /* Landscape phones and down */
-}
-
-.container-related .related-block h2 {
-	color: #2d2a28;
-	font-weight: 200;
-	font-size: 1.75rem;
-	line-height: 2.125rem;
-	margin-top: 0px;
-	margin-bottom: 15px; /* Landscape phones and down */
-}
-
-.container-related .related-block p {
-	margin-bottom: 30px;
-	font-size: 1rem;
-	line-height: 1.375rem;
-}
-
-.container-related .related-block li {
-	padding-bottom: 20px;
-	font-size: 1.0625rem;
-	line-height: 1.375rem; /* Landscape phones and down */
-}
-
-.container-related .related-block a {
-	font-weight: 600;
-	font-style: normal;
-	text-decoration: none;
-}
-
-.container-related .related-block a:hover {
-	color: #A04400;
-	text-decoration: underline;
-}
-
-.container-related .related-block .cta-link:after {
-	line-height: 1;
-}
-
-.container-related .field_contact_info {
-	border: 1px solid #333F48;
-	background-color: rgba(248, 248, 248, 0.96); /* Landscape phones and down */
-}
-
-.container-related .sidebar-content {
-	padding-bottom: 0px;
-}
-
-.container-related .sidebar-module { /* Landscape phones and down */
-}
-
-.container.container-mid1 {
-	background: blanchedalmond;
-	text-align: center;
-	padding-bottom: 20px;
-	padding-top: 10px;
-}
-
-.container.container-top1 {
-	padding-top: 20px;
-}
-
-.container-nav-forty_acres .sub-nav:after {
-	border-left: none;
-}
-
 .newsletter a.cta.sidebar-cta {
 	margin: 0 0 20px 0;
 }
 
 .container.container-top.top-theme-2 {
 	padding: 0 10px;
-}
-
-.container-bottom.no-padding .main-content,
-.container-bottom.no-padding .sidebar-content {
-	margin-top: 0;
 }
 
 .footer-theme2 {
@@ -1167,37 +871,9 @@ header {
 .footer-theme2 .footer-tertiary { /* Landscape phones and down */
 }
 
-.footer-theme2 .footer-tertiary .footer-headline {
-	font-size: 1rem;
-	color: #333F48;
-	font-weight: bold;
-	margin: 0 0 10px 0; /* Landscape phones and down */
-}
-
-.footer-theme2 .footer-tertiary .newsletter-form {
-	height: 38px;
-	border: 1px solid #a1a1a1;
-	position: relative; /* Landscape phones and down */
-}
-
 .footer-theme2 .footer-tertiary .newsletter {
 	border-bottom: 0px;
 	margin: 0 0 6px 0;
-}
-
-.footer-theme2 .footer-tertiary .newsletter input.newsletter-input {
-	background-color: #fff;
-	height: 36px;
-}
-
-.footer-theme2 .footer-tertiary .newsletter .footer-headline { /* Landscape phones and down */
-}
-
-.footer-theme2 .footer-headline {
-	font-size: 1rem;
-	color: #333F48;
-	font-weight: bold;
-	margin: 0 0 10px 0; /* Landscape phones and down */
 }
 
 .footer-theme2 .newsletter,
@@ -2359,10 +2035,6 @@ hr {
 	margin: 0 15px;
 }
 
-.ct--sign-up .newsletter {
-	padding: 0 15px;
-}
-
 .sidebar-twitter-style .module-cta {
 	width: 200px;
 	margin-left: -100px;
@@ -2497,73 +2169,12 @@ hr {
 	top: 13px;
 }
 
-.container-hero.container-hero-small .column {
-	min-height: 360px;
-}
-
 .container-hero .hero-cta {
 	position: absolute;
 	right: 15px;
 	bottom: -1px;
 	font-size: 1.125rem;
 	padding: 17px 20px;
-}
-
-.container-hero1-1 {
-	padding: 60px 10px;
-}
-
-.container-hero1-1 .hero-headline {
-	margin-bottom: 20px;
-	font-size: 3.125rem;
-	line-height: 3.75rem;
-}
-
-.container-hero1-1 .hero-subhead {
-	font-weight: 200;
-	margin-bottom: 25px;
-	font-size: 1.5rem;
-	line-height: 2rem;
-}
-
-.container-hero1-1 .hero-cta {
-	padding: 15px 25px;
-}
-
-.container-top .field_utexas_promo_list_collection .promo-list .content a {
-	font-size: 0.875rem;
-}
-
-.container-top .pillar-cta {
-	float: right;
-}
-
-.container-mid h2 {
-	font-size: 2.5rem;
-	line-height: 3.125rem;
-}
-
-.container-related {
-	padding: 60px 10px 40px 10px;
-}
-
-.container-related .related-block {
-	padding: 30px;
-	margin-right: 20px;
-	margin-bottom: 0px;
-}
-
-.container-related .related-block h2 {
-	font-size: 2.5rem;
-	line-height: 3.125rem;
-}
-
-.container-related .related-block li {
-	padding-bottom: 30px;
-}
-
-.container-related .field_contact_info {
-	padding: 15px 20px 5px 20px;
 }
 
 .footer-theme2 {
@@ -2584,25 +2195,6 @@ hr {
 
 .footer-theme2 .footer-tertiary {
 	padding-left: 32px;
-}
-
-.footer-theme2 .footer-tertiary .footer-headline {
-	font-size: 1.125rem;
-	margin: 0 0 20px 0;
-}
-
-.footer-theme2 .footer-tertiary .newsletter-form {
-	margin-bottom: 40px;
-}
-
-.footer-theme2 .footer-tertiary .newsletter .footer-headline {
-	font-size: 1.125rem;
-	margin: 0 0 12px 0;
-}
-
-.footer-theme2 .footer-headline {
-	font-size: 1.25rem;
-	margin: 0 0 20px 0;
 }
 
 .footer-theme2 .helpful-link-item {
@@ -2745,10 +2337,6 @@ body #toolbar {
 	padding: 8px 6px;
 }
 
-.ct--sign-up .newsletter {
-	padding: 0 20px;
-}
-
 .container-highlight {
 	padding: 60px 10px;
 }
@@ -2818,16 +2406,6 @@ body #toolbar {
 
 .container-hero.container-hero-right .hero-headline {
 	margin-left: 30%;
-}
-
-.container-hero1-1 .hero-headline {
-	margin-bottom: 20px;
-	font-size: 3.75rem;
-	line-height: 4.375rem;
-}
-
-.container-related .related-block {
-	margin-right: 40px;
 }
 
 .breadcrumbs {
@@ -3314,14 +2892,6 @@ body #toolbar {
 
 .container-top .promo-unit .cta-link {
 	font-size: 0.9375rem;
-}
-
-.container-top .field_utexas_promo_list_collection {
-	padding: 0 5px;
-}
-
-.container-related .sidebar-module {
-	margin-bottom: 0px;
 }
 
 .footer-theme2 .newsletter,

@@ -32,7 +32,7 @@ Scenario: Validate CTA Title
   And I fill in "Placeholder Title" for "edit-field-file-image-title-text-und-0-value"
   And I press the "Save" button
   And I fill in "Copy text field example" for "edit-field-utexas-photo-content-area-und-0-copy-value" in the "photo_content_area" region
-  And I fill in "https://www.google.com" for "edit-field-utexas-photo-content-area-und-0-links-0-link-url" in the "photo_content_area" region
+  And I fill in "/profiles/utexas/themes/forty_acres/screenshot.png" for "edit-field-utexas-photo-content-area-und-0-links-0-link-url" in the "photo_content_area" region
   And I press the "Save" button
   Then I should see the message "Standard Page Test PCA has been created."
 

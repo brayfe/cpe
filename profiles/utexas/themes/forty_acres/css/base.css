@@ -2432,6 +2432,18 @@ button.secondary,
 	padding-bottom: 30px;
 }
 
+table .rtecenter {
+	text-align: center !important;
+}
+
+table .rteright {
+	text-align: right !important;
+}
+
+body {
+	-webkit-font-smoothing: subpixel-antialiased;
+}
+
 a {
 	text-decoration: none;
 	color: #BF5700;

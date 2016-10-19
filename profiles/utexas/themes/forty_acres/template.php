@@ -51,7 +51,7 @@ function forty_acres_menu_tree__menu_footer($variables) {
   if (theme_get_setting('footer_menu_grid') == TRUE) {
     $two_column_class = 'large-block-grid-2';
   }
-    // Add classes to the wrapper and return with the menu tree.
+  // Add classes to the wrapper and return with the menu tree.
   return '<ul class="helpful-links ' . $two_column_class . '" role="menu">' . $variables['tree'] . '</ul>';
 }
 
@@ -249,55 +249,6 @@ function forty_acres_item_list($variables) {
 }
 
 /**
- * The name of the field collection item entity.
- */
-define('FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE', 'field_collection_item');
-
-/**
- * Implements template_preprocess_entity().
- *
- * We're wanting to grab all of the
- * fields per entity to expose as a simple value in a
- * field-collection-item.tpl.php template.
- *
- * @see template_preprocess_entity()
- * @see field-collection-item.tpl.php
- */
-function forty_acres_preprocess_entity(&$variables) {
-  // Add in variables for the defined field collections.
-  if ($variables['entity_type'] == FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE) {
-    $collection = $variables[FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE];
-
-    // Get the field names.
-    $field_info = field_info_instances(FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE, $collection->field_name);
-    $fields = array_keys($field_info);
-    $temp = array();
-
-    // Iterate over the fields.
-    foreach ($fields as $field) {
-      // Grab the items of the field.
-      $items = field_get_items(FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE, $collection, $field);
-      $value = array();
-      $view  = $field_info[$field]['display']['default'];
-
-      // Only continue if there are items stored in the field.
-      if ($items) {
-        // Throw the items into a sub array.
-        foreach ($items as $item) {
-          $value[] = field_view_value(FORTY_ACRES_FIELD_COLLECTION_ITEM_ENTITY_TYPE, $collection, $field, $item, $view);
-        }
-      }
-
-      // Associate for the field.
-      $temp[$field] = $value;
-    }
-
-    // Assign back to the array.
-    $variables['values'] = $temp;
-  }
-}
-
-/**
  * Implements template_preprocess_field_collection_view().
  *
  * Used to add a theme hook suggestion for further templating.
@@ -421,6 +372,7 @@ function forty_acres_preprocess_html(&$variables) {
  * Finally, it associates the 404 and 403 pages with their theme suggestions.
  */
 function forty_acres_preprocess_page(&$variables, $hook) {
+
   $path = drupal_get_path('theme', 'forty_acres');
 
   // Add forty_acres_pages.css if Page Builder is enabled.
@@ -609,6 +561,19 @@ function forty_acres_preprocess_page(&$variables, $hook) {
   if (theme_get_setting('utexas_searchbar_theme_settings') == 'no') {
     $variables['display_search'] = FALSE;
     drupal_add_css('#main-nav {margin: 0;}.container-nav-phase2 .nav-item:first-child{border-top: none!important;}', 'inline');
+  }
+
+  $variables['display_breadcrumb'] = 1;
+  if (isset($variables['node'])) {
+    if ($variables['node']->show_breadcrumb !== NULL) {
+      $variables['display_breadcrumb'] = $variables['node']->show_breadcrumb;
+    }
+    else {
+      $default_breadcrumb = theme_get_setting('utexas_' . $variables['node']->type . '_breadcrumb');
+      if ($default_breadcrumb !== NULL) {
+        $variables['display_breadcrumb'] = $default_breadcrumb;
+      }
+    }
   }
 
   // Decrease padding if user selects two-column footer menu.

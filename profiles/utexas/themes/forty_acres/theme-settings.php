@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Theme settings which allow for configuration settings through the theme UI.
@@ -45,17 +46,6 @@ function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
     '#element_validate' => array('_forty_acres_parent_link_validate'),
   );
 
-  /**
-   * Helper function to provide validation on Parent Entity Website.
-   */
-  function _forty_acres_parent_link_validate($element, &$form_state) {
-    if ($form_state['values']['parent_link_title'] != '' && empty($element['#value'])) {
-      form_error($element, t('Please enter a link for the Parent Entity Website.  A link is required if you have entered a Parent Entity Name.'));
-    }
-    if ($element['#value'] != '' && filter_var($element['#value'], FILTER_VALIDATE_URL) === FALSE) {
-      form_error($element, t('Please enter a valid link for the Parent Entity Website.'));
-    }
-  }
   $form['utexas_main_nav_theme_settings']['secondary_menu'] = array(
     '#type' => 'radios',
     '#title' => t('Which option should be displayed in the secondary menu region (directly to the left of the search form)?'),
@@ -83,6 +73,25 @@ function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
   if (!module_exists('utexas_google_cse')) {
     $form['utexas_main_nav_theme_settings']['utexas_searchbar_theme_settings']['display_search'] = array(
       '#markup' => t("<div class='messages warning'>The UTexas Google CSE module is currently disabled which prevents the search bar from being displayed on your site.  Please contact a site administrator to resolve this.</div>"),
+    );
+  }
+
+  // Breadcrumb.
+  $form['utexas_breadcrumb'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Breadcrumbs'),
+    '#description' => t('Choose whether to display breadcrumbs by default at the top of pages. These defaults can be overridden on a per-page basis in the "Publishing Options" vertical tab.'),
+  );
+  $breadcrumb_options = array(
+    'Standard Page',
+    'Landing Page',
+  );
+  foreach ($breadcrumb_options as $option) {
+    $machine_name = 'utexas_' . strtolower(str_replace(' ', '_', $option)) . '_breadcrumb';
+    $form['utexas_breadcrumb'][$machine_name] = array(
+      '#title' => $option,
+      '#type' => 'checkbox',
+      '#default_value' => theme_get_setting($machine_name),
     );
   }
 
@@ -135,7 +144,7 @@ function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
   // Fieldsets containing options for custom 403 and 404 text.
   $form['utexas_403_and_404_contact'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Contact information for "Access Denied" and "Page Not Found" pages'),
+    '#title' => t('"Access Denied" and "Page Not Found" page settings'),
   );
   $form['utexas_403_and_404_contact']['contact_403_checkbox'] = array(
     '#type' => 'checkbox',
@@ -170,10 +179,15 @@ function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
   );
   $form['utexas_403_and_404_contact']['contact_404_container']['contact_404'] = array(
     '#type' => 'textarea',
-    '#title' =>  t('Enter the text you would like to appear on the "Page Not Found" page.'),
+    '#title' => t('Enter the text you would like to appear on the "Page Not Found" page.'),
     '#default_value' => theme_get_setting('contact_404'),
   );
-
+  $form['utexas_403_and_404_contact']['enable_404_menus'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable menus on "Page Not Found" pages'),
+    '#description' => t('Note: enabling will have a performance impact on sites that have a high number of 404 responses'),
+    '#default_value' => theme_get_setting('enable_404_menus'),
+  );
   // Option to load supplemental foundation javascript files.
   $form['utexas_extra_foundation_js'] = array(
     '#type' => 'fieldset',
@@ -209,4 +223,35 @@ function forty_acres_form_system_theme_settings_alter(&$form, &$form_state) {
     '#title' => t('Visit a <a href="/demo/fortyacres-icon-font">demonstration page</a> to see a list of icons available in the Forty Acres icon font.'),
     '#description' => t('Note: this page is only visible to authenticated users.'),
   );
+  $form['#submit'][] = 'forty_acres_form_system_theme_settings_submit';
+}
+
+/**
+ * Helper function to provide validation on Parent Entity Website.
+ */
+function _forty_acres_parent_link_validate($element, &$form_state) {
+  if ($form_state['values']['parent_link_title'] != '' && empty($element['#value'])) {
+    form_error($element, t('Please enter a link for the Parent Entity Website.  A link is required if you have entered a Parent Entity Name.'));
+  }
+  if ($element['#value'] != '' && filter_var($element['#value'], FILTER_VALIDATE_URL) === FALSE) {
+    form_error($element, t('Please enter a valid link for the Parent Entity Website.'));
+  }
+}
+
+/**
+ * Theme Settings Submit Callback.
+ */
+function forty_acres_form_system_theme_settings_submit($form, &$form_state) {
+  $site_404 = variable_get('site_404', '');
+  if ($site_404 == '') {
+    if ($form_state['values']['enable_404_menus'] == 1) {
+      variable_set('site_404', UTEXAS_NAVIGATION404_PAGE);
+    }
+  }
+  elseif ($site_404 == UTEXAS_NAVIGATION404_PAGE) {
+    if ($form_state['values']['enable_404_menus'] == 0) {
+      variable_del('site_404');
+    }
+  }
+  drupal_flush_all_caches();
 }

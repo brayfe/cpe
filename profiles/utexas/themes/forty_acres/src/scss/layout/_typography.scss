@@ -1,5 +1,8 @@
 
 // General Typography
+body {
+	-webkit-font-smoothing:	subpixel-antialiased;
+}
 a{
 	text-decoration: none;
 	color: $burntOrange;
