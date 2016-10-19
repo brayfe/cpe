@@ -1,0 +1,46 @@
+name = cpesubtheme
+description = subtheme starter kit based off of the Forty Acres UT theme
+core = 7.x
+version = 7.x-2.4
+base theme = forty_acres
+
+stylesheets[all][] = css/custom.css
+stylesheets[all][] = css/overrides.css
+scripts[] = js/scripts.js
+
+; core required regions - Page Top and Bottom are hidden and reserved for Drupal Core and contributed modules
+regions[garbage_collector] = Garbage Collector
+regions[page_top]    = Page Top
+regions[content]     = Content
+regions[page_bottom] = Page Bottom
+
+; core default regions
+regions[header]         = Header
+regions[highlighted]    = Highlighted
+regions[help]           = Help
+regions[sidebar_first]  = Left sidebar
+regions[sidebar_second] = Right sidebar
+regions[footer]         = Footer
+
+; custom regions
+regions[content_top]                = Content Top
+regions[content_top_three_pillars]  = Content Top Three Pillars
+regions[content_top_four_pillars]   = Content Top Four Pillars
+regions[content_top_left]           = Content Top Left
+regions[content_top_right]          = Content Top Right
+regions[main_content_top_left]      = Main Content Top Left
+regions[main_content_top_right]     = Main Content Top Right
+regions[content_top_middle]         = Content Top Middle
+regions[content_highlighted]        = Content Highlighted
+regions[content_bottom]             = Content Bottom
+regions[footer_firstcolumn]         = Footer First
+regions[footer_connect]             = Footer Connect
+regions[footer_secondcolumn]        = Footer Second
+
+; features
+features[] = logo
+features[] = name
+features[] = slogan
+features[] = favicon
+features[] = main_menu
+features[] = secondary_menu
