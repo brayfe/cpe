@@ -15,8 +15,9 @@ function cpe_deployment_install() {
 /**
  * Implements hook_update_N().
  *
- * First update hook.
+ * Generate initial taxonomy terms.
  */
 function cpe_deployment_update_7101() {
-
+  // Install CPE Taxonomies.
+  _install_taxonomy_terms();
 }
