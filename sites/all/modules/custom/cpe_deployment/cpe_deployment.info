@@ -1,0 +1,3 @@
+name = CPE Deployment
+description = CPE deployment module, used to automate changes to this site
+core = 7.x

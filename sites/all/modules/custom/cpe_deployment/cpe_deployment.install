@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Install for CPE initial deployment.
+ */
+
+ /**
+ * Implements hook_install().
+ */
+function cpe_deployment_install() {
+  drupal_set_installed_schema_version('cpe_deployment', 7100);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * First update hook.
+ */
+function cpe_deployment_update_7101() {
+
+}
