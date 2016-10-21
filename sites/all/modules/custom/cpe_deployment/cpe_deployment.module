@@ -9,14 +9,8 @@
   * Helper function to add default taxonomy terms.
   */
 function _install_taxonomy_terms() {
-  // Create Course Type Vocabulary.
-  $course_types_vocab = (object) array(
-    'name' => 'Course Types',
-    'description' => 'The type of course being created.',
-    'machine_name' => 'cpe_course_type_vocab',
-  );
-
-  taxonomy_vocabulary_save($course_types_vocab);
+  // Get the Course Type Vocabulary.
+  $course_types_vocab = taxonomy_vocabulary_machine_name_load('cpe_course_types');
 
   $course_types = array(
     'Course',
@@ -26,18 +20,14 @@ function _install_taxonomy_terms() {
   );
 
   // Create the taxonomy terms.
-  foreach ($course_types as $weight => $type) {
-    _create_taxonomy_term($type, $course_types_vocab->vid, $weight);
+  if ($course_types_vocab != FALSE) {
+    foreach ($course_types as $weight => $type) {
+      _create_taxonomy_term($type, $course_types_vocab->vid, $weight);
+    }
   }
 
-  // Create Section Type Vocabulary.
-  $section_types_vocab = (object) array(
-    'name' => 'Section Types',
-    'description' => 'The type of section being created.',
-    'machine_name' => 'cpe_section_type_vocab',
-  );
-
-  taxonomy_vocabulary_save($section_types_vocab);
+  // Get the Section Type Vocabulary.
+  $section_types_vocab = taxonomy_vocabulary_machine_name_load('cpe_section_types');
 
   $section_types = array(
     'Course',
@@ -45,18 +35,14 @@ function _install_taxonomy_terms() {
   );
 
   // Create the taxonomy terms.
-  foreach ($section_types as $weight => $type) {
-    _create_taxonomy_term($type, $section_types_vocab->vid, $weight);
+  if ($section_types_vocab != FALSE) {
+    foreach ($section_types as $weight => $type) {
+      _create_taxonomy_term($type, $section_types_vocab->vid, $weight);
+    }
   }
 
-  // Create Modality Vocabulary.
-  $modality_vocab = (object) array(
-    'name' => 'Modality',
-    'description' => 'The different ways a course is offered.',
-    'machine_name' => 'cpe_modality_vocab',
-  );
-
-  taxonomy_vocabulary_save($modality_vocab);
+  // Get the Modality Vocabulary.
+  $modality_vocab = taxonomy_vocabulary_machine_name_load('cpe_modality');
 
   $modality = array(
     'Online',
@@ -66,8 +52,52 @@ function _install_taxonomy_terms() {
   );
 
   // Create the taxonomy terms.
-  foreach ($modality as $weight => $type) {
-    _create_taxonomy_term($type, $modality_vocab->vid, $weight);
+  if ($modality_vocab != FALSE) {
+    foreach ($modality as $weight => $type) {
+      _create_taxonomy_term($type, $modality_vocab->vid, $weight);
+    }
+  }
+
+  // Get the Accrediting Bodies Vocabulary.
+  $accred_body_vocab = taxonomy_vocabulary_machine_name_load('cpe_accred_bodies');
+
+  $accred_bodies = array(
+    'SHRM',
+    'IIBA',
+    'CFP',
+    'TREC',
+    'PMI',
+    'CEU',
+  );
+
+  // Create the taxonomy terms.
+  if ($accred_body_vocab != FALSE) {
+    foreach ($accred_bodies as $weight => $type) {
+      _create_taxonomy_term($type, $accred_body_vocab->vid, $weight);
+    }
+  }
+
+  // Get the Professional Unit Types Vocabulary.
+  $prof_unit_types_vocab = taxonomy_vocabulary_machine_name_load('cpe_prof_unit_types');
+
+  $prof_unit_types = array(
+    'CEU',
+    'PDU-Leadership',
+    'PDU-Technical',
+    'PDU-Strategic and Busniess Management',
+    'PDC-Leadership and Navigation',
+    'PDC-Critical Evaluation',
+    'PDC-Business Acumen',
+    'CDU',
+    'CE',
+    'CE',
+  );
+
+  // Create the taxonomy terms.
+  if ($prof_unit_types_vocab != FALSE) {
+    foreach ($prof_unit_types as $weight => $type) {
+      _create_taxonomy_term($type, $prof_unit_types_vocab->vid, $weight);
+    }
   }
 
 }
