@@ -17,7 +17,6 @@ features[field_base][] = field_instructor_creds
 features[field_base][] = field_instructor_pic
 features[field_base][] = field_num_hours
 features[field_base][] = field_prof_unit_type
-features[field_instance][] = node-cpe_instructor-body
 features[field_instance][] = node-cpe_instructor-field_instructor_bio
 features[field_instance][] = node-cpe_instructor-field_instructor_creds
 features[field_instance][] = node-cpe_instructor-field_instructor_pic
