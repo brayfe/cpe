@@ -1,0 +1,17 @@
+name = Taxonomy Categories
+description = Taxonomy Categories 
+core = 7.x
+package = Taxonomies
+version = 7.x-1.0
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = strongarm
+dependencies[] = taxonomy
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[taxonomy][] = cpe_accred_bodies
+features[taxonomy][] = cpe_course_types
+features[taxonomy][] = cpe_modality
+features[taxonomy][] = cpe_prof_unit_types
+features[taxonomy][] = cpe_section_types
+project path = sites/all/modules/custom/features/taxonomies
