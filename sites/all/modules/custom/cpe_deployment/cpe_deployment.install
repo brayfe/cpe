@@ -21,6 +21,7 @@ function cpe_deployment_update_7101() {
   // Enable the following Features/Modules.
   $enable = array(
     'cpe_content_type_section',
+    'cpe_content_type_course',
   );
 
   module_enable($enable);
