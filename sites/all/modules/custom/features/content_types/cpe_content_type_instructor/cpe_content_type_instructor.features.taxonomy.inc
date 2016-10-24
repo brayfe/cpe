@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * content_type_instructor.features.taxonomy.inc
+ * cpe_content_type_instructor.features.taxonomy.inc
  */
 
 /**
  * Implements hook_taxonomy_default_vocabularies().
  */
-function content_type_instructor_taxonomy_default_vocabularies() {
+function cpe_content_type_instructor_taxonomy_default_vocabularies() {
   return array(
     'cpe_prof_unit_types' => array(
       'name' => 'Professional Unit Types',

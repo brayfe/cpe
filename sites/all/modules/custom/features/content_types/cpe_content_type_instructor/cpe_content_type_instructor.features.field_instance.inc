@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * content_type_instructor.features.field_instance.inc
+ * cpe_content_type_instructor.features.field_instance.inc
  */
 
 /**
  * Implements hook_field_default_field_instances().
  */
-function content_type_instructor_field_default_field_instances() {
+function cpe_content_type_instructor_field_default_field_instances() {
   $field_instances = array();
 
   // Exported field_instance: 'node-cpe_instructor-field_instructor_bio'.
@@ -154,91 +154,12 @@ function content_type_instructor_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-cpe_instructor-field_num_hours'.
-  $field_instances['node-cpe_instructor-field_num_hours'] = array(
-    'bundle' => 'cpe_instructor',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 3,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_num_hours',
-    'label' => 'Number of Hours',
-    'required' => 1,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 5,
-    ),
-  );
-
-  // Exported field_instance: 'node-cpe_instructor-field_prof_unit_type'.
-  $field_instances['node-cpe_instructor-field_prof_unit_type'] = array(
-    'bundle' => 'cpe_instructor',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'taxonomy',
-        'settings' => array(),
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 2,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_prof_unit_type',
-    'label' => 'Professional Unit Type',
-    'required' => 1,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 4,
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Bio');
   t('Credentials');
-  t('Number of Hours');
   t('Photo');
   t('Photo of the instructor(s)');
-  t('Professional Unit Type');
   t('The instructor\'s bio');
 
   return $field_instances;
