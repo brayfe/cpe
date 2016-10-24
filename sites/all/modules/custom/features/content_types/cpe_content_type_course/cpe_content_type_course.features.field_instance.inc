@@ -90,6 +90,46 @@ function cpe_content_type_course_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-cpe_course-field_course_notes'.
+  $field_instances['node-cpe_course-field_course_notes'] = array(
+    'bundle' => 'cpe_course',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_course_notes',
+    'label' => 'Notes',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 7,
+    ),
+  );
+
   // Exported field_instance: 'node-cpe_course-field_course_outcomes'.
   $field_instances['node-cpe_course-field_course_outcomes'] = array(
     'bundle' => 'cpe_course',
@@ -255,6 +295,7 @@ function cpe_content_type_course_field_default_field_instances() {
   t('Description');
   t('Discounts');
   t('Learning Outcomes');
+  t('Notes');
   t('Prerequisites');
   t('Textbook Information');
   t('Who Should Enroll');
