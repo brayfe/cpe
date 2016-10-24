@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Information Sessions feature.
+ */
+
+include_once 'cpe_info_sessions_view.features.inc';
