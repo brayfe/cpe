@@ -1,35 +1,14 @@
 <?php
 /**
  * @file
- * cpe_content_type_multicourse_certificate.features.field_base.inc
+ * cpe_content_type_mcc.features.field_base.inc
  */
 
 /**
  * Implements hook_field_default_field_bases().
  */
-function cpe_content_type_multicourse_certificate_field_default_field_bases() {
+function cpe_content_type_mcc_field_default_field_bases() {
   $field_bases = array();
-
-  // Exported field_base: 'body'.
-  $field_bases['body'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(
-      0 => 'node',
-    ),
-    'field_name' => 'body',
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'text',
-    'settings' => array(),
-    'translatable' => 0,
-    'type' => 'text_with_summary',
-  );
 
   // Exported field_base: 'field_mcc_certify_body'.
   $field_bases['field_mcc_certify_body'] = array(

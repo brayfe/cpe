@@ -1,57 +1,14 @@
 <?php
 /**
  * @file
- * cpe_content_type_multicourse_certificate.features.field_instance.inc
+ * cpe_content_type_mcc.features.field_instance.inc
  */
 
 /**
  * Implements hook_field_default_field_instances().
  */
-function cpe_content_type_multicourse_certificate_field_default_field_instances() {
+function cpe_content_type_mcc_field_default_field_instances() {
   $field_instances = array();
-
-  // Exported field_instance: 'node-cpe_multi_course_cert-body'.
-  $field_instances['node-cpe_multi_course_cert-body'] = array(
-    'bundle' => 'cpe_multi_course_cert',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 13,
-      ),
-      'teaser' => array(
-        'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(
-          'trim_length' => 600,
-        ),
-        'type' => 'text_summary_or_trimmed',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'body',
-    'label' => 'Body',
-    'required' => FALSE,
-    'settings' => array(
-      'display_summary' => TRUE,
-      'text_processing' => 1,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'text',
-      'settings' => array(
-        'rows' => 20,
-        'summary_rows' => 5,
-      ),
-      'type' => 'text_textarea_with_summary',
-      'weight' => 16,
-    ),
-  );
 
   // Exported field_instance:
   // 'node-cpe_multi_course_cert-field_mcc_certify_body'.
@@ -288,7 +245,7 @@ function cpe_content_type_multicourse_certificate_field_default_field_instances(
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 18,
+      'weight' => 11,
     ),
   );
 
@@ -409,7 +366,7 @@ function cpe_content_type_multicourse_certificate_field_default_field_instances(
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -529,7 +486,7 @@ function cpe_content_type_multicourse_certificate_field_default_field_instances(
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 13,
+      'weight' => 14,
     ),
   );
 
@@ -569,7 +526,7 @@ function cpe_content_type_multicourse_certificate_field_default_field_instances(
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 11,
+      'weight' => 12,
     ),
   );
 
@@ -615,7 +572,6 @@ function cpe_content_type_multicourse_certificate_field_default_field_instances(
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Body');
   t('Certifying Body');
   t('Description');
   t('Duration');

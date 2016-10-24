@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Content Type : Multi Course Certificate feature.
+ */
+
+include_once 'cpe_content_type_mcc.features.inc';

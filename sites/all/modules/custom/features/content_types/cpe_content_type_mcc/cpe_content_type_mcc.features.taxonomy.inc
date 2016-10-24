@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * cpe_content_type_multicourse_certificate.features.taxonomy.inc
+ * cpe_content_type_mcc.features.taxonomy.inc
  */
 
 /**
  * Implements hook_taxonomy_default_vocabularies().
  */
-function cpe_content_type_multicourse_certificate_taxonomy_default_vocabularies() {
+function cpe_content_type_mcc_taxonomy_default_vocabularies() {
   return array(
     'cpe_modality' => array(
       'name' => 'Modality',
