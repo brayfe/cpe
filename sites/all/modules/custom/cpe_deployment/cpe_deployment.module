@@ -1,0 +1,120 @@
+<?php
+
+/**
+ * @file
+ * CPE Deployment module.
+ */
+
+ /**
+  * Helper function to add default taxonomy terms.
+  */
+function _install_taxonomy_terms() {
+  // Get the Course Type Vocabulary.
+  $course_types_vocab = taxonomy_vocabulary_machine_name_load('cpe_course_types');
+
+  $course_types = array(
+    'Course',
+    'Webinar',
+    'Information Session',
+    'Specialist Program',
+  );
+
+  // Create the taxonomy terms.
+  if ($course_types_vocab != FALSE) {
+    foreach ($course_types as $weight => $type) {
+      _create_taxonomy_term($type, $course_types_vocab->vid, $weight);
+    }
+  }
+
+  // Get the Section Type Vocabulary.
+  $section_types_vocab = taxonomy_vocabulary_machine_name_load('cpe_section_types');
+
+  $section_types = array(
+    'Course',
+    'Single Course Certificate',
+  );
+
+  // Create the taxonomy terms.
+  if ($section_types_vocab != FALSE) {
+    foreach ($section_types as $weight => $type) {
+      _create_taxonomy_term($type, $section_types_vocab->vid, $weight);
+    }
+  }
+
+  // Get the Modality Vocabulary.
+  $modality_vocab = taxonomy_vocabulary_machine_name_load('cpe_modality');
+
+  $modality = array(
+    'Online',
+    'In-person',
+    'Online Self-paced',
+    'Online Cohort-based',
+  );
+
+  // Create the taxonomy terms.
+  if ($modality_vocab != FALSE) {
+    foreach ($modality as $weight => $type) {
+      _create_taxonomy_term($type, $modality_vocab->vid, $weight);
+    }
+  }
+
+  // Get the Accrediting Bodies Vocabulary.
+  $accred_body_vocab = taxonomy_vocabulary_machine_name_load('cpe_accred_bodies');
+
+  $accred_bodies = array(
+    'SHRM',
+    'IIBA',
+    'CFP',
+    'TREC',
+    'PMI',
+    'CEU',
+  );
+
+  // Create the taxonomy terms.
+  if ($accred_body_vocab != FALSE) {
+    foreach ($accred_bodies as $weight => $type) {
+      _create_taxonomy_term($type, $accred_body_vocab->vid, $weight);
+    }
+  }
+
+  // Get the Professional Unit Types Vocabulary.
+  $prof_unit_types_vocab = taxonomy_vocabulary_machine_name_load('cpe_prof_unit_types');
+
+  $prof_unit_types = array(
+    'CEU',
+    'PDU-Leadership',
+    'PDU-Technical',
+    'PDU-Strategic and Busniess Management',
+    'PDC-Leadership and Navigation',
+    'PDC-Critical Evaluation',
+    'PDC-Business Acumen',
+    'CDU',
+    'CE',
+    'CE',
+  );
+
+  // Create the taxonomy terms.
+  if ($prof_unit_types_vocab != FALSE) {
+    foreach ($prof_unit_types as $weight => $type) {
+      _create_taxonomy_term($type, $prof_unit_types_vocab->vid, $weight);
+    }
+  }
+
+}
+
+/**
+ * Helper function to create a taxonomy term.
+ */
+function _create_taxonomy_term($name, $vid, $weight = NULL, $parent_tid = NULL) {
+  $term = new stdClass();
+  $term->name = $name;
+  $term->vid = $vid;
+  if ($weight) {
+    $term->weight = $weight;
+  }
+  if ($parent_tid) {
+    $term->parent = array($parent_tid);
+  }
+  taxonomy_term_save($term);
+  return $term;
+}
