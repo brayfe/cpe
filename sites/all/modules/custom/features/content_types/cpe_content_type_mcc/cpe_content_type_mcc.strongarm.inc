@@ -35,16 +35,16 @@ function cpe_content_type_mcc_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'metatags' => array(
-          'weight' => '17',
+          'weight' => '24',
         ),
         'title' => array(
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '16',
+          'weight' => '23',
         ),
         'redirect' => array(
-          'weight' => '15',
+          'weight' => '22',
         ),
       ),
       'display' => array(),
