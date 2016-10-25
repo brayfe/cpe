@@ -19,16 +19,16 @@ function cpe_content_type_scc_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'metatags' => array(
-          'weight' => '14',
+          'weight' => '21',
         ),
         'title' => array(
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '12',
+          'weight' => '19',
         ),
         'redirect' => array(
-          'weight' => '13',
+          'weight' => '20',
         ),
       ),
       'display' => array(),

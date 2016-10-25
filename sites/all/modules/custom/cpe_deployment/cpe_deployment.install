@@ -25,6 +25,7 @@ function cpe_deployment_update_7101() {
     'cpe_content_type_mcc',
     'cpe_content_type_scc',
     'cpe_content_type_aos',
+    'cpe_info_sessions_view',
   );
 
   module_enable($enable);
