@@ -280,7 +280,7 @@ function cpe_content_type_scc_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_scc_featured_related',
-    'label' => 'Featured and Realted Courses',
+    'label' => 'Featured and Related Courses',
     'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -744,7 +744,7 @@ function cpe_content_type_scc_field_default_field_instances() {
   t('Description');
   t('Duration');
   t('Email');
-  t('Featured and Realted Courses');
+  t('Featured and Related Courses');
   t('Headline');
   t('Info Sessions');
   t('Learning Outcomes');

@@ -10,6 +10,45 @@
 function cpe_content_type_mcc_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'node-cpe_multi_course_cert-field_mcc_aos'.
+  $field_instances['node-cpe_multi_course_cert-field_mcc_aos'] = array(
+    'bundle' => 'cpe_multi_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 15,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mcc_aos',
+    'label' => 'Area of Study',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 1,
+    ),
+  );
+
   // Exported field_instance:
   // 'node-cpe_multi_course_cert-field_mcc_certify_body'.
   $field_instances['node-cpe_multi_course_cert-field_mcc_certify_body'] = array(
@@ -47,7 +86,174 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 6,
+      'weight' => 7,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'node-cpe_multi_course_cert-field_mcc_contact_email'.
+  $field_instances['node-cpe_multi_course_cert-field_mcc_contact_email'] = array(
+    'bundle' => 'cpe_multi_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'email',
+        'settings' => array(),
+        'type' => 'email_default',
+        'weight' => 20,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mcc_contact_email',
+    'label' => 'Email',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'email',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'email_textfield',
+      'weight' => 19,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'node-cpe_multi_course_cert-field_mcc_contact_name'.
+  $field_instances['node-cpe_multi_course_cert-field_mcc_contact_name'] = array(
+    'bundle' => 'cpe_multi_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 18,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mcc_contact_name',
+    'label' => 'Program Coordinator Name',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 17,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'node-cpe_multi_course_cert-field_mcc_contact_phone'.
+  $field_instances['node-cpe_multi_course_cert-field_mcc_contact_phone'] = array(
+    'bundle' => 'cpe_multi_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'phone',
+        'settings' => array(),
+        'type' => 'phone',
+        'weight' => 19,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mcc_contact_phone',
+    'label' => 'Phone Number',
+    'required' => 0,
+    'settings' => array(
+      'ca_phone_parentheses' => 1,
+      'ca_phone_separator' => '-',
+      'phone_country_code' => 0,
+      'phone_default_country_code' => 1,
+      'phone_int_max_length' => 15,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'phone',
+      'settings' => array(),
+      'type' => 'phone_textfield',
+      'weight' => 18,
+    ),
+  );
+
+  // Exported field_instance: 'node-cpe_multi_course_cert-field_mcc_courses'.
+  $field_instances['node-cpe_multi_course_cert-field_mcc_courses'] = array(
+    'bundle' => 'cpe_multi_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 16,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mcc_courses',
+    'label' => 'Courses Included',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => 8,
     ),
   );
 
@@ -88,7 +294,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -128,7 +334,51 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 10,
+      'weight' => 13,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'node-cpe_multi_course_cert-field_mcc_featured_related'.
+  $field_instances['node-cpe_multi_course_cert-field_mcc_featured_related'] = array(
+    'bundle' => 'cpe_multi_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 17,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mcc_featured_related',
+    'label' => 'Featured and Related Courses',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => 12,
     ),
   );
 
@@ -168,7 +418,47 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 1,
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'node-cpe_multi_course_cert-field_mcc_info_sessions'.
+  $field_instances['node-cpe_multi_course_cert-field_mcc_info_sessions'] = array(
+    'bundle' => 'cpe_multi_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 21,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mcc_info_sessions',
+    'label' => 'Info Sessions',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 20,
     ),
   );
 
@@ -208,7 +498,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 9,
+      'weight' => 11,
     ),
   );
 
@@ -245,7 +535,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 11,
+      'weight' => 14,
     ),
   );
 
@@ -285,7 +575,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 7,
+      'weight' => 9,
     ),
   );
 
@@ -325,7 +615,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -366,7 +656,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 13,
+      'weight' => 16,
     ),
   );
 
@@ -406,7 +696,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -446,7 +736,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 8,
+      'weight' => 10,
     ),
   );
 
@@ -486,7 +776,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 14,
+      'weight' => 21,
     ),
   );
 
@@ -526,7 +816,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 12,
+      'weight' => 15,
     ),
   );
 
@@ -566,22 +856,29 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Area of Study');
   t('Certifying Body');
+  t('Courses Included');
   t('Description');
   t('Duration');
+  t('Email');
+  t('Featured and Related Courses');
   t('Headline');
+  t('Info Sessions');
   t('Learning Outcomes');
   t('Mishell ID');
   t('Modality');
   t('Notes');
   t('Payment Options');
+  t('Phone Number');
   t('Prerequisites');
+  t('Program Coordinator Name');
   t('Program ID');
   t('RFI Code');
   t('Tuition');
