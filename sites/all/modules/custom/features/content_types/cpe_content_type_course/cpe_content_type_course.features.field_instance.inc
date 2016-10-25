@@ -52,6 +52,145 @@ function cpe_content_type_course_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-cpe_course-field_course_contact_email'.
+  $field_instances['node-cpe_course-field_course_contact_email'] = array(
+    'bundle' => 'cpe_course',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'email',
+        'settings' => array(),
+        'type' => 'email_default',
+        'weight' => 11,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_course_contact_email',
+    'label' => 'Email',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'email',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'email_textfield',
+      'weight' => 12,
+    ),
+  );
+
+  // Exported field_instance: 'node-cpe_course-field_course_contact_name'.
+  $field_instances['node-cpe_course-field_course_contact_name'] = array(
+    'bundle' => 'cpe_course',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 9,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_course_contact_name',
+    'label' => 'Program Coordinator Name',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance: 'node-cpe_course-field_course_contact_phone'.
+  $field_instances['node-cpe_course-field_course_contact_phone'] = array(
+    'bundle' => 'cpe_course',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'phone',
+        'settings' => array(),
+        'type' => 'phone',
+        'weight' => 10,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_course_contact_phone',
+    'label' => 'Phone Number',
+    'required' => 0,
+    'settings' => array(
+      'ca_phone_parentheses' => 1,
+      'ca_phone_separator' => '-',
+      'phone_country_code' => 0,
+      'phone_default_country_code' => 1,
+      'phone_int_max_length' => 15,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'phone',
+      'settings' => array(),
+      'type' => 'phone_textfield',
+      'weight' => 11,
+    ),
+  );
+
   // Exported field_instance: 'node-cpe_course-field_course_description'.
   $field_instances['node-cpe_course-field_course_description'] = array(
     'bundle' => 'cpe_course',
@@ -429,9 +568,12 @@ function cpe_content_type_course_field_default_field_instances() {
   t('Course Type');
   t('Description');
   t('Discounts');
+  t('Email');
   t('Learning Outcomes');
   t('Notes');
+  t('Phone Number');
   t('Prerequisites');
+  t('Program Coordinator Name');
   t('Textbook Information');
   t('The Area of Study to which this course belongs.');
   t('Who Should Enroll');
