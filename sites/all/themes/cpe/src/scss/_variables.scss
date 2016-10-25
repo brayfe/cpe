@@ -1,0 +1,51 @@
+///// General Variables
+
+//z-index
+$headerZindex: 1000;
+$navZindex: 1001;
+$pageZindex: 999;
+
+//General Colors
+$burntOrange: #BF5700;
+$burntOrangeAccent: #A04400;
+$hamburgerBrown: #382E2C;
+$burntGrey: #2d2a28;
+$navy: #333F48;
+$stormBlue: #005e83;
+$bodyCopy: #282828;
+
+// Nav
+$nav-Bkg: #392F2d;
+$nav-Bkg-desktop: #EBE8E2;
+$nav-selected-Bkg: #2D2523;
+$nav-constituents-bkg: #6A6361;
+$nav-constituents-border: #9c9796;
+
+// borders
+$light-grey-border: #e1ddd2;
+$sidebar-border: #f0ede6;
+
+//Misc Colors
+$lightGreyText: #6a6a6a;
+$lightGreyDivider: #a1a1a1;
+$alert: #ffeb63;
+$sidebar-Bkg: #fffdfa;
+$sidebar-divider: #d6d6d6;
+
+//fonts:
+$charis: CharisSILW, serif;
+$opensans: open_sans, sans-serif;
+$openSans_bold: open_sans_bold, serif;
+$openSans_semiBold: open_sans_semibold, serif;
+$openSans_regular: open_sans_regular, serif;
+
+//animations
+$nav-transition: .2s ease-in-out;
+
+//heights?
+$topnav-height: rem-calc(50);
+$topnav-height-news: rem-calc(32);
+
+//Widths?
+$mobile-nav-width: rem-calc(265);
+
