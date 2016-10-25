@@ -1,5 +1,5 @@
-name = cpe
-description = subtheme based off Forty Acres UT theme
+name = Center for Professional Education
+description = A subtheme for CPE based off of the Forty Acres UT theme
 core = 7.x
 version = 7.x-2.4
 base theme = forty_acres
