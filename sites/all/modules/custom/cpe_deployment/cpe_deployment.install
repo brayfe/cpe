@@ -18,8 +18,18 @@ function cpe_deployment_install() {
  * Generate initial taxonomy terms.
  */
 function cpe_deployment_update_7101() {
+  // Enable the custom theme.
+  $enable = array(
+    'theme_default' => 'cpe',
+  );
+  theme_enable($enable);
+
+  // Set custom theme as default.
+  variable_set('theme_default', $enable['theme_default']);
+
   // Enable the following Features/Modules.
   $enable = array(
+    'cpe_content_type_instructor',
     'cpe_content_type_section',
     'cpe_content_type_course',
     'cpe_content_type_mcc',
