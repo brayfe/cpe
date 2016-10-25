@@ -1,4 +1,0 @@
-# Ignore files created by node or bower and/or compiled SASS files in dist folder
-dist/
-node_modules/
-src/bower_components
