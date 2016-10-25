@@ -22,6 +22,9 @@ function cpe_deployment_update_7101() {
   $enable = array(
     'cpe_content_type_section',
     'cpe_content_type_course',
+    'cpe_content_type_mcc',
+    'cpe_content_type_scc',
+    'cpe_content_type_aos',
   );
 
   module_enable($enable);
