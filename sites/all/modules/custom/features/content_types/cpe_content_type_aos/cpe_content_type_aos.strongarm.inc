@@ -19,16 +19,16 @@ function cpe_content_type_aos_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'metatags' => array(
-          'weight' => '10',
+          'weight' => '13',
         ),
         'title' => array(
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '9',
+          'weight' => '12',
         ),
         'redirect' => array(
-          'weight' => '8',
+          'weight' => '11',
         ),
       ),
       'display' => array(),
