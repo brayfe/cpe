@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Template for a basic page.
+ * Template for an Instructor node.
  *
  * Available variables:
  *
@@ -67,8 +67,8 @@
   <div class="middle_content row">
 
     <?php if($page['content']):?>
-        <div class="column small-12 <?php print $size_content_region; ?>">
 
+        <div class="column small-12 medium-8 large-9">
           <?php 
             print render($field_instructor_bio); 
             print render($field_instructor_creds);
@@ -77,12 +77,12 @@
         </div>
     <?php endif; ?>
 
-    <?php if($page['sidebar_second']):?>
+
         <div class="column small-12 medium-4 large-3">
           <?php print render($page['sidebar_second']); ?>
           <?php print render($field_instructor_pic); ?>
         </div>
-    <?php endif; ?>
+
   </div>
 
     <?php if ($page['footer']): ?>

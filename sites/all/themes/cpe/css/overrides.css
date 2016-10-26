@@ -1,9 +1,11 @@
 .middle_content {
   margin-bottom: 3em; }
 
-.field_instructor_bio {
-  font-family: open_sans, "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-  color: #282828;
-  margin-bottom: 1.25rem; }
+.column.medium-8.large-9 {
+  padding-right: 2em; }
+  .column.medium-8.large-9 .field_instructor_bio {
+    font-family: open_sans, "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: #282828;
+    margin-bottom: 1.25rem; }
