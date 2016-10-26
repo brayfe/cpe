@@ -40,7 +40,7 @@
  */
 
 ?>
-<h1> hi there</h1>
+
 <?php if (file_exists($partial_header)): require_once $partial_header; endif;  ?>
 
 <div class="UT-page default-page" id="ut-page-content" role="main">
@@ -68,13 +68,19 @@
 
     <?php if($page['content']):?>
         <div class="column small-12 <?php print $size_content_region; ?>">
-          <?php print render($page['content']); ?>
+
+          <?php 
+            print render($field_instructor_bio); 
+            print render($field_instructor_creds);
+          ?>
+
         </div>
     <?php endif; ?>
 
     <?php if($page['sidebar_second']):?>
         <div class="column small-12 medium-4 large-3">
           <?php print render($page['sidebar_second']); ?>
+          <?php print render($field_instructor_pic); ?>
         </div>
     <?php endif; ?>
   </div>
