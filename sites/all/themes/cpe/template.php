@@ -17,7 +17,7 @@ function cpe_preprocess_page(&$variables) {
 	if (isset($variables['node'])) {
 		$node = $variables['node'];
 		if ($node->type == 'cpe_instructor') {
-	    		$variables['field_instructor_bio'] = field_view_field('node', $node, 'field_instructor_bio');
+	    		$variables['field_instructor_bio'] = field_view_field('node', $node, 'field_instructor_bio', array('label' => 'above'));
 
 	    		$variables['field_instructor_creds'] = field_view_field('node', $node, 'field_instructor_creds');
 
