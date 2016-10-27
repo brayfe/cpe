@@ -1,0 +1,18 @@
+// instructor content type
+
+.column.medium-8.large-9 {
+	padding-right: 2em;
+
+	.field_instructor_bio {
+		font-family: $opensans;
+		font-size: 1.125rem;
+		line-height: 1.75rem;
+		color: $bodyCopy;
+		margin-bottom: 1.25rem;
+	}
+
+}
+
+.field_instructor_pic {
+	text-align: center;
+}
