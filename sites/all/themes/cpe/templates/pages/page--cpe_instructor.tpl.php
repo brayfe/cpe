@@ -67,7 +67,6 @@
   <div class="middle_content row">
 
     <?php if($page['content']):?>
-
         <div class="column small-12 medium-8 large-9">
           
           <?php 
