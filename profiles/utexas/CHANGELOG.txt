@@ -1,3 +1,7 @@
+UT Drupal Kit 7.x-2.4.1, 2016-10-27
+---------------------------------
+[MC-437] - Update LibXML validation in UTexas Tablesaw Filter module
+
 UT Drupal Kit 7.x-2.4, 2016-10-03
 ---------------------------------
 [MC-256] - Add option to toggle breadcrumbs on landing page/standard page
