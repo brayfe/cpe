@@ -1,5 +1,48 @@
 // general styles that get used throughout
 
+// move content area for the copy down
 .middle_content {
 	margin-bottom: 3em;
+}
+
+// for contact boxes
+.contact-wrapper {
+	background-color: #fff;
+	padding: 10px;
+	border: 1px solid #e1ddd2;
+	margin: 0;
+
+	h2.contact-title {
+		margin: 0px 0 10px 0;
+		color: #2d2a28;
+		font-style: italic;
+		font-size: 1.0625rem;
+		line-height: 1.4375rem;
+		border-bottom: 1px solid #e1ddd2;
+		padding-bottom: 10px;
+		font-weight: 500;
+		text-align: center;
+	}
+
+	.coordinator-name {
+		color: #BF5700;
+		font-family: open_sans, sans-serif;
+		font-size: 0.875rem;
+		line-height: 1.1875rem;
+		font-style: normal;
+		font-weight: bold;
+		margin-bottom: 2px;
+	}
+
+	.field_aos_contact_phone {
+		color: #474541;
+		font-family: CharisSILW, serif;
+		font-size: 0.9375rem;
+		line-height: 1.375rem;
+	}
+
+	.field_aos_contact_email {
+		color: #474541;
+		text-decoration: underline;
+	}
 }
