@@ -1,0 +1,71 @@
+// area of study content type
+
+.node-type-cpe-area-of-study {
+
+	.top-banner {
+		position: relative;
+		height: 400px;
+
+		.column {
+			min-height: 369px;
+		}
+
+		.container-hero.hero-style-1 {
+			height:400px;
+			margin-right: -15px;
+			margin-left: -15px;
+			margin-top: 0;
+			padding-top: 28px;
+
+			.relative-pos {
+				position: relative;
+			}
+
+			h1.page-title {
+				bottom: 0;
+				position: absolute;
+				background-color: #f8f8f8;
+				font-family: $opensans;
+				color: $burntGrey;
+				font-weight: 600;
+				padding: 10px 20px;
+				opacity: 0.96;
+			}
+
+		} 
+
+		// .field_aos_banner_image {
+		// 	height:400px;
+		// 	text-align: center;
+
+		// 	img {
+		// 		height: 400px;
+		// 	}
+
+		// }
+
+		.rfi-code {
+			float: right;
+			max-height: 350px;
+			overflow: hidden;
+			width: 400px;
+			height: 340px;
+			opacity: 0.96;
+			background-color: #f8f8f8;
+		}
+
+	}
+
+	.middle_content {
+		margin-top: 2em;
+	}
+
+	.column.medium-8.large-9 {
+		padding-right: 2em;
+	}
+
+}
+
+// more responsive styling in _layout.scss
+ 
+
