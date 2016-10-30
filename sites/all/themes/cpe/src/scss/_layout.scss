@@ -1,0 +1,50 @@
+// responsive styling; more responsive styling may be found on individual content types pages
+
+// put some space to the left of the page title on nodes of content types using the  hero bg image
+@media screen and (max-width: 64em) {
+	
+	.top-banner {
+
+		h1.page-title {
+			margin-left: 10px;
+		}
+
+	}
+
+}
+
+// move RFI form down below out of hero bg image div to under it
+@media screen and (max-width: 59.9375em) {
+	
+	.top-banner {
+
+		.column.small-12.large-6.relative-pos {
+			width: 97.7%;
+		}
+
+		.column.small-12.medium-5.large-5.rfi-block {
+			padding: 0 5px;
+			width:100%;
+
+
+			.rfi-code {
+				margin-right: 0;
+				width: 100%;
+			}
+		}
+
+	}
+
+	.middle_content {
+		margin-top: 0 !important;
+	}
+
+}
+
+// put margin to right of RFI box until it moves down under hero
+@media screen and (min-width: 60em) and (max-width: 64em) {
+	
+	.rfi-code {
+		margin-right: 10px;
+	}
+}

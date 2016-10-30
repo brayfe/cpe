@@ -1,5 +1,62 @@
 .middle_content {
   margin-bottom: 3em; }
+  .middle_content .column.small-12.medium-8.large-9 .field {
+    margin-bottom: 1.5em; }
+
+.contact-wrapper {
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #e1ddd2;
+  margin: 0; }
+  .contact-wrapper h2.contact-title {
+    margin: 0px 0 10px 0;
+    color: #2d2a28;
+    font-style: italic;
+    font-size: 1.0625rem;
+    line-height: 1.4375rem;
+    border-bottom: 1px solid #e1ddd2;
+    padding-bottom: 10px;
+    font-weight: 500;
+    text-align: center; }
+  .contact-wrapper .coordinator-name {
+    color: #BF5700;
+    font-family: open_sans, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.1875rem;
+    font-style: normal;
+    font-weight: bold;
+    margin-bottom: 2px; }
+  .contact-wrapper .field_aos_contact_phone {
+    color: #474541;
+    font-family: CharisSILW, serif;
+    font-size: 0.9375rem;
+    line-height: 1.375rem; }
+  .contact-wrapper .field_aos_contact_email {
+    color: #474541;
+    text-decoration: underline; }
+
+.info-sessions {
+  margin-top: 1.5em; }
+
+@media screen and (max-width: 64em) {
+  .top-banner h1.page-title {
+    margin-left: 10px; } }
+
+@media screen and (max-width: 59.9375em) {
+  .top-banner .column.small-12.large-6.relative-pos {
+    width: 97.7%; }
+  .top-banner .column.small-12.medium-5.large-5.rfi-block {
+    padding: 0 5px;
+    width: 100%; }
+    .top-banner .column.small-12.medium-5.large-5.rfi-block .rfi-code {
+      margin-right: 0;
+      width: 100%; }
+  .middle_content {
+    margin-top: 0 !important; } }
+
+@media screen and (min-width: 60em) and (max-width: 64em) {
+  .rfi-code {
+    margin-right: 10px; } }
 
 .column.medium-8.large-9 {
   padding-right: 2em; }
@@ -12,3 +69,40 @@
 
 .field_instructor_pic {
   text-align: center; }
+
+.node-type-cpe-multi-course-cert .top-banner {
+  position: relative;
+  height: 400px; }
+  .node-type-cpe-multi-course-cert .top-banner .column {
+    min-height: 369px; }
+  .node-type-cpe-multi-course-cert .top-banner .container-hero.hero-style-1 {
+    height: 400px;
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: 0;
+    padding-top: 28px; }
+    .node-type-cpe-multi-course-cert .top-banner .container-hero.hero-style-1 .relative-pos {
+      position: relative; }
+    .node-type-cpe-multi-course-cert .top-banner .container-hero.hero-style-1 h1.page-title {
+      bottom: 0;
+      position: absolute;
+      background-color: #f8f8f8;
+      font-family: open_sans, "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+      color: #2d2a28;
+      font-weight: 600;
+      padding: 10px 20px;
+      opacity: 0.96; }
+  .node-type-cpe-multi-course-cert .top-banner .rfi-code {
+    float: right;
+    max-height: 350px;
+    overflow: hidden;
+    width: 400px;
+    height: 340px;
+    opacity: 0.96;
+    background-color: #f8f8f8; }
+
+.node-type-cpe-multi-course-cert .middle_content {
+  margin-top: 2em; }
+
+.node-type-cpe-multi-course-cert .column.medium-8.large-9 {
+  padding-right: 2em; }
