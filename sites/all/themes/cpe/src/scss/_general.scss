@@ -3,6 +3,15 @@
 // move content area for the copy down
 .middle_content {
 	margin-bottom: 3em;
+
+	.column.small-12.medium-8.large-9 {
+
+		.field {
+			margin-bottom: 1.5em;
+		}
+
+	}
+
 }
 
 // for contact boxes
@@ -45,4 +54,10 @@
 		color: #474541;
 		text-decoration: underline;
 	}
+
+}
+
+// info sessions
+.info-sessions {
+	margin-top: 1.5em;
 }
