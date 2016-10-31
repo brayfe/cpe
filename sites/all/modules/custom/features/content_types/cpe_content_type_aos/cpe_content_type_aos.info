@@ -13,6 +13,7 @@ dependencies[] = phone
 dependencies[] = strongarm
 dependencies[] = taxonomy
 dependencies[] = text
+dependencies[] = utexas_hero_photo
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[field_base][] = field_aos_accred_body

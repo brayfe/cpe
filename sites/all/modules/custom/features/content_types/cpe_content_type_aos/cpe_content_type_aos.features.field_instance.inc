@@ -342,7 +342,7 @@ function cpe_content_type_aos_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -382,7 +382,7 @@ function cpe_content_type_aos_field_default_field_instances() {
     'description' => 'The javascript snippet from Emma that generates the RFI block.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
