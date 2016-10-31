@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * This field.tpl has been changed to Drupal default field.tpl.php so field labels can be shown
+  *
  * @file field.tpl.php
  * Default template implementation to display the value of a field.
  *
