@@ -22,7 +22,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -43,7 +43,7 @@ function cpe_content_type_aos_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 5,
+      'weight' => 7,
     ),
   );
 
@@ -61,7 +61,7 @@ function cpe_content_type_aos_field_default_field_instances() {
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -86,7 +86,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'size' => 100,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 3,
+      'weight' => 5,
     ),
   );
 
@@ -126,7 +126,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 4,
+      'weight' => 43,
     ),
   );
 
@@ -138,11 +138,11 @@ function cpe_content_type_aos_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'email',
         'settings' => array(),
         'type' => 'email_default',
-        'weight' => 9,
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -165,7 +165,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 9,
+      'weight' => 12,
     ),
   );
 
@@ -177,11 +177,11 @@ function cpe_content_type_aos_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 7,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -205,7 +205,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 7,
+      'weight' => 9,
     ),
   );
 
@@ -217,11 +217,11 @@ function cpe_content_type_aos_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'phone',
         'settings' => array(),
         'type' => 'phone',
-        'weight' => 8,
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -247,7 +247,7 @@ function cpe_content_type_aos_field_default_field_instances() {
       'module' => 'phone',
       'settings' => array(),
       'type' => 'phone_textfield',
-      'weight' => 8,
+      'weight' => 11,
     ),
   );
 
@@ -287,7 +287,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 42,
     ),
   );
 
@@ -305,7 +305,7 @@ function cpe_content_type_aos_field_default_field_instances() {
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -330,7 +330,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'size' => 100,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 6,
+      'weight' => 8,
     ),
   );
 
@@ -370,7 +370,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 1,
+      'weight' => 41,
     ),
   );
 
@@ -410,7 +410,44 @@ function cpe_content_type_aos_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 10,
+      'weight' => 44,
+    ),
+  );
+
+  // Exported field_instance: 'node-cpe_area_of_study-field_utexas_hero_photo'.
+  $field_instances['node-cpe_area_of_study-field_utexas_hero_photo'] = array(
+    'bundle' => 'cpe_area_of_study',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'utexas_hero_photo',
+        'settings' => array(),
+        'type' => 'utexas_hero_photo_full',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_utexas_hero_photo',
+    'label' => 'Hero Photo',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'utexas_hero_photo',
+      'settings' => array(),
+      'type' => 'utexas_hero_photo_full',
+      'weight' => 1,
     ),
   );
 
@@ -423,6 +460,7 @@ function cpe_content_type_aos_field_default_field_instances() {
   t('Email');
   t('Featured Courses and Programs');
   t('Headline');
+  t('Hero Photo');
   t('Phone Number');
   t('Program Coordinator Name');
   t('RFI Code');
