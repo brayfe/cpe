@@ -16,43 +16,29 @@ function cpe_preprocess_page(&$variables) {
     }
 
     $node = $variables['node'];
-    // instructor content type field variables
+    $view = node_view($node);
+    
+    // Instructor content type field variables
     if ($node->type == 'cpe_instructor') {
-            $variables['field_instructor_bio'] = field_view_field('node', $node, 'field_instructor_bio', array('label' => 'above'));
-
-            $variables['field_instructor_creds'] = field_view_field('node', $node, 'field_instructor_creds');
-
-            $variables['field_instructor_pic'] = field_view_field('node', $node, 'field_instructor_pic', array('settings' => array('image_style' => 'large')));
+        $variables['field_instructor_bio'] = render($view['field_instructor_bio']);
+        $variables['field_instructor_creds'] = render($view['field_instructor_creds']);
+        $variables['field_instructor_pic'] = render($view['field_instructor_pic']);
     }
-
-
-    // Course content type field variables
+    
+   // Course content type field variables
     if ($node->type == 'cpe_course') {
-
-            $variables['field_course_type'] = field_view_field('node', $node, 'field_course_type');
-
-            $variables['field_course_aos'] = field_view_field('node', $node, 'field_course_aos');
-
-            $variables['field_course_description'] = field_view_field('node', $node, 'field_course_description');
-
-            $variables['field_course_who_enroll'] = field_view_field('node', $node, 'field_course_who_enroll');
-
-            $variables['field_course_outcomes'] = field_view_field('node', $node, 'field_course_outcomes');
-
-            $variables['field_course_discounts'] = field_view_field('node', $node, 'field_course_discounts');
-
-            $variables['field_course_prereqs'] = field_view_field('node', $node, 'field_course_prereqs');
-
-            $variables['field_course_textbook_info'] = field_view_field('node', $node, 'field_course_textbook_info');
-
-            $variables['field_course_notes'] = field_view_field('node', $node, 'field_course_notes');
-
-            $variables['field_course_contact_name'] = field_view_field('node', $node, 'field_course_contact_name');
-
-            $variables['field_course_contact_phone'] = field_view_field('node', $node, 'field_course_contact_phone');
-
-            $variables['field_course_contact_email'] = field_view_field('node', $node, 'field_course_contact_email');
-
+        $variables['field_course_type'] = render($view['field_course_type']);
+        $variables['field_course_aos'] = render($view['field_course_aos']);
+        $variables['field_course_description'] = render($view['field_course_description']);
+        $variables['field_course_who_enroll'] = render($view['field_course_who_enroll']);
+        $variables['field_course_outcomes'] = render($view['field_course_outcomes']);
+        $variables['field_course_discounts'] = render($view['field_course_discounts']);
+        $variables['field_course_prereqs'] = render($view['field_course_prereqs']);
+        $variables['field_course_textbook_info'] = render($view['field_course_textbook_info']);
+        $variables['field_course_notes'] = render($view['field_course_notes']);
+        $variables['field_course_contact_name'] = render($view['field_course_contact_name']);
+        $variables['field_course_contact_phone'] = render($view['field_course_contact_phone']);
+        $variables['field_course_contact_email'] = render($view['field_course_contact_email']);
     }
 
 }
