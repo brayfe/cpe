@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CPE Hero IMage Style feature.
+ */
+
+include_once 'cpe_hero_image_style.features.inc';
