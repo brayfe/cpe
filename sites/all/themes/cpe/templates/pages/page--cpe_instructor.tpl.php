@@ -80,8 +80,6 @@
         <div class="column small-12 medium-4 large-3">
           <!-- Print the instructor picture field -->
           <?php print render($field_instructor_pic); ?>
-          <?php print render($page['sidebar_second']); ?>
-          
         </div>
 
   </div>
