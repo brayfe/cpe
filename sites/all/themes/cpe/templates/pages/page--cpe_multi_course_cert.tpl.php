@@ -111,6 +111,7 @@
                 print render($field_mcc_tuition);
                 print render($field_mcc_pay_options);
               ?>
+            </div>
             <!--contact info-->
             <div class="contact-wrapper">
               <h2 class="contact-title">Contact</h2>
