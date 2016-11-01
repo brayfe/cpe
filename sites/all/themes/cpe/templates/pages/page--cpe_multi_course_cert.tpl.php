@@ -95,18 +95,22 @@
               print render($field_mcc_notes);
               print render($field_mcc_program_id);
               print render($field_mcc_courses);
-              print render($field_mcc_mishell_id);
-              print render($field_mcc_duration);
-              print render($field_mcc_modality);
+              //print render($field_mcc_mishell_id);
               print render($field_mcc_featured_related);
-              print render($field_mcc_tuition);
-              print render($field_mcc_pay_options);  
             ?>
 
           </div>
         <?php endif; ?>
 
           <div class="column small-12 medium-4 large-3">
+            <div class="at-a-glance">
+              <h4 class="at-a-glance-title">At A Glance</h4>
+              <?php 
+                print render($field_mcc_duration);
+                print render($field_mcc_modality);
+                print render($field_mcc_tuition);
+                print render($field_mcc_pay_options);
+              ?>
             <!--contact info-->
             <div class="contact-wrapper">
               <h2 class="contact-title">Contact</h2>
