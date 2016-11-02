@@ -98,7 +98,7 @@
 
 
   <div class="section-fields">
-    <div class="field section-field-dates">
+    <div class="section-field-dates">
       <div class="section-field-labels">Dates: </div>
       <?php print render($field_section_dates); ?>
     </div>
@@ -109,7 +109,7 @@
       print render($content['field_section_location']);
     ?>
 
-    <div class="field section-field-instructor">
+    <div class="section-field-instructor">
       <div class="section-field-labels">Instructor: </div>
       <?php print render($field_section_instructor); ?>
     </div>
@@ -120,11 +120,8 @@
       print render($content['field_section_cost']);
       print render($content['field_section_course_id']);
     ?>
-    <div class="field-mishell"><?php print $field_section_mishell_id; ?></div>
 
-    <form name="myForm" method="post" action="../../js/mastercookie.js" onsubmit="return storeValue(this);">
-      <input class="cookie-value" type="submit" data-value="value" value="Add to Cart">
-    </form>
+    <?php //print $field_section_mishell_id; ?>
 
   </div>
     
