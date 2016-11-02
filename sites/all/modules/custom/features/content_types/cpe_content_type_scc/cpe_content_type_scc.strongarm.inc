@@ -15,20 +15,36 @@ function cpe_content_type_scc_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__cpe_single_course_cert';
   $strongarm->value = array(
-    'view_modes' => array(),
+    'view_modes' => array(
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
+    ),
     'extra_fields' => array(
       'form' => array(
         'metatags' => array(
-          'weight' => '21',
+          'weight' => '22',
         ),
         'title' => array(
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '19',
+          'weight' => '20',
         ),
         'redirect' => array(
-          'weight' => '20',
+          'weight' => '21',
         ),
       ),
       'display' => array(),
