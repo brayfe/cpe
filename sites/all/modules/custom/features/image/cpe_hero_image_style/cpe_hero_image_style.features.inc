@@ -12,7 +12,7 @@ function cpe_hero_image_style_image_default_styles() {
 
   // Exported image style: cpe_hero_bg_image.
   $styles['cpe_hero_bg_image'] = array(
-    'label' => 'CPE Hero BG IMage',
+    'label' => 'CPE Hero BG Image',
     'effects' => array(
       4 => array(
         'name' => 'image_scale',

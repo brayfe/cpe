@@ -1,5 +1,5 @@
 name = CPE Hero Image Style
-description = styles the hero images so they are no more than 400px ht
+description = Styles the hero images to no more than 400px high
 core = 7.x
 package = Image
 version = 7.x-1.0
