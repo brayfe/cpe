@@ -31,7 +31,6 @@ function cpe_preprocess_node(&$variables) {
 
 	
 	$node = $variables['node'];
-	dpm($node);
 	if($node->type == 'cpe_section') {
 
 	$variables['field_section_cost'] = $node->field_section_cost['und'][0]['safe_value'];

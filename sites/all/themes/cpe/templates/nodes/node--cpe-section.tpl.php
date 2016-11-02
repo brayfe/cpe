@@ -122,6 +122,10 @@
     ?>
     <div class="field-mishell"><?php print $field_section_mishell_id; ?></div>
 
+    <form name="myForm" method="post" action="../../js/mastercookie.js" onsubmit="return storeValue(this);">
+      <input class="cookie-value" type="submit" data-value="value" value="Add to Cart">
+    </form>
+
   </div>
     
 
