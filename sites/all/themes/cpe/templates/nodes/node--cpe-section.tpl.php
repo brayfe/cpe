@@ -105,7 +105,7 @@
 
     <?php 
       print render($content['field_section_days']);
-      print render($field_section_times);
+      print render($content['field_section_times']);
       print render($content['field_section_location']);
     ?>
 

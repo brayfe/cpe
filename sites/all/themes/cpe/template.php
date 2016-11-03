@@ -19,8 +19,9 @@ function cpe_preprocess_page(&$variables) {
 // node tpl for sections
 function cpe_preprocess_node(&$variables) {
 
-	$node = $variables['node'];
 
+	$node = $variables['node'];
+    dpm($node);
 	if($node->type == 'cpe_section') {
 
     	$variables['field_section_cost'] = $node->field_section_cost['und'][0]['safe_value'];
@@ -31,9 +32,11 @@ function cpe_preprocess_node(&$variables) {
 
     	$variables['field_section_days'] = $node->field_section_days['und'][0]['value'];
 
-    	$timestamp1 = strtotime($node->field_section_times['und'][0]['value']);
-    	$timestamp2 = strtotime($node->field_section_times['und'][0]['value2']);
-    	$variables['field_section_times'] =  format_date(intval($timestamp1), 'custom', 'g:i A T') . ' - ' . format_date(intval($timestamp2), 'custom', 'g:i A T');
+    	// $timestamp1 = strtotime($node->field_section_times['und'][0]['value']);
+    	// $timestamp2 = strtotime($node->field_section_times['und'][0]['value2']);
+    	// $variables['field_section_times'] =  format_date(intval($timestamp1), 'custom', 'g:i A T') . ' - ' . format_date(intval($timestamp2), 'custom', 'g:i A T');
+
+        $variables['field_section_times'] = $node->field_section_times['und'][0]['value'] . ' - ' . $node->field_section_times['und'][0]['value2'];
 
     	$variables['field_section_location'] = $node->field_section_location['und'][0]['safe_value'];
 
