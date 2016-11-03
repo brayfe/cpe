@@ -1,0 +1,81 @@
+<?php 
+
+/*
+ * @file
+ * module to cart and checkout behavior
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function cpe_cart_block_info() {
+  $blocks['cpe_cart'] = array(
+    // The name that will appear in the block list.
+    'info' => t('CPE Cart'),
+    // Default setting.
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  return $blocks;
+}
+/**
+ * Implements hook_block_view().
+ */
+function cpe_cart_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+  /*
+   *case 'syndicate':
+   *  $block['subject'] = t('Syndicate');
+   *  $block['content'] = theme('feed_icon', array('url' => url('rss.xml'), 'title' => t('Syndicate')));
+   *  break;
+   *
+   *case 'recent':
+   *  if (user_access('access content')) {
+   *    $block['subject'] = t('Recent content');
+   *    if ($nodes = node_get_recent(variable_get('node_recent_block_count', 10))) {
+   *      $block['content'] = theme('node_recent_block', array(
+   *        'nodes' => $nodes,
+   *      ));
+   *    } else {
+   *      $block['content'] = t('No content available.');
+   *    }
+   *  }
+   *  break;
+   */
+    case 'cpe_cart':
+		$block['subject'] = t('test');
+		
+		$block['content'] = array(
+			'#markup' => theme('cpe_cart'),
+			'#attached' => array(
+		  		'js' => array(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js'),
+				),
+      	);
+
+      	break;
+    
+  	}
+  	return $block;
+}
+
+
+
+/**
+ * Implements hook_theme().
+ *
+ * @see template_preprocess_utexas_social_links()
+ */
+function cpe_cart_theme($existing, $type, $theme, $path) {
+  return array(
+    'cpe_cart' => array(
+      'variables' => array(
+        'item' => NULL,
+      ),
+      'template' => 'theme/cpe-cart',
+    ),
+  );
+}
+
+
+

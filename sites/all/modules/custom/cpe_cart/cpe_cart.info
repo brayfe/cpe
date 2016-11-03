@@ -1,0 +1,5 @@
+name = CPE Cart 
+description = A custom block module for handling the cart functionality. 
+core = 7.x 
+package = Custom 
+version = 7.x-1.0
