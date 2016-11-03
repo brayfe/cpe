@@ -105,7 +105,7 @@
 
     <?php 
       print render($content['field_section_days']);
-      print render($content['$field_section_times']);
+      print render($field_section_times);
       print render($content['field_section_location']);
     ?>
 
@@ -121,6 +121,7 @@
       print render($content['field_section_course_id']);
     ?>
 
+    <!-- hide mishell field for now; this will be used later with the add to cart button-->
     <?php //print $field_section_mishell_id; ?>
 
   </div>
