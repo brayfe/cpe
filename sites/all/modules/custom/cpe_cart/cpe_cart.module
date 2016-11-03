@@ -6,6 +6,18 @@
  */
 
 /**
+ * Implements hook_init().
+ */
+function cpe_cart_init() {
+  /*
+   *drupal_add_css(drupal_get_path('module', 'book') . '/book.css');
+   */
+  setcookie('class','0UE14173rS000000000000', time() + 3600, '/', 'utexas.edu');
+  $checkout_url = variable_get('cpe_cart_checkout_url', '');
+  drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => $checkout_url)), array('type' => 'setting'));
+}
+
+/**
  * Implements hook_block_info().
  */
 function cpe_cart_block_info() {

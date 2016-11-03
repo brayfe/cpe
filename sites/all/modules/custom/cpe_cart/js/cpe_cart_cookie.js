@@ -14,7 +14,7 @@ function getCookie(name) {
 
 function setCookie(name, value) {
     if (value == '') {
-        document.cookie=name + "=; path=/; domain=cpe-local.utexas.edu";
+        document.cookie=name + "=; path=/; domain=utexas.edu";
     } else {
         var oldvalue = getCookie(name);
         if (oldvalue != null) {
@@ -26,9 +26,9 @@ function setCookie(name, value) {
         if (index == -1) {
             if (value != null && value != "") {
                 if (oldvalue != null) {
-                    document.cookie=name + "=" + oldvalue + escape(value) + "; path=/ ; domain=cpe-local.utexas.edu";
+                    document.cookie=name + "=" + oldvalue + escape(value) + "; path=/ ; domain=utexas.edu";
                 } else {
-                        document.cookie=name + "=" + escape(value) + "; path=/ ; domain=cpe-local.utexas.edu";
+                        document.cookie=name + "=" + escape(value) + "; path=/ ; domain=utexas.edu";
                 }
                 mycookie = document.cookie;
             }

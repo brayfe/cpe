@@ -1,12 +1,19 @@
 (function($){
-    Drupal.behaviors.modulename = {
-      attach: function (context, settings) {
+  Drupal.behaviors.modulename = {
+    attach: function (context, settings) {
               /*Code goes here, this is going to be like 
               $(document).ready() but will not be lost if
               Drupal reloads the page or something */
 
  //<![CDATA[
  var mycookie = document.cookie;
+
+ $('#empty_cart').on('click',function() {
+   setCookie('class', '');
+   alert("hi");
+   location.reload();
+ });
+
  function getCookie(name) {
   var index = mycookie.indexOf(name + '=');
   if (index == -1)
@@ -18,33 +25,33 @@
   return unescape(mycookie.substring(index, endstr));
 }
 
-    //var cookievalue = getCookie('class');
-    var cookievalue = '';
+    var cookievalue = getCookie('class');
     alert(cookievalue);
     var numofcookies = 0;
     if (cookievalue != null) {
       var numofcookies = cookievalue.length / 22;
     }
 
-     if (numofcookies == 1) {
+    if (numofcookies == 1) {
       $('#classes_cart').append(" " + numofcookies + " Item");
-    //   document.write(" " + numofcookies + " Item");
-     }
-     else
-     {
+      //   document.write(" " + numofcookies + " Item");
+    }
+    else
+    {
       $('#classes_cart').append(" " + numofcookies + " Items");
-     }
+    }
+
     if (numofcookies != 0) {
 
-      $('#classes_cart').append('<br /><form action="https://utdirect.utexas.edu/nlogon/cee/uex/reg1.WBX" method="get"><input type="hidden" /><input type="submit" value="Check Out >" /></form>');
-      
-      //document.write('<input type="button" value="Empty Cart" onClick="setCookie('class', '');window.location.reload();" />');
+      $('#classes_cart').append('<br /><form action="' + Drupal.settings.cpe_cart.cpeCartCheckoutUrl + '" method="get"><input type="hidden" /><input type="submit" value="Check Out >" /></form>');
 
+      $('#classes_cart').append('<input id="empty_cart" type="button" value="Empty Cart"  />');
+      //onClick="setCookie('class', '');window.location.reload();"
     }
 
     //]]>
 
-        }
-    }
+  }
+}
 }(jQuery));
-   
+
