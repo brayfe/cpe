@@ -9,9 +9,6 @@
  * Implements hook_init().
  */
 function cpe_cart_init() {
-  /*
-   *drupal_add_css(drupal_get_path('module', 'book') . '/book.css');
-   */
   setcookie('class','0UE14173rS000000000000', time() + 3600, '/', 'utexas.edu');
   $checkout_url = variable_get('cpe_cart_checkout_url', '');
   drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => $checkout_url)), array('type' => 'setting'));
@@ -36,25 +33,6 @@ function cpe_cart_block_view($delta = '') {
   $block = array();
 
   switch ($delta) {
-  /*
-   *case 'syndicate':
-   *  $block['subject'] = t('Syndicate');
-   *  $block['content'] = theme('feed_icon', array('url' => url('rss.xml'), 'title' => t('Syndicate')));
-   *  break;
-   *
-   *case 'recent':
-   *  if (user_access('access content')) {
-   *    $block['subject'] = t('Recent content');
-   *    if ($nodes = node_get_recent(variable_get('node_recent_block_count', 10))) {
-   *      $block['content'] = theme('node_recent_block', array(
-   *        'nodes' => $nodes,
-   *      ));
-   *    } else {
-   *      $block['content'] = t('No content available.');
-   *    }
-   *  }
-   *  break;
-   */
     case 'cpe_cart':
 		$block['subject'] = t('test');
 		
