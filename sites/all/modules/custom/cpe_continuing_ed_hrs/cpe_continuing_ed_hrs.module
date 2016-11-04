@@ -62,7 +62,7 @@ function cpe_continuing_ed_hrs_field_widget_info() {
 function cpe_continuing_ed_hrs_field_widget_form(&$form,
  &$form_state,
  $field,
-  $instance,
+ $instance,
  $langcode,
  $items,
  $delta,
