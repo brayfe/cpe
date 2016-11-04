@@ -313,12 +313,11 @@ function template_preprocess_rel_arts_field(&$variables) {
   if ($file = file_load($image_fid)) {
     $alt = $link_title ?: $file->filename;
     $title = $link_title ?: $file->filename;
-    $image = theme('image', array(
+    $image = theme('image_style', array(
       'path' => $file->uri,
-      'width' => $file->width,
-      'height' => $file->height,
       'alt' => $alt,
       'title' => $title,
+      'style_name' => 'rel_art_img',
     ));
   }
 
