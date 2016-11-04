@@ -1,0 +1,462 @@
+<?php
+
+/**
+ * @file
+ * The CPE Related Artifacts module.
+ *
+ * Development for two custom compound fields for CPE content.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines the field within the system.
+ */
+function cpe_related_artifacts_field_info() {
+  return array(
+    'related_artifacts' => array(
+      // Used when adding field to CT.
+      'label' => t('Related Artifacts'),
+      'description' => t('Defines the Related Artifacts field.'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'rel_arts_widget',
+      'default_formatter' => 'rel_arts_formatter',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines one formatter for the promo list
+ * Field.
+ */
+function cpe_related_artifacts_field_formatter_info() {
+  return array(
+    'rel_arts_formatter' => array(
+      'label' => t('Related Artifacts'),
+      'field types' => array('related_artifacts'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines the default widget.
+ */
+function cpe_related_artifacts_field_widget_info() {
+  return array(
+    'rel_arts_widget' => array(
+      'label' => t('Related Artifacts'),
+      'field types' => array('related_artifacts'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Form definition for the field widget.
+ */
+function cpe_related_artifacts_field_widget_form(&$form,
+ &$form_state,
+ $field,
+  $instance,
+ $langcode,
+ $items,
+ $delta,
+ $element) {
+  switch ($instance['widget']['type']) {
+    case 'rel_arts_widget':
+      // Uploaded Thumbnail Image.
+      $element['image_fid'] = array(
+        '#type' => 'managed_file',
+        '#title' => t('Thumbnail Image'),
+        '#description' => t('Upload the image that will appear as the link for this artifact.'),
+        '#upload_location' => 'public://related_artifacts/thumbnails/',
+        '#upload_validators' => array(
+          'file_validate_extensions' => array('gif png jpg jpeg'),
+        ),
+        '#default_value' => (isset($items[$delta]['image_fid'])) ? $items[$delta]['image_fid'] : 0,
+      );
+      // Link.
+      $link = '';
+      $element['link'] = array(
+        '#type' => 'fieldset',
+        '#collapsible' => FALSE,
+        '#title' => t('Link'),
+      );
+      // If internal path (/node/20), convert to alias.
+      // External links are left alone.
+      if (isset($items[$delta]['link_href'])) {
+        if (trim($items[$delta]['link_href']) != '') {
+          $link = drupal_get_path_alias($items[$delta]['link_href']);
+        }
+      }
+      $element['link']['link_title'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Link Title'),
+        '#description' => t('An optional title for this image link anchor tag.'),
+        '#size' => 60,
+        '#maxlength' => 128,
+        '#default_value' => (isset($items[$delta]['link_title'])) ? $items[$delta]['link_title'] : '',
+      );
+      $element['link']['link_href'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Link Location'),
+        '#size' => 60,
+        '#maxlength' => 1024,
+        '#default_value' => $link,
+        '#description' => t('Location this field links to.'),
+        '#attributes' => array(
+          'placeholder' => 'external URL (http://) or internal path (e.g., about/diversity)',
+        ),
+      );
+      // Uploaded File.
+      $element['file_fid'] = array(
+        '#type' => 'managed_file',
+        '#title' => 'File Upload',
+        '#description' => t('The related artifact file to download.'),
+        '#upload_location' => 'public://related_artifacts/documents/',
+        '#upload_validators' => array(
+          'file_validate_extensions' => array('pdf ppt pptx doc docx txt'),
+        ),
+        '#default_value' => isset($items[$delta]['file_fid']) ? $items[$delta]['file_fid'] : 0,
+      );
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ * Determines whether or not the field has data in it.
+ */
+function cpe_related_artifacts_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'related_artifacts':
+      return empty($item['image_fid']) and
+        empty($item['link']['link_href']) and
+        empty($item['file_fid']);
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to make sure uploaded links are valid before trying to save.
+ */
+function cpe_related_artifacts_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  switch ($field['type']) {
+    case 'related_artifacts':
+      foreach ($items as $delta => &$item) {
+        // If an item has at least one field filled in.
+        if (!empty($item) and !cpe_related_artifacts_field_is_empty($item, $field)) {
+          if (isset($item['image_fid'])) {
+            // If there is no image, set an error.
+            // Thumbnail image is required.
+            if ($item['image_fid'] == 0) {
+              $errors[$field['field_name']][$langcode][$delta][] = array(
+                'error' => 'image_no_image',
+                'message' => t('%field: A Thumbnail Image is required.', array('%field' => $instance['label'])),
+              );
+            }
+          }
+          // Check if link is epmty.
+          if (empty($item['link']['link_href'])) {
+            // If it is, there must be an uploaded file.
+            if (empty($item['file_fid'])) {
+              $errors[$field['field_name']][$langcode][$delta][] = array(
+                'error' => 'need_one',
+                'message' => t('%field: List a link or upload a file for this artifact.', array('%field' => $instance['label'])),
+              );
+            }
+          }
+          // Link exists, make sure file does not.
+          else {
+            if (!empty($item['file_fid'])) {
+              $errors[$field['field_name']][$langcode][$delta][] = array(
+                'error' => 'need_one',
+                'message' => t('%field: You may only have one item for this artifact.', array('%field' => $instance['label'])),
+              );
+            }
+            // Validate Link.
+            if (!cpe_related_artifacts_path_exists($item['link']['link_href'])) {
+              $errors[$field['field_name']][$langcode][$delta][] = array(
+                'error' => 'link_bad_href',
+                'message' => t('%field: Please list a valid URL.', array('%field' => $instance['label'])),
+              );
+            }
+          }
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function cpe_related_artifacts_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  switch ($error['error']) {
+    case 'image_no_image':
+      form_error($element['image_fid'], $error['message']);
+      break;
+
+    case 'link_bad_href':
+      form_error($element['link']['link_href'], $error['message']);
+      break;
+
+    case 'need_one':
+      form_error($element['file_fid']);
+      form_error($element['link']['link_href'], $error['message']);
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Used to split widget groups into column data.
+ */
+function cpe_related_artifacts_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  switch ($field['type']) {
+    case 'related_artifacts':
+      foreach ($items as $delta => &$item) {
+        // Adjust link & title.
+        if (isset($item['link']['link_href'])) {
+          $item['link_href'] = drupal_get_normal_path($item['link']['link_href']);
+          $item['link_title'] = isset($item['link']['link_title']) ? $item['link']['link_title'] : '';
+        }
+        // Unset title if there is no link.
+        else {
+          $item['link_href'] = '';
+          $item['link_title'] = '';
+        }
+        unset($item['link']);
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Used to display the Related Artifacts formatter.
+ */
+function cpe_related_artifacts_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'rel_arts_formatter':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('rel_arts_field', $item),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'cpe_related_artifacts') . '/theme/css/rel-arts.css'),
+          ),
+        );
+      }
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Defines the CEH field type rendering.
+ *
+ * @see template_preprocess_ceh_field()
+ */
+function cpe_related_artifacts_theme($existing, $type, $theme, $path) {
+  return array(
+    'rel_arts_field' => array(
+      'variables' => array(
+        'image' => NULL,
+        'link' => NULL,
+        'file_link' => NULL,
+      ),
+      'template' => 'theme/related-artifact',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function for Related Artifacts field.
+ *
+ * @see cpe_related_artifacts_theme()
+ * @see related-artifact.tpl.php
+ *
+ * @ingroup themeable
+ */
+function template_preprocess_rel_arts_field(&$variables) {
+  $image_fid = $variables['image_fid'];
+  $link_title = $variables['link_title'];
+  $link_href = $variables['link_href'];
+  $file_fid = $variables['file_fid'];
+  $link = FALSE;
+
+  // Grab the image.
+  if ($file = file_load($image_fid)) {
+    $alt = $link_title ?: $file->filename;
+    $title = $link_title ?: $file->filename;
+    $image = theme('image', array(
+      'path' => $file->uri,
+      'width' => $file->width,
+      'height' => $file->height,
+      'alt' => $alt,
+      'title' => $title,
+    ));
+  }
+
+  if ($doc_file = file_load($file_fid)) {
+    $url = file_create_url($doc_file->uri);
+    $link = l($image, $url, array('html' => TRUE));
+  }
+  else {
+    $link = l($image, $link_href, array('html' => TRUE, 'attributes' => array('title' => $link_title)));
+  }
+
+  $variables['link'] = $link;
+
+}
+
+/**
+ * Implements hook_file_download().
+ *
+ * Checks access to make sure users can actually use the files that have been
+ * uploaded. Required since Drupal 7.29.
+ */
+function cpe_related_artifacts_file_download($uri) {
+  if (strpos(file_uri_target($uri), 'related_artifacts') === 0) {
+    $info = image_get_info($uri);
+    return array('Content-Type' => $info['mime_type']);
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements hook_field_insert().
+ *
+ * Permanently save uploaded images and record the usage.
+ */
+function cpe_related_artifacts_field_insert($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+  // Permanently save new images.
+  foreach ($items as $item) {
+    // Make sure they've been permanently stored.
+    if ($file = file_load($item['image_fid']) and $file->status !== FILE_STATUS_PERMANENT) {
+      $file->status = FILE_STATUS_PERMANENT;
+      file_save($file);
+      file_usage_add($file, 'cpe_related_artifacts', $entity_type, $id);
+    }
+    if ($file = file_load($item['file_fid']) and $file->status !== FILE_STATUS_PERMANENT) {
+      $file->status = FILE_STATUS_PERMANENT;
+      file_save($file);
+      file_usage_add($file, 'cpe_related_artifacts', $entity_type, $id);
+    }
+  }
+}
+
+/**
+ * Implements hook_field_update().
+ *
+ * Handle image changes.
+ */
+function cpe_related_artifacts_field_update($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+
+  // Build a display of the current FIDs.
+  $current_fids = array();
+  foreach ($items as $item) {
+    $current_fids[] = $item['image_fid'];
+    $current_fids[] = $item['file_fid'];
+
+    // Make sure they've been permanently stored.
+    if ($file = file_load($item['image_fid']) and $file->status !== FILE_STATUS_PERMANENT) {
+      $file->status = FILE_STATUS_PERMANENT;
+      file_save($file);
+      file_usage_add($file, 'cpe_related_artifacts', $entity_type, $id);
+    }
+    if ($file = file_load($item['file_fid']) and $file->status !== FILE_STATUS_PERMANENT) {
+      $file->status = FILE_STATUS_PERMANENT;
+      file_save($file);
+      file_usage_add($file, 'cpe_related_artifacts', $entity_type, $id);
+    }
+  }
+
+  // Get an original.
+  $original = entity_create_stub_entity($entity_type, array($id, $vid, $bundle));
+  field_attach_load($entity_type, array($id => $original), FIELD_LOAD_CURRENT, array('field_id' => $field['id']));
+
+  // Loop through the original entity, looking for files.
+  $original_fids = array();
+  if (!empty($original->{$field['field_name']}[$langcode])) {
+    foreach ($original->{$field['field_name']}[$langcode] as $original_item) {
+      // Grab a list of original FIDs to comparage against.
+      $original_fids[] = $original_item['image_fid'];
+      $original_fids[] = $original_item['file_fid'];
+
+      // If there's an original FID but it's not in the current FIDs...
+      if (isset($original_item['image_fid']) and !in_array($original_item['image_fid'], $current_fids)) {
+        // ...the file has been removed, so delete it permanently.
+        if ($file = file_load($original_item['image_fid'])) {
+          file_delete($file, TRUE);
+        }
+      }
+      // If there's an original FID but it's not in the current FIDs...
+      if (isset($original_item['file_fid']) and !in_array($original_item['file_fid'], $current_fids)) {
+        // ...the file has been removed, so delete it permanently.
+        if ($file = file_load($original_item['file_fid'])) {
+          file_delete($file, TRUE);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_delete().
+ *
+ * Permanently delete any files uploaded by the user.
+ */
+function cpe_related_artifacts_field_delete($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+
+  // Loop through the items in the field being deleted.
+  foreach ($items as $delta => $item) {
+    // Actually delete the file, if it exists.
+    if ($file = file_load($item['image_fid'])) {
+      file_delete($file, TRUE);
+    }
+    if ($file = file_load($item['file_fid'])) {
+      file_delete($file, TRUE);
+    }
+  }
+}
+
+/**
+ * Helper function to check if a drupal path exists or is in the filesystem.
+ */
+function cpe_related_artifacts_path_exists($path = FALSE) {
+  $result = FALSE;
+  $target = drupal_get_normal_path($path);
+  if (!$path or ($path and (drupal_valid_path($target) or file_exists(getcwd() . $path)))) {
+    $result = TRUE;
+  }
+  return $result;
+}
