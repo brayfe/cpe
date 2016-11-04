@@ -107,6 +107,7 @@
       print render($content['field_section_days']);
       print render($content['field_section_times']);
       print render($content['field_section_location']);
+      print render($content['field_section_modality']);
     ?>
 
     <div class="section-field-instructor">
@@ -115,7 +116,6 @@
     </div>
     
     <?php 
-      print render($content['field_section_modality']);
       print render($content['field_section_notes']);
       print render($content['field_section_cost']);
       print render($content['field_section_course_id']);
