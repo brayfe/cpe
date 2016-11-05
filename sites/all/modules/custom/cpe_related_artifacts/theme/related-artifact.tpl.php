@@ -5,5 +5,5 @@
  */
 ?>
 <div id="related-arts-field">
-  <div id="related-arts-image"><?= $link; ?></div>
+  <div id="related-arts-image"><?php print $link; ?></div>
 </div>
