@@ -100,19 +100,15 @@ function utexas_tablesaw_filter_filter_info() {
 function _tablesaw_filter($text, $filter, $format, $langcode, $cache, $cache_id) {
   // Older versions of libxml always add DOCTYPE, <html>, and <body> tags.
   // See http://www.php.net/manual/en/libxml.constants.php.
-  // Sometimes, PHP is >= 5.4, but libxml is old enough that the constants are
-  // not defined.
-  static $new_libxml;
-  if (!isset($new_libxml)) {
-    $new_libxml = version_compare(PHP_VERSION, '5.4', '>=') && defined('LIBXML_HTML_NOIMPLIED') && defined('LIBXML_HTML_NODEFDTD');
-  }
   if ($text != '') {
     $tables = array();
     libxml_use_internal_errors(TRUE);
     // LibXML requires that the html is wrapped in a root node.
     $text = '<root>' . $text . '</root>';
     $dom = new DOMDocument();
-    if ($new_libxml) {
+    // Sometimes, PHP is >= 5.4, but libxml is old enough that the constants are
+    // not defined.
+    if (defined(LIBXML_VERSION) && LIBXML_VERSION >= 20708) {
       $dom->loadHTML(mb_convert_encoding($text, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     }
     else {
@@ -145,7 +141,7 @@ function _tablesaw_filter($text, $filter, $format, $langcode, $cache, $cache_id)
         $html .= $dom->saveHTML($child);
       }
       // For lower older libxml, use preg_replace to clean up DOCTYPE.
-      if (!$new_libxml) {
+      if (defined(LIBXML_VERSION) && LIBXML_VERSION < 20708 && strpos($html, '<html><body>') != FALSE) {
         $html_start = strpos($html, '<html><body>') + 12;
         $html_length = strpos($html, '</body></html>') - $html_start;
         $html = substr($html, $html_start, $html_length);
