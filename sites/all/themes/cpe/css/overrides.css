@@ -70,19 +70,24 @@
 .field_instructor_pic {
   text-align: center; }
 
+.node-type-cpe-single-course-cert .top-banner,
 .node-type-cpe-multi-course-cert .top-banner {
   position: relative;
   height: 400px; }
+  .node-type-cpe-single-course-cert .top-banner .column,
   .node-type-cpe-multi-course-cert .top-banner .column {
     min-height: 369px; }
+  .node-type-cpe-single-course-cert .top-banner .container-hero.hero-style-1,
   .node-type-cpe-multi-course-cert .top-banner .container-hero.hero-style-1 {
     height: 400px;
     margin-right: -15px;
     margin-left: -15px;
     margin-top: 0;
     padding-top: 28px; }
+    .node-type-cpe-single-course-cert .top-banner .container-hero.hero-style-1 .relative-pos,
     .node-type-cpe-multi-course-cert .top-banner .container-hero.hero-style-1 .relative-pos {
       position: relative; }
+    .node-type-cpe-single-course-cert .top-banner .container-hero.hero-style-1 h1.page-title,
     .node-type-cpe-multi-course-cert .top-banner .container-hero.hero-style-1 h1.page-title {
       bottom: 0;
       position: absolute;
@@ -92,6 +97,7 @@
       font-weight: 600;
       padding: 10px 20px;
       opacity: 0.96; }
+  .node-type-cpe-single-course-cert .top-banner .rfi-code,
   .node-type-cpe-multi-course-cert .top-banner .rfi-code {
     float: right;
     max-height: 350px;
@@ -101,9 +107,11 @@
     opacity: 0.96;
     background-color: #f8f8f8; }
 
+.node-type-cpe-single-course-cert .middle_content,
 .node-type-cpe-multi-course-cert .middle_content {
   margin-top: 2em; }
 
+.node-type-cpe-single-course-cert .column.medium-8.large-9,
 .node-type-cpe-multi-course-cert .column.medium-8.large-9 {
   padding-right: 2em; }
 
