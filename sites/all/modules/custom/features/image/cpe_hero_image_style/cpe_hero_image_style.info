@@ -1,0 +1,9 @@
+name = CPE Hero Image Style
+description = Styles the hero images to no more than 400px high
+core = 7.x
+package = Image
+version = 7.x-1.0
+dependencies[] = image
+features[features_api][] = api:2
+features[image][] = cpe_hero_bg_image
+project path = sites/all/modules/custom/features/image
