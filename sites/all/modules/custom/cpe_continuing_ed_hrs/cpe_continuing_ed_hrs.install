@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Install file for CPE Custom Compound field module.
+ *
+ * Used to install a field schema for
+ * the Continuing Education Hours field, made up of:
+ * Accrediting Body - Select list from Accrediting Body vocab
+ * Prof. Unit Type - Taxonomy vocab
+ * Number of Hours - text.
+ */
+
+/**
+ * Implements hook_field_schema().
+ *
+ * Defines the schema for Continuing Ed Hours field.
+ */
+function cpe_continuing_ed_hrs_field_schema($field) {
+  $columns = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+    case 'cont_ed_hrs':
+      $columns['accrediting_body_tid'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The Accrediting Body term reference.',
+      );
+      $columns['prof_unit_type_tid'] = array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'description' => 'The Professional Unit Type term reference.',
+      );
+      $columns['num_hours'] = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Number of hours related to this course.',
+      );
+      break;
+
+  }
+
+  return array(
+    'columns' => $columns,
+    'foreign keys' => $foreign_keys,
+  );
+}
