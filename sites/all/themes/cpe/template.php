@@ -24,6 +24,20 @@ function cpe_preprocess_page(&$variables) {
     $variables['field_instructor_pic'] = render($view['field_instructor_pic']);
   }
 
+	// Area of Study content type field variables
+  if ($node->type == 'cpe_area_of_study') {
+    $variables['field_aos_headline'] = render($view['field_aos_headline']);
+    $variables['field_aos_description'] = render($view['field_aos_description']);
+    $variables['field_aos_cert_options'] = render($view['field_aos_cert_options']);
+    $variables['field_aos_certify_body'] = render($view['field_aos_certify_body']);
+    $variables['field_aos_accred_body'] = render($view['field_aos_accred_body']);
+    $variables['field_aos_featured'] = render($view['field_aos_featured']);
+    $variables['field_aos_contact_name'] = render($view['field_aos_contact_name']);
+    $variables['field_aos_rfi'] = render($view['field_aos_rfi']);
+    $variables['field_aos_contact_phone'] = render($view['field_aos_contact_phone']);
+    $variables['field_aos_contact_email'] = render($view['field_aos_contact_email']);
+  }
+
   // SCC content type field variables
   if ($node->type == 'cpe_single_course_cert') {
     $variables['field_scc_aos'] = render($view['field_scc_aos']);
