@@ -1,0 +1,9 @@
+name = CPE Related Artifacts Image
+description = image style for the related artifacts  images
+core = 7.x
+package = Image
+version = 7.x-1.0
+dependencies[] = image
+features[features_api][] = api:2
+features[image][] = rel_art_img
+project path = sites/all/modules/custom/features/image

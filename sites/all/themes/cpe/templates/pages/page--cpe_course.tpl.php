@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Page template for Instructor content type nodes.
+ * Template for course pages.
  *
  * Available variables:
  *
@@ -40,7 +40,6 @@
  */
 
 ?>
-
 <?php if (file_exists($partial_header)): require_once $partial_header; endif;  ?>
 
 <div class="UT-page default-page" id="ut-page-content" role="main">
@@ -65,23 +64,38 @@
     <?php endif; ?>
 
   <div class="middle_content row">
-
+ 
         <div class="column small-12 medium-8 large-9">
 
-          <?php 
-            // Print fields for instructor bio and credentials in main content area
-            print render($field_instructor_bio); 
-            print render($field_instructor_creds);
-          ?>
+            <?php 
+              print render($field_course_description);
+              print render($field_course_type);
+              print render($field_course_aos);
+              print render($field_course_who_enroll);
+              print render($field_course_outcomes);
+              print render($field_course_prereqs);
+              // continuing education hours
+              print render($field_course_discounts);              
+              print render($field_course_textbook_info);
+              print render($field_course_notes);
+            ?>
 
         </div>
+ 
 
-
+    <?php //if($page['sidebar_second']):?>
         <div class="column small-12 medium-4 large-3">
-          <!-- Print the instructor picture field -->
-          <?php print render($field_instructor_pic); ?>
+            <div class="contact-wrapper">
+              <h2 class="contact-title">Contact</h2>
+              <div class="coordinator-name"><?php print render($field_course_contact_name); ?></div>
+              <?php  
+                print render($field_course_contact_phone);
+                print render($field_course_contact_email);
+              ?>
+            </div>
+          <?php //print render($page['sidebar_second']); ?>
         </div>
-
+    <?php //endif; ?>
   </div>
 
     <?php if ($page['footer']): ?>

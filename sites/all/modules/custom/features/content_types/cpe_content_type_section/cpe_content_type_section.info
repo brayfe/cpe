@@ -10,6 +10,7 @@ dependencies[] = features
 dependencies[] = list
 dependencies[] = options
 dependencies[] = strongarm
+dependencies[] = taxonomy
 dependencies[] = text
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
