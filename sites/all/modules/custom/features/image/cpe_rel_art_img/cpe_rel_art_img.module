@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CPE Related Artifacts Image feature.
+ */
+
+include_once 'cpe_rel_art_img.features.inc';
