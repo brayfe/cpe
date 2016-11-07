@@ -45,6 +45,21 @@ function cpe_content_type_course_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
+  // Exported field_base: 'field_course_cont_ed_hrs'.
+  $field_bases['field_course_cont_ed_hrs'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_course_cont_ed_hrs',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'cpe_continuing_ed_hrs',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'cont_ed_hrs',
+  );
+
   // Exported field_base: 'field_course_contact_email'.
   $field_bases['field_course_contact_email'] = array(
     'active' => 1,
