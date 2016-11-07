@@ -42,7 +42,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
@@ -83,7 +83,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -123,7 +123,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 19,
+      'weight' => 20,
     ),
   );
 
@@ -164,7 +164,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 17,
+      'weight' => 18,
     ),
   );
 
@@ -207,7 +207,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
       'module' => 'phone',
       'settings' => array(),
       'type' => 'phone_textfield',
-      'weight' => 18,
+      'weight' => 19,
     ),
   );
 
@@ -250,7 +250,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -291,7 +291,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -331,7 +331,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 13,
+      'weight' => 14,
     ),
   );
 
@@ -375,7 +375,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -415,7 +415,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -455,7 +455,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 20,
+      'weight' => 21,
     ),
   );
 
@@ -494,7 +494,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 11,
+      'weight' => 12,
     ),
   );
 
@@ -531,7 +531,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 14,
+      'weight' => 15,
     ),
   );
 
@@ -571,7 +571,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -611,7 +611,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -652,7 +652,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 16,
+      'weight' => 17,
     ),
   );
 
@@ -692,7 +692,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -732,7 +732,45 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 10,
+      'weight' => 11,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'node-cpe_multi_course_cert-field_mcc_related_arts'.
+  $field_instances['node-cpe_multi_course_cert-field_mcc_related_arts'] = array(
+    'bundle' => 'cpe_multi_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'cpe_related_artifacts',
+        'settings' => array(),
+        'type' => 'rel_arts_formatter',
+        'weight' => 22,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mcc_related_arts',
+    'label' => 'Related Artifacts',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'cpe_related_artifacts',
+      'settings' => array(),
+      'type' => 'rel_arts_widget',
+      'weight' => 23,
     ),
   );
 
@@ -772,7 +810,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 21,
+      'weight' => 22,
     ),
   );
 
@@ -812,7 +850,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 15,
+      'weight' => 16,
     ),
   );
 
@@ -852,7 +890,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -916,6 +954,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
   t('Program Coordinator Name');
   t('Program ID');
   t('RFI Code');
+  t('Related Artifacts');
   t('Tuition');
   t('Who Should Enroll');
 
