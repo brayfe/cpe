@@ -62,12 +62,12 @@ function _install_taxonomy_terms() {
   $accred_body_vocab = taxonomy_vocabulary_machine_name_load('cpe_accred_bodies');
 
   $accred_bodies = array(
-    'SHRM',
-    'IIBA',
-    'CFP',
-    'TREC',
-    'PMI',
-    'CEU',
+    'Society for Human Resource',
+    'International Institute of Business Analysis',
+    'Certified Financial Planner Board of Standards',
+    'Texas Real Estate Commission',
+    'Project Management Institute',
+    'Continuing Education Units',
   );
 
   // Create the taxonomy terms.
@@ -80,23 +80,31 @@ function _install_taxonomy_terms() {
   // Get the Professional Unit Types Vocabulary.
   $prof_unit_types_vocab = taxonomy_vocabulary_machine_name_load('cpe_prof_unit_types');
 
-  $prof_unit_types = array(
-    'CEU',
-    'PDU-Leadership',
-    'PDU-Technical',
-    'PDU-Strategic and Busniess Management',
-    'PDC-Leadership and Navigation',
-    'PDC-Critical Evaluation',
-    'PDC-Business Acumen',
-    'CDU',
-    'CE',
-    'CE',
-  );
+  $prof_unit_types[] = array( 'name' => 'CEUs',
+                              'body' => 'Continuing Education Units');
+  $prof_unit_types[] = array('name' => 'PDUs-Leadership',
+                              'body' => 'Project Management Institute');
+  $prof_unit_types[] = array('name' => 'PDUs-Technical',
+                              'body' => 'Project Management Institute');
+  $prof_unit_types[] = array('name' => 'PDUs-Strategic and Business Management',
+                              'body' => 'Project Management Institute');
+  $prof_unit_types[] = array('name' => 'PDCs-Leadership and Navigation',
+                              'body' => 'Society for Human Resource');
+  $prof_unit_types[] = array('name' => 'PDCs-Critical Evaluation',
+                              'body' => 'Society for Human Resource');
+  $prof_unit_types[] = array('name' => 'PDCs-Business Acumen',
+                              'body' => 'Society for Human Resource');
+  $prof_unit_types[] = array('name' => 'CDUs',
+                              'body' => 'International Institute of Business Analysis');
+  $prof_unit_types[] = array('name' => 'CE',
+                              'body' => 'Certified Financial Planner Board of Standards');
+  $prof_unit_types[] = array('name' => 'CE',
+                              'body' => 'Texas Real Estate Commission');
 
   // Create the taxonomy terms.
   if ($prof_unit_types_vocab != FALSE) {
-    foreach ($prof_unit_types as $weight => $type) {
-      _create_taxonomy_term($type, $prof_unit_types_vocab->vid, $weight);
+    foreach ($prof_unit_types as $weight => $term) {
+      _create_put_taxonomy_term($term['name'], $prof_unit_types_vocab->vid, $term['body'], $weight);
     }
   }
 
@@ -116,5 +124,33 @@ function _create_taxonomy_term($name, $vid, $weight = NULL, $parent_tid = NULL) 
     $term->parent = array($parent_tid);
   }
   taxonomy_term_save($term);
-  return $term;
+}
+
+/**
+ * Helper function to create a taxonomy term.
+ */
+function _create_put_taxonomy_term($name, $vid, $body, $weight = NULL) {
+  $term = new stdClass();
+  $term->name = $name;
+  $term->vid = $vid;
+  if ($weight) {
+    $term->weight = $weight;
+  }
+  $field = array(
+    'entity_type' => 'taxonomy_term',
+    'bundle' => 'cpe_prof_unit_types',
+    'deleted' => 0,
+    'target_id' => _get_tid_from_name($body),
+  );
+  $term->field_accrediting_body[LANGUAGE_NONE][0] = $field;
+
+  taxonomy_term_save($term);
+}
+
+/**
+ * Helper function to look up tid for a specific term.
+ */
+function _get_tid_from_name($name) {
+  return db_query('SELECT tid FROM {taxonomy_term_data} WHERE name = :name',
+  array(':name' => $name))->fetchField();
 }

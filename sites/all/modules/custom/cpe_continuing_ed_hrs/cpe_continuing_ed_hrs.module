@@ -1,0 +1,307 @@
+<?php
+
+/**
+ * @file
+ * The CPE Continuing Education Hours module.
+ *
+ * Development for a custom compound field for CPE.
+ */
+
+/**
+ * Implements hook_field_info().
+ *
+ * Defines the field within the system.
+ */
+function cpe_continuing_ed_hrs_field_info() {
+  return array(
+    'cont_ed_hrs' => array(
+      'label' => t('Continuing Ed Hours'),
+      'description' => t('Defines the Continuing Education Hours field.'),
+      'settings' => array(),
+      'instance_settings' => array(),
+      'default_widget' => 'cont_ed_widget',
+      'default_formatter' => 'cont_ed_formatter',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines a formatter for the Continuing Education
+ * Hours Field.
+ */
+function cpe_continuing_ed_hrs_field_formatter_info() {
+  return array(
+    'cont_ed_formatter' => array(
+      'label' => t('Continuing Ed Hours'),
+      'field types' => array('cont_ed_hrs'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Defines the default widget.
+ */
+function cpe_continuing_ed_hrs_field_widget_info() {
+  return array(
+    'cont_ed_widget' => array(
+      'label' => t('Continuing Ed Hours'),
+      'field types' => array('cont_ed_hrs'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Form definition for the field widget.
+ */
+function cpe_continuing_ed_hrs_field_widget_form(&$form,
+ &$form_state,
+ $field,
+ $instance,
+ $langcode,
+ $items,
+ $delta,
+ $element) {
+  switch ($instance['widget']['type']) {
+    case 'cont_ed_widget':
+      // Set selected to TID of saved value or changed via ajax value.
+      if (isset($form_state['values'])) {
+        $name = $field['field_name'];
+        $selected = $form_state['values'][$name][LANGUAGE_NONE][$delta]['accrediting_body_tid'];
+      }
+      else {
+        $selected = isset($items[$delta]['accrediting_body_tid']) ? $items[$delta]['accrediting_body_tid'] : '';
+      }
+
+      // Set the options array for Accrediting Bodies field.
+      $options = _get_taxonomy_options('cpe_accred_bodies');
+
+      // Accrediting Body.
+      $element['accrediting_body_tid'] = array(
+        '#type' => 'select',
+        '#title' => t('Accrediting Body'),
+        '#options' => $options,
+        '#default_value' => $selected,
+        '#attributes' => array('delta' => $delta),
+        '#ajax' => array(
+          'event' => 'change',
+          'callback' => '_ajax_select_callback',
+          'wrapper' => 'put-select-' . $delta,
+        ),
+      );
+      // Professional Unit Type.
+      $element['prof_unit_type_tid'] = array(
+        '#type' => 'select',
+        '#title' => t('Professional Unit Type'),
+        '#prefix' => '<div id="put-select-' . $delta . '">',
+        '#suffix' => '</div>',
+        '#options' => _get_put_terms($selected),
+        '#default_value' => (isset($items[$delta]['prof_unit_type_tid'])) ? $items[$delta]['prof_unit_type_tid'] : '',
+      );
+      // Number of Hours.
+      $element['num_hours'] = array(
+        '#type' => 'textfield',
+        '#default_value' => (isset($items[$delta]['num_hours'])) ? $items[$delta]['num_hours'] : '',
+        '#title' => 'Number of Hours',
+        '#description' => t('The number of hours for this program.'),
+      );
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ * Determines whether or not the field has data in it.
+ */
+function cpe_continuing_ed_hrs_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case 'cont_ed_hrs':
+      return empty($item['accrediting_body_tid']);
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Used to make sure uploaded links are valid before trying to save.
+ */
+function cpe_continuing_ed_hrs_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  switch ($field['type']) {
+    case 'cont_ed_hrs':
+      foreach ($items as $delta => &$item) {
+        // If an item has Accrediting Body field filled in.
+        if (!empty($item) and !cpe_continuing_ed_hrs_field_is_empty($item, $field)) {
+          // Check Professional Unit Type.
+          if (empty($item['prof_unit_type_tid'])) {
+            $errors[$field['field_name']][$langcode][$delta][] = array(
+              'error' => 'no_prof_unit',
+              'message' => t('%field: Please select a Professional Unit Type.', array('%field' => $instance['label'])),
+            );
+          }
+          // Check Number of Hours.
+          if (empty($item['num_hours'])) {
+            $errors[$field['field_name']][$langcode][$delta][] = array(
+              'error' => 'no_num_hrs',
+              'message' => t('%field: Please enter the number of hours.', array('%field' => $instance['label'])),
+            );
+          }
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Applies sub-field errors to individual form elements.
+ */
+function cpe_continuing_ed_hrs_field_widget_error($element, $error, $form, &$form_state) {
+  // Set sub-field errors.
+  switch ($error['error']) {
+    case 'no_prof_unit':
+      form_error($element['prof_unit_type_tid'], $error['message']);
+      break;
+
+    case 'no_num_hrs':
+      form_error($element['num_hours'], $error['message']);
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * Used to display the Continuing Ed Hours formatter.
+ */
+function cpe_continuing_ed_hrs_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  switch ($display['type']) {
+    case 'cont_ed_formatter':
+      foreach ($items as $delta => $item) {
+        $element[] = array(
+          '#type' => 'markup',
+          '#markup' => theme('ceh_field', $item),
+          '#attached' => array(
+            'css' => array(drupal_get_path('module', 'cpe_continuing_ed_hrs') . '/theme/css/ceh.css'),
+          ),
+        );
+      }
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Defines the CEH field type rendering.
+ *
+ * @see template_preprocess_ceh_field()
+ */
+function cpe_continuing_ed_hrs_theme($existing, $type, $theme, $path) {
+  return array(
+    'ceh_field' => array(
+      'variables' => array(
+        'ac_body' => NULL,
+        'put' => NULL,
+        'num_hours' => NULL,
+      ),
+      'template' => 'theme/cont-ed-hrs',
+    ),
+  );
+}
+
+/**
+ * Theme preprocess function for Continuing Ed Hrs field.
+ *
+ * @see cpe_continuing_ed_hrs_theme()
+ * @see cont-ed-hrs.tpl.php
+ *
+ * @ingroup themeable
+ */
+function template_preprocess_ceh_field(&$variables) {
+  $variables['ac_body'] = _get_name_from_tid($variables['accrediting_body_tid']);
+  $variables['put'] = _get_name_from_tid($variables['prof_unit_type_tid']);
+}
+
+/**
+ * Ajax callback to update Prof. Unit Types.
+ *
+ * Run when an Accrediting Body is selected. Copied logic from
+ * https://www.drupal.org/node/1194484#comment-8899345.
+ */
+function _ajax_select_callback($form, $form_state) {
+  $form_state['rebuild'] = TRUE;
+  // Gets an array of the path of the triggering element.
+  $parents = $form_state['triggering_element']['#array_parents'];
+  // Removes the triggering element name.
+  array_pop($parents);
+  // Adds the element you want to target.
+  $parents[] = 'prof_unit_type_tid';
+  // Turns the array into a path on $form - i.e.
+  // $form['field_name']['und'][0]['your_element_name'];.
+  $element = drupal_array_get_nested_value($form, $parents);
+
+  return $element;
+}
+
+/**
+ * Helper function to pull terms for a specific taxonomy.
+ */
+function _get_taxonomy_options($machine_name) {
+  $options = array('0' => 'None');
+  // SELECT td.tid, td.name FROM taxonomy_term_data td
+  // JOIN taxonomy_vocabulary tv
+  // ON td.vid=tv.vid
+  // WHERE tv.machine_name = 'cpe_accred_bodies'.
+  $q = db_select('taxonomy_term_data', 'td');
+  $q->join('taxonomy_vocabulary', 'tv', 'td.vid=tv.vid');
+  $q->fields('td', array('tid', 'name'));
+  $q->condition('tv.machine_name', $machine_name, '=');
+  $result = $q->execute();
+
+  while ($record = $result->fetchAssoc()) {
+    $options[$record['tid']] = $record['name'];
+  }
+
+  return $options;
+}
+
+/**
+ * Helper function to Look up Prof. Unit Type
+ * terms tagged with a specifc Accrediting Bodies term.
+ */
+function _get_put_terms($key = '') {
+  $options = array();
+
+  // Query the db for the terms filtered by $key.
+  $q = db_query('SELECT ac.entity_id FROM {field_data_field_accrediting_body} ac WHERE ac.field_accrediting_body_target_id = :uid', array(':uid' => $key));
+  $result = $q->fetchCol();
+
+  // Create options list with tid as array key, name as value.
+  foreach ($result as $index => $tid) {
+    $options[$tid] = _get_name_from_tid($tid);
+  }
+
+  return $options;
+}
+
+/**
+ * Helper function to look up name for a specific term.
+ */
+function _get_name_from_tid($tid) {
+  return db_query('SELECT name FROM {taxonomy_term_data} WHERE tid = :tid',
+  array(':tid' => $tid))->fetchField();
+}
