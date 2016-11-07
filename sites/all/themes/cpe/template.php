@@ -8,11 +8,11 @@
  * Setup custom page templates based on suggestions.
  */
 function cpe_preprocess_page(&$variables) {
-	// Set theme hook suggestions for page templates to work
-	if (isset($variables['node']->type)) {
+  // check for node type set then use theme hook suggestions for page templates to work
+  if (isset($variables['node']->type)) {
     $nodetype = $variables['node']->type;
     $variables['theme_hook_suggestions'][] = 'page__' . $nodetype;
-	}
+  }
 
   $node = $variables['node'];
   $view = node_view($node);
@@ -22,6 +22,22 @@ function cpe_preprocess_page(&$variables) {
     $variables['field_instructor_bio'] = render($view['field_instructor_bio']);
     $variables['field_instructor_creds'] = render($view['field_instructor_creds']);
     $variables['field_instructor_pic'] = render($view['field_instructor_pic']);
+  }
+
+  // Course content type field variables
+  if ($node->type == 'cpe_course') {
+    $variables['field_course_type'] = render($view['field_course_type']);
+    $variables['field_course_aos'] = render($view['field_course_aos']);
+    $variables['field_course_description'] = render($view['field_course_description']);
+    $variables['field_course_who_enroll'] = render($view['field_course_who_enroll']);
+    $variables['field_course_outcomes'] = render($view['field_course_outcomes']);
+    $variables['field_course_discounts'] = render($view['field_course_discounts']);
+    $variables['field_course_prereqs'] = render($view['field_course_prereqs']);
+    $variables['field_course_textbook_info'] = render($view['field_course_textbook_info']);
+    $variables['field_course_notes'] = render($view['field_course_notes']);
+    $variables['field_course_contact_name'] = render($view['field_course_contact_name']);
+    $variables['field_course_contact_phone'] = render($view['field_course_contact_phone']);
+    $variables['field_course_contact_email'] = render($view['field_course_contact_email']);
   }
 
   // Area of Study content type field variables
@@ -93,7 +109,7 @@ function cpe_preprocess_page(&$variables) {
  */
 function cpe_preprocess_node(&$variables) {
 	$node = $variables['node'];
-	
+
   if($node->type == 'cpe_section') {
     $variables['field_section_cost'] = $node->field_section_cost['und'][0]['safe_value'];
     $datestamp1 = strtotime($node->field_section_dates['und'][0]['value']);
@@ -112,7 +128,7 @@ function cpe_preprocess_node(&$variables) {
     $variables['field_section_course'] = $node->field_section_course['und'][0]['target_id'];
     $variables['field_section_course_id'] = $node->field_section_course_id['und'][0]['safe_value'];
     $variables['field_section_mishell_id'] = $node->field_section_mishell_id['und'][0]['safe_value'];
-    $variables['field_section_notes'] = $node->field_section_notes['und'][0]['safe_value'];	
+    $variables['field_section_notes'] = $node->field_section_notes['und'][0]['safe_value'];
 	}
 
 }

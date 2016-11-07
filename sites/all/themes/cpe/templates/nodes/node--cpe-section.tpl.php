@@ -98,24 +98,24 @@
 
 
   <div class="section-fields">
-    <div class="section-field-dates">
-      <div class="section-field-labels">Dates: </div>
+    <div class="field field_section_dates">
+      <div class="section-field-labels field-label">Dates: </div>
       <?php print render($field_section_dates); ?>
     </div>
 
-    <?php 
+    <?php
       print render($content['field_section_days']);
       print render($content['field_section_times']);
       print render($content['field_section_location']);
       print render($content['field_section_modality']);
     ?>
 
-    <div class="section-field-instructor">
-      <div class="section-field-labels">Instructor: </div>
+    <div class="field field_section_instructor">
+      <div class="section-field-labels field-label">Instructor: </div>
       <?php print render($field_section_instructor); ?>
     </div>
-    
-    <?php 
+
+    <?php
       print render($content['field_section_notes']);
       print render($content['field_section_cost']);
       print render($content['field_section_course_id']);
@@ -125,32 +125,5 @@
     <?php //print $field_section_mishell_id; ?>
 
   </div>
-    
-
-
-  <div class="content clearfix"<?php print $content_attributes; ?>>
-    <?php
-      // We hide the comments and links now so that we can render them later.
-      hide($content['comments']);
-      hide($content['links']);
-    ?>
-  </div>
-
-  <?php
-    // Remove the "Add new comment" link on the teaser page or if the comment
-    // form is being displayed on the same page.
-    if ($teaser || !empty($content['comments']['comment_form'])) {
-      unset($content['links']['comment']['#links']['comment-add']);
-    }
-    // Only display the wrapper div if there are links.
-    $links = render($content['links']);
-    if ($links):
-  ?>
-    <div class="link-wrapper">
-      <?php print $links; ?>
-    </div>
-  <?php endif; ?>
-
-  <?php print render($content['comments']); ?>
 
 </div>
