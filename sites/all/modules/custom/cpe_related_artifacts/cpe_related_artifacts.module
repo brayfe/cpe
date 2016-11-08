@@ -81,12 +81,41 @@ function cpe_related_artifacts_field_widget_form(&$form,
         ),
         '#default_value' => (isset($items[$delta]['image_fid'])) ? $items[$delta]['image_fid'] : 0,
       );
+
+      $element['link_title'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Link Title'),
+        '#description' => t('An optional title for this image link anchor tag.'),
+        '#size' => 60,
+        '#maxlength' => 128,
+        '#default_value' => (isset($items[$delta]['link_title'])) ? $items[$delta]['link_title'] : '',
+      );
+
+      $element['file_link'] = array(
+        '#title' => 'Link to file',
+        '#type' => 'checkbox',
+        '#default_value' => !empty($items[$delta]['file_fid']) ? 1 : 0,
+        '#states' => array(
+          'checked' => array(
+            ':input[name="field_scc_related_arts[und][' . $delta . '][selection_container][url_link]"]' => array('checked' => FALSE),
+          ),
+          'unchecked' => array(
+            ':input[name="field_scc_related_arts[und][' . $delta . '][selection_container][url_link]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+
       // Link.
       $link = '';
       $element['link'] = array(
         '#type' => 'fieldset',
         '#collapsible' => FALSE,
         '#title' => t('Link'),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="field_scc_related_arts[und][' . $delta . '][file_link]"]' => array('checked' => FALSE),
+          ),
+        ),
       );
       // If internal path (/node/20), convert to alias.
       // External links are left alone.
@@ -95,14 +124,7 @@ function cpe_related_artifacts_field_widget_form(&$form,
           $link = drupal_get_path_alias($items[$delta]['link_href']);
         }
       }
-      $element['link']['link_title'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Link Title'),
-        '#description' => t('An optional title for this image link anchor tag.'),
-        '#size' => 60,
-        '#maxlength' => 128,
-        '#default_value' => (isset($items[$delta]['link_title'])) ? $items[$delta]['link_title'] : '',
-      );
+
       $element['link']['link_href'] = array(
         '#type' => 'textfield',
         '#title' => t('Link Location'),
@@ -124,6 +146,11 @@ function cpe_related_artifacts_field_widget_form(&$form,
           'file_validate_extensions' => array('pdf ppt pptx doc docx txt'),
         ),
         '#default_value' => isset($items[$delta]['file_fid']) ? $items[$delta]['file_fid'] : 0,
+        '#states' => array(
+          'visible' => array(
+            ':input[name="field_scc_related_arts[und][' . $delta . '][file_link]"]' => array('checked' => TRUE),
+          ),
+        ),
       );
       break;
   }
@@ -183,7 +210,7 @@ function cpe_related_artifacts_field_validate($entity_type, $entity, $field, $in
             if (!empty($item['file_fid'])) {
               $errors[$field['field_name']][$langcode][$delta][] = array(
                 'error' => 'need_one',
-                'message' => t('%field: You may only have one item for this artifact.', array('%field' => $instance['label'])),
+                'message' => t('%field: You may only have a link OR a file upload, remove one of them to continue.', array('%field' => $instance['label'])),
               );
             }
             // Validate Link.
@@ -235,7 +262,7 @@ function cpe_related_artifacts_field_presave($entity_type, $entity, $field, $ins
         // Adjust link & title.
         if (isset($item['link']['link_href'])) {
           $item['link_href'] = drupal_get_normal_path($item['link']['link_href']);
-          $item['link_title'] = isset($item['link']['link_title']) ? $item['link']['link_title'] : '';
+          $item['link_title'] = isset($item['link_title']) ? $item['link_title'] : '';
         }
         // Unset title if there is no link.
         else {
