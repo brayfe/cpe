@@ -45,6 +45,21 @@ function cpe_content_type_scc_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
+  // Exported field_base: 'field_scc_cont_ed_hrs'.
+  $field_bases['field_scc_cont_ed_hrs'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_scc_cont_ed_hrs',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'cpe_continuing_ed_hrs',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'cont_ed_hrs',
+  );
+
   // Exported field_base: 'field_scc_contact_email'.
   $field_bases['field_scc_contact_email'] = array(
     'active' => 1,
@@ -347,6 +362,21 @@ function cpe_content_type_scc_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'text',
+  );
+
+  // Exported field_base: 'field_scc_related_arts'.
+  $field_bases['field_scc_related_arts'] = array(
+    'active' => 1,
+    'cardinality' => 3,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_scc_related_arts',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'cpe_related_artifacts',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'related_artifacts',
   );
 
   // Exported field_base: 'field_scc_rfi'.

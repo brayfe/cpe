@@ -50,7 +50,7 @@ function cpe_content_type_aos_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -102,7 +102,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'size' => 100,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -149,7 +149,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -195,7 +195,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 9,
+      'weight' => 11,
     ),
   );
 
@@ -242,7 +242,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 7,
+      'weight' => 9,
     ),
   );
 
@@ -291,7 +291,7 @@ function cpe_content_type_aos_field_default_field_instances() {
       'module' => 'phone',
       'settings' => array(),
       'type' => 'phone_textfield',
-      'weight' => 8,
+      'weight' => 10,
     ),
   );
 
@@ -338,7 +338,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -390,7 +390,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'size' => 100,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -437,7 +437,51 @@ function cpe_content_type_aos_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 1,
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'node-cpe_area_of_study-field_aos_related_arts'.
+  $field_instances['node-cpe_area_of_study-field_aos_related_arts'] = array(
+    'bundle' => 'cpe_area_of_study',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'cpe_related_artifacts',
+        'settings' => array(),
+        'type' => 'rel_arts_formatter',
+        'weight' => 10,
+      ),
+      'full' => array(
+        'label' => 'hidden',
+        'module' => 'cpe_related_artifacts',
+        'settings' => array(),
+        'type' => 'rel_arts_formatter',
+        'weight' => 11,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_aos_related_arts',
+    'label' => 'Related Artifacts',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'cpe_related_artifacts',
+      'settings' => array(),
+      'type' => 'rel_arts_widget',
+      'weight' => 12,
     ),
   );
 
@@ -484,7 +528,7 @@ function cpe_content_type_aos_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -545,6 +589,7 @@ function cpe_content_type_aos_field_default_field_instances() {
   t('Phone Number');
   t('Program Coordinator Name');
   t('RFI Code');
+  t('Related Artifacts');
   t('The javascript snippet from Emma that generates the RFI block.');
 
   return $field_instances;

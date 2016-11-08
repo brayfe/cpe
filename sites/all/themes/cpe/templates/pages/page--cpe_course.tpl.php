@@ -74,7 +74,7 @@
               print render($field_course_who_enroll);
               print render($field_course_outcomes);
               print render($field_course_prereqs);
-              // continuing education hours
+              print render($field_course_cont_ed_hrs);
               print render($field_course_discounts);              
               print render($field_course_textbook_info);
               print render($field_course_notes);

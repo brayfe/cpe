@@ -91,6 +91,7 @@
               print render($field_aos_certify_body);
               print render($field_aos_accred_body);
               print render($field_aos_featured);
+              print render($field_aos_related_arts);
             ?>
 
           </div>
