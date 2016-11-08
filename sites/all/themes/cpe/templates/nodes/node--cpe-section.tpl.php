@@ -121,6 +121,11 @@
       print render($content['field_section_course_id']);
     ?>
 
+    <input type="submit" value="Add to Cart" id="Adding PDC course" setcookie('class','0UE14173rS000000000000', time() + 3600, '/', 'utexas.edu'); />
+
+    <input type="submit" value="Add to Cart" id="Contact Coordinator" />
+    
+
     <!-- hide mishell field for now; this will be used later with the add to cart button-->
     <?php //print $field_section_mishell_id; ?>
 
