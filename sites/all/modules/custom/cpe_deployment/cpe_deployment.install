@@ -38,6 +38,7 @@ function cpe_deployment_update_7101() {
     'cpe_info_sessions_view',
     'cpe_rel_art_img',
     'cpe_related_artifacts',
+    'cpe_cart',
   );
 
   module_enable($enable);
