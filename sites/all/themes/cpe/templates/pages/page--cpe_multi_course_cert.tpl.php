@@ -95,8 +95,8 @@
               print render($field_mcc_notes);
               print render($field_mcc_program_id);
               print render($field_mcc_courses);
-              //print render($field_mcc_mishell_id);
               print render($field_mcc_featured_related);
+              print render($field_mcc_related_arts);
             ?>
 
           </div>

@@ -219,6 +219,21 @@ function cpe_content_type_aos_field_default_field_bases() {
     'type' => 'text_long',
   );
 
+  // Exported field_base: 'field_aos_related_arts'.
+  $field_bases['field_aos_related_arts'] = array(
+    'active' => 1,
+    'cardinality' => 3,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_aos_related_arts',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'cpe_related_artifacts',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'related_artifacts',
+  );
+
   // Exported field_base: 'field_aos_rfi'.
   $field_bases['field_aos_rfi'] = array(
     'active' => 1,

@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * CPE Admin module.
+ *
+ * Used to add custom logic to CPE site.
+ */
+
+// Give the date format type a machine name.
+define('CPE_ADMIN_DATE_TYPE', 'cpe_admin_date_type');
+
+// Define the string to be passed to date().
+define('CPE_ADMIN_DATE_FORMAT', 'g:i a');
+
+/**
+ * Implements hook_date_formats().
+ */
+function cpe_admin_date_formats() {
+  $formats = array();
+  $formats[] = array(
+    'type' => CPE_ADMIN_DATE_TYPE,
+    'format' => CPE_ADMIN_DATE_FORMAT,
+    'locales' => array(),
+  );
+
+  variable_set('date_format_' . CPE_ADMIN_DATE_TYPE, CPE_ADMIN_DATE_FORMAT);
+
+  return $formats;
+}
+
+/**
+ * Implements hook_date_format_types().
+ */
+function cpe_admin_date_format_types() {
+  $types = array();
+  $types[CPE_ADMIN_DATE_TYPE] = t('Times');
+  return $types;
+}
+
+function cpe_admin_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'cpe_multi_course_cert_node_form' || $form_id == 'cpe_area_of_study_node_form' || $form_id == 'cpe_single_course_cert_node_form') {
+    $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['hero_image_style']['#type'] = 'value';
+    $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['hero_image_position']['#type'] = 'value';
+    $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['caption']['#type'] = 'value';
+    $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['subhead']['#type'] = 'value';
+    $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['link']['#type'] = 'value';
+    $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['link']['link_href']['#type'] = 'value';
+    $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['link']['link_title']['#type'] = 'value';
+  }
+}

@@ -21,7 +21,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 18,
+        'weight' => 20,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -47,6 +47,44 @@ function cpe_content_type_scc_field_default_field_instances() {
   );
 
   // Exported field_instance:
+  // 'node-cpe_single_course_cert-field_scc_cont_ed_hrs'.
+  $field_instances['node-cpe_single_course_cert-field_scc_cont_ed_hrs'] = array(
+    'bundle' => 'cpe_single_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'cpe_continuing_ed_hrs',
+        'settings' => array(),
+        'type' => 'cont_ed_formatter',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_scc_cont_ed_hrs',
+    'label' => 'Continuing Education Hours',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'cpe_continuing_ed_hrs',
+      'settings' => array(),
+      'type' => 'cont_ed_widget',
+      'weight' => 8,
+    ),
+  );
+
+  // Exported field_instance:
   // 'node-cpe_single_course_cert-field_scc_contact_email'.
   $field_instances['node-cpe_single_course_cert-field_scc_contact_email'] = array(
     'bundle' => 'cpe_single_course_cert',
@@ -59,7 +97,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'email',
         'settings' => array(),
         'type' => 'email_default',
-        'weight' => 16,
+        'weight' => 17,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -82,7 +120,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 16,
+      'weight' => 18,
     ),
   );
 
@@ -99,7 +137,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 14,
+        'weight' => 15,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -123,7 +161,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 14,
+      'weight' => 16,
     ),
   );
 
@@ -140,7 +178,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'phone',
         'settings' => array(),
         'type' => 'phone',
-        'weight' => 15,
+        'weight' => 16,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -166,7 +204,7 @@ function cpe_content_type_scc_field_default_field_instances() {
       'module' => 'phone',
       'settings' => array(),
       'type' => 'phone_textfield',
-      'weight' => 15,
+      'weight' => 17,
     ),
   );
 
@@ -207,7 +245,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -223,7 +261,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 8,
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -247,7 +285,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 10,
+      'weight' => 12,
     ),
   );
 
@@ -266,7 +304,7 @@ function cpe_content_type_scc_field_default_field_instances() {
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
-        'weight' => 12,
+        'weight' => 13,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -291,7 +329,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 9,
+      'weight' => 11,
     ),
   );
 
@@ -331,7 +369,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -350,7 +388,7 @@ function cpe_content_type_scc_field_default_field_instances() {
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
-        'weight' => 17,
+        'weight' => 18,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -371,7 +409,7 @@ function cpe_content_type_scc_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 17,
+      'weight' => 19,
     ),
   );
 
@@ -387,7 +425,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_plain',
-        'weight' => 13,
+        'weight' => 14,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -408,7 +446,7 @@ function cpe_content_type_scc_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 11,
+      'weight' => 13,
     ),
   );
 
@@ -424,7 +462,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -448,7 +486,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 7,
+      'weight' => 9,
     ),
   );
 
@@ -488,7 +526,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -505,7 +543,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 10,
+        'weight' => 11,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -529,7 +567,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 13,
+      'weight' => 15,
     ),
   );
 
@@ -569,7 +607,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -586,7 +624,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 7,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -610,7 +648,45 @@ function cpe_content_type_scc_field_default_field_instances() {
         'size' => 40,
       ),
       'type' => 'text_textfield',
-      'weight' => 8,
+      'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'node-cpe_single_course_cert-field_scc_related_arts'.
+  $field_instances['node-cpe_single_course_cert-field_scc_related_arts'] = array(
+    'bundle' => 'cpe_single_course_cert',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'cpe_related_artifacts',
+        'settings' => array(),
+        'type' => 'rel_arts_formatter',
+        'weight' => 19,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_scc_related_arts',
+    'label' => 'Related Artifacts',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'cpe_related_artifacts',
+      'settings' => array(),
+      'type' => 'rel_arts_widget',
+      'weight' => 21,
     ),
   );
 
@@ -626,7 +702,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 11,
+        'weight' => 12,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -650,7 +726,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 18,
+      'weight' => 20,
     ),
   );
 
@@ -666,7 +742,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 9,
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -690,7 +766,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'size' => 40,
       ),
       'type' => 'text_textfield',
-      'weight' => 12,
+      'weight' => 14,
     ),
   );
 
@@ -731,7 +807,7 @@ function cpe_content_type_scc_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -769,13 +845,14 @@ function cpe_content_type_scc_field_default_field_instances() {
       'module' => 'utexas_hero_photo',
       'settings' => array(),
       'type' => 'utexas_hero_photo_full',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Area of Study');
+  t('Continuing Education Hours');
   t('Description');
   t('Duration');
   t('Email');
@@ -792,6 +869,7 @@ function cpe_content_type_scc_field_default_field_instances() {
   t('Program Coordinator Name');
   t('Program ID');
   t('RFI Code');
+  t('Related Artifacts');
   t('The javascript snippet from Emma that generates the RFI block.');
   t('Tuition');
   t('Who Should Enroll');

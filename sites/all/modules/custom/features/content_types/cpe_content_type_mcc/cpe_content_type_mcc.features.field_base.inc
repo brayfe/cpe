@@ -426,6 +426,21 @@ function cpe_content_type_mcc_field_default_field_bases() {
     'type' => 'text',
   );
 
+  // Exported field_base: 'field_mcc_related_arts'.
+  $field_bases['field_mcc_related_arts'] = array(
+    'active' => 1,
+    'cardinality' => 3,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_mcc_related_arts',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'cpe_related_artifacts',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'related_artifacts',
+  );
+
   // Exported field_base: 'field_mcc_rfi'.
   $field_bases['field_mcc_rfi'] = array(
     'active' => 1,

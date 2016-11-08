@@ -5,7 +5,7 @@
  * Install for CPE initial deployment.
  */
 
- /**
+/**
  * Implements hook_install().
  */
 function cpe_deployment_install() {
@@ -36,8 +36,12 @@ function cpe_deployment_update_7101() {
     'cpe_content_type_scc',
     'cpe_content_type_aos',
     'cpe_info_sessions_view',
+    'cpe_hero_image_style',
     'cpe_rel_art_img',
     'cpe_related_artifacts',
+    'cpe_continuing_ed_hrs',
+    'cpe_admin',
+    'cpe_text_formats',
     'cpe_cart',
   );
 

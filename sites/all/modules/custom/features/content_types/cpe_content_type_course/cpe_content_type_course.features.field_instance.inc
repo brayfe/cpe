@@ -27,7 +27,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 11,
+        'weight' => 12,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -52,6 +52,50 @@ function cpe_content_type_course_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-cpe_course-field_course_cont_ed_hrs'.
+  $field_instances['node-cpe_course-field_course_cont_ed_hrs'] = array(
+    'bundle' => 'cpe_course',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'cpe_continuing_ed_hrs',
+        'settings' => array(),
+        'type' => 'cont_ed_formatter',
+        'weight' => 12,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'cpe_continuing_ed_hrs',
+        'settings' => array(),
+        'type' => 'cont_ed_formatter',
+        'weight' => 4,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_course_cont_ed_hrs',
+    'label' => 'Continuing Education Hours',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'cpe_continuing_ed_hrs',
+      'settings' => array(),
+      'type' => 'cont_ed_widget',
+      'weight' => 7,
+    ),
+  );
+
   // Exported field_instance: 'node-cpe_course-field_course_contact_email'.
   $field_instances['node-cpe_course-field_course_contact_email'] = array(
     'bundle' => 'cpe_course',
@@ -71,7 +115,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'module' => 'email',
         'settings' => array(),
         'type' => 'email_default',
-        'weight' => 9,
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -94,7 +138,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -117,7 +161,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 7,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -141,7 +185,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 10,
+      'weight' => 11,
     ),
   );
 
@@ -164,7 +208,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'module' => 'phone',
         'settings' => array(),
         'type' => 'phone',
-        'weight' => 8,
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -190,7 +234,7 @@ function cpe_content_type_course_field_default_field_instances() {
       'module' => 'phone',
       'settings' => array(),
       'type' => 'phone_textfield',
-      'weight' => 11,
+      'weight' => 12,
     ),
   );
 
@@ -260,7 +304,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -284,7 +328,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -307,7 +351,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -331,7 +375,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -448,7 +492,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -472,7 +516,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -493,7 +537,7 @@ function cpe_content_type_course_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 10,
+        'weight' => 11,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -568,6 +612,7 @@ function cpe_content_type_course_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Area of Study');
+  t('Continuing Education Hours');
   t('Course Type');
   t('Description');
   t('Discounts');
