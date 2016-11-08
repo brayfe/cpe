@@ -92,8 +92,10 @@
               print render($field_scc_outcomes);
               print render($field_scc_prereqs);
               print render($field_scc_notes);
+              print render($field_scc_cont_ed_hrs);
               print render($field_scc_program_id);
               print render($field_scc_featured_related);
+              print render($field_scc_related_arts);
             ?>
 
           </div>

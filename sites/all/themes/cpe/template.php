@@ -32,6 +32,7 @@ function cpe_preprocess_page(&$variables) {
     $variables['field_course_who_enroll'] = render($view['field_course_who_enroll']);
     $variables['field_course_outcomes'] = render($view['field_course_outcomes']);
     $variables['field_course_discounts'] = render($view['field_course_discounts']);
+    $variables['field_course_cont_ed_hrs'] = render($view['field_course_cont_ed_hrs']);
     $variables['field_course_prereqs'] = render($view['field_course_prereqs']);
     $variables['field_course_textbook_info'] = render($view['field_course_textbook_info']);
     $variables['field_course_notes'] = render($view['field_course_notes']);
@@ -48,6 +49,7 @@ function cpe_preprocess_page(&$variables) {
     $variables['field_aos_certify_body'] = render($view['field_aos_certify_body']);
     $variables['field_aos_accred_body'] = render($view['field_aos_accred_body']);
     $variables['field_aos_featured'] = render($view['field_aos_featured']);
+    $variables['field_aos_related_arts'] = render($view['field_aos_related_arts']);
     $variables['field_aos_contact_name'] = render($view['field_aos_contact_name']);
     $variables['field_aos_rfi'] = render($view['field_aos_rfi']);
     $variables['field_aos_contact_phone'] = render($view['field_aos_contact_phone']);
@@ -69,6 +71,8 @@ function cpe_preprocess_page(&$variables) {
     $variables['field_scc_modality'] = render($view['field_scc_modality']);
     $variables['field_scc_tuition'] = render($view['field_scc_tuition']);
     $variables['field_scc_pay_options'] = render($view['field_scc_pay_options']);
+    $variables['field_scc_cont_ed_hrs'] = render($view['field_scc_cont_ed_hrs']);
+    $variables['field_scc_related_arts'] = render($view['field_scc_related_arts']);
     $variables['field_scc_contact_name'] = render($view['field_scc_contact_name']);
     $variables['field_scc_contact_phone'] = render($view['field_scc_contact_phone']);
     $variables['field_scc_contact_email'] = render($view['field_scc_contact_email']);
@@ -95,6 +99,7 @@ function cpe_preprocess_page(&$variables) {
     $variables['field_mcc_featured_related'] = render($view['field_mcc_featured_related']);
     $variables['field_mcc_tuition'] = render($view['field_mcc_tuition']);
     $variables['field_mcc_pay_options'] = render($view['field_mcc_pay_options']);
+    $variables['field_mcc_related_arts'] = render($view['field_mcc_related_arts']);
     $variables['field_mcc_rfi'] = render($view['field_mcc_rfi']);
     $variables['field_mcc_contact_name'] = render($view['field_mcc_contact_name']);
     $variables['field_mcc_contact_phone'] = render($view['field_mcc_contact_phone']);
@@ -108,7 +113,7 @@ function cpe_preprocess_page(&$variables) {
  * Implements hook_preprocess_node().
  */
 function cpe_preprocess_node(&$variables) {
-	$node = $variables['node'];
+    $node = $variables['node'];
 
   if($node->type == 'cpe_section') {
     $variables['field_section_cost'] = $node->field_section_cost['und'][0]['safe_value'];
@@ -129,6 +134,6 @@ function cpe_preprocess_node(&$variables) {
     $variables['field_section_course_id'] = $node->field_section_course_id['und'][0]['safe_value'];
     $variables['field_section_mishell_id'] = $node->field_section_mishell_id['und'][0]['safe_value'];
     $variables['field_section_notes'] = $node->field_section_notes['und'][0]['safe_value'];
-	}
+    }
 
 }
