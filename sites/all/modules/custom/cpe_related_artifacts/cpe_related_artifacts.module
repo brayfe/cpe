@@ -91,12 +91,10 @@ function cpe_related_artifacts_field_widget_form(&$form,
         '#default_value' => (isset($items[$delta]['link_title'])) ? $items[$delta]['link_title'] : '',
       );
 
-
-
       $element['file_link'] = array(
         '#title' => 'Link to file',
         '#type' => 'checkbox',
-        '#default_value' => isset($items[$delta]['file_fid']) ? 1 : 0,
+        '#default_value' => !empty($items[$delta]['file_fid']) ? 1 : 0,
         '#states' => array(
           'checked' => array(
             ':input[name="field_scc_related_arts[und][' . $delta . '][selection_container][url_link]"]' => array('checked' => FALSE),
@@ -106,7 +104,6 @@ function cpe_related_artifacts_field_widget_form(&$form,
           ),
         ),
       );
-
 
       // Link.
       $link = '';
@@ -128,8 +125,6 @@ function cpe_related_artifacts_field_widget_form(&$form,
         }
       }
 
-      
-      
       $element['link']['link_href'] = array(
         '#type' => 'textfield',
         '#title' => t('Link Location'),
