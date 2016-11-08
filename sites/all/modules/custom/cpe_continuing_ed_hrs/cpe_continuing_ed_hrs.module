@@ -74,6 +74,9 @@ function cpe_continuing_ed_hrs_field_widget_form(&$form,
       if (isset($form_state['values'][$name][LANGUAGE_NONE][$delta]['accrediting_body_tid'])) {
         $selected = $form_state['values'][$name][LANGUAGE_NONE][$delta]['accrediting_body_tid'];
       }
+      elseif (isset($form_state['input'][$name][LANGUAGE_NONE][$delta]['accrediting_body_tid'])) {
+        $selected = $form_state['input'][$name][LANGUAGE_NONE][$delta]['accrediting_body_tid'];
+      }
       else {
         $selected = isset($items[$delta]['accrediting_body_tid']) ? $items[$delta]['accrediting_body_tid'] : '';
       }
