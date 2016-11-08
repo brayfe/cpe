@@ -1,53 +1,38 @@
 (function($){
   Drupal.behaviors.modulename = {
     attach: function (context, settings) {
-              /*Code goes here, this is going to be like 
-              $(document).ready() but will not be lost if
-              Drupal reloads the page or something */
 
-     //<![CDATA[
-      var mycookie = document.cookie;
+      $('input#add-to-cart').on('click', function() {
+        var classId = $(this).data('class-id');
+        setCookie('class', classId);
+        $('form#section-form').submit();
+      });
 
-      function getCookie(name) {
-        var index = mycookie.indexOf(name + '=');
-        if (index == -1)
-          return null;
-          index = mycookie.indexOf("=", index) + 1;
-          var endstr = mycookie.indexOf(';', index);
-        if (endstr == -1)
-          endstr = mycookie.length;
-          return unescape(mycookie.substring(index, endstr));
+      var cookieVal = getCookie('class');
+      var numOfClasses = 0;
+      if (cookieVal != null) {
+        var numOfClasses = cookieVal.length / Drupal.settings.cpe_cart.cpeCartClassIdLength;
       }
 
-      var cookievalue = getCookie('class');
-      var numofcookies = 0;
-      if (cookievalue != null) {
-        var numofcookies = cookievalue.length / 22;
-      }
-
-      if (numofcookies == 1) {
-        $('#classes_cart').append(" " + numofcookies + " Item");
+      if (numOfClasses == 1) {
+        $('#classes_cart').append(" " + numOfClasses + " Item");
       }
       else
       {
-        $('#classes_cart').append(" " + numofcookies + " Items");
+        $('#classes_cart').append(" " + numOfClasses + " Items");
       }
 
-      if (numofcookies != 0) {
+      if (numOfClasses > 0) {
 
-        $('#classes_cart').append('<br /><form action="' + Drupal.settings.cpe_cart.cpeCartCheckoutUrl + '" method="get"><input type="hidden" /><input type="submit" value="Check Out >" /></form>');
+        $('#classes_cart').append('<br /><form action="' + Drupal.settings.cpe_cart.cpeCartCheckoutUrl + '" method="get"><input type="submit" value="Check Out >" /></form>');
 
         $('#classes_cart').append('<input id="empty_cart" type="button" value="Empty Cart"  />');
-        
-        $('#empty_cart').on('click',function() {
-          setCookie('class', '');
-          location.reload();
-        });
-
+          
+          $('#empty_cart').on('click',function() {
+            setCookie('class', '');
+            location.reload();
+          });
       }
-
-      //]]>
-
     }
   }
 }(jQuery));

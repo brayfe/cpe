@@ -1,6 +1,6 @@
 
-//<![CDATA[
 var mycookie = document.cookie;
+
 function getCookie(name) {
     var index = mycookie.indexOf(name + '=');
     if (index == -1)
@@ -14,7 +14,7 @@ function getCookie(name) {
 
 function setCookie(name, value) {
     if (value == '') {
-        document.cookie=name + "=; path=/; domain=utexas.edu";
+        document.cookie=name + "=; path=/; domain=" + Drupal.settings.cpe_cart.cpeCartCookieDomain;
     } else {
         var oldvalue = getCookie(name);
         if (oldvalue != null) {
@@ -26,9 +26,9 @@ function setCookie(name, value) {
         if (index == -1) {
             if (value != null && value != "") {
                 if (oldvalue != null) {
-                    document.cookie=name + "=" + oldvalue + escape(value) + "; path=/ ; domain=utexas.edu";
+                    document.cookie=name + "=" + oldvalue + escape(value) + "; path=/ ; domain=" + Drupal.settings.cpe_cart.cpeCartCookieDomain;
                 } else {
-                        document.cookie=name + "=" + escape(value) + "; path=/ ; domain=utexas.edu";
+                    document.cookie=name + "=" + escape(value) + "; path=/ ; domain=" + Drupal.settings.cpe_cart.cpeCartCookieDomain;
                 }
                 mycookie = document.cookie;
             }
@@ -39,4 +39,3 @@ function setCookie(name, value) {
         }
     }
 }
-//]]>
