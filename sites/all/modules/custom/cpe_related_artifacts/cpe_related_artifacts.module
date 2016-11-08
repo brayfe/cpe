@@ -215,7 +215,7 @@ function cpe_related_artifacts_field_validate($entity_type, $entity, $field, $in
             if (!empty($item['file_fid'])) {
               $errors[$field['field_name']][$langcode][$delta][] = array(
                 'error' => 'need_one',
-                'message' => t('%field: You may only have one item for this artifact.', array('%field' => $instance['label'])),
+                'message' => t('%field: You may only have a link OR a file upload, remove one of them to continue.', array('%field' => $instance['label'])),
               );
             }
             // Validate Link.
