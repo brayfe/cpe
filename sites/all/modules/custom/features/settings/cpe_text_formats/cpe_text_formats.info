@@ -1,4 +1,4 @@
-name = Settings : Text Formats
+name = Settings: Text Formats
 description = The text format configurations for this site.
 core = 7.x
 package = Settings

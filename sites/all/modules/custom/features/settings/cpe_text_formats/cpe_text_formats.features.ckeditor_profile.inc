@@ -14,10 +14,19 @@ function cpe_text_formats_ckeditor_profile_defaults() {
       'settings' => array(
         'ss' => 2,
         'toolbar' => '[
-    [\'Format\',\'Bold\',\'Italic\',\'-\',\'NumberedList\',\'BulletedList\',\'-\',\'Link\',\'Unlink\',\'Image\']
+    [\'Source\'],
+    [\'Cut\',\'Copy\',\'Paste\',\'PasteText\',\'PasteFromWord\',\'-\',\'Scayt\'],
+    [\'Undo\',\'Redo\',\'Find\',\'Replace\',\'-\',\'SelectAll\'],
+    [\'Image\',\'Table\',\'HorizontalRule\',\'Smiley\',\'SpecialChar\'],
+    [\'Maximize\',\'ShowBlocks\'],
+    \'/\',
+    [\'Format\'],
+    [\'Bold\',\'Italic\',\'Underline\',\'Strike\',\'-\',\'Subscript\',\'Superscript\',\'-\',\'RemoveFormat\'],
+    [\'NumberedList\',\'BulletedList\',\'-\',\'Outdent\',\'Indent\',\'Blockquote\'],
+    [\'JustifyLeft\',\'JustifyCenter\',\'JustifyRight\',\'JustifyBlock\',\'-\',\'Link\',\'Unlink\',\'Anchor\']
 ]',
         'expand' => 't',
-        'default' => 'f',
+        'default' => 't',
         'show_toggle' => 't',
         'uicolor' => 'default',
         'uicolor_user' => 'default',
