@@ -1,0 +1,17 @@
+name = Settings : Text Formats
+description = The text format configurations for this site.
+core = 7.x
+package = Settings
+version = 7.x-1.0
+dependencies[] = ckeditor_link
+dependencies[] = features
+dependencies[] = filter
+dependencies[] = media_wysiwyg
+dependencies[] = utexas_qualtrics_filter
+dependencies[] = utexas_tablesaw_filter
+dependencies[] = video_filter
+features[ckeditor_profile][] = Advanced
+features[features_api][] = api:2
+features[filter][] = filtered_html
+features_exclude[dependencies][ckeditor] = ckeditor
+project path = sites/all/modules/custom/features/settings
