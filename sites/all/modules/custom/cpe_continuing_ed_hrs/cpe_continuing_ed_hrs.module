@@ -70,8 +70,8 @@ function cpe_continuing_ed_hrs_field_widget_form(&$form,
   switch ($instance['widget']['type']) {
     case 'cont_ed_widget':
       // Set selected to TID of saved value or changed via ajax value.
-      if (isset($form_state['values'])) {
-        $name = $field['field_name'];
+      $name = $field['field_name'];
+      if (isset($form_state['values'][$name][LANGUAGE_NONE][$delta]['accrediting_body_tid'])) {
         $selected = $form_state['values'][$name][LANGUAGE_NONE][$delta]['accrediting_body_tid'];
       }
       else {
