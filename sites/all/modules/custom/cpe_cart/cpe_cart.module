@@ -9,7 +9,7 @@ define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', ''));
 
 define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.edu'));
 
-define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 20));
+define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 22));
 
 /**
  * Implements hook_init().
