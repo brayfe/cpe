@@ -64,10 +64,10 @@
     <?php endif; ?>
 
   <div class="middle_content row">
- 
+
         <div class="column small-12 medium-8 large-9">
 
-            <?php 
+            <?php
               print render($field_course_description);
               print render($field_course_type);
               print render($field_course_aos);
@@ -75,20 +75,21 @@
               print render($field_course_outcomes);
               print render($field_course_prereqs);
               print render($field_course_cont_ed_hrs);
-              print render($field_course_discounts);              
+              print render($field_course_certificates);
+              print render($field_course_discounts);
               print render($field_course_textbook_info);
               print render($field_course_notes);
             ?>
 
         </div>
- 
+
 
     <?php //if($page['sidebar_second']):?>
         <div class="column small-12 medium-4 large-3">
             <div class="contact-wrapper">
               <h2 class="contact-title">Contact</h2>
               <div class="coordinator-name"><?php print render($field_course_contact_name); ?></div>
-              <?php  
+              <?php
                 print render($field_course_contact_phone);
                 print render($field_course_contact_email);
               ?>
