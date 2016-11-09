@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Module to create cart and checkout behavior.
+ */
+
+define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', ''));
+define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.edu'));
+define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 22));
+
+/**
+ * Implements hook_init().
+ */
+function cpe_cart_init() {
+  drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/cpe_cart_cookie.js');
+  drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js');
+  drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => CPE_CART_CHECKOUT_URL)), array('type' => 'setting'));
+  drupal_add_js(array('cpe_cart' => array('cpeCartCookieDomain' => CPE_CART_COOKIE_DOMAIN)), array('type' => 'setting'));
+  drupal_add_js(array('cpe_cart' => array('cpeCartClassIdLength' => CPE_CART_CLASS_ID_LENGTH)), array('type' => 'setting'));
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function cpe_cart_block_info() {
+  $blocks['cpe_cart'] = array(
+    // The name that will appear in the block list.
+    'info' => t('CPE Cart'),
+    // Default setting.
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cpe_cart_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'cpe_cart':
+      $block['subject'] = t('Shopping Cart');
+      $block['content'] = array(
+        '#markup' => theme('cpe_cart'),
+        '#attached' => array(
+          'js' => array(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js'),
+        ),
+      );
+
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cpe_cart_theme($existing, $type, $theme, $path) {
+  return array(
+    'cpe_cart' => array(
+      'variables' => array(
+        'item' => NULL,
+      ),
+      'template' => 'theme/cpe-cart',
+    ),
+  );
+}

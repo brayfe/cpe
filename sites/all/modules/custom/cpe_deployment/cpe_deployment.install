@@ -42,6 +42,7 @@ function cpe_deployment_update_7101() {
     'cpe_continuing_ed_hrs',
     'cpe_admin',
     'cpe_text_formats',
+    'cpe_cart',
   );
 
   module_enable($enable);

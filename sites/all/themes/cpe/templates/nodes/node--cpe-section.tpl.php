@@ -121,8 +121,14 @@
       print render($content['field_section_course_id']);
     ?>
 
-    <!-- hide mishell field for now; this will be used later with the add to cart button-->
-    <?php //print $field_section_mishell_id; ?>
+    <form id="section-form">
+
+      <input type="submit" value="Add to Cart" id="add-to-cart" data-class-id="<?php print $field_section_mishell_id; ?>" />
+
+      <!-- <input type="submit" value="Contact Coordinator" id="email-coord" /> -->
+    
+
+    </form>
 
   </div>
 
