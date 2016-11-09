@@ -1,14 +1,12 @@
-<?php 
+<?php
 
-/*
+/**
  * @file
- * module to cart and checkout behavior
+ * Module to create cart and checkout behavior.
  */
 
 define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', ''));
-
 define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.edu'));
-
 define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 22));
 
 /**
@@ -34,6 +32,7 @@ function cpe_cart_block_info() {
   );
   return $blocks;
 }
+
 /**
  * Implements hook_block_view().
  */
@@ -42,27 +41,22 @@ function cpe_cart_block_view($delta = '') {
 
   switch ($delta) {
     case 'cpe_cart':
-		$block['subject'] = t('test');
-		
-		$block['content'] = array(
-			'#markup' => theme('cpe_cart'),
-			'#attached' => array(
-		  		'js' => array(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js'),
-				),
-      	);
+      $block['subject'] = t('Shopping Cart');
+      $block['content'] = array(
+        '#markup' => theme('cpe_cart'),
+        '#attached' => array(
+          'js' => array(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js'),
+        ),
+      );
 
-      	break;
-    
-  	}
-  	return $block;
+      break;
+  }
+
+  return $block;
 }
-
-
 
 /**
  * Implements hook_theme().
- *
- * @see template_preprocess_utexas_social_links()
  */
 function cpe_cart_theme($existing, $type, $theme, $path) {
   return array(
@@ -74,6 +68,3 @@ function cpe_cart_theme($existing, $type, $theme, $path) {
     ),
   );
 }
-
-
-
