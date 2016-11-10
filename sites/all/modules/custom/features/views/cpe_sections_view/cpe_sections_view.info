@@ -1,0 +1,10 @@
+name = Sections per Course
+core = 7.x
+package = Views
+version = 7.x-1.0
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = cpe_sections
+features_exclude[dependencies][utexas_page_builder] = utexas_page_builder
+project path = sites/all/modules/custom/features/views
