@@ -35,7 +35,7 @@ function cpe_preprocess_page(&$variables) {
     $variables['field_course_discounts'] = render($view['field_course_discounts']);
     $variables['field_course_cont_ed_hrs'] = render($view['field_course_cont_ed_hrs']);
     // Load block view of certificates.
-    $block = module_invoke('views', 'block_view', 'certs_by_course-block');
+    $block = module_invoke('views', 'block_view', 'cpe_certs_by_course-block');
     $variables['field_course_certificates'] = $block['subject'] . render($block['content']);
     $variables['field_course_prereqs'] = render($view['field_course_prereqs']);
     $variables['field_course_textbook_info'] = render($view['field_course_textbook_info']);
