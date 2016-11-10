@@ -78,8 +78,7 @@
           print render($field_course_notes);
         ?>
       </div>
-
-      <?php // if($page['sidebar_second']):?>
+      <!-- Sidebar second. -->
       <div class="column small-12 medium-4 large-3">
         <div class="contact-wrapper">
           <h2 class="contact-title">Contact</h2>
@@ -89,9 +88,11 @@
             print render($field_course_contact_email);
           ?>
         </div>
-      </div>
-      <?php // endif; ?>
-    </div>
+        <div class="section-wrapper">
+          <?php print render($field_course_sections); ?>
+        </div>
+      </div><!-- End sidebar second. -->
+    </div><!-- End middle_content. -->
 
     <?php if ($page['footer']): ?>
       <div class="row">

@@ -59,6 +59,7 @@ function cpe_deployment_update_7102() {
   $enable = array(
     'cpe_cart',
     'cpe_certs_by_course_view',
+    'cpe_sections_view',
   );
 
   module_enable($enable);
