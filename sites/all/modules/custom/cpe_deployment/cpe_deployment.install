@@ -42,11 +42,24 @@ function cpe_deployment_update_7101() {
     'cpe_continuing_ed_hrs',
     'cpe_admin',
     'cpe_text_formats',
-    'cpe_cart',
   );
 
   module_enable($enable);
 
   // Install CPE Taxonomy terms.
   _install_taxonomy_terms();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable new features.
+ */
+function cpe_deployment_update_7102() {
+  $enable = array(
+    'cpe_cart',
+    'cpe_certs_by_course_view',
+  );
+
+  module_enable($enable);
 }
