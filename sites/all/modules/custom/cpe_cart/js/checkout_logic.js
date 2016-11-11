@@ -20,6 +20,7 @@
               // Hide the "Contact Coodinator" button if there are seats available
               $emailCoordinatorButton.hide();
               if (data < 5) {
+                // Add a pseudo "Seats Remaining" field if there are 1-4 seats available
                 $('div.field_section_course_id').before('<div class="field field_seats_remaining"><div class="field-label">Seats Remaining: </div><div class="field-items">' + data + '</div></div></div>');
               }
             } else {
