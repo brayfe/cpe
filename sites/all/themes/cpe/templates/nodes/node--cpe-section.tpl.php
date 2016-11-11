@@ -96,37 +96,20 @@
     </div>
   <?php endif; ?>
 
-
-  <div class="section-fields">
+<!--   <div class="section-fields">
     <div class="field field_section_dates">
       <div class="section-field-labels field-label">Dates: </div>
-      <?php print render($field_section_dates); ?>
-    </div>
+      <?php //print render($field_section_dates); ?>
+    </div> -->
 
-    <?php
-      print render($content['field_section_days']);
-      print render($content['field_section_times']);
-      print render($content['field_section_location']);
-      print render($content['field_section_modality']);
-    ?>
-
-    <div class="field field_section_instructor">
-      <div class="section-field-labels field-label">Instructor: </div>
-      <?php print render($field_section_instructor); ?>
-    </div>
-
-    <?php
-      print render($content['field_section_notes']);
-      print render($content['field_section_cost']);
-      print render($content['field_section_course_id']);
-    ?>
+    <?php print render($content); ?>
 
     <form id="section-form">
 
       <input type="submit" value="Add to Cart" id="add-to-cart" data-class-id="<?php print $field_section_mishell_id; ?>" />
 
       <!-- <input type="submit" value="Contact Coordinator" id="email-coord" /> -->
-    
+
 
     </form>
 
