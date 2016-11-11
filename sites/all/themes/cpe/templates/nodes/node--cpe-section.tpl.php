@@ -96,23 +96,12 @@
     </div>
   <?php endif; ?>
 
-<!--   <div class="section-fields">
-    <div class="field field_section_dates">
-      <div class="section-field-labels field-label">Dates: </div>
-      <?php //print render($field_section_dates); ?>
-    </div> -->
+  <?php print render($content); ?>
 
-    <?php print render($content); ?>
+  <form id="section-form">
+    <input type="submit" value="Add to Cart" id="add-to-cart" data-class-id="<?php print $field_section_mishell_id; ?>" />
 
-    <form id="section-form">
-
-      <input type="submit" value="Add to Cart" id="add-to-cart" data-class-id="<?php print $field_section_mishell_id; ?>" />
-
-      <!-- <input type="submit" value="Contact Coordinator" id="email-coord" /> -->
-
-
-    </form>
-
-  </div>
+    <!-- <input type="submit" value="Contact Coordinator" id="email-coord" /> -->
+  </form>
 
 </div>

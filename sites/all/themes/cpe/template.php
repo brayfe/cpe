@@ -121,7 +121,7 @@ function cpe_preprocess_page(&$variables) {
  */
 function cpe_preprocess_node(&$variables) {
   $node = $variables['node'];
-  if($node->type == 'cpe_section') {
+  if ($node->type == 'cpe_section') {
     $variables['field_section_mishell_id'] = $node->field_section_mishell_id['und'][0]['safe_value'];
   }
 }
