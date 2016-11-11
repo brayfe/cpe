@@ -40,7 +40,6 @@
  */
 
 ?>
-
 <?php if (file_exists($partial_header)): require_once $partial_header; endif;  ?>
 
 <div class="UT-page default-page" id="ut-page-content" role="main">
@@ -67,19 +66,20 @@
   <div class="middle_content row">
 
         <div class="column small-12 medium-8 large-9">
-
-          <?php 
+          <?php
             // Print fields for instructor bio and credentials in main content area
-            print render($field_instructor_bio); 
+            print render($field_instructor_bio);
             print render($field_instructor_creds);
           ?>
-
         </div>
 
 
         <div class="column small-12 medium-4 large-3">
           <!-- Print the instructor picture field -->
           <?php print render($field_instructor_pic); ?>
+          <?php if($page['sidebar_second']):?>
+                <?php print render($page['sidebar_second']); ?>
+          <?php endif; ?>
         </div>
 
   </div>
