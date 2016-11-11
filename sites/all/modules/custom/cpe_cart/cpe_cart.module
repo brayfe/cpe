@@ -5,12 +5,24 @@
  * Module to create cart and checkout behavior.
  */
 
+/**
+ * URL for shopping cart checkout.
+ */
 define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', ''));
 
+/**
+ * Cookie domain for shopping cart cookie.
+ */
 define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.edu'));
 
+/**
+ * Length of the class ID value in the shopping cart Cookie.
+ */
 define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 22));
 
+/**
+ * URL to use for checking remaining seats on a class ID via MISHELL.
+ */
 define('CPE_CART_SEAT_CHECK_URL', variable_get('cpe_cart_seat_check_url', drupal_get_path('module', 'cpe_cart') . '/seat_check.php?s_pgm_id='));
 
 /**
