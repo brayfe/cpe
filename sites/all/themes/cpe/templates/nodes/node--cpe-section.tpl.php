@@ -96,39 +96,14 @@
     </div>
   <?php endif; ?>
 
+  <?php print render($content); ?>
 
-  <div class="section-fields">
-    <div class="field field_section_dates">
-      <div class="section-field-labels field-label">Dates: </div>
-      <?php print render($field_section_dates); ?>
-    </div>
+  <form id="section-form">
 
-    <?php
-      print render($content['field_section_days']);
-      print render($content['field_section_times']);
-      print render($content['field_section_location']);
-      print render($content['field_section_modality']);
-    ?>
+    <input type="submit" value="Add to Cart" id="add-to-cart" data-class-id="<?php print $field_section_mishell_id; ?>" />
 
-    <div class="field field_section_instructor">
-      <div class="section-field-labels field-label">Instructor: </div>
-      <?php print render($field_section_instructor); ?>
-    </div>
+    <a href="mailto:<?php print render($field_coordinator_email); ?>" id="email-coord" />Email Coordinator</a>
 
-    <?php
-      print render($content['field_section_notes']);
-      print render($content['field_section_cost']);
-      print render($content['field_section_course_id']);
-    ?>
-
-    <form id="section-form">
-
-      <input type="submit" value="Add to Cart" id="add-to-cart" data-class-id="<?php print $field_section_mishell_id; ?>" />
-
-      <a href="mailto:<?php print render($field_coordinator_email); ?>" id="email-coord" />Email Coordinator</a>
-
-    </form>
-
-  </div>
+  </form>
 
 </div>
