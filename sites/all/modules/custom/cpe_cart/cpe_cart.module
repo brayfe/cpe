@@ -10,14 +10,32 @@ define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.
 define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 22));
 
 /**
+ * Check whether we are on a page using the default theme.
+ *
+ * @return bool
+ *   Whether or not this page uses the default theme.
+ */
+function _cpe_cart_is_theme_default() {
+  global $theme;
+  $theme_default = variable_get('theme_default', 'cpe');
+  return $theme == $theme_default;
+}
+
+/**
  * Implements hook_init().
  */
 function cpe_cart_init() {
-  drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/cpe_cart_cookie.js');
-  drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js');
-  drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => CPE_CART_CHECKOUT_URL)), array('type' => 'setting'));
-  drupal_add_js(array('cpe_cart' => array('cpeCartCookieDomain' => CPE_CART_COOKIE_DOMAIN)), array('type' => 'setting'));
-  drupal_add_js(array('cpe_cart' => array('cpeCartClassIdLength' => CPE_CART_CLASS_ID_LENGTH)), array('type' => 'setting'));
+  // Is this page request using the default theme?
+  // If CSS/JS aggregation is on, add tablesaw on every page for aggregration.
+  // If aggregation is off, responsive_tables_filter_preprocess_page()
+  // conditionally adds it on a per-page basis.
+  if (_cpe_cart_is_theme_default()) {
+    drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/cpe_cart_cookie.js');
+    drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js');
+    drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => CPE_CART_CHECKOUT_URL)), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartCookieDomain' => CPE_CART_COOKIE_DOMAIN)), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartClassIdLength' => CPE_CART_CLASS_ID_LENGTH)), array('type' => 'setting'));
+  }
 }
 
 /**
