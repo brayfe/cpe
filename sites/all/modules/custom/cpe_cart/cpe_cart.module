@@ -6,8 +6,12 @@
  */
 
 define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', ''));
+
 define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.edu'));
+
 define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 22));
+
+define('CPE_CART_SEAT_CHECK_URL', variable_get('cpe_cart_seat_check_url', drupal_get_path('module', 'cpe_cart') . '/seat_check.php?s_pgm_id='));
 
 /**
  * Implements hook_init().
@@ -18,6 +22,7 @@ function cpe_cart_init() {
   drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => CPE_CART_CHECKOUT_URL)), array('type' => 'setting'));
   drupal_add_js(array('cpe_cart' => array('cpeCartCookieDomain' => CPE_CART_COOKIE_DOMAIN)), array('type' => 'setting'));
   drupal_add_js(array('cpe_cart' => array('cpeCartClassIdLength' => CPE_CART_CLASS_ID_LENGTH)), array('type' => 'setting'));
+  drupal_add_js(array('cpe_cart' => array('cpeCartSeatCheckUrl' => CPE_CART_SEAT_CHECK_URL)), array('type' => 'setting'));
 }
 
 /**

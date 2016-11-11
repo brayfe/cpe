@@ -8,6 +8,28 @@
         $('form#section-form').submit();
       });
 
+      // Hide the "Add to Cart" button if MISHELL returns a response for
+      // the seat check that isn't a number greater than zero.
+      $('div.node-cpe-section').each(function() {
+        if ($('input#add-to-cart', this).length) {
+          var $addToCartButton = $('input#add-to-cart', this);
+          var $emailCoordinatorButton = $('input#email-coord', this);
+          var classId = $addToCartButton.data('class-id');
+          $.get(Drupal.settings.cpe_cart.cpeCartSeatCheckUrl + classId, function(data) {
+            if (data > 0) {
+              // Hide the "Contact Coodinator" button if there are seats available
+              $emailCoordinatorButton.hide();
+              if (data < 5) {
+                $('div.field_section_course_id').before('<div class="field field_seats_remaining"><div class="field-label">Seats Remaining: </div><div class="field-items">' + data + '</div></div></div>');
+              }
+            } else {
+              // Hide the "Add to Cart" button if there are no seats available
+              $addToCartButton.hide()
+            }
+          });
+        }
+      });
+
       var cookieVal = getCookie('class');
       var numOfClasses = 0;
       if (cookieVal != null) {
