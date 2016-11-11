@@ -54,7 +54,7 @@
           <div class="container container-hero hero-style-1">
 
             <div class="row">
-            <!--set placement of content that appears on top of hero image-->
+              <!--set placement of content that appears on top of hero image-->
               <div class="column small-12 medium-6 large-6 relative-pos">
                 <h1 class="page-title"><?php print $title; ?></h1>
               </div>
@@ -63,7 +63,7 @@
               </div>
 
             </div>
-          </div> 
+          </div>
 
         </div>
 
@@ -85,47 +85,52 @@
           <div class="column small-12 medium-8 large-9">
             <?php
               // print fields in the main area
-              print render($field_scc_aos);
-              print render($field_scc_headline);
-              print render($field_scc_description);
-              print render($field_scc_who_enroll);
-              print render($field_scc_outcomes);
-              print render($field_scc_prereqs);
-              print render($field_scc_notes);
-              print render($field_scc_cont_ed_hrs);
-              print render($field_scc_program_id);
-              print render($field_scc_featured_related);
-              print render($field_scc_related_arts);
+            print render($field_scc_aos);
+            print render($field_scc_headline);
+            print render($field_scc_description);
+            print render($field_scc_who_enroll);
+            print render($field_scc_outcomes);
+            print render($field_scc_prereqs);
+            print render($field_scc_notes);
+            print render($field_scc_cont_ed_hrs);
+            print render($field_scc_program_id);
+            print render($field_scc_featured_related);
+            print render($field_scc_related_arts);
             ?>
 
           </div>
         <?php endif; ?>
 
-          <div class="column small-12 medium-4 large-3">
-            <div class="at-a-glance">
-              <h4 class="at-a-glance-title">At A Glance</h4>
-              <?php 
-                print render($field_scc_duration);
-                print render($field_scc_modality);
-                print render($field_scc_tuition);
-                print render($field_scc_pay_options);
-              ?>
-            </div>
-            <!--contact info-->
-            <div class="contact-wrapper">
-              <h2 class="contact-title">Contact</h2>
-              <div class="coordinator-name"><?php print render($field_scc_contact_name); ?></div>
-              <?php  
-              print render($field_scc_contact_phone);
-              print render($field_scc_contact_email);
-              ?>
-            </div>
-
-            <!--info sessions-->
-            <div class="info-sessions">
-              <?php print render($field_scc_info_sessions); ?>
-            </div>
+        <div class="column small-12 medium-4 large-3">
+          <div class="at-a-glance">
+            <h4 class="at-a-glance-title">At A Glance</h4>
+            <?php
+            print render($field_scc_duration);
+            print render($field_scc_modality);
+            print render($field_scc_tuition);
+            print render($field_scc_pay_options);
+            ?>
           </div>
+          <!--contact info-->
+          <div class="contact-wrapper">
+            <h2 class="contact-title">Contact</h2>
+            <div class="coordinator-name"><?php print render($field_scc_contact_name); ?></div>
+            <?php
+            print render($field_scc_contact_phone);
+            print render($field_scc_contact_email);
+            ?>
+          </div>
+          <div class="section-wrapper">
+            <?php if($page['sidebar_second']):?>
+              <?php print render($page['sidebar_second']); ?>
+            <?php endif; ?>
+          </div>
+
+          <!--info sessions-->
+          <div class="info-sessions">
+            <?php print render($field_scc_info_sessions); ?>
+          </div>
+        </div>
 
       </div>
 

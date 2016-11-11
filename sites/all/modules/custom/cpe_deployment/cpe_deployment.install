@@ -64,3 +64,12 @@ function cpe_deployment_update_7102() {
 
   module_enable($enable);
 }
+function cpe_deployment_update_7103() {
+  $enable = array(
+    'cpe_context_sections_in_sidebar',
+    'cpe_sections_in_sidebar',
+  );
+
+  module_enable($enable);
+}
+

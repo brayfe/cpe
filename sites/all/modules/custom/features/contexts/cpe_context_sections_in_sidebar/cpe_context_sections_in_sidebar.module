@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Context : Sections In Sidebar feature.
+ */
+
+include_once 'cpe_context_sections_in_sidebar.features.inc';

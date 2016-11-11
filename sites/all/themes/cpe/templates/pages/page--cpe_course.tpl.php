@@ -42,29 +42,29 @@
 ?>
 <?php if (file_exists($partial_header)): require_once $partial_header; endif;  ?>
 
-<div class="UT-page default-page" id="ut-page-content" role="main">
-  <div class="container container-top">
-    <?php if (file_exists($partial_breadcrumbs)) : require_once $partial_breadcrumbs; endif; ?>
-    <?php if (file_exists($partial_page_top)) : require_once $partial_page_top; endif; ?>
-    <?php if (!isset($no_title)): ?>
-      <div class="row">
-        <div class="column small-12">
-          <h1 class="page-title"><?php print $title; ?></h1>
+  <div class="UT-page default-page" id="ut-page-content" role="main">
+    <div class="container container-top">
+      <?php if (file_exists($partial_breadcrumbs)) : require_once $partial_breadcrumbs; endif; ?>
+      <?php if (file_exists($partial_page_top)) : require_once $partial_page_top; endif; ?>
+      <?php if (!isset($no_title)): ?>
+        <div class="row">
+          <div class="column small-12">
+            <h1 class="page-title"><?php print $title; ?></h1>
+          </div>
         </div>
-      </div>
-    <?php endif; ?>
-  </div>
-  <div class="container">
-    <?php if($page['header']):?>
-      <div class="row">
-        <div class="columns small-12">
-          <?php print render($page['header']); ?>
+      <?php endif; ?>
+    </div>
+    <div class="container">
+      <?php if($page['header']):?>
+        <div class="row">
+          <div class="columns small-12">
+            <?php print render($page['header']); ?>
+          </div>
         </div>
-      </div>
-    <?php endif; ?>
-    <div class="middle_content row">
-      <div class="column small-12 medium-8 large-9">
-        <?php
+      <?php endif; ?>
+      <div class="middle_content row">
+        <div class="column small-12 medium-8 large-9">
+          <?php
           print render($field_course_description);
           print render($field_course_type);
           print render($field_course_aos);
@@ -76,31 +76,33 @@
           print render($field_course_discounts);
           print render($field_course_textbook_info);
           print render($field_course_notes);
-        ?>
-      </div>
-      <!-- Sidebar second. -->
-      <div class="column small-12 medium-4 large-3">
-        <div class="contact-wrapper">
-          <h2 class="contact-title">Contact</h2>
-          <div class="coordinator-name"><?php print render($field_course_contact_name); ?></div>
-          <?php
-            print render($field_course_contact_phone);
-            print render($field_course_contact_email);
           ?>
         </div>
-        <div class="section-wrapper">
-          <?php print render($field_course_sections); ?>
-        </div>
-      </div><!-- End sidebar second. -->
-    </div><!-- End middle_content. -->
+        <!-- Sidebar second. -->
+        <div class="column small-12 medium-4 large-3">
+          <div class="contact-wrapper">
+            <h2 class="contact-title">Contact</h2>
+            <div class="coordinator-name"><?php print render($field_course_contact_name); ?></div>
+            <?php
+            print render($field_course_contact_phone);
+            print render($field_course_contact_email);
+            ?>
+          </div>
+          <div class="section-wrapper">
+            <?php if($page['sidebar_second']):?>
+                <?php print render($page['sidebar_second']); ?>
+            <?php endif; ?>
+          </div>
+        </div><!-- End sidebar second. -->
+      </div><!-- End middle_content. -->
 
-    <?php if ($page['footer']): ?>
-      <div class="row">
-        <div class="column small-12">
-          <?php print render($page['footer']); ?>
+      <?php if ($page['footer']): ?>
+        <div class="row">
+          <div class="column small-12">
+            <?php print render($page['footer']); ?>
+          </div>
         </div>
-      </div>
-    <?php endif; ?>
+      <?php endif; ?>
+    </div>
+    <?php if (file_exists($partial_footer)): require_once $partial_footer; endif;  ?>
   </div>
-  <?php if (file_exists($partial_footer)): require_once $partial_footer; endif;  ?>
-</div>
