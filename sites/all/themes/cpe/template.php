@@ -141,6 +141,16 @@ function cpe_preprocess_node(&$variables) {
     $variables['field_section_course_id'] = $node->field_section_course_id['und'][0]['safe_value'];
     $variables['field_section_mishell_id'] = $node->field_section_mishell_id['und'][0]['safe_value'];
     $variables['field_section_notes'] = $node->field_section_notes['und'][0]['safe_value'];
+
+    // Add the "Course coordinator" email, based on whether the parent of the
+    // section is a course or a single_course_cert.
+    $node_wrapper = entity_metadata_wrapper('node', $node);
+    switch ($node_wrapper->field_section_course->getBundle()) {
+      case 'cpe_course':
+        $variables['field_coordinator_email'] = $node_wrapper->field_section_course->field_course_contact_email->value();
+      case 'cpe_single_course_cert':
+        $variables['field_coordinator_email'] = $node_wrapper->field_section_course->field_scc_contact_email->value();
+    }
   }
 
 }

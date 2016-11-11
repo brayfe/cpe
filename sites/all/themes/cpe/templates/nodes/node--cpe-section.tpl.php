@@ -125,8 +125,7 @@
 
       <input type="submit" value="Add to Cart" id="add-to-cart" data-class-id="<?php print $field_section_mishell_id; ?>" />
 
-      <input type="submit" value="Contact Coordinator" id="email-coord" />
-
+      <a href="mailto:<?php print render($field_coordinator_email); ?>" id="email-coord" />Email Coordinator</a>
 
     </form>
 
