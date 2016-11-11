@@ -6,7 +6,7 @@
  *
  * This is a "wrapper" script for querying MISHELL on UT Direct
  * to check for seat availability on course sections in the Center
- * for Professional Education. The only reason it has to be done`
+ * for Professional Education. The only reason it has to be done
  * this way is to avoid a CORS violation when making an AJAX request
  * to check seat availability.
  */
