@@ -63,7 +63,7 @@
               </div>
 
             </div>
-          </div> 
+          </div>
 
         </div>
 
@@ -104,7 +104,7 @@
           <div class="column small-12 medium-4 large-3">
             <div class="at-a-glance">
               <h4 class="at-a-glance-title">At A Glance</h4>
-              <?php 
+              <?php
                 print render($field_scc_duration);
                 print render($field_scc_modality);
                 print render($field_scc_tuition);
@@ -115,7 +115,7 @@
             <div class="contact-wrapper">
               <h2 class="contact-title">Contact</h2>
               <div class="coordinator-name"><?php print render($field_scc_contact_name); ?></div>
-              <?php  
+              <?php
               print render($field_scc_contact_phone);
               print render($field_scc_contact_email);
               ?>
@@ -125,6 +125,12 @@
             <div class="info-sessions">
               <?php print render($field_scc_info_sessions); ?>
             </div>
+
+            <!-- render anything in sidebar-->
+            <?php if($page['sidebar_second']):?>
+              <?php print render($page['sidebar_second']); ?>
+            <?php endif; ?>
+
           </div>
 
       </div>

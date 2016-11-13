@@ -63,7 +63,7 @@
               </div>
 
             </div>
-          </div> 
+          </div>
 
         </div>
 
@@ -83,7 +83,7 @@
 
         <?php if($page['content']):?>
           <div class="column small-12 medium-8 large-9">
-            <?php 
+            <?php
               // print fields in the main area
               print render($field_aos_headline);
               print render($field_aos_description);
@@ -102,11 +102,14 @@
             <div class="contact-wrapper">
               <h2 class="contact-title">Contact</h2>
               <div class="coordinator-name"><?php print render($field_aos_contact_name); ?></div>
-              <?php  
+              <?php
                 print render($field_aos_contact_phone);
                 print render($field_aos_contact_email);
               ?>
             </div>
+            <?php if($page['sidebar_second']):?>
+              <?php print render($page['sidebar_second']); ?>
+            <?php endif; ?>
           </div>
 
       </div>
