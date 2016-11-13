@@ -1,0 +1,17 @@
+name = Context : Sections In Sidebar
+description = Put the sections into the sidebar on courses and SCC pages
+core = 7.x
+package = Context
+version = 7.x-1.0
+dependencies[] = context
+dependencies[] = cpe_content_type_course
+dependencies[] = cpe_content_type_scc
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = strongarm
+dependencies[] = views
+features[context][] = cpe_sections_in_sidebar
+features[ctools][] = context:context:3
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+project path = sites/all/modules/custom/features/contexts

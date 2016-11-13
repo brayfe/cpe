@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Template for a Single Course Certificate page.
@@ -38,9 +39,7 @@
  *
  * @ingroup themeable.
  */
-
 ?>
-
 <?php if (file_exists($partial_header)): require_once $partial_header; endif;  ?>
 
   <div class="UT-page default-page" id="ut-page-content" role="main">
@@ -48,26 +47,20 @@
       <?php if (file_exists($partial_breadcrumbs)) : require_once $partial_breadcrumbs; endif; ?>
       <?php if (file_exists($partial_page_top)) : require_once $partial_page_top; endif; ?>
       <?php if (!isset($no_title)): ?>
-
         <div class="top-banner">
           <!-- the div below print the hero background image-->
           <div class="container container-hero hero-style-1">
-
             <div class="row">
-            <!--set placement of content that appears on top of hero image-->
+              <!--set placement of content that appears on top of hero image-->
               <div class="column small-12 medium-6 large-6 relative-pos">
                 <h1 class="page-title"><?php print $title; ?></h1>
               </div>
               <div class="column small-12 medium-5 large-5 rfi-block">
                 <div class="rfi-code"><?php print render($field_scc_rfi); ?></div>
               </div>
-
             </div>
-          </div> 
-
+          </div>
         </div>
-
-
       <?php endif; ?>
     </div>
     <div class="container">
@@ -80,11 +73,10 @@
       <?php endif; ?>
 
       <div class="middle_content row">
-
         <?php if($page['content']):?>
           <div class="column small-12 medium-8 large-9">
             <?php
-              // print fields in the main area
+              // Print fields in the main area.
               print render($field_scc_aos);
               print render($field_scc_headline);
               print render($field_scc_description);
@@ -97,36 +89,37 @@
               print render($field_scc_featured_related);
               print render($field_scc_related_arts);
             ?>
-
           </div>
         <?php endif; ?>
 
-          <div class="column small-12 medium-4 large-3">
-            <div class="at-a-glance">
-              <h4 class="at-a-glance-title">At A Glance</h4>
-              <?php 
-                print render($field_scc_duration);
-                print render($field_scc_modality);
-                print render($field_scc_tuition);
-                print render($field_scc_pay_options);
-              ?>
-            </div>
-            <!--contact info-->
-            <div class="contact-wrapper">
-              <h2 class="contact-title">Contact</h2>
-              <div class="coordinator-name"><?php print render($field_scc_contact_name); ?></div>
-              <?php  
-              print render($field_scc_contact_phone);
-              print render($field_scc_contact_email);
-              ?>
-            </div>
-
-            <!--info sessions-->
-            <div class="info-sessions">
-              <?php print render($field_scc_info_sessions); ?>
-            </div>
+        <div class="column small-12 medium-4 large-3">
+          <div class="at-a-glance">
+            <h4 class="at-a-glance-title">At A Glance</h4>
+            <?php
+              print render($field_scc_duration);
+              print render($field_scc_modality);
+              print render($field_scc_tuition);
+              print render($field_scc_pay_options);
+            ?>
           </div>
-
+          <!--contact info-->
+          <div class="contact-wrapper">
+            <h2 class="contact-title">Contact</h2>
+            <div class="coordinator-name"><?php print render($field_scc_contact_name); ?></div>
+            <?php
+            print render($field_scc_contact_phone);
+            print render($field_scc_contact_email);
+            ?>
+          </div>
+          <!--render sidebar-->
+          <?php if($page['sidebar_second']):?>
+            <?php print render($page['sidebar_second']); ?>
+          <?php endif; ?>
+          <!--info sessions-->
+          <div class="info-sessions">
+            <?php print render($field_scc_info_sessions); ?>
+          </div>
+        </div>
       </div>
 
       <?php if ($page['footer']): ?>
