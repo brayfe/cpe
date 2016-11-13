@@ -15,7 +15,7 @@ function cpe_preprocess_page(&$variables) {
     $variables['theme_hook_suggestions'][] = 'page__' . $nodetype;
   }
 
-  if(isset($variables['node'])) {
+  if (isset($variables['node'])) {
     $node = $variables['node'];
     $view = node_view($node);
 
@@ -44,9 +44,6 @@ function cpe_preprocess_page(&$variables) {
       $variables['field_course_contact_name'] = render($view['field_course_contact_name']);
       $variables['field_course_contact_phone'] = render($view['field_course_contact_phone']);
       $variables['field_course_contact_email'] = render($view['field_course_contact_email']);
-      // Load block view of Sections.
-      $block = module_invoke('views', 'block_view', 'cpe_sections-block');
-      $variables['field_course_sections'] = $block['subject'] . render($block['content']);
     }
 
     // Area of Study content type field variables.

@@ -64,3 +64,17 @@ function cpe_deployment_update_7102() {
 
   module_enable($enable);
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable new feature for the context that puts sections onthe course and SCC pages.
+ */
+function cpe_deployment_update_7103() {
+  $enable = array(
+    'cpe_context_sections_in_sidebar',
+  );
+
+  module_enable($enable);
+}
+

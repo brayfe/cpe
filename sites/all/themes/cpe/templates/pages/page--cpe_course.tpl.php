@@ -65,17 +65,17 @@
       <div class="middle_content row">
         <div class="column small-12 medium-8 large-9">
           <?php
-          print render($field_course_description);
-          print render($field_course_type);
-          print render($field_course_aos);
-          print render($field_course_who_enroll);
-          print render($field_course_outcomes);
-          print render($field_course_prereqs);
-          print render($field_course_cont_ed_hrs);
-          print render($field_course_certificates);
-          print render($field_course_discounts);
-          print render($field_course_textbook_info);
-          print render($field_course_notes);
+            print render($field_course_description);
+            print render($field_course_type);
+            print render($field_course_aos);
+            print render($field_course_who_enroll);
+            print render($field_course_outcomes);
+            print render($field_course_prereqs);
+            print render($field_course_cont_ed_hrs);
+            print render($field_course_certificates);
+            print render($field_course_discounts);
+            print render($field_course_textbook_info);
+            print render($field_course_notes);
           ?>
         </div>
         <!-- Sidebar second. -->
@@ -84,18 +84,16 @@
             <h2 class="contact-title">Contact</h2>
             <div class="coordinator-name"><?php print render($field_course_contact_name); ?></div>
             <?php
-            print render($field_course_contact_phone);
-            print render($field_course_contact_email);
+              print render($field_course_contact_phone);
+              print render($field_course_contact_email);
             ?>
           </div>
-
           <div class="section-wrapper">
             <?php if($page['sidebar_second']):?>
               <?php print render($page['sidebar_second']); ?>
             <?php endif; ?>
           </div>
-
-        </div>
+        </div><!-- End sidebar second. -->
       </div><!-- End middle_content. -->
 
       <?php if ($page['footer']): ?>
