@@ -14,10 +14,23 @@
         $('form#section-form').submit();
       });
 
-      // Hide the "Add to Cart" button if MISHELL returns a response for
-      // the seat check that isn't a number greater than zero. If the response
-      // is between 1-4, show the number of seats remaining as a sepaarate
-      // field on the section.
+      // "Seat availability check" functionality
+      // This does an AJAX call to a wrapper script that connects to MISHELL
+      // and queries the course_id for a section to see how many seats are
+      // available.
+      //
+      // It also adds a "Seats remaining" pseudo-field to the section display
+      // and hides it by default.
+      //
+      // If a section has 0 zero seats available or is not found, the "Add to Cart"
+      // button is hidden in favor of the "Contact Coordinator" button.
+      //
+      // If a section has 1-4 available seats, the "Seats remaining" pseudo-field
+      // is populated with the number of available seats, and the "Contact
+      // Coordinator" button remains hidden.
+      //
+      // If a section has 5+ available seats, the "Seats remaining" pseudo-field
+      // and the "Contact Coordinator" button both stay hiddden.
       $('#block-views-cpe-sections-block div.node-cpe-section').each(function () {
         if ($('input#add-to-cart', this).length) {
           var $addToCartButton = $('input#add-to-cart', this);
