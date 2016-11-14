@@ -41,10 +41,8 @@ function _cpe_cart_is_theme_default() {
  * Implements hook_init().
  */
 function cpe_cart_init() {
-  // Is this page request using the default theme?
-  // If CSS/JS aggregation is on, add tablesaw on every page for aggregration.
-  // If aggregation is off, responsive_tables_filter_preprocess_page()
-  // conditionally adds it on a per-page basis.
+  // Is this page request using the default theme? If so, add the JavaScript
+  // files and variables related to the CPE cart and seat check functionality.
   if (_cpe_cart_is_theme_default()) {
     drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/cpe_cart_cookie.js');
     drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js');
