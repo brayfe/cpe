@@ -145,3 +145,12 @@ function cpe_preprocess_node(&$variables) {
     $variables['field_section_mishell_id'] = $node->field_section_mishell_id['und'][0]['safe_value'];
   }
 }
+
+/**
+ * Implements hook_preprocess_links().
+ */
+function cpe_preprocess_links(&$variables) {
+    if (isset($variables['links']['node-readmore'])) {
+      $variables['links']['node-readmore']['title'] = t('Learn more');
+    }
+}
