@@ -77,6 +77,12 @@ function cpe_certs_by_course_view_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'cpe_course' => 'cpe_course',
   );
+  /* Filter criterion: Content: Title */
+  $handler->display->display_options['filters']['title']['id'] = 'title';
+  $handler->display->display_options['filters']['title']['table'] = 'node';
+  $handler->display->display_options['filters']['title']['field'] = 'title';
+  $handler->display->display_options['filters']['title']['relationship'] = 'reverse_field_mcc_courses_node';
+  $handler->display->display_options['filters']['title']['operator'] = 'not empty';
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block');
