@@ -232,7 +232,7 @@ function cpe_content_type_scc_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_scc_description',
-    'label' => 'Description',
+    'label' => 'Program Overview',
     'required' => 1,
     'settings' => array(
       'text_processing' => 1,
@@ -853,7 +853,6 @@ function cpe_content_type_scc_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Area of Study');
   t('Continuing Education Hours');
-  t('Description');
   t('Duration');
   t('Email');
   t('Featured and Related Courses');
@@ -868,6 +867,7 @@ function cpe_content_type_scc_field_default_field_instances() {
   t('Prerequisites');
   t('Program Coordinator Name');
   t('Program ID');
+  t('Program Overview');
   t('RFI Code');
   t('Related Artifacts');
   t('The javascript snippet from Emma that generates the RFI block.');
