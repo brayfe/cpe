@@ -32,7 +32,7 @@
 				opacity: 0.96;
 			}
 
-		} 
+		}
 
 		.rfi-code {
 			float: right;
@@ -48,6 +48,17 @@
 
 	.middle_content {
 		margin-top: 2em;
+
+    .field_aos_headline {
+
+      p {
+        color: $burntOrange;
+        font-size: 1.35em;
+        line-height: 1.5em;
+      }
+
+    }
+
 	}
 
 	.column.medium-8.large-9 {
@@ -57,5 +68,5 @@
 }
 
 // more responsive styling in _layout.scss
- 
+
 

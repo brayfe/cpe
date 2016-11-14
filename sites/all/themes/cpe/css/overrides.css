@@ -70,6 +70,12 @@
 .field_instructor_pic {
   text-align: center; }
 
+.section-fields .section-field-labels {
+  font-weight: bold; }
+
+.section-fields .field {
+  margin-bottom: .8em; }
+
 .node-type-cpe-course .top-banner {
   position: relative;
   height: 400px; }
@@ -140,6 +146,10 @@
 
 .node-type-cpe-area-of-study .middle_content {
   margin-top: 2em; }
+  .node-type-cpe-area-of-study .middle_content .field_aos_headline p {
+    color: #BF5700;
+    font-size: 1.35em;
+    line-height: 1.5em; }
 
 .node-type-cpe-area-of-study .column.medium-8.large-9 {
   padding-right: 2em; }
@@ -177,6 +187,10 @@
 
 .node-type-cpe-single-course-cert .middle_content {
   margin-top: 2em; }
+  .node-type-cpe-single-course-cert .middle_content .field_scc_headline p {
+    color: #BF5700;
+    font-size: 1.35em;
+    line-height: 1.5em; }
 
 .node-type-cpe-single-course-cert .column.medium-8.large-9 {
   padding-right: 2em; }
@@ -217,9 +231,13 @@
 
 .node-type-cpe-multi-course-cert .middle_content {
   margin-top: 2em; }
+  .node-type-cpe-multi-course-cert .middle_content .field_mcc_headline p {
+    color: #BF5700;
+    font-size: 1.35em;
+    line-height: 1.5em; }
 
 .node-type-cpe-multi-course-cert .column.medium-8.large-9 {
   padding-right: 2em; }
 
 .node-type-cpe-multi-course-cert .at-a-glance .field {
-  margin-bottom: .5em; }
+  margin-bottom: .75em; }
