@@ -18,7 +18,7 @@ define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.
 /**
  * Length of the class ID value in the shopping cart Cookie.
  */
-define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 22));
+define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 20));
 
 /**
  * URL to use for checking remaining seats on a class ID via MISHELL.
