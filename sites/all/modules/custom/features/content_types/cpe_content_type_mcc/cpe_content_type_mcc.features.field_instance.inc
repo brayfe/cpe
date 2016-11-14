@@ -278,7 +278,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_mcc_description',
-    'label' => 'Description',
+    'label' => 'Program Overview',
     'required' => 1,
     'settings' => array(
       'text_processing' => 1,
@@ -937,7 +937,6 @@ function cpe_content_type_mcc_field_default_field_instances() {
   t('Area of Study');
   t('Certifying Body');
   t('Courses Included');
-  t('Description');
   t('Duration');
   t('Email');
   t('Featured and Related Courses');
@@ -953,6 +952,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
   t('Prerequisites');
   t('Program Coordinator Name');
   t('Program ID');
+  t('Program Overview');
   t('RFI Code');
   t('Related Artifacts');
   t('Tuition');
