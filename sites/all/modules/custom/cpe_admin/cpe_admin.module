@@ -38,6 +38,11 @@ function cpe_admin_date_format_types() {
   return $types;
 }
 
+/**
+ * Implements hook_form_alter().
+ *
+ * Hide unused Hero Photo form elements from admin form.
+ */
 function cpe_admin_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'cpe_multi_course_cert_node_form' || $form_id == 'cpe_area_of_study_node_form' || $form_id == 'cpe_single_course_cert_node_form') {
     $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['hero_image_style']['#type'] = 'value';
@@ -47,5 +52,57 @@ function cpe_admin_form_alter(&$form, &$form_state, $form_id) {
     $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['link']['#type'] = 'value';
     $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['link']['link_href']['#type'] = 'value';
     $form['field_utexas_hero_photo'][LANGUAGE_NONE][0]['link']['link_title']['#type'] = 'value';
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * Finds/displays only the results with the same Accred Body.
+ */
+function cpe_admin_views_pre_render(&$view) {
+  if ($view->name == 'cpe_course_by_aos' && $view->current_display = "page") {
+    // Variable that collects results to remove.
+    $unset = array();
+    foreach ($view->result as $key => $row) {
+      // Assume this result should be removed unless Accred Body is found.
+      $has_same_ab = FALSE;
+      // The Accrediting Body tid of the Area of Study.
+      $accrediting_body = $row->field_field_aos_accred_body[0]['raw']['tid'];
+      $ceh = $row->field_field_course_cont_ed_hrs;
+      // Look for a Course CEH field with same Accred Body as AoS.
+      foreach ($ceh as $delta => $field) {
+        if ($field['raw']['accrediting_body_tid'] == $accrediting_body) {
+          // Has the same Accrediting Body, so display this result.
+          $has_same_ab = TRUE;
+          break;
+        }
+      }
+      if (!$has_same_ab) {
+        $unset[] = $key;
+      }
+    }
+
+    // Remove unwanted results from display.
+    foreach ($unset as $key) {
+      unset($view->result[$key]);
+    }
+    // Re-index the result array.
+    $view->result = array_values($view->result);
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ *
+ * Convert the path alias to a NID to use in the view.
+ */
+function cpe_admin_views_pre_view(&$view, &$display_id, &$args) {
+  if ($view->name == 'cpe_course_by_aos') {
+    $url = arg();
+    if (isset($url[1])) {
+      $nid = str_replace('node/', '', drupal_get_normal_path($url[1]));
+      $view->args[0] = $nid;
+    }
   }
 }
