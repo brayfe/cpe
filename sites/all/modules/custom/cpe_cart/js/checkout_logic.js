@@ -9,8 +9,8 @@
 
       // Attach a click behavior to the "add to cart" button.
       $('input#add-to-cart').on('click', function () {
-        var classId = $(this).data('class-id');
-        setCookie('class', classId);
+        var mishellId = $(this).data('mishell-id');
+        setCookie('class', mishellId);
         $('form#section-form').submit();
       });
 
@@ -21,12 +21,12 @@
       $('#block-views-cpe-sections-block div.node-cpe-section').each(function () {
         if ($('input#add-to-cart', this).length) {
           var $addToCartButton = $('input#add-to-cart', this);
-          var classId = $addToCartButton.data('class-id');
+          var courseId = $addToCartButton.data('course-id');
           var $emailCoordinatorButton = $('button#email-coord', this);
           $('div.field_section_course_id', this).before('<div class="field field_seats_remaining"><div class="field-label">Seats Remaining: </div><div class="field-items"></div></div></div>');
           var $seatsRemainingField = $('div.field_seats_remaining', this);
           $seatsRemainingField.hide();
-          $.get(Drupal.settings.cpe_cart.cpeCartSeatCheckUrl + classId, function (data) {
+          $.get(Drupal.settings.cpe_cart.cpeCartSeatCheckUrl + courseId, function (data) {
             var seatsAvailable = parseInt(data);
             $seatsRemainingField.children('.field-items').text(seatsAvailable);
             if (seatsAvailable > 0) {
