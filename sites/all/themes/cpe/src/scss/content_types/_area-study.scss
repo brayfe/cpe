@@ -67,7 +67,8 @@
 					margin-right: 0;
 				}
 
-				.node-cpe-single-course-cert {
+				.node-cpe-single-course-cert,
+				.node-cpe-multi-course-cert {
 
 					h2 {
 						font-size: 1.125em;
@@ -76,7 +77,8 @@
 						line-height: 1.25em;
 					}
 
-					.field_scc_headline {
+					.field_scc_headline,
+					.field_mcc_headline {
 
 						.field-item {
 							margin: 0;
