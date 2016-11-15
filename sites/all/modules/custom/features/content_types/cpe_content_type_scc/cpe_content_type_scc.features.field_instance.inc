@@ -459,7 +459,7 @@ function cpe_content_type_scc_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'hidden',
+        'label' => 'above',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -474,7 +474,7 @@ function cpe_content_type_scc_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_scc_notes',
-    'label' => 'Notes',
+    'label' => 'Additional Information',
     'required' => 0,
     'settings' => array(
       'text_processing' => 1,
@@ -852,6 +852,7 @@ function cpe_content_type_scc_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Additional Information');
   t('Area of Study');
   t('Continuing Education Hours');
   t('Duration');
@@ -862,7 +863,6 @@ function cpe_content_type_scc_field_default_field_instances() {
   t('Info Sessions');
   t('Learning Outcomes');
   t('Modality');
-  t('Notes');
   t('Payment Options');
   t('Phone Number');
   t('Prerequisites');

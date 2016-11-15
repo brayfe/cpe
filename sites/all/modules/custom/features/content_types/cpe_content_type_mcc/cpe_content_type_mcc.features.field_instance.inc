@@ -544,7 +544,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'hidden',
+        'label' => 'above',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -559,7 +559,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_mcc_notes',
-    'label' => 'Notes',
+    'label' => 'Additional Information',
     'required' => 0,
     'settings' => array(
       'text_processing' => 1,
@@ -935,6 +935,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Additional Information');
   t('Area of Study');
   t('Certifying Body');
   t('Courses Included');
@@ -947,7 +948,6 @@ function cpe_content_type_mcc_field_default_field_instances() {
   t('Learning Outcomes');
   t('Mishell ID');
   t('Modality');
-  t('Notes');
   t('Payment Options');
   t('Phone Number');
   t('Prerequisites');
