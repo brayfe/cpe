@@ -50,20 +50,25 @@
 		margin-top: 2em;
 
 		.at-a-glance {
-			background-color: #fffdfa;
-			border: 1px solid #f0ede6;
-			padding: 1em 1em 0 1em;
-			margin-bottom: 1.5em;
-			line-height: 1.6em;
+	    background-color: #b65600;
+	    color: #fff;
+	    position: relative;
+	    padding: 1em 1em .1em 1em;
+	    margin-bottom: 1.5em;
+	    line-height: 1.6em;
 
 			h4 {
-				background-color: #fff;
-				color: #BF5700;
+				background-color: #9b4b00;
+				font-weight: normal;
+				text-transform: uppercase;
+				margin-right: -16px;
+				margin-left: -16px;
+				margin-top: -16px;
+				color: #fff;
 				font-size: 1.4em;
 				padding: .5em;
 				text-align: center;
 				margin-bottom: .7em;
-				border: 1px solid #f0ede6;
 			}
 
 			.field {
