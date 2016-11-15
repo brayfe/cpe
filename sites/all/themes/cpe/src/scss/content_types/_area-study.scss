@@ -32,7 +32,7 @@
 				opacity: 0.96;
 			}
 
-		} 
+		}
 
 		.rfi-code {
 			float: right;
@@ -48,6 +48,76 @@
 
 	.middle_content {
 		margin-top: 2em;
+
+		.field_aos_cert_options {
+
+			.field-item {
+				display: inline-block;
+				vertical-align: top;
+				width: 31.5%;
+				background-color: #efefef;
+				margin: 1em 1%;
+				padding: 1em;
+
+				&:nth-child(3n+1) {
+					margin-left: 0;
+				}
+
+				&:nth-child(3n+3) {
+					margin-right: 0;
+				}
+
+				.node-cpe-single-course-cert {
+
+					h2 {
+						font-size: 1.125em;
+						margin: 0;
+						margin-bottom: .5em;
+						line-height: 1.25em;
+					}
+
+					.field_scc_headline {
+
+						.field-item {
+							margin: 0;
+							padding: 0;
+							width: 100%;
+
+							p {
+								margin-bottom: 0;
+								line-height: 1.3em;
+								font-size: 1em;
+							}
+
+						}
+
+					}
+
+					ul.links {
+
+						li.node-readmore {
+							display: block;
+							width: 100%;
+							padding: 0;
+							list-style-type: none;
+							background-color: $brandBlue;
+							padding: 4px;
+							text-align: center;
+
+							a {
+								color: #fff;
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
 	}
 
 	.column.medium-8.large-9 {
@@ -57,5 +127,5 @@
 }
 
 // more responsive styling in _layout.scss
- 
+
 
