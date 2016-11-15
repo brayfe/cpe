@@ -340,14 +340,14 @@ function cpe_content_type_course_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'hidden',
+        'label' => 'above',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 6,
       ),
       'full' => array(
-        'label' => 'hidden',
+        'label' => 'above',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -362,7 +362,7 @@ function cpe_content_type_course_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_course_notes',
-    'label' => 'Notes',
+    'label' => 'Additional Information',
     'required' => 0,
     'settings' => array(
       'text_processing' => 1,
@@ -611,6 +611,7 @@ function cpe_content_type_course_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Additional Information');
   t('Area of Study');
   t('Continuing Education Hours');
   t('Course Type');
@@ -618,7 +619,6 @@ function cpe_content_type_course_field_default_field_instances() {
   t('Discounts');
   t('Email');
   t('Learning Outcomes');
-  t('Notes');
   t('Phone Number');
   t('Prerequisites');
   t('Program Coordinator Name');

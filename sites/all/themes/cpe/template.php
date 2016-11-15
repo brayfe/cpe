@@ -151,8 +151,10 @@ function cpe_preprocess_node(&$variables) {
     switch ($node_wrapper->field_section_course->getBundle()) {
       case 'cpe_course':
         $variables['field_coordinator_email'] = $node_wrapper->field_section_course->field_course_contact_email->value();
+        break;
       case 'cpe_single_course_cert':
         $variables['field_coordinator_email'] = $node_wrapper->field_section_course->field_scc_contact_email->value();
+        break;
     }
   }
 }
