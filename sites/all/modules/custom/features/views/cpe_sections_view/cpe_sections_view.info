@@ -1,4 +1,5 @@
 name = Sections per Course
+description = The next 3 sections available for this Course/SCC.
 core = 7.x
 package = Views
 version = 7.x-1.0
