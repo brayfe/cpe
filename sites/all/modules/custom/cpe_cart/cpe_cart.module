@@ -5,9 +5,25 @@
  * Module to create cart and checkout behavior.
  */
 
+/**
+ * URL for shopping cart checkout.
+ */
 define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', ''));
+
+/**
+ * Cookie domain for shopping cart cookie.
+ */
 define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.edu'));
-define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 22));
+
+/**
+ * Length of the class ID value in the shopping cart Cookie.
+ */
+define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 20));
+
+/**
+ * URL to use for checking remaining seats on a class ID via MISHELL.
+ */
+define('CPE_CART_SEAT_CHECK_URL', variable_get('cpe_cart_seat_check_url', drupal_get_path('module', 'cpe_cart') . '/seat_check.php?s_pgm_id='));
 
 /**
  * Check whether we are on a page using the default theme.
@@ -25,16 +41,15 @@ function _cpe_cart_is_theme_default() {
  * Implements hook_init().
  */
 function cpe_cart_init() {
-  // Is this page request using the default theme?
-  // If CSS/JS aggregation is on, add tablesaw on every page for aggregration.
-  // If aggregation is off, responsive_tables_filter_preprocess_page()
-  // conditionally adds it on a per-page basis.
+  // Is this page request using the default theme? If so, add the JavaScript
+  // files and variables related to the CPE cart and seat check functionality.
   if (_cpe_cart_is_theme_default()) {
     drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/cpe_cart_cookie.js');
     drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js');
     drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => CPE_CART_CHECKOUT_URL)), array('type' => 'setting'));
     drupal_add_js(array('cpe_cart' => array('cpeCartCookieDomain' => CPE_CART_COOKIE_DOMAIN)), array('type' => 'setting'));
     drupal_add_js(array('cpe_cart' => array('cpeCartClassIdLength' => CPE_CART_CLASS_ID_LENGTH)), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartSeatCheckUrl' => CPE_CART_SEAT_CHECK_URL)), array('type' => 'setting'));
   }
 }
 

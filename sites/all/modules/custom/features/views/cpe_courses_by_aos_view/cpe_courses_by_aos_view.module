@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Courses by Area of Study feature.
+ */
+
+include_once 'cpe_courses_by_aos_view.features.inc';
