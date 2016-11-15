@@ -30,6 +30,28 @@ function cpe_preprocess_page(&$variables) {
     if ($node->type == 'cpe_course') {
       $variables['field_course_type'] = render($view['field_course_type']);
       $variables['field_course_aos'] = render($view['field_course_aos']);
+
+      // Custom label display logic based on course type
+      $course_type_term = taxonomy_term_load($node->field_course_type['und'][0]['tid']);
+      $course_description_display = 'above';
+      switch ($course_type_term->name) {
+        case 'Course':
+          $course_description_display = 'above';
+          break;
+        case 'Webinar':
+          $course_description_display = 'hidden';
+          break;
+        case 'Information Session':
+          $course_description_display = 'hidden';
+          break;
+        case 'Specialist Program':
+          $course_description_display = 'above';
+          break;
+        default:
+          $course_description_display = 'above';
+      }
+      $view['field_course_description']['#label_display'] = $course_description_display;
+
       $variables['field_course_description'] = render($view['field_course_description']);
       $variables['field_course_who_enroll'] = render($view['field_course_who_enroll']);
       $variables['field_course_outcomes'] = render($view['field_course_outcomes']);
