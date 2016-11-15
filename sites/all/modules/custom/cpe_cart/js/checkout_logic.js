@@ -9,8 +9,24 @@
 
       // Attach a click behavior to the "add to cart" button.
       $('input#add-to-cart').on('click', function () {
-        var mishellId = $(this).data('mishell-id');
-        setCookie('class', mishellId);
+        var mishellIdRaw = $(this).data('mishell-id');
+        // If the MISHELL ID field is only 7 bytes, it should be padded to 8 bytes
+        // with an underscore.
+        if (mishellIdRaw.length == '7') {
+          var mishellIdEightByte = mishellIdRaw + '_';
+        }
+        else if (mishellIdRaw.length == '8') {
+          var mishellIdEightByte = mishellIdRaw;
+        }
+        else {
+          console.error('MISHELL ID is not a valid 7 or 8 byte value');
+          alert('An unknown error has occurred. Please contact the website administrators.');
+          return false;
+        }
+        // Pad the 8-byte string with an additional 12 zeros, to match what
+        // MISHELL expects to see in the "class" cookie for cart checkout.
+        var mishellIdForCart = mishellIdEightByte + '000000000000';
+        setCookie('class', mishellIdForCart);
         $('form#section-form').submit();
       });
 
