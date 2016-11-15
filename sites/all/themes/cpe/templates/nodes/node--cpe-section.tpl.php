@@ -99,9 +99,11 @@
   <?php print render($content); ?>
 
   <form id="section-form">
-    <input type="submit" value="Add to Cart" id="add-to-cart" data-class-id="<?php print $field_section_mishell_id; ?>" />
 
-    <!-- <input type="submit" value="Contact Coordinator" id="email-coord" /> -->
+    <input type="submit" value="Add to Cart" id="add-to-cart" data-mishell-id="<?php print $field_section_mishell_id; ?>" />
+
+    <button class="email-coord"><a href="mailto:<?php print render($field_coordinator_email); ?>" />Email Coordinator</a></button>
+
   </form>
 
 </div>
