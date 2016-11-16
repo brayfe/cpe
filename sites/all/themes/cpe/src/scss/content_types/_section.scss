@@ -2,15 +2,74 @@
 
 .section-fields {
 
-	.section-field-labels {
-		font-weight: bold;
-	}
+  .section-field-labels {
+    font-weight: bold;
+  }
 
-	.field {
-		margin-bottom: .8em;
-	}
+  .field {
+    margin-bottom: .8em;
+  }
 
 }
 
- 
+// set sidebar default bg color to transparent
+.sidebar-default-style {
+  background: transparent;
+  border: 0;
+}
+
+// sections view
+#block-views-cpe-sections-block {
+
+  .views-row {
+    margin: 1em 0 2em;
+    background-color: rgba(0,0,0,.02);
+
+    .node-cpe-section {
+
+      .field {
+        margin-bottom: 1em;
+      }
+
+      #section-form {
+        margin-bottom: 0;
+        text-align: center;
+
+        .email-coord {
+          margin-bottom: 0;
+          background-color: #3383a4;
+          padding: 8px 18px;
+          outline: 0;
+
+          a {
+            color: #fff;
+            font-size: 1em;
+            outline: 0;
+          }
+
+        }
+
+      }
+
+    }
+
+    .section-number {
+      width: 100%;
+      background-color: #efefef;
+      text-align: center;
+      font-size: 1.2em;
+      padding:3px 8px;
+      font-weight: bold;
+    }
+
+    .node-cpe-section {
+      padding: 1em;
+    }
+  }
+
+}
+
+
+
+
 
