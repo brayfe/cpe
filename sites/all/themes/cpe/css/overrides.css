@@ -162,7 +162,11 @@
       font-size: 1.125em;
       margin: 0;
       margin-bottom: .5em;
-      line-height: 1.25em; }
+      line-height: 1.25em;
+      height: 75px; }
+    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .content,
+    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .content {
+      height: 100px; }
     .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_scc_headline .field-item,
     .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_mcc_headline .field-item,
     .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_scc_headline .field-item,
