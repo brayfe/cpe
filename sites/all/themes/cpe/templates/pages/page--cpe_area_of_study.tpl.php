@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Template for a Area of study page.
@@ -38,7 +39,6 @@
  *
  * @ingroup themeable.
  */
-
 ?>
 
 <?php if (file_exists($partial_header)): require_once $partial_header; endif;  ?>
@@ -84,7 +84,7 @@
         <?php if($page['content']):?>
           <div class="column small-12 medium-8 large-9">
             <?php
-              // print fields in the main area
+              // Print fields in the main area.
               print render($field_aos_headline);
               print render($field_aos_description);
               print render($field_aos_cert_options);
@@ -92,6 +92,7 @@
               print render($field_aos_accred_body);
               print render($field_aos_featured);
               print render($field_aos_related_arts);
+              print render($link_to_course_listing);
             ?>
 
           </div>

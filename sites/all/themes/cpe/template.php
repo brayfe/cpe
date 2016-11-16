@@ -31,22 +31,26 @@ function cpe_preprocess_page(&$variables) {
       $variables['field_course_type'] = render($view['field_course_type']);
       $variables['field_course_aos'] = render($view['field_course_aos']);
 
-      // Custom label display logic based on course type
+      // Custom label display logic based on course type.
       $course_type_term = taxonomy_term_load($node->field_course_type['und'][0]['tid']);
       $course_description_display = 'above';
       switch ($course_type_term->name) {
         case 'Course':
           $course_description_display = 'above';
           break;
+
         case 'Webinar':
           $course_description_display = 'hidden';
           break;
+
         case 'Information Session':
           $course_description_display = 'hidden';
           break;
+
         case 'Specialist Program':
           $course_description_display = 'above';
           break;
+
         default:
           $course_description_display = 'above';
       }
@@ -81,6 +85,8 @@ function cpe_preprocess_page(&$variables) {
       $variables['field_aos_rfi'] = render($view['field_aos_rfi']);
       $variables['field_aos_contact_phone'] = render($view['field_aos_contact_phone']);
       $variables['field_aos_contact_email'] = render($view['field_aos_contact_email']);
+      $link_text = '<div class="course-listing-link">' . t("PDUs/CEUs") . '</div>';
+      $variables['link_to_course_listing'] = l($link_text, "/course-by-aos/" . drupal_get_path_alias(), array('attributes' => array('title' => "PDUs/CEUs"), 'html' => TRUE));
     }
 
     // SCC content type field variables.
@@ -152,6 +158,7 @@ function cpe_preprocess_node(&$variables) {
       case 'cpe_course':
         $variables['field_coordinator_email'] = $node_wrapper->field_section_course->field_course_contact_email->value();
         break;
+
       case 'cpe_single_course_cert':
         $variables['field_coordinator_email'] = $node_wrapper->field_section_course->field_scc_contact_email->value();
         break;
@@ -163,7 +170,7 @@ function cpe_preprocess_node(&$variables) {
  * Implements hook_preprocess_links().
  */
 function cpe_preprocess_links(&$variables) {
-    if (isset($variables['links']['node-readmore'])) {
-      $variables['links']['node-readmore']['title'] = t('Learn more');
-    }
+  if (isset($variables['links']['node-readmore'])) {
+    $variables['links']['node-readmore']['title'] = t('Learn more');
+  }
 }
