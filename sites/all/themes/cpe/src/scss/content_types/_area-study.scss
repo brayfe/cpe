@@ -120,7 +120,47 @@
 
 		}
 
-	}
+
+    .field_aos_headline {
+
+      p {
+        color: $burntOrange;
+        line-height: 1.25em;
+		    font-size: 2.25em;
+   			margin-top: 2em;
+   		}
+
+   	}
+
+  }
+
+  .at-a-glance {
+    background-color: #BF5700;
+    color: #fff;
+    position: relative;
+    padding: 1em 1em .1em 1em;
+    margin-bottom: 1.5em;
+    line-height: 1.6em;
+
+    h4 {
+      background-color: #9b4b00;
+      font-weight: normal;
+      text-transform: uppercase;
+      margin-right: -16px;
+      margin-left: -16px;
+      margin-top: -16px;
+      color: #fff;
+      font-size: 1.4em;
+      padding: .5em;
+      text-align: center;
+      margin-bottom: .7em;
+    }
+
+    .field {
+      margin-bottom: .75em;
+    }
+
+  }
 
 	.column.medium-8.large-9 {
 		padding-right: 2em;
