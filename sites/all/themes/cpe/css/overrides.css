@@ -152,47 +152,55 @@
     width: 31.5%;
     background-color: #efefef;
     margin: 1em 1%;
-    padding: 1em; }
+    padding: 1em;
+    min-height: 200px; }
     .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item:nth-child(3n+1) {
       margin-left: 0; }
     .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item:nth-child(3n+3) {
       margin-right: 0; }
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert h2,
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert h2 {
-      font-size: 1.125em;
-      margin: 0;
-      margin-bottom: .5em;
-      line-height: 1.25em;
-      height: 75px; }
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .content,
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .content {
-      height: 100px; }
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_scc_headline .field-item,
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_mcc_headline .field-item,
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_scc_headline .field-item,
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_mcc_headline .field-item {
-      margin: 0;
-      padding: 0;
-      width: 100%; }
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_scc_headline .field-item p,
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_mcc_headline .field-item p,
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_scc_headline .field-item p,
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_mcc_headline .field-item p {
-        margin-bottom: 0;
-        line-height: 1.3em;
-        font-size: 1em; }
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert ul.links li.node-readmore,
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert ul.links li.node-readmore {
-      display: block;
-      width: 100%;
-      padding: 0;
-      list-style-type: none;
-      background-color: #3383a4;
-      padding: 4px;
-      text-align: center; }
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert ul.links li.node-readmore a,
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert ul.links li.node-readmore a {
-        color: #fff; }
+    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert,
+    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert {
+      position: relative;
+      min-height: 190px; }
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert h2,
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert h2 {
+        font-size: 1.125em;
+        margin: 0;
+        margin-bottom: .5em;
+        line-height: 1.25em; }
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_scc_headline .field-item,
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_mcc_headline .field-item,
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_scc_headline .field-item,
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_mcc_headline .field-item {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 0; }
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_scc_headline .field-item p,
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_mcc_headline .field-item p,
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_scc_headline .field-item p,
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_mcc_headline .field-item p {
+          margin-bottom: 0;
+          line-height: 1.3em;
+          font-size: 1em; }
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert ul.links,
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert ul.links {
+        position: absolute;
+        bottom: 0;
+        margin: 0;
+        width: 100%; }
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert ul.links li.node-readmore,
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert ul.links li.node-readmore {
+          display: block;
+          width: 100%;
+          padding: 0;
+          list-style-type: none;
+          background-color: #3383a4;
+          padding: 4px;
+          text-align: center; }
+          .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert ul.links li.node-readmore a,
+          .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert ul.links li.node-readmore a {
+            color: #fff; }
   .node-type-cpe-area-of-study .middle_content .field_aos_headline p {
     color: #BF5700;
     line-height: 1.25em;

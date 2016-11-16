@@ -58,6 +58,7 @@
 				background-color: #efefef;
 				margin: 1em 1%;
 				padding: 1em;
+				min-height: 200px;
 
 				&:nth-child(3n+1) {
 					margin-left: 0;
@@ -69,17 +70,20 @@
 
 				.node-cpe-single-course-cert,
 				.node-cpe-multi-course-cert {
+					position: relative;
+   				min-height: 190px;
 
 					h2 {
 						font-size: 1.125em;
 						margin: 0;
 						margin-bottom: .5em;
 						line-height: 1.25em;
-						height: 75px;
+						//height: 75px;
+
 					}
 
 					.content {
-						height: 100px;
+						//height: 100px;
 					}
 
 					.field_scc_headline,
@@ -89,6 +93,7 @@
 							margin: 0;
 							padding: 0;
 							width: 100%;
+							min-height: 0;
 
 							p {
 								margin-bottom: 0;
@@ -101,6 +106,10 @@
 					}
 
 					ul.links {
+						position: absolute;
+						bottom: 0;
+						margin: 0;
+						width: 100%;
 
 						li.node-readmore {
 							display: block;
