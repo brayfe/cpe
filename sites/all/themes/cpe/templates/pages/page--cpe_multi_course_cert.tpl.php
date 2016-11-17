@@ -112,6 +112,11 @@
             print render($field_mcc_pay_options);
             ?>
           </div>
+
+          <form id="mcc-form">
+            <input type="submit" value="Add to Cart" id="add-to-cart" data-mishell-id="<?php print $field_mcc_mishell_id; ?>" />
+          </form>
+
           <!--contact info-->
           <div class="contact-wrapper">
             <h2 class="contact-title">Contact</h2>
