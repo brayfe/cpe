@@ -92,7 +92,7 @@
 
       // If there are classes in the cart, change the available actions.
       if (numOfClasses > 0) {
-        $('#classes_cart').append('<br /><form action="' + Drupal.settings.cpe_cart.cpeCartCheckoutUrl + '" method="get"><input type="submit" value="Check Out >" /></form>');
+        $('#classes_cart').append('<form action="' + Drupal.settings.cpe_cart.cpeCartCheckoutUrl + '" method="get"><input type="submit" value="Check Out" /></form>');
 
         $('#classes_cart').append('<input id="empty_cart" type="button" value="Empty Cart"  />');
 

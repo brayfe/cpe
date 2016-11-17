@@ -58,6 +58,31 @@
   .rfi-code {
     margin-right: 10px; } }
 
+.shopping-cart {
+  float: right;
+  color: #000;
+  margin-right: 10px; }
+  .shopping-cart img {
+    display: inline-block; }
+  .shopping-cart form {
+    display: inline-block;
+    margin-left: 8px; }
+    .shopping-cart form input[type="submit"] {
+      background-color: #3383a4;
+      padding: 4px 8px;
+      border: 0;
+      color: #fff; }
+  .shopping-cart form#cartform {
+    display: inline-block;
+    margin-left: 0; }
+  .shopping-cart input#empty_cart {
+    display: inline-block;
+    background-color: #3383a4;
+    padding: 4px 8px;
+    border: 0;
+    margin-left: 12px;
+    color: #fff; }
+
 .column.medium-8.large-9 {
   padding-right: 2em; }
   .column.medium-8.large-9 .field_instructor_bio {
