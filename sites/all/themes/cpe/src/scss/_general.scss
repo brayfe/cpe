@@ -1,5 +1,75 @@
 // general styles that get used throughout
 
+// RFI boxes
+.rfi-code {
+  float: right;
+  overflow: hidden;
+  width: 400px;
+  height: 342px;
+  background-color: rgba(255,255,255,.9);
+
+  .e2ma_signup_form {
+    margin: 0;
+    width: auto;
+    font-family: $opensans;
+
+    form {
+      padding: 1em;
+    }
+
+    .e2ma_signup_message {
+      display: block;
+      background-color: #333F48;
+      width: 100%;
+      padding: 8px 0 4px;
+      text-align: center;
+
+      span {
+        font-size: 1.8em !important;
+        color: #fff;
+      }
+
+    }
+
+    .e2ma_signup_form_row {
+
+      &:after {
+        display: table;
+        content: ' ';
+        clear: both;
+      }
+
+      .e2ma_signup_form_element {
+        float: right;
+        width: 70%;
+      }
+
+      .e2ma_signup_form_label {
+        width: 25%;
+        font-size: 1em;
+        display: inline-block;
+        min-width: 100px;
+
+      }
+
+    }
+
+  }
+
+  .e2ma_signup_form_button_row {
+
+    input {
+      background-color: #3383a4;
+      border-radius: 0;
+      text-transform: none;
+      font-size: 1em;
+      outline: 0;
+    }
+
+  }
+
+}
+
 // move content area for the copy down
 .middle_content {
 	margin-bottom: 3em;
