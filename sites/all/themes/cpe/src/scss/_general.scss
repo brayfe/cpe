@@ -1,5 +1,14 @@
 // general styles that get used throughout
 
+// paragraphs (like from CKEditor) should be 1px font
+p {
+	font-size: 1em;
+}
+
+.field-label {
+	font-size: 1.25em;
+}
+
 // move content area for the copy down
 .middle_content {
 	margin-bottom: 3em;
@@ -61,3 +70,4 @@
 .info-sessions {
 	margin-top: 1.5em;
 }
+

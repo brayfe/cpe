@@ -1,3 +1,9 @@
+p {
+  font-size: 1em; }
+
+.field-label {
+  font-size: 1.25em; }
+
 .middle_content {
   margin-bottom: 3em; }
   .middle_content .column.small-12.medium-8.large-9 .field {
