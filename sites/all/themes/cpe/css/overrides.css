@@ -11,7 +11,7 @@ header.UT-header {
   float: right;
   overflow: hidden;
   width: 400px;
-  height: 342px;
+  height: 340px;
   background-color: rgba(255, 255, 255, 0.9); }
   .rfi-code .e2ma_signup_form {
     margin: 0;
@@ -455,14 +455,6 @@ form#section-form .email-coord {
       font-weight: 600;
       padding: 10px 20px;
       opacity: 0.96; }
-  .node-type-cpe-multi-course-cert .top-banner .rfi-code {
-    float: right;
-    max-height: 350px;
-    overflow: hidden;
-    width: 400px;
-    height: 340px;
-    opacity: 0.96;
-    background-color: #f8f8f8; }
 
 .node-type-cpe-multi-course-cert .middle_content {
   margin-top: 2em; }
