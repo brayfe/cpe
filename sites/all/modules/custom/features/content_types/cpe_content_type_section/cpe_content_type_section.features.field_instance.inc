@@ -294,7 +294,7 @@ function cpe_content_type_section_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_section_instructor',
     'label' => 'Instructor',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
