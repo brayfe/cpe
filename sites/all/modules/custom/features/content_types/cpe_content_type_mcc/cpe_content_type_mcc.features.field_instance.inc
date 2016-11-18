@@ -447,7 +447,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_mcc_info_sessions',
     'label' => 'Info Sessions',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
