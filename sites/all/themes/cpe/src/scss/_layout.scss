@@ -49,6 +49,24 @@
 	}
 }
 
+// put border on bottom of breadcrumbs on large
+@media only screen and (min-width: 64.0625em) {
+	#ut-page-content ul.breadcrumbs li {
+	  border-bottom: 1px solid #e1ddd2;
+	}
+}
+
+@media only screen and (min-width: 960px) and (max-width: 1024px) {
+	.node-type-cpe-single-course-cert .top-banner .container-hero.hero-style-1 {
+	  //margin-top: 28px !important;
+	}
+
+	#ut-page-content {
+  	padding-top: 82px !important;
+  }
+
+}
+
 // get rid of border lines near cart block on medium screens
 @media only screen and (min-width: 40.063em) {
 	.container-logo-p2 {

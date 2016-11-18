@@ -9,6 +9,11 @@ p {
 	font-size: 1.25em;
 }
 
+// no border on bottom of header
+header.UT-header {
+  border-bottom: none;
+}
+
 // RFI boxes
 .rfi-code {
   float: right;
@@ -139,5 +144,19 @@ p {
 // info sessions
 .info-sessions {
 	margin-top: 1.5em;
+}
+
+// frontpage styles
+.front {
+
+  header.UT-header {
+    botder-bottom: 0;
+  }
+
+  #ut-page-content {
+    padding-top: 32px;
+    border: none;
+  }
+
 }
 

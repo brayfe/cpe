@@ -13,7 +13,7 @@ Drupal.behaviors.utexasCustomBehavior = {
       }
     }
       //  enter custom javascript here
-      var desktop_screen_size = 1025;
+      var desktop_screen_size = 1024;
       var translateWidget = $("#classes_cart");
       var desktopTranslateWidgetContainer = $(".cart-toggle-large");
       var mobileTranslateWidgetContainer = $(".cart-toggle-small");
