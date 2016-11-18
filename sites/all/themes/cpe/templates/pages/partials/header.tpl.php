@@ -98,16 +98,17 @@
               </ul>
             </div>
           </div>
-          <!-- place the cart on desktop-->
-          <div class="cart-toggle-large">
-            <?php $block = module_invoke('cpe_cart', 'block_view', 'cpe_cart');
-            print render($block['content']); ?>
-          </div>
+
         </div>
 
       </div> <!-- container-topnav -->
       <div class="container container-nav container-nav-phase2">
         <div class="row">
+          <!-- place the cart on desktop-->
+          <div class="cart-toggle-large">
+            <?php $block = module_invoke('cpe_cart', 'block_view', 'cpe_cart');
+            print render($block['content']); ?>
+          </div>
           <div class="column small-12">
             <nav>
               <?php print render($page['menus']['core_main']); ?>

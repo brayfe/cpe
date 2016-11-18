@@ -1,0 +1,33 @@
+// styles for the header
+.container.container-hero.hero-style-1 {
+  background-position: center;
+}
+
+ul.nav.accessible-megamenu {
+  margin-top: 0;
+  height: 50px;
+
+  li {
+    height:30px;
+  }
+}
+#ut-page-content {
+  padding-top: 15px;
+  border-top: 1px solid #EBE8E2;
+
+  .container-top {
+
+    .row:first-child {
+      //height: 80px;
+    }
+
+  }
+
+}
+
+.node-type-cpe-course .UT-header,
+.node-type-cpe-single-course-cert .UT-header {
+  border: none;
+  min-height: none;
+}
+
