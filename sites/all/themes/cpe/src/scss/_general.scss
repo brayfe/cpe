@@ -1,5 +1,14 @@
 // general styles that get used throughout
 
+// paragraphs (like from CKEditor) should be 1px font
+p {
+	font-size: 1em;
+}
+
+.field-label {
+	font-size: 1.25em;
+}
+
 // RFI boxes
 .rfi-code {
   float: right;
@@ -131,3 +140,4 @@
 .info-sessions {
 	margin-top: 1.5em;
 }
+
