@@ -401,7 +401,7 @@ function cpe_content_type_scc_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_scc_info_sessions',
     'label' => 'Info Sessions',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
