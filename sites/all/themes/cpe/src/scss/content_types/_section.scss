@@ -27,6 +27,10 @@
 
     .node-cpe-section {
 
+      .field-label {
+        font-size: 1em;
+      }
+
       .field {
         margin-bottom: 1em;
       }
@@ -69,7 +73,7 @@
 
 }
 
-// style buttons for section (both section nodes and sections on courses and SCC
+// style buttons for section (both section nodes and sections on courses and SCC)
 form#section-form {
 
   input[type="submit"] {

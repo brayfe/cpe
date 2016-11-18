@@ -164,6 +164,8 @@ p {
 #block-views-cpe-sections-block .views-row {
   margin: 1em 0 2em;
   background-color: rgba(0, 0, 0, 0.02); }
+  #block-views-cpe-sections-block .views-row .node-cpe-section .field-label {
+    font-size: 1em; }
   #block-views-cpe-sections-block .views-row .node-cpe-section .field {
     margin-bottom: 1em; }
   #block-views-cpe-sections-block .views-row .node-cpe-section #section-form {
@@ -361,6 +363,8 @@ form#section-form .email-coord {
     padding: .5em;
     text-align: center;
     margin-bottom: .7em; }
+  .node-type-cpe-area-of-study .at-a-glance .field-label {
+    font-size: 1em; }
   .node-type-cpe-area-of-study .at-a-glance .field {
     margin-bottom: .75em; }
 
@@ -424,6 +428,8 @@ form#section-form .email-coord {
     padding: .5em;
     text-align: center;
     margin-bottom: .7em; }
+  .node-type-cpe-single-course-cert .at-a-glance .field-label {
+    font-size: 1em; }
   .node-type-cpe-single-course-cert .at-a-glance .field {
     margin-bottom: .75em; }
 
@@ -487,6 +493,8 @@ form#section-form .email-coord {
     padding: .5em;
     text-align: center;
     margin-bottom: .7em; }
+  .node-type-cpe-multi-course-cert .at-a-glance .field-label {
+    font-size: 1em; }
   .node-type-cpe-multi-course-cert .at-a-glance .field {
     margin-bottom: .75em; }
 
