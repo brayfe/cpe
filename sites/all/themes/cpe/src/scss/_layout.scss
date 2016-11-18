@@ -2,7 +2,7 @@
 
 // put some space to the left of the page title on nodes of content types using the  hero bg image
 @media screen and (max-width: 64em) {
-	
+
 	.top-banner {
 
 		h1.page-title {
@@ -15,7 +15,7 @@
 
 // move RFI form down below out of hero bg image div to under it
 @media screen and (max-width: 59.9375em) {
-	
+
 	.top-banner {
 
 		.column.small-12.large-6.relative-pos {
@@ -43,8 +43,33 @@
 
 // put margin to right of RFI box until it moves down under hero
 @media screen and (min-width: 60em) and (max-width: 64em) {
-	
+
 	.rfi-code {
 		margin-right: 10px;
 	}
 }
+
+// get rid of border lines near cart block on medium screens
+@media only screen and (min-width: 40.063em) {
+	.container-logo-p2 {
+		border: none;
+	}
+
+	ul.breadcrumbs {
+
+		li {
+			border-bottom: none;
+		}
+
+	}
+
+}
+// small screens- get rid of border near cart
+@media only screen and (max-width: 40em) {
+
+	.container-logo-p2 {
+		border:none;
+	}
+
+}
+

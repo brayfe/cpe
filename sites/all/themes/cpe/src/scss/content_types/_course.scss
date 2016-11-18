@@ -32,7 +32,7 @@
 				opacity: 0.96;
 			}
 
-		} 
+		}
 
 		.rfi-code {
 			float: right;
@@ -56,6 +56,16 @@
 
 }
 
+// course and SCC pages, when cart shows on page, move boder under main nav down below it for consistancy
+.node-type-cpe-course,
+.node-type-cpe-single-course-cert {
+
+	.UT-header {
+		min-height: 200px;
+	}
+
+}
+
 // more responsive styling in _layout.scss
- 
+
 

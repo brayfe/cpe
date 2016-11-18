@@ -69,6 +69,34 @@
 
 }
 
+// style buttons for section (both section nodes and sections on courses and SCC
+form#section-form {
+
+  input[type="submit"] {
+    margin-bottom: 0;
+    background-color: #3383a4;
+    padding: 8px 18px;
+    outline: 0;
+    color: #fff;
+    font-size: 1em;
+    border: none;
+  }
+
+  .email-coord {
+    margin-bottom: 0;
+    background-color: #3383a4;
+    padding: 8px 18px;
+    outline: 0;
+
+    a {
+      color: #fff;
+      font-size: 1em;
+      outline: 0;
+    }
+
+  }
+
+}
 
 
 

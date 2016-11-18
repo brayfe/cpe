@@ -4,6 +4,46 @@ p {
 .field-label {
   font-size: 1.25em; }
 
+.rfi-code {
+  float: right;
+  overflow: hidden;
+  width: 400px;
+  height: 342px;
+  background-color: rgba(255, 255, 255, 0.9); }
+  .rfi-code .e2ma_signup_form {
+    margin: 0;
+    width: auto;
+    font-family: open_sans, "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
+    .rfi-code .e2ma_signup_form form {
+      padding: 1em; }
+    .rfi-code .e2ma_signup_form .e2ma_signup_message {
+      display: block;
+      background-color: #333F48;
+      width: 100%;
+      padding: 8px 0 4px;
+      text-align: center; }
+      .rfi-code .e2ma_signup_form .e2ma_signup_message span {
+        font-size: 1.8em !important;
+        color: #fff; }
+    .rfi-code .e2ma_signup_form .e2ma_signup_form_row:after {
+      display: table;
+      content: ' ';
+      clear: both; }
+    .rfi-code .e2ma_signup_form .e2ma_signup_form_row .e2ma_signup_form_element {
+      float: right;
+      width: 70%; }
+    .rfi-code .e2ma_signup_form .e2ma_signup_form_row .e2ma_signup_form_label {
+      width: 25%;
+      font-size: 1em;
+      display: inline-block;
+      min-width: 100px; }
+  .rfi-code .e2ma_signup_form_button_row input {
+    background-color: #3383a4;
+    border-radius: 0;
+    text-transform: none;
+    font-size: 1em;
+    outline: 0; }
+
 .middle_content {
   margin-bottom: 3em; }
   .middle_content .column.small-12.medium-8.large-9 .field {
@@ -64,6 +104,41 @@ p {
   .rfi-code {
     margin-right: 10px; } }
 
+@media only screen and (min-width: 40.063em) {
+  .container-logo-p2 {
+    border: none; }
+  ul.breadcrumbs li {
+    border-bottom: none; } }
+
+@media only screen and (max-width: 40em) {
+  .container-logo-p2 {
+    border: none; } }
+
+.shopping-cart {
+  float: right;
+  color: #000;
+  margin-right: 10px; }
+  .shopping-cart img {
+    display: inline-block; }
+  .shopping-cart form {
+    display: inline-block;
+    margin-left: 8px; }
+    .shopping-cart form input[type="submit"] {
+      background-color: #3383a4;
+      padding: 4px 8px;
+      border: 0;
+      color: #fff; }
+  .shopping-cart form#cartform {
+    display: inline-block;
+    margin-left: 0; }
+  .shopping-cart input#empty_cart {
+    display: inline-block;
+    background-color: #3383a4;
+    padding: 4px 8px;
+    border: 0;
+    margin-left: 12px;
+    color: #fff; }
+
 .column.medium-8.large-9 {
   padding-right: 2em; }
   .column.medium-8.large-9 .field_instructor_bio {
@@ -113,6 +188,25 @@ p {
   #block-views-cpe-sections-block .views-row .node-cpe-section {
     padding: 1em; }
 
+form#section-form input[type="submit"] {
+  margin-bottom: 0;
+  background-color: #3383a4;
+  padding: 8px 18px;
+  outline: 0;
+  color: #fff;
+  font-size: 1em;
+  border: none; }
+
+form#section-form .email-coord {
+  margin-bottom: 0;
+  background-color: #3383a4;
+  padding: 8px 18px;
+  outline: 0; }
+  form#section-form .email-coord a {
+    color: #fff;
+    font-size: 1em;
+    outline: 0; }
+
 .node-type-cpe-course .top-banner {
   position: relative;
   height: 400px; }
@@ -149,6 +243,10 @@ p {
 
 .node-type-cpe-course .column.medium-8.large-9 {
   padding-right: 2em; }
+
+.node-type-cpe-course .UT-header,
+.node-type-cpe-single-course-cert .UT-header {
+  min-height: 200px; }
 
 .node-type-cpe-area-of-study .top-banner {
   position: relative;
