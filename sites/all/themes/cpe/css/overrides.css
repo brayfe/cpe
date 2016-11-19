@@ -410,7 +410,8 @@ a[title="PDUs/CEUs"] {
   padding: 10px;
   text-align: center;
   color: #000;
-  font-weight: bold; }
+  font-weight: bold;
+  margin-bottom: 3em; }
 
 .node-type-cpe-single-course-cert .top-banner {
   position: relative;
