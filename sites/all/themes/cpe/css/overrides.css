@@ -11,14 +11,16 @@ header.UT-header {
   float: right;
   overflow: hidden;
   width: 400px;
-  height: 342px;
+  height: 340px;
   background-color: rgba(255, 255, 255, 0.9); }
   .rfi-code .e2ma_signup_form {
     margin: 0;
     width: auto;
     font-family: open_sans, "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
     .rfi-code .e2ma_signup_form form {
-      padding: 1em; }
+      padding: 1em;
+      max-width: 500px;
+      margin: 0 auto; }
     .rfi-code .e2ma_signup_form .e2ma_signup_message {
       display: block;
       background-color: #333F48;
@@ -93,44 +95,6 @@ header.UT-header {
 .front #ut-page-content {
   padding-top: 32px;
   border: none; }
-
-@media screen and (max-width: 64em) {
-  .top-banner h1.page-title {
-    margin-left: 10px; } }
-
-@media screen and (max-width: 59.9375em) {
-  .top-banner .column.small-12.large-6.relative-pos {
-    width: 97.7%; }
-  .top-banner .column.small-12.medium-5.large-5.rfi-block {
-    padding: 0 5px;
-    width: 100%; }
-    .top-banner .column.small-12.medium-5.large-5.rfi-block .rfi-code {
-      margin-right: 0;
-      width: 100%; }
-  .middle_content {
-    margin-top: 0 !important; } }
-
-@media screen and (min-width: 60em) and (max-width: 64em) {
-  .rfi-code {
-    margin-right: 10px; } }
-
-@media only screen and (min-width: 64.0625em) {
-  #ut-page-content ul.breadcrumbs li {
-    border-bottom: 1px solid #e1ddd2; } }
-
-@media only screen and (min-width: 960px) and (max-width: 1024px) {
-  #ut-page-content {
-    padding-top: 82px !important; } }
-
-@media only screen and (min-width: 40.063em) {
-  .container-logo-p2 {
-    border: none; }
-  ul.breadcrumbs li {
-    border-bottom: none; } }
-
-@media only screen and (max-width: 40em) {
-  .container-logo-p2 {
-    border: none; } }
 
 .container.container-hero.hero-style-1 {
   background-position: center; }
@@ -491,14 +455,6 @@ form#section-form .email-coord {
       font-weight: 600;
       padding: 10px 20px;
       opacity: 0.96; }
-  .node-type-cpe-multi-course-cert .top-banner .rfi-code {
-    float: right;
-    max-height: 350px;
-    overflow: hidden;
-    width: 400px;
-    height: 340px;
-    opacity: 0.96;
-    background-color: #f8f8f8; }
 
 .node-type-cpe-multi-course-cert .middle_content {
   margin-top: 2em; }
@@ -542,3 +498,52 @@ form#section-form .email-coord {
   color: #fff;
   font-size: 1em;
   border: none; }
+
+@media screen and (max-width: 64em) {
+  .top-banner h1.page-title {
+    margin-left: 10px; } }
+
+@media screen and (max-width: 59.9375em) {
+  .top-banner .column.small-12.large-6.relative-pos {
+    width: 97.7%; }
+  .top-banner .column.small-12.medium-5.large-5.rfi-block {
+    padding: 0 5px;
+    width: 100%; }
+    .top-banner .column.small-12.medium-5.large-5.rfi-block .rfi-code {
+      margin-right: 0;
+      width: 100%; }
+  .middle_content {
+    margin-top: 0 !important; } }
+
+@media screen and (min-width: 60em) and (max-width: 64em) {
+  .rfi-code {
+    margin-right: 10px; } }
+
+@media only screen and (min-width: 64.0625em) {
+  #ut-page-content ul.breadcrumbs li {
+    border-bottom: 1px solid #e1ddd2; } }
+
+@media only screen and (min-width: 960px) and (max-width: 1024px) {
+  #ut-page-content {
+    padding-top: 82px !important; } }
+
+@media only screen and (min-width: 40.063em) {
+  .container-logo-p2 {
+    border: none; }
+  ul.breadcrumbs li {
+    border-bottom: none; } }
+
+@media only screen and (max-width: 40em) {
+  .container-logo-p2 {
+    border: none; } }
+
+@media only screen and (min-width: 300px) and (max-width: 400px) {
+  .node-type-cpe-area-of-study .top-banner .rfi-code,
+  .node-type-cpe-multi-course-cert .top-banner .rfi-code,
+  .node-type-cpe-single-course-cert .top-banner .rfi-code {
+    height: 445px;
+    max-height: 445px; }
+    .node-type-cpe-area-of-study .top-banner .rfi-code .e2ma_signup_form .e2ma_signup_form_row .e2ma_signup_form_element,
+    .node-type-cpe-multi-course-cert .top-banner .rfi-code .e2ma_signup_form .e2ma_signup_form_row .e2ma_signup_form_element,
+    .node-type-cpe-single-course-cert .top-banner .rfi-code .e2ma_signup_form .e2ma_signup_form_row .e2ma_signup_form_element {
+      width: 100% !important; } }

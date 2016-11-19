@@ -91,3 +91,30 @@
 
 }
 
+@media only screen and (min-width: 300px) and (max-width: 400px) {
+
+	.node-type-cpe-area-of-study,
+	.node-type-cpe-multi-course-cert,
+	.node-type-cpe-single-course-cert {
+		.top-banner .rfi-code {
+			height: 445px;
+			max-height: 445px;
+
+			.e2ma_signup_form {
+
+				.e2ma_signup_form_row {
+
+					.e2ma_signup_form_element {
+						width: 100% !important;
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+}
+

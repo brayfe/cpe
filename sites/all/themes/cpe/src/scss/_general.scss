@@ -19,7 +19,7 @@ header.UT-header {
   float: right;
   overflow: hidden;
   width: 400px;
-  height: 342px;
+  height: 340px;
   background-color: rgba(255,255,255,.9);
 
   .e2ma_signup_form {
@@ -29,6 +29,8 @@ header.UT-header {
 
     form {
       padding: 1em;
+      max-width: 500px;
+      margin: 0 auto;
     }
 
     .e2ma_signup_message {
