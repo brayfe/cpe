@@ -44,6 +44,7 @@ default:
         field_utexas_promo_units: ".field_utexas_promo_units"
         field_utexas_promo_units_values: "#field-utexas-promo-units-values"
         field_utexas_promo_list_values: "#edit-field-utexas-promo-list"
+        field_utexas_social_share: "#block-utexas-social-sharing-utexas-social-sharing-block"
         field_utexas_resource: ".field_utexas_resource"
         form_item_description: ".form-item-description"
         form_item_name: ".form-item-name"

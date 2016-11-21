@@ -2677,10 +2677,19 @@ ul.pagination li.current a:hover {
 .container.container-bottom.accent .field.field_utexas_twitter_widget,
 .container.container-bottom.accent .field_utexas_social_links,
 .container.container-bottom.accent .fieldblock_field_utexas_resource,
-.container.container-bottom.accent .block-menu-block {
+.container.container-bottom.accent .block-menu-block,
+.container.container-bottom.accent #block-utexas-social-sharing-utexas-social-sharing-block {
 	background-color: #fff;
 	border: 1px solid #333f48;
 	padding: 20px 20px 3px;
+}
+
+.container.container-bottom.accent #block-utexas-social-sharing-utexas-social-sharing-block {
+	padding-top: 0;
+}
+
+.container.container-bottom.accent #block-utexas-social-sharing-utexas-social-sharing-block .post-headline {
+	padding-left: 0;
 }
 
 .container.container-bottom.accent .field_utexas_resource .flex-content.horizontal {
@@ -3085,6 +3094,101 @@ ul.pagination li.current a:hover {
 	float: right;
 	font-size: 0.6875rem;
 	margin: 20px 0; /* Landscape phones and down */
+}
+
+.social-share .social-links {
+	margin: 0px;
+	padding: 8px 0 6px 0;
+}
+
+.social-share .social-links li.social-share-li {
+	text-align: center;
+	padding: 10px 0 5px 0;
+	border: 1px solid #e1ddd2 !important;
+	border-left: none !important;
+}
+
+.social-share .social-links li.social-share-li:first-child {
+	border-left: 1px solid #e1ddd2 !important;
+}
+
+.social-share .social-links .connect-link {
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+.social-share .social-links .connect-link:hover {
+	text-decoration: none;
+	-webkit-filter: brightness(80%);
+	filter: brightness(80%);
+}
+
+.social-share .social-links [class^="icon-"],
+.social-share .social-links [class*=" icon-"] {
+	font-size: 28px; /* Landscape phones and down */
+}
+
+.social-share .social-links .icon-twitter {
+	color: #00aced;
+}
+
+.social-share .social-links .icon-facebook {
+	color: #3b5998;
+}
+
+.social-share .social-links .icon-googleplus {
+	color: #dd4b39;
+}
+
+.social-share .social-links .icon-linkedin {
+	color: #007bb6;
+}
+
+.social-share .social-links .icon-pinterest {
+	color: #cb2027;
+}
+
+.social-share .social-links .icon-tumblr {
+	color: #32506d;
+}
+
+.social-share .social-links .icon-reddit {
+	color: #5f99cf;
+}
+
+.social-share .social-links span.social-name {
+	text-decoration: none;
+	color: #282828;
+	font-size: 14px;
+	display: none; /* Landscape phones and down */
+}
+
+.sidebar-content .social-share .post-headline,
+.region-content-top-right .social-share .post-headline {
+	font-size: 18px !important;
+	margin-bottom: 0;
+}
+
+.sidebar-content .social-share .social-links li:nth-child(3n-2),
+.region-content-top-right .social-share .social-links li:nth-child(3n-2) {
+	border-left: 1px solid #e1ddd2 !important;
+}
+
+.sidebar-content .social-share .social-links li:nth-child(n+4),
+.region-content-top-right .social-share .social-links li:nth-child(n+4) {
+	border-top: 0px !important;
+}
+
+.region-main-content-top-right .social-share .post-headline,
+.region-main-content-top-left .social-share .post-headline {
+	font-size: 18px !important;
+	margin-bottom: 0;
+}
+
+#block-utexas-social-sharing-utexas-social-sharing-block .contextual-links-wrapper,
+#block-utexas-social-sharing-utexas-social-sharing-block .contextual-links {
+	display: none;
 }
 
 .cta {
@@ -5210,6 +5314,11 @@ h1,
 	margin: 40px 0;
 }
 
+.social-share .social-links [class^="icon-"],
+.social-share .social-links [class*=" icon-"] {
+	font-size: 24px;
+}
+
 .cta:after {
 	margin-left: 10px;
 }
@@ -6098,6 +6207,10 @@ td.show-for-xxlarge-down {
 
 .main-content {
 	padding-right: 40px;
+}
+
+.social-share .social-links span.social-name {
+	display: block;
 }
 
 .sub-nav.item-c-1 .sub-nav-item {

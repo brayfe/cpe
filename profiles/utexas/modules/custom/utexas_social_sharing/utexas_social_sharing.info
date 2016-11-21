@@ -1,0 +1,8 @@
+name = Social Sharing
+description = Provides links to share webpages on social media
+core = 7.x
+version = 7.x-1.0
+package = UTexas
+
+configure = admin/config/utexas/utexas_social_sharing
+
