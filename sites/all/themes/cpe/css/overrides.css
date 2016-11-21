@@ -537,7 +537,7 @@ a[title="PDUs/CEUs"] {
   .rfi-code {
     margin-right: 10px; } }
 
-@media only screen and (min-width: 64.0625em) {
+@media only screen and (min-width: 64em) {
   #ut-page-content ul.breadcrumbs li {
     border-bottom: 1px solid #e1ddd2; } }
 
