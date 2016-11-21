@@ -247,6 +247,12 @@ form#section-form .email-coord {
 .node-type-cpe-course .column.medium-8.large-9 {
   padding-right: 2em; }
 
+.view-cpe-certs-by-course .field-label {
+  font-weight: bold; }
+
+.view-cpe-certs-by-course {
+  margin-bottom: 1.5em; }
+
 .node-type-cpe-area-of-study .top-banner {
   position: relative;
   height: 400px; }

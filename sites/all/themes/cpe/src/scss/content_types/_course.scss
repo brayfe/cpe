@@ -56,7 +56,16 @@
 
 }
 
-// course and SCC pages, when cart shows on page, move boder under main nav down below it for consistancy
+// style certificates by course label and put margin under the view
+.view-cpe-certs-by-course .field-label {
+  font-weight: bold;
+}
+
+.view-cpe-certs-by-course {
+  margin-bottom: 1.5em;
+}
+
+// course and SCC pages, when cart shows on page, move border under main nav down below it for consistancy
 .node-type-cpe-course,
 .node-type-cpe-single-course-cert {
 
