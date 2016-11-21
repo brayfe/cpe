@@ -142,6 +142,12 @@ ul.nav.accessible-megamenu {
     margin-left: 12px;
     color: #fff; }
 
+.node-type-cpe-instructor h1.page-title {
+  color: #BF5700;
+  line-height: 1.25em;
+  font-size: 2.25em;
+  font-weight: normal; }
+
 .column.medium-8.large-9 {
   padding-right: 2em; }
   .column.medium-8.large-9 .field_instructor_bio {
