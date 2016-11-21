@@ -89,10 +89,15 @@
               print render($field_aos_description);
               print render($field_aos_cert_options);
               print render($field_aos_certify_body);
-              print render($field_aos_accred_body);
+              // Display field if it isn't "Continuing Education Units".
+              if ($display_link) {
+                print render($field_aos_accred_body);
+              }
               print render($field_aos_featured);
               print render($field_aos_related_arts);
-              print render($link_to_course_listing);
+              if ($display_link) {
+                print render($link_to_course_listing);
+              }
             ?>
 
           </div>

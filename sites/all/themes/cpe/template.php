@@ -87,6 +87,10 @@ function cpe_preprocess_page(&$variables) {
       $variables['field_aos_contact_email'] = render($view['field_aos_contact_email']);
       $link_text = '<div class="course-listing-link">' . t("PDUs/CEUs") . '</div>';
       $variables['link_to_course_listing'] = l($link_text, "/course-by-aos/" . drupal_get_path_alias(), array('attributes' => array('title' => "PDUs/CEUs"), 'html' => TRUE));
+
+      $node_wrapper = entity_metadata_wrapper('node', $node);
+      // Only show link to PDU if Accred Body is NOT tid 16 (CEUs).
+      $variables['display_link'] = $node_wrapper->field_aos_accred_body->value()->tid == 16 ? FALSE : TRUE;
     }
 
     // SCC content type field variables.
@@ -138,7 +142,7 @@ function cpe_preprocess_page(&$variables) {
       $variables['field_mcc_contact_email'] = render($view['field_mcc_contact_email']);
       $variables['field_mcc_info_sessions'] = render($view['field_mcc_info_sessions']);
 
-      // Just get the safe value of the MISHELL ID field, rather than a fully rendered field
+      // Get safe value of MISHELL ID field, rather than fully rendered field.
       $node_wrapper = entity_metadata_wrapper('node', $node);
       $variables['field_mcc_mishell_id'] = $node_wrapper->field_mcc_mishell_id->value();
     }
