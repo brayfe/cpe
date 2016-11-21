@@ -25,7 +25,7 @@ header.UT-header {
       display: block;
       background-color: #333F48;
       width: 100%;
-      padding: 8px 0 4px;
+      padding: 14px 0 9px;
       text-align: center; }
       .rfi-code .e2ma_signup_form .e2ma_signup_message span {
         font-size: 1.8em !important;
@@ -47,7 +47,9 @@ header.UT-header {
     border-radius: 0;
     text-transform: none;
     font-size: 1em;
-    outline: 0; }
+    outline: 0;
+    height: 2em;
+    font-weight: normal; }
 
 .middle_content {
   margin-bottom: 3em; }
@@ -344,8 +346,7 @@ form#section-form .email-coord {
   .node-type-cpe-area-of-study .middle_content .field_aos_headline p {
     color: #BF5700;
     line-height: 1.25em;
-    font-size: 2.25em;
-    margin-top: 2em; }
+    font-size: 2.25em; }
 
 .node-type-cpe-area-of-study .at-a-glance {
   background-color: #BF5700;
@@ -527,6 +528,8 @@ a[title="PDUs/CEUs"] {
     .top-banner .column.small-12.medium-5.large-5.rfi-block .rfi-code {
       margin-right: 0;
       width: 100%; }
+      .top-banner .column.small-12.medium-5.large-5.rfi-block .rfi-code .e2ma_signup_form input {
+        max-width: none; }
   .middle_content {
     margin-top: 0 !important; } }
 
@@ -534,7 +537,7 @@ a[title="PDUs/CEUs"] {
   .rfi-code {
     margin-right: 10px; } }
 
-@media only screen and (min-width: 64.0625em) {
+@media only screen and (min-width: 64em) {
   #ut-page-content ul.breadcrumbs li {
     border-bottom: 1px solid #e1ddd2; } }
 
@@ -551,6 +554,10 @@ a[title="PDUs/CEUs"] {
 @media only screen and (max-width: 40em) {
   .container-logo-p2 {
     border: none; } }
+
+@media only screen and (min-width: 300px) and (max-width: 40em) {
+  a[title="PDUs/CEUs"] {
+    margin-right: -26px; } }
 
 @media only screen and (min-width: 300px) and (max-width: 400px) {
   .node-type-cpe-area-of-study .top-banner .rfi-code,

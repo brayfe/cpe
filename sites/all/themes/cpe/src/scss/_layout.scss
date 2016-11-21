@@ -3,118 +3,137 @@
 // put some space to the left of the page title on nodes of content types using the  hero bg image
 @media screen and (max-width: 64em) {
 
-	.top-banner {
+  .top-banner {
 
-		h1.page-title {
-			margin-left: 10px;
-		}
+    h1.page-title {
+      margin-left: 10px;
+    }
 
-	}
+  }
 
 }
 
 // move RFI form down below out of hero bg image div to under it
 @media screen and (max-width: 59.9375em) {
 
-	.top-banner {
+  .top-banner {
 
-		.column.small-12.large-6.relative-pos {
-			width: 97.7%;
-		}
+    .column.small-12.large-6.relative-pos {
+      width: 97.7%;
+    }
 
-		.column.small-12.medium-5.large-5.rfi-block {
-			padding: 0 5px;
-			width:100%;
+    .column.small-12.medium-5.large-5.rfi-block {
+      padding: 0 5px;
+      width:100%;
 
 
-			.rfi-code {
-				margin-right: 0;
-				width: 100%;
-			}
-		}
+      .rfi-code {
+        margin-right: 0;
+        width: 100%;
 
-	}
+        .e2ma_signup_form {
 
-	.middle_content {
-		margin-top: 0 !important;
-	}
+          input {
+            max-width: none;
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  .middle_content {
+    margin-top: 0 !important;
+  }
 
 }
 
 // put margin to right of RFI box until it moves down under hero
 @media screen and (min-width: 60em) and (max-width: 64em) {
 
-	.rfi-code {
-		margin-right: 10px;
-	}
+  .rfi-code {
+    margin-right: 10px;
+  }
 }
 
 // put border on bottom of breadcrumbs on large
-@media only screen and (min-width: 64.0625em) {
-	#ut-page-content ul.breadcrumbs li {
-	  border-bottom: 1px solid #e1ddd2;
-	}
+@media only screen and (min-width: 64em) {
+  #ut-page-content ul.breadcrumbs li {
+    border-bottom: 1px solid #e1ddd2;
+  }
 }
 
 @media only screen and (min-width: 960px) and (max-width: 1024px) {
-	.node-type-cpe-single-course-cert .top-banner .container-hero.hero-style-1 {
-	  //margin-top: 28px !important;
-	}
+  .node-type-cpe-single-course-cert .top-banner .container-hero.hero-style-1 {
+    //margin-top: 28px !important;
+  }
 
-	#ut-page-content {
-  	padding-top: 82px !important;
+  #ut-page-content {
+    padding-top: 82px !important;
   }
 
 }
 
 // get rid of border lines near cart block on medium screens
 @media only screen and (min-width: 40.063em) {
-	.container-logo-p2 {
-		border: none;
-	}
+  .container-logo-p2 {
+    border: none;
+  }
 
-	ul.breadcrumbs {
+  ul.breadcrumbs {
 
-		li {
-			border-bottom: none;
-		}
+    li {
+      border-bottom: none;
+    }
 
-	}
+  }
 
 }
 // small screens- get rid of border near cart
 @media only screen and (max-width: 40em) {
 
-	.container-logo-p2 {
-		border:none;
-	}
+  .container-logo-p2 {
+    border:none;
+  }
+
+}
+
+
+@media only screen and (min-width: 300px) and (max-width: 40em) {
+
+  a[title="PDUs/CEUs"] {
+    margin-right: -26px;
+  }
 
 }
 
 @media only screen and (min-width: 300px) and (max-width: 400px) {
 
-	.node-type-cpe-area-of-study,
-	.node-type-cpe-multi-course-cert,
-	.node-type-cpe-single-course-cert {
-		.top-banner .rfi-code {
-			height: 445px;
-			max-height: 445px;
+  .node-type-cpe-area-of-study,
+  .node-type-cpe-multi-course-cert,
+  .node-type-cpe-single-course-cert {
+    .top-banner .rfi-code {
+      height: 445px;
+      max-height: 445px;
 
-			.e2ma_signup_form {
+      .e2ma_signup_form {
 
-				.e2ma_signup_form_row {
+        .e2ma_signup_form_row {
 
-					.e2ma_signup_form_element {
-						width: 100% !important;
-					}
+          .e2ma_signup_form_element {
+            width: 100% !important;
+          }
 
-				}
+        }
 
-			}
+      }
 
-		}
+    }
 
-	}
+  }
 
 }
 

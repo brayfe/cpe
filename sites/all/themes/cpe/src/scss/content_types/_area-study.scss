@@ -2,137 +2,131 @@
 
 .node-type-cpe-area-of-study {
 
-	.top-banner {
-		position: relative;
-		height: 400px;
+  .top-banner {
+    position: relative;
+    height: 400px;
 
-		.column {
-			min-height: 369px;
-		}
+    .column {
+      min-height: 369px;
+    }
 
-		.container-hero.hero-style-1 {
-			height:400px;
-			margin-right: -15px;
-			margin-left: -15px;
-			margin-top: 0;
-			padding-top: 28px;
+    .container-hero.hero-style-1 {
+      height:400px;
+      margin-right: -15px;
+      margin-left: -15px;
+      margin-top: 0;
+      padding-top: 28px;
 
-			.relative-pos {
-				position: relative;
-			}
+      .relative-pos {
+        position: relative;
+      }
 
-			h1.page-title {
-				bottom: 0;
-				position: absolute;
-				background-color: #f8f8f8;
-				font-family: $opensans;
-				color: $burntGrey;
-				font-weight: 600;
-				padding: 10px 20px;
-				opacity: 0.96;
-			}
+      h1.page-title {
+        bottom: 0;
+        position: absolute;
+        background-color: #f8f8f8;
+        font-family: $opensans;
+        color: $burntGrey;
+        font-weight: 600;
+        padding: 10px 20px;
+        opacity: 0.96;
+      }
 
-		}
+    }
 
-		.rfi-code {
-			float: right;
-			max-height: 350px;
-			overflow: hidden;
-			width: 400px;
-			height: 340px;
-			opacity: 0.96;
-			background-color: #f8f8f8;
-		}
+    .rfi-code {
+      float: right;
+      max-height: 350px;
+      overflow: hidden;
+      width: 400px;
+      height: 340px;
+      opacity: 0.96;
+      background-color: #f8f8f8;
+    }
 
-	}
+  }
 
-	.middle_content {
-		margin-top: 2em;
+  .middle_content {
+    margin-top: 2em;
 
-		.field_aos_cert_options {
+    .field_aos_cert_options {
 
-			.field-item {
-				display: inline-block;
-				vertical-align: top;
-				width: 31.5%;
-				background-color: #efefef;
-				margin: 1em 1%;
-				padding: 1em;
-				min-height: 200px;
+      .field-item {
+        display: inline-block;
+        vertical-align: top;
+        width: 31.5%;
+        background-color: #efefef;
+        margin: 1em 1%;
+        padding: 1em;
+        min-height: 200px;
 
-				&:nth-child(3n+1) {
-					margin-left: 0;
-				}
+        &:nth-child(3n+1) {
+          margin-left: 0;
+        }
 
-				&:nth-child(3n+3) {
-					margin-right: 0;
-				}
+        &:nth-child(3n+3) {
+          margin-right: 0;
+        }
 
-				.node-cpe-single-course-cert,
-				.node-cpe-multi-course-cert {
-					position: relative;
-   				min-height: 190px;
+        .node-cpe-single-course-cert,
+        .node-cpe-multi-course-cert {
+          position: relative;
+          min-height: 190px;
 
-					h2 {
-						font-size: 1.125em;
-						margin: 0;
-						margin-bottom: .5em;
-						line-height: 1.25em;
-						//height: 75px;
+          h2 {
+            font-size: 1.125em;
+            margin: 0;
+            margin-bottom: .5em;
+            line-height: 1.25em;
+          }
 
-					}
+          .field_scc_headline,
+          .field_mcc_headline {
 
-					.content {
-						//height: 100px;
-					}
+            .field-item {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              min-height: 0;
 
-					.field_scc_headline,
-					.field_mcc_headline {
+              p {
+                margin-bottom: 0;
+                line-height: 1.3em;
+                font-size: 1em;
+              }
 
-						.field-item {
-							margin: 0;
-							padding: 0;
-							width: 100%;
-							min-height: 0;
+            }
 
-							p {
-								margin-bottom: 0;
-								line-height: 1.3em;
-								font-size: 1em;
-							}
+          }
 
-						}
+          ul.links {
+            position: absolute;
+            bottom: 0;
+            margin: 0;
+            width: 100%;
 
-					}
+            li.node-readmore {
+              display: block;
+              width: 100%;
+              padding: 0;
+              list-style-type: none;
+              background-color: $brandBlue;
+              padding: 4px;
+              text-align: center;
 
-					ul.links {
-						position: absolute;
-						bottom: 0;
-						margin: 0;
-						width: 100%;
+              a {
+                color: #fff;
+              }
 
-						li.node-readmore {
-							display: block;
-							width: 100%;
-							padding: 0;
-							list-style-type: none;
-							background-color: $brandBlue;
-							padding: 4px;
-							text-align: center;
+            }
 
-							a {
-								color: #fff;
-							}
+          }
 
-						}
+        }
 
-					}
+      }
 
-				}
-
-			}
-
-		}
+    }
 
 
     .field_aos_headline {
@@ -140,11 +134,10 @@
       p {
         color: $burntOrange;
         line-height: 1.25em;
-		    font-size: 2.25em;
-   			margin-top: 2em;
-   		}
+        font-size: 2.25em;
+      }
 
-   	}
+    }
 
   }
 
@@ -180,9 +173,9 @@
 
   }
 
-	.column.medium-8.large-9 {
-		padding-right: 2em;
-	}
+  .column.medium-8.large-9 {
+    padding-right: 2em;
+  }
 
 }
 
