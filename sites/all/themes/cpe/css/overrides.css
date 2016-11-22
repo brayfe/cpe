@@ -390,6 +390,19 @@ a[title="PDUs/CEUs"] {
   font-weight: bold;
   margin-bottom: 3em; }
 
+.field_aos_related_arts .field-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
+  .field_aos_related_arts .field-items .field-item {
+    width: 31%;
+    display: inline-block;
+    box-sizing: border-box; }
+
 .node-type-cpe-single-course-cert .top-banner {
   position: relative;
   height: 400px; }
@@ -454,6 +467,19 @@ a[title="PDUs/CEUs"] {
 
 .node-type-cpe-single-course-cert .column.medium-8.large-9 {
   padding-right: 2em; }
+
+.field_scc_related_arts .field-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
+  .field_scc_related_arts .field-items .field-item {
+    width: 31%;
+    display: inline-block;
+    box-sizing: border-box; }
 
 .node-type-cpe-multi-course-cert .top-banner {
   position: relative;
@@ -521,6 +547,19 @@ a[title="PDUs/CEUs"] {
   font-size: 1em;
   border: none; }
 
+.field_mcc_related_arts .field-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
+  .field_mcc_related_arts .field-items .field-item {
+    width: 31%;
+    display: inline-block;
+    box-sizing: border-box; }
+
 @media screen and (max-width: 64em) {
   .top-banner h1.page-title {
     margin-left: 10px; } }
@@ -559,11 +598,9 @@ a[title="PDUs/CEUs"] {
 
 @media only screen and (max-width: 40em) {
   .container-logo-p2 {
-    border: none; } }
-
-@media only screen and (min-width: 300px) and (max-width: 40em) {
-  a[title="PDUs/CEUs"] {
-    margin-right: -26px; } }
+    border: none; }
+  .middle_content .column:first-child {
+    padding-right: 7px !important; } }
 
 @media only screen and (min-width: 300px) and (max-width: 400px) {
   .node-type-cpe-area-of-study .top-banner .rfi-code,
