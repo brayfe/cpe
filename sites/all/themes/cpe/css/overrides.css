@@ -43,7 +43,7 @@ header.UT-header {
       display: inline-block;
       min-width: 100px; }
   .rfi-code .e2ma_signup_form_button_row input {
-    background-color: #3383a4;
+    background-color: #3282a6;
     border-radius: 0;
     text-transform: none;
     font-size: 1em;
@@ -127,7 +127,7 @@ ul.nav.accessible-megamenu {
     display: inline-block;
     margin-left: 8px; }
     .shopping-cart form input[type="submit"] {
-      background-color: #3383a4;
+      background-color: #3282a6;
       padding: 4px 8px;
       border: 0;
       color: #fff; }
@@ -136,7 +136,7 @@ ul.nav.accessible-megamenu {
     margin-left: 0; }
   .shopping-cart input#empty_cart {
     display: inline-block;
-    background-color: #3383a4;
+    background-color: #3282a6;
     padding: 4px 8px;
     border: 0;
     margin-left: 12px;
@@ -182,7 +182,7 @@ ul.nav.accessible-megamenu {
     text-align: center; }
     #block-views-cpe-sections-block .views-row .node-cpe-section #section-form .email-coord {
       margin-bottom: 0;
-      background-color: #3383a4;
+      background-color: #3282a6;
       padding: 8px 18px;
       outline: 0; }
       #block-views-cpe-sections-block .views-row .node-cpe-section #section-form .email-coord a {
@@ -201,7 +201,7 @@ ul.nav.accessible-megamenu {
 
 form#section-form input[type="submit"] {
   margin-bottom: 0;
-  background-color: #3383a4;
+  background-color: #3282a6;
   padding: 8px 18px;
   outline: 0;
   color: #fff;
@@ -210,7 +210,7 @@ form#section-form input[type="submit"] {
 
 form#section-form .email-coord {
   margin-bottom: 0;
-  background-color: #3383a4;
+  background-color: #3282a6;
   padding: 8px 18px;
   outline: 0; }
   form#section-form .email-coord a {
@@ -343,7 +343,7 @@ form#section-form .email-coord {
           width: 100%;
           padding: 0;
           list-style-type: none;
-          background-color: #3383a4;
+          background-color: #3282a6;
           padding: 4px;
           text-align: center; }
           .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert ul.links li.node-readmore a,
@@ -514,7 +514,7 @@ a[title="PDUs/CEUs"] {
 
 .node-type-cpe-multi-course-cert form#mcc-form input[type="submit"] {
   margin-bottom: 0;
-  background-color: #3383a4;
+  background-color: #3282a6;
   padding: 8px 18px;
   outline: 0;
   color: #fff;
