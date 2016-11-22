@@ -15,7 +15,7 @@
     margin-left: 8px;
 
     input[type="submit"] {
-      background-color: #3383a4;
+      background-color: $buttonBlue;
       padding: 4px 8px;
       border: 0;
       color: #fff;
@@ -30,7 +30,7 @@
 
   input#empty_cart {
     display: inline-block;
-    background-color: #3383a4;
+    background-color: $buttonBlue;
     padding: 4px 8px;
     border: 0;
     margin-left: 12px;

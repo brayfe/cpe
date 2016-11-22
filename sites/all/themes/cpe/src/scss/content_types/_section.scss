@@ -41,7 +41,7 @@
 
         .email-coord {
           margin-bottom: 0;
-          background-color: #3383a4;
+          background-color: $buttonBlue;
           padding: 8px 18px;
           outline: 0;
 
@@ -78,7 +78,7 @@ form#section-form {
 
   input[type="submit"] {
     margin-bottom: 0;
-    background-color: #3383a4;
+    background-color: $buttonBlue;
     padding: 8px 18px;
     outline: 0;
     color: #fff;
@@ -88,7 +88,7 @@ form#section-form {
 
   .email-coord {
     margin-bottom: 0;
-    background-color: #3383a4;
+    background-color: $buttonBlue;
     padding: 8px 18px;
     outline: 0;
 
