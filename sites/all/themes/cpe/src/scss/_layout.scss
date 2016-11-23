@@ -99,16 +99,16 @@
     border:none;
   }
 
-}
+  .middle_content {
 
+    .column:first-child {
+      padding-right: 7px !important;
+    }
 
-@media only screen and (min-width: 300px) and (max-width: 40em) {
-
-  a[title="PDUs/CEUs"] {
-    margin-right: -26px;
   }
 
 }
+
 
 @media only screen and (min-width: 300px) and (max-width: 400px) {
 

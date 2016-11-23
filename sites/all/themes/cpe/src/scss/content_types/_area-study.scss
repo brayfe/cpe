@@ -190,6 +190,29 @@ a[title="PDUs/CEUs"] {
   margin-bottom: 3em;
 }
 
+// related arts
+.field_aos_related_arts {
+
+  .field-items {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+
+    .field-item {
+      width: 31%;
+      display: inline-block;
+      box-sizing: border-box;
+    }
+
+  }
+
+}
+
 // more responsive styling in _layout.scss
 
 
