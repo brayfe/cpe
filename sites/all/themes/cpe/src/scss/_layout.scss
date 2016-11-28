@@ -66,6 +66,34 @@
   }
 }
 
+// area of study pages need certificate options boxes to be one col below 1024px
+@media only screen and (max-width: 64em) {
+
+  .node-type-cpe-area-of-study {
+
+    .middle_content {
+
+      .field_aos_cert_options {
+
+        .field-items {
+          display: block;
+
+          .field-item {
+            width: 100%;
+            margin-bottom: 1em;
+            margin-top: 1em;
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
 @media only screen and (min-width: 960px) and (max-width: 1024px) {
   .node-type-cpe-single-course-cert .top-banner .container-hero.hero-style-1 {
     //margin-top: 28px !important;
