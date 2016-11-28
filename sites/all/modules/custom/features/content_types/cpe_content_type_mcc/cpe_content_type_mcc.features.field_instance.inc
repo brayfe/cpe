@@ -236,7 +236,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_mcc_courses',
-    'label' => 'Courses Included',
+    'label' => 'Courses Available',
     'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -650,7 +650,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'size' => 60,
+        'size' => 150,
       ),
       'type' => 'text_textfield',
       'weight' => 17,
@@ -848,7 +848,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'size' => 60,
+        'size' => 150,
       ),
       'type' => 'text_textfield',
       'weight' => 16,
@@ -938,7 +938,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
   t('Additional Information');
   t('Area of Study');
   t('Certifying Body');
-  t('Courses Included');
+  t('Courses Available');
   t('Duration');
   t('Email');
   t('Featured and Related Courses');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Template for a Mutli Course Certificate page.
@@ -38,7 +39,6 @@
  *
  * @ingroup themeable.
  */
-
 ?>
 
 <?php if (file_exists($partial_header)): require_once $partial_header; endif;  ?>
@@ -84,17 +84,17 @@
         <?php if($page['content']):?>
           <div class="column small-12 medium-8 large-9">
             <?php
-              // print fields in the main area
+            // Print fields in the main area.
             print render($field_mcc_aos);
             print render($field_mcc_headline);
             print render($field_mcc_description);
             print render($field_mcc_who_enroll);
             print render($field_mcc_outcomes);
+            print render($field_mcc_courses);
             print render($field_mcc_prereqs);
             print render($field_mcc_certify_body);
             print render($field_mcc_notes);
             print render($field_mcc_program_id);
-            print render($field_mcc_courses);
             print render($field_mcc_featured_related);
             print render($field_mcc_related_arts);
             ?>
