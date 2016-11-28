@@ -1,5 +1,5 @@
-​name = CPE Related Artifacts Field
+name = CPE Related Artifacts Field
 description = Contains the Related Artifacts custom compound field.
 core = 7.x
 version = 7.x-1.0
-package = CPE
+package = Custom
