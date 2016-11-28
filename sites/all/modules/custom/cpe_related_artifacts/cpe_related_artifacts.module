@@ -63,13 +63,16 @@ function cpe_related_artifacts_field_widget_info() {
 function cpe_related_artifacts_field_widget_form(&$form,
  &$form_state,
  $field,
-  $instance,
+ $instance,
  $langcode,
  $items,
  $delta,
  $element) {
   switch ($instance['widget']['type']) {
     case 'rel_arts_widget':
+      // Grab field name dynamically.
+      $field_name = $field['field_name'];
+
       // Uploaded Thumbnail Image.
       $element['image_fid'] = array(
         '#type' => 'managed_file',
@@ -97,10 +100,10 @@ function cpe_related_artifacts_field_widget_form(&$form,
         '#default_value' => !empty($items[$delta]['file_fid']) ? 1 : 0,
         '#states' => array(
           'checked' => array(
-            ':input[name="field_scc_related_arts[und][' . $delta . '][selection_container][url_link]"]' => array('checked' => FALSE),
+            ':input[name="' . $field_name . '[und][' . $delta . '][selection_container][url_link]"]' => array('checked' => FALSE),
           ),
           'unchecked' => array(
-            ':input[name="field_scc_related_arts[und][' . $delta . '][selection_container][url_link]"]' => array('checked' => TRUE),
+            ':input[name="' . $field_name . '[und][' . $delta . '][selection_container][url_link]"]' => array('checked' => TRUE),
           ),
         ),
       );
@@ -113,7 +116,7 @@ function cpe_related_artifacts_field_widget_form(&$form,
         '#title' => t('Link'),
         '#states' => array(
           'visible' => array(
-            ':input[name="field_scc_related_arts[und][' . $delta . '][file_link]"]' => array('checked' => FALSE),
+            ':input[name="' . $field_name . '[und][' . $delta . '][file_link]"]' => array('checked' => FALSE),
           ),
         ),
       );
@@ -148,7 +151,7 @@ function cpe_related_artifacts_field_widget_form(&$form,
         '#default_value' => isset($items[$delta]['file_fid']) ? $items[$delta]['file_fid'] : 0,
         '#states' => array(
           'visible' => array(
-            ':input[name="field_scc_related_arts[und][' . $delta . '][file_link]"]' => array('checked' => TRUE),
+            ':input[name="' . $field_name . '[und][' . $delta . '][file_link]"]' => array('checked' => TRUE),
           ),
         ),
       );
