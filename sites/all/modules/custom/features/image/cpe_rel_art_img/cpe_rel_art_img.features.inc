@@ -19,7 +19,7 @@ function cpe_rel_art_img_image_default_styles() {
         'data' => array(
           'width' => 480,
           'height' => 480,
-          'upscale' => 0,
+          'upscale' => 1,
         ),
         'weight' => 1,
       ),
