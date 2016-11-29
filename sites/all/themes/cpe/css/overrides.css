@@ -306,6 +306,7 @@ form#section-form .email-coord {
     width: 31%;
     padding: 1em;
     display: inline-block;
+    vertical-align: top;
     box-sizing: border-box;
     background-color: #efefef; }
     .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item:nth-child(3n+1) {
