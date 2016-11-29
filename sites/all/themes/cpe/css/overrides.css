@@ -534,6 +534,12 @@ a[title="PDUs/CEUs"] {
     font-size: 1em; }
   .node-type-cpe-multi-course-cert .at-a-glance .field {
     margin-bottom: .75em; }
+  .node-type-cpe-multi-course-cert .at-a-glance .field_mcc_pay_options p {
+    color: #fff;
+    margin-bottom: 0; }
+    .node-type-cpe-multi-course-cert .at-a-glance .field_mcc_pay_options p a {
+      color: #fff;
+      text-decoration: underline; }
 
 .node-type-cpe-multi-course-cert .column.medium-8.large-9 {
   padding-right: 2em; }
