@@ -62,6 +62,7 @@ function cpe_content_type_aos_field_default_field_bases() {
           'type' => 'none',
         ),
         'target_bundles' => array(
+          'cpe_area_of_study' => 'cpe_area_of_study',
           'cpe_multi_course_cert' => 'cpe_multi_course_cert',
           'cpe_single_course_cert' => 'cpe_single_course_cert',
         ),
