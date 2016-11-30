@@ -89,14 +89,12 @@ function cpe_sections_view_views_default_views() {
   $handler->display->display_options['arguments']['field_section_course_target_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['field_section_course_target_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['filter_groups']['operator'] = 'OR';
+  $handler->display->display_options['filter_groups']['groups'] = array(
+    1 => 'AND',
+    2 => 'AND',
+  );
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Published */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'node';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = 1;
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
   /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
@@ -105,6 +103,23 @@ function cpe_sections_view_views_default_views() {
     'cpe_section' => 'cpe_section',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Modality (field_section_modality) */
+  $handler->display->display_options['filters']['field_section_modality_tid']['id'] = 'field_section_modality_tid';
+  $handler->display->display_options['filters']['field_section_modality_tid']['table'] = 'field_data_field_section_modality';
+  $handler->display->display_options['filters']['field_section_modality_tid']['field'] = 'field_section_modality_tid';
+  $handler->display->display_options['filters']['field_section_modality_tid']['value'] = array(
+    8 => '8',
+  );
+  $handler->display->display_options['filters']['field_section_modality_tid']['group'] = 1;
+  $handler->display->display_options['filters']['field_section_modality_tid']['type'] = 'select';
+  $handler->display->display_options['filters']['field_section_modality_tid']['vocabulary'] = 'cpe_modality';
   /* Filter criterion: Content: Dates -  start date (field_section_dates) */
   $handler->display->display_options['filters']['field_section_dates_value']['id'] = 'field_section_dates_value';
   $handler->display->display_options['filters']['field_section_dates_value']['table'] = 'field_data_field_section_dates';
@@ -112,6 +127,32 @@ function cpe_sections_view_views_default_views() {
   $handler->display->display_options['filters']['field_section_dates_value']['operator'] = '>';
   $handler->display->display_options['filters']['field_section_dates_value']['group'] = 1;
   $handler->display->display_options['filters']['field_section_dates_value']['default_date'] = 'now';
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status_1']['id'] = 'status_1';
+  $handler->display->display_options['filters']['status_1']['table'] = 'node';
+  $handler->display->display_options['filters']['status_1']['field'] = 'status';
+  $handler->display->display_options['filters']['status_1']['value'] = '1';
+  $handler->display->display_options['filters']['status_1']['group'] = 2;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type_1']['id'] = 'type_1';
+  $handler->display->display_options['filters']['type_1']['table'] = 'node';
+  $handler->display->display_options['filters']['type_1']['field'] = 'type';
+  $handler->display->display_options['filters']['type_1']['value'] = array(
+    'cpe_section' => 'cpe_section',
+  );
+  $handler->display->display_options['filters']['type_1']['group'] = 2;
+  /* Filter criterion: Content: Modality (field_section_modality) */
+  $handler->display->display_options['filters']['field_section_modality_tid_1']['id'] = 'field_section_modality_tid_1';
+  $handler->display->display_options['filters']['field_section_modality_tid_1']['table'] = 'field_data_field_section_modality';
+  $handler->display->display_options['filters']['field_section_modality_tid_1']['field'] = 'field_section_modality_tid';
+  $handler->display->display_options['filters']['field_section_modality_tid_1']['value'] = array(
+    7 => '7',
+    9 => '9',
+    10 => '10',
+  );
+  $handler->display->display_options['filters']['field_section_modality_tid_1']['group'] = 2;
+  $handler->display->display_options['filters']['field_section_modality_tid_1']['type'] = 'select';
+  $handler->display->display_options['filters']['field_section_modality_tid_1']['vocabulary'] = 'cpe_modality';
   $export['cpe_sections'] = $view;
 
   return $export;
