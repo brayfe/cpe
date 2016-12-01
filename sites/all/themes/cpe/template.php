@@ -171,6 +171,40 @@ function cpe_preprocess_node(&$variables) {
         break;
     }
   }
+  // Trim Headline field for teasers on Certificate Options field.
+  elseif (
+  in_array($node->type, array(
+    'cpe_single_course_cert',
+    'cpe_multi_course_cert',
+    'cpe_area_of_study',
+  )) && $variables['view_mode'] == 'teaser') {
+
+    // Select which CT teaser this is & assign headline field name.
+    $headline = "";
+    switch ($node->type) {
+      case 'cpe_single_course_cert':
+        $headline = 'field_scc_headline';
+        break;
+
+      case 'cpe_multi_course_cert':
+        $headline = 'field_mcc_headline';
+        break;
+
+      case 'cpe_area_of_study':
+        $headline = 'field_aos_headline';
+        break;
+
+      default:
+        $headline = 'field_scc_headline';
+    }
+
+    // Get untrimmed value from field.
+    $node_wrapper = entity_metadata_wrapper('node', $node);
+    $variables[$headline] = strip_tags($node_wrapper->$headline->value()['value']);
+
+    // Use Drupal truncate function to shorten the field on word boundary.
+    $variables['content'][$headline][0]['#markup'] = '<p>' . truncate_utf8($variables[$headline], 103, TRUE, TRUE) . '</p>';
+  }
 }
 
 /**
