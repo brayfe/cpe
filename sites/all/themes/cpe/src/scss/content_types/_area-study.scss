@@ -52,14 +52,7 @@
     .field_aos_cert_options {
 
       .field-items {
-        display: -webkit-box;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: -moz-flex;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-justify-content: space-between;
-        justify-content: space-between;
+
       }
 
       .field-item {
@@ -69,6 +62,7 @@
         vertical-align: top;
         box-sizing: border-box;
         background-color: #efefef;
+        margin: 1em 1em 0 0;
 
         &:nth-child(3n+1) {
           margin-left: 0;
@@ -78,10 +72,9 @@
           margin-right: 0;
         }
 
-        .node-cpe-single-course-cert,
-        .node-cpe-multi-course-cert {
+        .node-teaser {
           position: relative;
-          height: 100%;
+          min-height: 270px;
 
           h2 {
             font-size: 1.125em;
@@ -92,7 +85,8 @@
           }
 
           .field_scc_headline,
-          .field_mcc_headline {
+          .field_mcc_headline,
+          .field_aos_headline {
 
             .field-item {
               margin: 0;
@@ -104,6 +98,7 @@
                 margin-bottom: 2em;
                 line-height: 1.3em;
                 font-size: 1em;
+                color: #000;
               }
 
             }
@@ -127,6 +122,7 @@
 
               a {
                 color: #fff;
+                display: block;
               }
 
             }

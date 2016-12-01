@@ -294,59 +294,47 @@ form#section-form .email-coord {
 
 .node-type-cpe-area-of-study .middle_content {
   margin-top: 2em; }
-  .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-items {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: -moz-flex;
-    display: flex;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between; }
   .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item {
     width: 31%;
     padding: 1em;
     display: inline-block;
     vertical-align: top;
     box-sizing: border-box;
-    background-color: #efefef; }
+    background-color: #efefef;
+    margin: 1em 1em 0 0; }
     .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item:nth-child(3n+1) {
       margin-left: 0; }
     .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item:nth-child(3n+3) {
       margin-right: 0; }
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert,
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert {
+    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser {
       position: relative;
-      height: 100%; }
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert h2,
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert h2 {
+      min-height: 270px; }
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser h2 {
         font-size: 1.125em;
         margin: 0;
         margin-bottom: .5em;
         line-height: 1.25em;
         white-space: wrap; }
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_scc_headline .field-item,
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_mcc_headline .field-item,
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_scc_headline .field-item,
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_mcc_headline .field-item {
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser .field_scc_headline .field-item,
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser .field_mcc_headline .field-item,
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser .field_aos_headline .field-item {
         margin: 0;
         padding: 0;
         width: 100%;
         min-height: 0; }
-        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_scc_headline .field-item p,
-        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert .field_mcc_headline .field-item p,
-        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_scc_headline .field-item p,
-        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert .field_mcc_headline .field-item p {
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser .field_scc_headline .field-item p,
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser .field_mcc_headline .field-item p,
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser .field_aos_headline .field-item p {
           margin-bottom: 2em;
           line-height: 1.3em;
-          font-size: 1em; }
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert ul.links,
-      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert ul.links {
+          font-size: 1em;
+          color: #000; }
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser ul.links {
         position: absolute;
         bottom: 0;
         margin: 0;
         width: 100%; }
-        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert ul.links li.node-readmore,
-        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert ul.links li.node-readmore {
+        .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser ul.links li.node-readmore {
           display: block;
           width: 100%;
           padding: 0;
@@ -354,9 +342,9 @@ form#section-form .email-coord {
           background-color: #3282a6;
           padding: 4px;
           text-align: center; }
-          .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-single-course-cert ul.links li.node-readmore a,
-          .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-cpe-multi-course-cert ul.links li.node-readmore a {
-            color: #fff; }
+          .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-item .node-teaser ul.links li.node-readmore a {
+            color: #fff;
+            display: block; }
   .node-type-cpe-area-of-study .middle_content .field_aos_headline p {
     color: #BF5700;
     line-height: 1.25em;
@@ -582,7 +570,15 @@ a[title="PDUs/CEUs"] {
 
 @media screen and (max-width: 64em) {
   .top-banner h1.page-title {
-    margin-left: 10px; } }
+    margin-left: 10px; }
+  .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-items {
+    display: block; }
+    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-items .field-item {
+      width: 100%;
+      margin-bottom: 1em;
+      margin-top: 1em; }
+      .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-items .field-item .node-teaser {
+        min-height: 140px; } }
 
 @media screen and (max-width: 59.9375em) {
   .top-banner .column.small-12.large-6.relative-pos {
@@ -605,14 +601,6 @@ a[title="PDUs/CEUs"] {
 @media only screen and (min-width: 64em) {
   #ut-page-content ul.breadcrumbs li {
     border-bottom: 1px solid #e1ddd2; } }
-
-@media only screen and (max-width: 64em) {
-  .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-items {
-    display: block; }
-    .node-type-cpe-area-of-study .middle_content .field_aos_cert_options .field-items .field-item {
-      width: 100%;
-      margin-bottom: 1em;
-      margin-top: 1em; } }
 
 @media only screen and (min-width: 960px) and (max-width: 1024px) {
   #ut-page-content {

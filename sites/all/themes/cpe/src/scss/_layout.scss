@@ -11,6 +11,34 @@
 
   }
 
+  .node-type-cpe-area-of-study {
+
+    .middle_content {
+
+      .field_aos_cert_options {
+
+        .field-items {
+          display: block;
+
+          .field-item {
+            width: 100%;
+            margin-bottom: 1em;
+            margin-top: 1em;
+
+            .node-teaser {
+              min-height: 140px;
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
 }
 
 // move RFI form down below out of hero bg image div to under it
@@ -69,28 +97,7 @@
 // area of study pages need certificate options boxes to be one col below 1024px
 @media only screen and (max-width: 64em) {
 
-  .node-type-cpe-area-of-study {
 
-    .middle_content {
-
-      .field_aos_cert_options {
-
-        .field-items {
-          display: block;
-
-          .field-item {
-            width: 100%;
-            margin-bottom: 1em;
-            margin-top: 1em;
-          }
-
-        }
-
-      }
-
-    }
-
-  }
 
 }
 
