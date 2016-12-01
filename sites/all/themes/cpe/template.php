@@ -174,6 +174,21 @@ function cpe_preprocess_node(&$variables) {
 }
 
 /**
+ * Implements template_preprocess_field().
+ *
+ * Used to trim teaser Headlines for Certificate Options field.
+ */
+function cpe_preprocess_field(&$variables, $hook) {
+  // Headlines used for Certificate Options Entity Reference field.
+  $cts = array('field_mcc_headline', 'field_scc_headline', 'field_aos_headline');
+  // If this is a teaser view Headline from allowed Entity References.
+  if (in_array($variables['element']['#field_name'], $cts) && $variables['element']['#view_mode'] == 'teaser') {
+    // Truncate to 100 characters (+3 for ellipsis), and return to markup.
+    $variables['items'][0]['#markup'] = truncate_utf8(strip_tags($variables['items'][0]['#markup']), 103, TRUE, TRUE);
+  }
+}
+
+/**
  * Implements hook_preprocess_links().
  */
 function cpe_preprocess_links(&$variables) {
