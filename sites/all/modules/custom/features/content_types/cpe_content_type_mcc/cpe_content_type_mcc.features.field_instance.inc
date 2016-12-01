@@ -721,7 +721,7 @@ function cpe_content_type_mcc_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_mcc_program_id',
     'label' => 'Program ID',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
