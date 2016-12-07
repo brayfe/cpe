@@ -72,6 +72,7 @@ function cpe_content_type_aos_strongarm() {
   $strongarm->name = 'node_options_cpe_area_of_study';
   $strongarm->value = array(
     0 => 'status',
+    1 => 'revision',
   );
   $export['node_options_cpe_area_of_study'] = $strongarm;
 
