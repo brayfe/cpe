@@ -102,6 +102,7 @@ function cpe_preprocess_page(&$variables) {
       $variables['field_scc_outcomes'] = render($view['field_scc_outcomes']);
       $variables['field_scc_prereqs'] = render($view['field_scc_prereqs']);
       $variables['field_scc_notes'] = render($view['field_scc_notes']);
+      $variables['field_scc_discounts'] = render($view['field_scc_discounts']);
       $variables['field_scc_program_id'] = render($view['field_scc_program_id']);
       $variables['field_scc_featured_related'] = render($view['field_scc_featured_related']);
       $variables['field_scc_duration'] = render($view['field_scc_duration']);
