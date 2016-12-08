@@ -18,6 +18,11 @@ define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', 'https://u
 define('CPE_CART_CHECKOUT_URL_QUERY_PARAMS', variable_get('cpe_cart_checkout_url_query_params', '{"prog_dept":"PD"}'));
 
 /**
+ * Cookie name for shopping cart cookie.
+ */
+define('CPE_CART_COOKIE_NAME', variable_get('cpe_cart_cookie_name', 'item'));
+
+/**
  * Cookie domain for shopping cart cookie.
  */
 define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.edu'));
@@ -55,6 +60,7 @@ function cpe_cart_init() {
     drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js');
     drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => CPE_CART_CHECKOUT_URL)), array('type' => 'setting'));
     drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrlQueryParams' => CPE_CART_CHECKOUT_URL_QUERY_PARAMS)), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartCookieName' => CPE_CART_COOKIE_NAME)), array('type' => 'setting'));
     drupal_add_js(array('cpe_cart' => array('cpeCartCookieDomain' => CPE_CART_COOKIE_DOMAIN)), array('type' => 'setting'));
     drupal_add_js(array('cpe_cart' => array('cpeCartClassIdLength' => CPE_CART_CLASS_ID_LENGTH)), array('type' => 'setting'));
     drupal_add_js(array('cpe_cart' => array('cpeCartSeatCheckUrl' => CPE_CART_SEAT_CHECK_URL)), array('type' => 'setting'));

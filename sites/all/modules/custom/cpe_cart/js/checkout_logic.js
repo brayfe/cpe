@@ -7,6 +7,8 @@
   Drupal.behaviors.modulename = {
     attach: function (context, settings) {
 
+      var cpeCartCookieName = Drupal.settings.cpe_cart.cpeCartCookieName;
+
       // Attach a click behavior to the "add to cart" button.
       $('input#add-to-cart').on('click', function () {
         var mishellIdRaw = $(this).data('mishell-id');
@@ -24,9 +26,9 @@
           return false;
         }
         // Pad the 8-byte string with an additional 12 zeros, to match what
-        // MISHELL expects to see in the "class" cookie for cart checkout.
+        // MISHELL expects to see in the cart cookie for cart checkout.
         var mishellIdForCart = mishellIdEightByte + '000000000000';
-        setCookie('class', mishellIdForCart);
+        setCookie(cpeCartCookieName, mishellIdForCart);
         $('form#section-form').submit();
       });
 
@@ -74,9 +76,9 @@
         }
       });
 
-      // Parse the "class" cookie and divide the contents by the length of the
+      // Parse the cart cookie and divide the contents by the length of the
       // classId as determined by the cpe_cart_class_id_length $conf variable.
-      var cookieVal = getCookie('class');
+      var cookieVal = getCookie(cpeCartCookieName);
       var numOfClasses = 0;
       if (cookieVal != null) {
         var numOfClasses = cookieVal.length / Drupal.settings.cpe_cart.cpeCartClassIdLength;
@@ -106,9 +108,9 @@
         $('#classes_cart').append('<input id="empty_cart" type="button" value="Empty Cart"  />');
 
         // Add the click behavior for the "empty cart" button to reset the
-        // "class" cookie and reload the page.
+        // cart cookie and reload the page.
         $('#empty_cart').on('click', function () {
-          setCookie('class', '');
+          setCookie(cpeCartCookieName, '');
           location.reload();
         });
       }
