@@ -92,7 +92,16 @@
 
       // If there are classes in the cart, change the available actions.
       if (numOfClasses > 0) {
-        $('#classes_cart').append('<form action="' + Drupal.settings.cpe_cart.cpeCartCheckoutUrl + '" method="get"><input type="submit" value="Check Out" /></form>');
+        $('#classes_cart').append('<form id="checkout_form" action="' + Drupal.settings.cpe_cart.cpeCartCheckoutUrl + '" method="get"><input type="submit" value="Check Out" /></form>');
+
+        if (query_params != '') {
+          var query_params = JSON.parse(Drupal.settings.cpe_cart.cpeCartCheckoutUrlQueryParams);
+          for (var key in query_params) {
+            if (query_params.hasOwnProperty(key)) {
+              $('#checkout_form').append('<input type="hidden" name="' + key + '" value="' + query_params[key] + '" />')
+            }
+          }
+        }
 
         $('#classes_cart').append('<input id="empty_cart" type="button" value="Empty Cart"  />');
 

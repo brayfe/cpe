@@ -8,7 +8,14 @@
 /**
  * URL for shopping cart checkout.
  */
-define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', ''));
+define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', 'https://utdirect.utexas.edu/nlogon/cee/mishell/co/co1.WBX'));
+
+/**
+ * Query Params to append to URL for shopping cart checkout.
+ * Should be defined as a string in JavaScript object syntax,
+ * for example: '{"prog_dept":"PD"}'
+ */
+define('CPE_CART_CHECKOUT_URL_QUERY_PARAMS', variable_get('cpe_cart_checkout_url_query_params', '{"prog_dept":"PD"}'));
 
 /**
  * Cookie domain for shopping cart cookie.
@@ -47,6 +54,7 @@ function cpe_cart_init() {
     drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/cpe_cart_cookie.js');
     drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js');
     drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => CPE_CART_CHECKOUT_URL)), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrlQueryParams' => CPE_CART_CHECKOUT_URL_QUERY_PARAMS)), array('type' => 'setting'));
     drupal_add_js(array('cpe_cart' => array('cpeCartCookieDomain' => CPE_CART_COOKIE_DOMAIN)), array('type' => 'setting'));
     drupal_add_js(array('cpe_cart' => array('cpeCartClassIdLength' => CPE_CART_CLASS_ID_LENGTH)), array('type' => 'setting'));
     drupal_add_js(array('cpe_cart' => array('cpeCartSeatCheckUrl' => CPE_CART_SEAT_CHECK_URL)), array('type' => 'setting'));
