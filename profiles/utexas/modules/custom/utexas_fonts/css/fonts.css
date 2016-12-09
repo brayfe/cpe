@@ -1,16 +1,16 @@
 @font-face {
-	font-family: 'forty_acres_icons';
-	src:url('../Icons/forty_acres_icons.eot');
-	src:url('../Icons/forty_acres_icons.eot?#iefixi9zati') format('embedded-opentype'),
-		url('../Icons/forty_acres_icons.ttf') format('truetype'),
-		url('../Icons/forty_acres_icons.woff') format('woff'),
-		url('../Icons/forty_acres_icons.svg') format('svg');
+	font-family: 'UT_icons';
+	src:url('../Icons/UT_icons.eot');
+	src:url('../Icons/UT_icons.eot?#iefixi9zati') format('embedded-opentype'),
+		url('../Icons/UT_icons.ttf') format('truetype'),
+		url('../Icons/UT_icons.woff') format('woff'),
+		url('../Icons/UT_icons.svg') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
-	font-family: 'forty_acres_icons';
+	font-family: 'UT_icons';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -25,6 +25,15 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-youtube3:before {
+  content: "\ea9d";
+}
+.icon-youtube2:before {
+  content: "\ea9e";
+}
+.icon-snapchat:before {
+  content: "\e901";
+}
 .icon-controller-play:before {
   content: "\e900";
 }
@@ -133,7 +142,7 @@
 .icon-linkedin:before {
   content: "\f110";
 }
-.icon-mail:before {
+.icon-mail:before, .icon-email:before {
   content: "\f111";
 }
 .icon-alert:before {
