@@ -76,6 +76,34 @@
         }
       });
 
+      // "Seat availability check" functionality for multi-course certificates
+      //
+      // This does an AJAX call to a wrapper script that connects to MISHELL
+      // and queries the course_id for a multi course certificate to see how
+      // many seats are available.
+      //
+      // If a certificate course_id has 0 zero seats available or is not found,
+      // the "Add to Cart" button is hidden in favor of the "Contact Coordinator" button.
+      //
+      $('#mcc-form').each(function () {
+        if ($('input#add-to-cart', this).length) {
+          var $addToCartButton = $('input#add-to-cart', this);
+          var mishellId = $addToCartButton.data('mishell-id');
+          var $emailCoordinatorButton = $('button.email-coord', this);
+          $.get(Drupal.settings.cpe_cart.cpeCartSeatCheckUrl + mishellId, function (data) {
+            var seatsAvailable = parseInt(data);
+            if (seatsAvailable > 0) {
+              // Hide the "Contact Coodinator" button if there are seats available.
+              $emailCoordinatorButton.hide();
+            }
+            else {
+              // Hide the "Add to Cart" button if there are no seats available.
+              $addToCartButton.hide();
+            }
+          });
+        }
+      });
+
       // Parse the cart cookie and divide the contents by the length of the
       // classId as determined by the cpe_cart_class_id_length $conf variable.
       var cookieVal = getCookie(cpeCartCookieName);
