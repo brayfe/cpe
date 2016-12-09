@@ -1,0 +1,16 @@
+<?php
+/**
+ * @file
+ * Install file for CPE Cart module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function cpe_cart_uninstall() {
+  variable_del('cpe_cart_cookie_name');
+  variable_del('cpe_cart_class_id_length');
+  variable_del('cpe_cart_cookie_domain');
+  variable_del('cpe_cart_checkout_url');
+  variable_del('cpe_cart_checkout_url_query_params');
+}
