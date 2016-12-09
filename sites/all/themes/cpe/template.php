@@ -143,9 +143,11 @@ function cpe_preprocess_page(&$variables) {
       $variables['field_mcc_contact_email'] = render($view['field_mcc_contact_email']);
       $variables['field_mcc_info_sessions'] = render($view['field_mcc_info_sessions']);
 
-      // Get safe value of MISHELL ID field, rather than fully rendered field.
+      // Get safe value of MISHELL ID field and course coodinator email fields,
+      // rather than fully rendered fields.
       $node_wrapper = entity_metadata_wrapper('node', $node);
       $variables['field_mcc_mishell_id'] = $node_wrapper->field_mcc_mishell_id->value();
+      $variables['field_coordinator_email'] = $node_wrapper->field_mcc_contact_email->value();
     }
   }
 }

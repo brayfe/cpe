@@ -115,6 +115,7 @@
 
           <form id="mcc-form">
             <input type="submit" value="Add to Cart" id="add-to-cart" data-mishell-id="<?php print $field_mcc_mishell_id; ?>" />
+            <button class="email-coord"><a href="mailto:<?php print render($field_coordinator_email); ?>" />Email Coordinator</a></button>
           </form>
 
           <!--contact info-->
