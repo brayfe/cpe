@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Install file for UTexas SAML Auth Helper module.
@@ -32,7 +33,7 @@ function utexas_saml_auth_helper_update_7101() {
  * Custom function to do SAML-related variable sets.
  */
 function _utexas_saml_auth_helper_add_settings() {
-    $body = '[user:name],
+  $body = '[user:name],
 
 A site administrator at [site:name] has created an account for you. You may now log in with your EID by clicking this link or copying and pasting it to your browser:
 
@@ -52,4 +53,14 @@ Note: if you were not expecting this email, instead contact your supervisor to v
 function utexas_saml_auth_helper_disable() {
   variable_del('user_mail_register_admin_created_body');
   variable_del('user_mail_status_activated_body');
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Delete all authmap records where module is "simplesamlphp_auth",
+ * effectively converting all SAML users to regular Drupal users.
+ */
+function utexas_saml_auth_helper_uninstall() {
+  db_delete('authmap')->condition('module', 'simplesamlphp_auth')->execute();
 }

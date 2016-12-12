@@ -1233,7 +1233,7 @@ textarea {
 }
 
 .container-topnav .topnav .current-directory .toggle:after {
-	font-family: 'forty_acres_icons';
+	font-family: 'UT_icons';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -1248,7 +1248,7 @@ textarea {
 
 .container-topnav .topnav .current-directory .toggle.active:after {
 	font-size: 1rem;
-	font-family: 'forty_acres_icons';
+	font-family: 'UT_icons';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -1563,17 +1563,17 @@ textarea {
 }
 
 .container-nav-phase2 #main-nav .sub-nav-row li a span:after {
+	font-family: 'UT_icons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1; /* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	content: "\f100";
-	display: inline;
-	font-family: "forty_acres_icons";
-	font-style: normal;
-	font-variant: normal;
-	font-weight: normal;
-	line-height: 1;
 	margin-left: 4px;
-	position: relative;
-	text-transform: none;
 	top: 1px;
 }
 
@@ -1849,19 +1849,18 @@ textarea {
 }
 
 .subnav li a:after {
+	font-family: 'UT_icons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1; /* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	content: "\f101";
-	font-family: "forty_acres_icons";
 	font-size: 0.6875rem;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: normal;
-	line-height: inherit;
 	padding-left: 7px;
-	position: relative;
-	text-transform: none;
-	top: 0;
-	color: inherit;
 }
 
 .subnav select {
