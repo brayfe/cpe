@@ -187,6 +187,13 @@ function _utexas_install_settings() {
 
   // Restrict new account creation to authorized users.
   variable_set('user_register', 0);
+  
+  // Set the breadcrumb default values.
+  $forty_acres_settings = variable_get('theme_forty_acres_settings', array());
+  $forty_acres_settings['utexas_standard_page_breadcrumb'] = 1;
+  $forty_acres_settings['utexas_landing_page_breadcrumb'] = 0;
+  variable_set('theme_forty_acres_settings', $forty_acres_settings);
+
 }
 
 /**
