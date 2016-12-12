@@ -6,36 +6,125 @@
  */
 
 /**
- * URL for shopping cart checkout.
+ * Implements hook_permission().
+ *
+ * Defines a user permission to allow users to configure module administration.
  */
-define('CPE_CART_CHECKOUT_URL', variable_get('cpe_cart_checkout_url', 'https://utdirect.utexas.edu/nlogon/cee/mishell/co/co1.WBX'));
+function cpe_cart_permission() {
+  return array(
+    'administer cpe cart' => array(
+      'title' => 'Administer CPE Cart module',
+      'description' => t('Perform administration tasks for the CPE Cart
+        module.'),
+    ),
+  );
+}
 
 /**
- * Query Params to append to URL for shopping cart checkout.
- * Should be defined as a string in JavaScript object syntax,
- * for example: '{"prog_dept":"PD"}'
+ * Implements hook_menu().
+ *
+ * Defines the menu routing for the administration path.
  */
-define('CPE_CART_CHECKOUT_URL_QUERY_PARAMS', variable_get('cpe_cart_checkout_url_query_params', '{"prog_dept":"PD"}'));
+function cpe_cart_menu() {
+  // Menu items.
+  $items = array();
+
+  // Admin page.
+  $items['admin/config/cpe'] = array(
+    'title' => 'Center for Professional Education',
+    'description' => 'Center for Professional Education',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'position' => 'left',
+    'weight' => -50,
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $items['admin/config/cpe/cpe_cart'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cpe_cart_admin_form'),
+    'access arguments' => array('administer_cpe_cart'),
+    'title' => 'CPE Cart',
+    'description' => 'Administration tasks for the CPE Cart module',
+  );
+
+  return $items;
+}
 
 /**
- * Cookie name for shopping cart cookie.
+ * Form callback to control module settings.
+ *
+ * Defines several variables that are defined by the form.
  */
-define('CPE_CART_COOKIE_NAME', variable_get('cpe_cart_cookie_name', 'item'));
+function cpe_cart_admin_form($form, &$form_state) {
+  $form['cpe_cart_cookie_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name of shopping cart cookie'),
+    '#description' => t('What is the name of the cookie that should store the
+      shopping cart data? This should match the expectation of the MISHELL
+      system.'),
+    '#default_value' => variable_get('cpe_cart_cookie_name', 'item'),
+    '#attributes' => array(
+      'placeholder' => 'Enter cookie name here',
+    ),
+    '#required' => TRUE,
+  );
 
-/**
- * Cookie domain for shopping cart cookie.
- */
-define('CPE_CART_COOKIE_DOMAIN', variable_get('cpe_cart_cookie_domain', 'utexas.edu'));
+  $form['cpe_cart_class_id_length'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Length of class ID for shopping cart cookie'),
+    '#element_validate' => array('element_validate_integer_positive'),
+    '#description' => t('What is the length that the course ID should be padded
+      to using zeros? This should match the expectation of the MISHELL
+      system.'),
+    '#default_value' => variable_get('cpe_cart_class_id_length', '20'),
+    '#attributes' => array(
+      'placeholder' => 'Enter class ID length here',
+    ),
+    '#required' => TRUE,
+  );
 
-/**
- * Length of the class ID value in the shopping cart Cookie.
- */
-define('CPE_CART_CLASS_ID_LENGTH', variable_get('cpe_cart_class_id_length', 20));
+  $form['cpe_cart_cookie_domain'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Domain for shopping cart cookie'),
+    '#description' => t('What is the domain that should be set for the shopping
+      cart cookie (e.g. "utexas.edu")?'),
+    '#default_value' => variable_get('cpe_cart_cookie_domain', 'utexas.edu'),
+    '#attributes' => array(
+      'placeholder' => 'Enter cookie domain here',
+    ),
+    '#required' => TRUE,
+  );
 
-/**
- * URL to use for checking remaining seats on a class ID via MISHELL.
- */
-define('CPE_CART_SEAT_CHECK_URL', variable_get('cpe_cart_seat_check_url', drupal_get_path('module', 'cpe_cart') . '/seat_check.php?s_pgm_id='));
+  $form['cpe_cart_checkout_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Base URL for cart checkout'),
+    '#description' => t('What is the URL that should the user should be
+      redirected to when they click the "Check Out" button? Do NOT include
+      query parameters such as "?pd_code=PD" -- those should be entered in the
+      "Query parameters for cart checkout URL" field.'),
+    '#default_value' => variable_get('cpe_cart_checkout_url', ''),
+    '#attributes' => array(
+      'placeholder' => 'Enter checkout URL here',
+    ),
+    '#required' => TRUE,
+  );
+
+  $form['cpe_cart_checkout_url_query_params'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Query params for cart checkout URL'),
+    '#description' => t('Specify query params that should be appended to the base Cart
+      checkout URL, in the format of \'{"key1":"value1", "key2":"value2"}\', which
+      will result in a full URL of %checkout_url.', array(
+        '%checkout_url' => variable_get('cpe_cart_checkout_url', 'http://example.com') . '?key1=value1&key2=value2',
+      )),
+    '#default_value' => variable_get('cpe_cart_checkout_url_query_params', ''),
+  );
+
+  // Use the system_settings_form() to add submit handlers to the button.
+  return system_settings_form($form);
+}
 
 /**
  * Check whether we are on a page using the default theme.
@@ -58,12 +147,12 @@ function cpe_cart_init() {
   if (_cpe_cart_is_theme_default()) {
     drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/cpe_cart_cookie.js');
     drupal_add_js(drupal_get_path('module', 'cpe_cart') . '/js/checkout_logic.js');
-    drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => CPE_CART_CHECKOUT_URL)), array('type' => 'setting'));
-    drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrlQueryParams' => CPE_CART_CHECKOUT_URL_QUERY_PARAMS)), array('type' => 'setting'));
-    drupal_add_js(array('cpe_cart' => array('cpeCartCookieName' => CPE_CART_COOKIE_NAME)), array('type' => 'setting'));
-    drupal_add_js(array('cpe_cart' => array('cpeCartCookieDomain' => CPE_CART_COOKIE_DOMAIN)), array('type' => 'setting'));
-    drupal_add_js(array('cpe_cart' => array('cpeCartClassIdLength' => CPE_CART_CLASS_ID_LENGTH)), array('type' => 'setting'));
-    drupal_add_js(array('cpe_cart' => array('cpeCartSeatCheckUrl' => CPE_CART_SEAT_CHECK_URL)), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrl' => variable_get('cpe_cart_checkout_url', ''))), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartCheckoutUrlQueryParams' => variable_get('cpe_cart_checkout_url_query_params', ''))), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartCookieName' => variable_get('cpe_cart_cookie_name', ''))), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartCookieDomain' => variable_get('cpe_cart_cookie_domain', ''))), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartClassIdLength' => variable_get('cpe_cart_class_id_length', ''))), array('type' => 'setting'));
+    drupal_add_js(array('cpe_cart' => array('cpeCartSeatCheckUrl' => drupal_get_path('module', 'cpe_cart') . '/seat_check.php?s_pgm_id=')), array('type' => 'setting'));
   }
 }
 
