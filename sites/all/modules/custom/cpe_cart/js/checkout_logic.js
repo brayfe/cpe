@@ -29,7 +29,6 @@
         // MISHELL expects to see in the cart cookie for cart checkout.
         var mishellIdForCart = mishellIdEightByte + '000000000000';
         setCookie(cpeCartCookieName, mishellIdForCart);
-        $('form#section-form').submit();
       });
 
       // "Seat availability check" functionality
