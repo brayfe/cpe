@@ -28,6 +28,7 @@ function cpe_cart_update_7100() {
     $role = user_role_load_by_name($role_name);
     user_role_grant_permissions($role->rid, $permissions);
   }
+  variable_set('cpe_cart_checkout_url_query_params', '{"prog_dept":"PD"}');
 }
 
 /**
