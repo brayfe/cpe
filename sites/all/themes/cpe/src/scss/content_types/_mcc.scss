@@ -95,6 +95,24 @@
 
   }
 
+  button.email-coord {
+    padding: 0;
+    background-color: transparent;
+
+    a {
+      margin-bottom: 0;
+      background-color: #3282a6;
+      padding: 8px 18px;
+      outline: 0;
+      color: #fff;
+      font-size: 1em;
+      border: none;
+      color: #fff;
+      text-decoration: none;
+    }
+
+  }
+
   .column.medium-8.large-9 {
     padding-right: 2em;
   }
