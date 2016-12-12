@@ -44,7 +44,7 @@ function cpe_cart_menu() {
   $items['admin/config/cpe/cpe_cart'] = array(
     'page callback' => 'drupal_get_form',
     'page arguments' => array('cpe_cart_admin_form'),
-    'access arguments' => array('administer_cpe_cart'),
+    'access arguments' => array('administer cpe cart'),
     'title' => 'CPE Cart',
     'description' => 'Administration tasks for the CPE Cart module',
   );
