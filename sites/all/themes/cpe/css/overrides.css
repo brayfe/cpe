@@ -545,7 +545,8 @@ a[title="PDUs/CEUs"] {
 
 .node-type-cpe-multi-course-cert button.email-coord {
   padding: 0;
-  background-color: transparent; }
+  background-color: transparent;
+  margin: 8px 0; }
   .node-type-cpe-multi-course-cert button.email-coord a {
     margin-bottom: 0;
     background-color: #3282a6;
