@@ -1,7 +1,7 @@
 .bottom-search{
-  .main-content{
-    padding-right: 0px;
-  }
+	.main-content{
+		padding-right: 0px;
+	}
 }
 .accented-container-wrapper {
   overflow: hidden;
@@ -39,18 +39,18 @@
   .field.field_utexas_twitter_widget,
   .field_utexas_social_links,
   .fieldblock_field_utexas_resource,
-  .block-menu-block,
-  #block-utexas-social-sharing-utexas-social-sharing-block {
+	.block-menu-block,
+	#block-utexas-social-sharing-utexas-social-sharing-block {
     background-color: #fff;
     border: 1px solid #333f48;
     padding: 20px 20px 3px;
   }
-  #block-utexas-social-sharing-utexas-social-sharing-block {
-    padding-top: 0;
-    .post-headline {
-      padding-left: 0;
-    }
-  }
+	#block-utexas-social-sharing-utexas-social-sharing-block {
+		padding-top: 0;
+		.post-headline {
+			padding-left: 0;
+		}
+	}
   .field_utexas_resource .flex-content.horizontal {
     background-color: #f8f8f8;
   }
