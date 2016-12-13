@@ -94,7 +94,7 @@
 
     <input type="submit" value="Add to Cart" id="add-to-cart" data-mishell-id="<?php print $field_section_mishell_id; ?>" />
 
-    <button class="email-coord"><a href="mailto:<?php print render($field_coordinator_email); ?>" />Email Coordinator</a></button>
+    <a class="email-coord" href="mailto:<?php print render($field_coordinator_email); ?>" />Email Coordinator</a>
 
   </form>
 
