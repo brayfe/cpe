@@ -2,33 +2,33 @@
 
 .social-share {
   .social-links {
-    margin: 0px;
-    padding: 8px 0 6px 0;
-    li.social-share-li{
-      text-align: center;
-      padding: 10px 0 5px 0;
-      border: 1px solid $light-grey-border!important;
-      border-left: none!important;
-      &:first-child {
-        border-left: 1px solid $light-grey-border!important;
-      }
-    }
-    .connect-link{
-      text-decoration: none;
-      text-align: center;
-      display: block;
-      &:hover{
-        text-decoration: none;
+  	margin: 0px;
+  	padding: 8px 0 6px 0;
+  	li.social-share-li{
+  		text-align: center;
+			padding: 10px 0 5px 0;
+			border: 1px solid $light-grey-border!important;
+			border-left: none!important;
+			&:first-child {
+				border-left: 1px solid $light-grey-border!important;
+			}
+  	}
+  	.connect-link{
+  		text-decoration: none;
+  		text-align: center;
+  		display: block;
+  		&:hover{
+  			text-decoration: none;
         filter: brightness(80%);
-      }
-    }
+  		}
+  	}
 
-    [class^="icon-"], [class*=" icon-"] {
-      font-size: 28px;
-      @include respond(medium){
-        font-size: 24px;
-      }
-    }
+  	[class^="icon-"], [class*=" icon-"] {
+  		font-size: 28px;
+  		@include respond(medium){
+  			font-size: 24px;
+  		}
+  	}
     .icon-twitter {
       color: #00aced;
     }
@@ -50,23 +50,23 @@
     .icon-reddit {
       color: #5f99cf;
     }
-    span.social-name{
-      text-decoration: none;
-      color: #282828;
-      font-size: 14px;
-      display: none;
-      @include respond(large) {
-        display: block;
-      }
-    }
+  	span.social-name{
+  		text-decoration: none;
+  		color: #282828;
+  		font-size: 14px;
+			display: none;
+			@include respond(large) {
+				display: block;
+			}
+  	}
   }
 }
 .sidebar-content, .region-content-top-right {
   .social-share {
-    .post-headline {
-      font-size: 18px!important;
-      margin-bottom: 0;
-    }
+		.post-headline {
+			font-size: 18px!important;
+			margin-bottom: 0;
+		}
     .social-links {
       li {
         &:nth-child(3n-2){
@@ -81,14 +81,14 @@
 }
 .region-main-content-top-right, .region-main-content-top-left {
   .social-share {
-    .post-headline {
-      font-size: 18px!important;
-      margin-bottom: 0;
-    }
+		.post-headline {
+			font-size: 18px!important;
+			margin-bottom: 0;
+		}
   }
 }
 #block-utexas-social-sharing-utexas-social-sharing-block {
-  .contextual-links-wrapper, .contextual-links {
-    display: none;
-  }
+	.contextual-links-wrapper, .contextual-links {
+		display: none;
+	}
 }

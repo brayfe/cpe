@@ -302,17 +302,8 @@
 	}
   #main-nav .sub-nav-row li a {
     span:after {
-      -moz-osx-font-smoothing: grayscale;
-      content: "\f100";
-      display: inline;
-      font-family: "forty_acres_icons";
-      font-style: normal;
-      font-variant: normal;
-      font-weight: normal;
-      line-height: 1;
+			@include icon(links);
       margin-left: 4px;
-      position: relative;
-      text-transform: none;
       top: 1px;
     }
   }

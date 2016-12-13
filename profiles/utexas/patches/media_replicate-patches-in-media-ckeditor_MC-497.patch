@@ -1,0 +1,48 @@
+diff --git a/profiles/utexas/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/library.js b/profiles/utexas/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/library.js
+index b097d17..d1c61f6 100644
+--- a/profiles/utexas/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/library.js
++++ b/profiles/utexas/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/library.js
+@@ -55,12 +55,8 @@
+ 
+       // Insert element. Use CKEDITOR.dom.element.createFromHtml to ensure our
+       // custom wrapper element is preserved.
+-      if (wysiwygHTML.indexOf("<!--MEDIA-WRAPPER-START-") !== -1) {
+-        ckeditorInstance.plugins.media.mediaLegacyWrappers = true;
+-        wysiwygHTML = wysiwygHTML.replace(/<!--MEDIA-WRAPPER-START-(\d+)-->(.*?)<!--MEDIA-WRAPPER-END-\d+-->/gi, '');
+-      } else {
+-        wysiwygHTML = '<mediawrapper data="">' + wysiwygHTML + '</mediawrapper>';
+-      }
++      ckeditorInstance.plugins.media.mediaLegacyWrappers = true;
++      wysiwygHTML = wysiwygHTML.replace(/<!--MEDIA-WRAPPER-START-(\d+)-->(.*?)<!--MEDIA-WRAPPER-END-\d+-->/gi, '');
+ 
+       var editorElement = CKEDITOR.dom.element.createFromHtml(wysiwygHTML);
+       ckeditorInstance.insertElement(editorElement);
+diff --git a/profiles/utexas/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/plugin.js b/profiles/utexas/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/plugin.js
+index 37fd3b9..4d5c396 100644
+--- a/profiles/utexas/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/plugin.js
++++ b/profiles/utexas/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/plugin.js
+@@ -83,20 +83,20 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
+         CKEDITOR.dtd.$object['mediawrapper'] = 1;
+       }
+       function prepareDataForWysiwygMode(data) {
+-        data = Drupal.media.filter.replaceTokenWithPlaceholder(data);
++/*        data = Drupal.media.filter.replaceTokenWithPlaceholder(data);
+         // Legacy media wrapper.
+         mediaPluginDefinition.mediaLegacyWrappers = (data.indexOf("<!--MEDIA-WRAPPER-START-") !== -1);
+-        data = data.replace(/<!--MEDIA-WRAPPER-START-(\d+)-->(.*?)<!--MEDIA-WRAPPER-END-\d+-->/gi, '<mediawrapper data="$1">$2</mediawrapper>');
++        data = data.replace(/<!--MEDIA-WRAPPER-START-(\d+)-->(.*?)<!--MEDIA-WRAPPER-END-\d+-->/gi, '<mediawrapper data="$1">$2</mediawrapper>');*/
+         return data;
+       }
+       function prepareDataForSourceMode(data) {
+-        var replacement = '$2';
++/*        var replacement = '$2';
+         // Legacy wrapper
+         if (mediaPluginDefinition.mediaLegacyWrappers) {
+           replacement = '<!--MEDIA-WRAPPER-START-$1-->$2<!--MEDIA-WRAPPER-END-$1-->';
+         }
+         data = data.replace(/<mediawrapper data="(.*)">(.*?)<\/mediawrapper>/gi, replacement);
+-        data = Drupal.media.filter.replacePlaceholderWithToken(data);
++        data = Drupal.media.filter.replacePlaceholderWithToken(data);*/
+         return data;
+       }
+ 

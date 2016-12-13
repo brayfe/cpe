@@ -70,7 +70,7 @@ function utexas_templates_schema() {
 function utexas_templates_install() {
   // Set the initial value for the schema version so we can
   // run updates after install.
-  drupal_set_installed_schema_version('utexas_templates', 7101);
+  drupal_set_installed_schema_version('utexas_templates', 7102);
 
   $templates = array(
     array(
@@ -1131,6 +1131,12 @@ function utexas_templates_install() {
             'enabled' => TRUE,
             'locked' => FALSE,
           ),
+          'field_utexas_background_accent' => array(
+            'machine_name' => 'field_utexas_background_accent',
+            '_weight' => -1,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
         ),
         'template_icon_fid' => 'landing-page-template-1.svg',
       ),
@@ -1249,6 +1255,12 @@ function utexas_templates_install() {
             '_weight' => -2,
             'enabled' => TRUE,
             'locked' => FALSE,
+          ),
+          'field_utexas_background_accent' => array(
+            'machine_name' => 'field_utexas_background_accent',
+            '_weight' => -1,
+            'enabled' => TRUE,
+            'locked' => TRUE,
           ),
         ),
         'template_icon_fid' => 'landing-page-template-2.svg',
@@ -1369,6 +1381,12 @@ function utexas_templates_install() {
             'enabled' => TRUE,
             'locked' => FALSE,
           ),
+          'field_utexas_background_accent' => array(
+            'machine_name' => 'field_utexas_background_accent',
+            '_weight' => -1,
+            'enabled' => TRUE,
+            'locked' => TRUE,
+          ),
         ),
         'template_icon_fid' => 'landing-page-template-3.svg',
       ),
@@ -1412,8 +1430,49 @@ function utexas_templates_update_7101() {
           '_weight' => 1,
           'enabled' => TRUE,
           'locked' => FALSE,
-        )
+        ),
       );
+      $template_fields = array_merge($template_fields, $new_field);
+      $template->fields = serialize($template_fields);
+      entity_save('template', $template);
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add background accent setting, if not already present.
+ */
+function utexas_templates_update_7102() {
+  $new_field = array(
+    'field_utexas_background_accent' => array(
+      'machine_name' => 'field_utexas_background_accent',
+      '_weight' => -1,
+      'enabled' => TRUE,
+      'locked' => TRUE,
+    ),
+  );
+
+  // Get ID for landing page templates.
+  $templates = array(
+    'Landing Page Template 1',
+    'Landing Page Template 2',
+    'Landing Page Template 3',
+  );
+  foreach ($templates as $template_name) {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'template', '=')
+        ->propertyCondition('name', $template_name, '=');
+    $result = $query->execute();
+    $tmp_id = array_keys($result['template']);
+    $entity_id = $tmp_id[0];
+    // Update template.
+    $template = entity_load_single('template', $entity_id);
+    $template_fields = unserialize($template->fields);
+    if (!isset($template_fields['field_utexas_background_accent'])) {
+      // Only act on templates that do not yet have a value for the background
+      // accent. This ensures existing sites will see no change in behavior.
       $template_fields = array_merge($template_fields, $new_field);
       $template->fields = serialize($template_fields);
       entity_save('template', $template);
