@@ -16,7 +16,7 @@ define('UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS', serialize(
     'Twitter' => 'icon-twitter',
     'Instagram' => 'icon-instagram',
     'LinkedIn' => 'icon-linkedin',
-    'YouTube' => 'icon-youtube',
+    'YouTube' => 'icon-youtube3',
     'GooglePlus' => 'icon-googleplus',
     'Flickr' => 'icon-flickr',
     'Pinterest' => 'icon-pinterest',
@@ -75,7 +75,7 @@ function utexas_social_accounts_admin() {
     '#prefix' => '<div id="field-table">',
     '#suffix' => '</div>',
   );
-  $accounts = unserialize(UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS);
+  $accounts = unserialize(variable_get('utexas_social_accounts_media_items', UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS));
   $count = 0;
   $max_delta = 10;
   foreach (array_keys($accounts) as $name) {
@@ -136,7 +136,7 @@ function theme_utexas_social_accounts_form_table(&$variables) {
     t('Weight'),
   );
   $rows = array();
-  $accounts = unserialize(UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS);
+  $accounts = unserialize(variable_get('utexas_social_accounts_media_items', UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS));
 
   $sorted_fields = array();
   foreach (array_keys($accounts) as $name) {
@@ -221,7 +221,7 @@ function utexas_social_accounts_form_alter(&$form, &$form_state, $form_id) {
  * Defines the validation for each input field from the admin form.
  */
 function utexas_social_accounts_form_validate($form, &$form_state) {
-  $accounts = unserialize(UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS);
+  $accounts = unserialize(variable_get('utexas_social_accounts_media_items', UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS));
   foreach (array_keys($accounts) as $name) {
     $machine_name = _utexas_admin_machine_name($name);
     if (filter_var($form_state['values']['utexas_social_accounts_' . $machine_name], FILTER_VALIDATE_URL) === FALSE
@@ -255,7 +255,7 @@ function social_accounts_block_view() {
   // Build the block content.
   $content = '<ul class="connect-links">';
 
-  $accounts = unserialize(UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS);
+  $accounts = unserialize(variable_get('utexas_social_accounts_media_items', UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS));
   $sorted_fields = array();
   $count = 0;
   foreach (array_keys($accounts) as $name) {

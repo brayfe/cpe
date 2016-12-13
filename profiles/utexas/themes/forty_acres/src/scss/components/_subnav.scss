@@ -55,19 +55,9 @@
 			}
 		}
       &:after {
-        -moz-osx-font-smoothing: grayscale;
-        content: "\f101";
-        font-family: "forty_acres_icons";
+				@include icon(buttons);
         font-size: 0.6875rem;
-        font-style: normal;
-        font-variant: normal;
-        font-weight: normal;
-        line-height: inherit;
         padding-left: 7px;
-        position: relative;
-        text-transform: none;
-        top: 0;
-        color: inherit;
       }
 	}
 

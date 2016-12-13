@@ -70,7 +70,7 @@ function simplesamlphp_auth_settings_basic() {
     '#type' => 'checkbox',
     '#title' => t('Register users (i.e., auto-provisioning)'),
     '#default_value' => variable_get('simplesamlphp_auth_registerusers', TRUE),
-    '#description' => t("Determines whether or not the module should automatically create/register new Drupal accounts for users that authenticate using SimpleSAMLphp. Unless you've done some custom work to provision Drupal accounts with the necessary authmap entries you will want this checked. NOTE: If unchecked each user must already have been provisioned a Drupal account with an appropriate entry in the authmap table before logging in. Otherwise they will receive a notice and be denied access. Be aware that simply creating a Drupal account will not create the necessary entry in the authmap table."),
+    '#description' => t("Determines wether or not the module should automatically create/register new Drupal accounts for users that authenticate using SimpleSAMLphp. Unless you've done some custom work to provision Drupal accounts with the necessary authmap entries you will want this checked. NOTE: If unchecked each user must already have been provisioned a Drupal account with an appropriate entry in the authmap table before logging in. Otherwise they will receive a notice and be denied access. Be aware that simply creating a Drupal account will not create the necessary entry in the authmap table."),
   );
 
   $form['#submit'][] = 'simplesamlphp_auth_settings_basic_submit';
@@ -164,6 +164,12 @@ function simplesamlphp_auth_settings_sync() {
     '#default_value' => variable_get('simplesamlphp_auth_mailattr', 'mail'),
     '#description' => t('Example: <i>mail</i><br />If the user attribute is multivalued, the first value will be used.'),
   );
+  $form['simplesamlphp_auth_grp_user']['simplesamlphp_auth_lock_saml_attrs'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Update account from SAML attributes every time the user logs in.'),
+    '#default_value' => variable_get('simplesamlphp_auth_lock_saml_attrs', 0),
+    '#description' => t('NOTE: This means manual changes made to user name or email address will be reverted. (OR those fields will be hidden in the user edit page)'),
+  );
   $form['simplesamlphp_auth_grp_user']['simplesamlphp_auth_rolepopulation'] = array(
     '#type' => 'textarea',
     '#title' => t('Automatic role population from simpleSAMLphp attributes'),
@@ -174,7 +180,7 @@ function simplesamlphp_auth_settings_sync() {
     '#type' => 'checkbox',
     '#title' => t('Reevaluate roles every time the user logs in.'),
     '#default_value' => variable_get('simplesamlphp_auth_roleevaleverytime', 0),
-    '#description' => t('NOTE: This means users could loose any roles that have been assigned manually in Drupal.'),
+    '#description' => t('NOTE: This means users could lose any roles that have been assigned manually in Drupal.'),
   );
   $form['simplesamlphp_auth_grp_user']['simplesamlphp_auth_autoenablesaml'] = array(
     '#type' => 'checkbox',

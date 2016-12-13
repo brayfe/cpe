@@ -1,0 +1,22 @@
+<?php
+/**
+ * @file
+ * Installation files for the utexas_social_sharing module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Delete any files and variables associated with the module.
+ */
+function utexas_news_share_uninstall() {
+  // File cleanup.
+  if ($file = variable_get('utexas_social_sharing_og_default', 0)) {
+    file_delete($file, TRUE);
+  }
+
+  // Variable cleanup.
+  variable_del('utexas_social_sharing_facebook_app_id');
+  variable_del('utexas_social_sharing_twitter_name');
+  variable_del('utexas_social_sharing_og_default');
+}

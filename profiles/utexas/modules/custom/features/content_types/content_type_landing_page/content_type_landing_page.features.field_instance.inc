@@ -149,7 +149,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'You can apply a background image accent to the lower region of any landing page to individualize content. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-BackgroundAccent">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -186,13 +186,14 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Select an existing Contact Info block to be available on this page. <a href="/admin/content/contact_info">Review or add Contact Info blocks</a>.',
+    'description' => 'This widget provides an easy way to display contact information on one or more pages. Since you may need the same contact information to appear on multiple pages, Contact Info data is added on a <a href="/admin/content/contact_info">separate form</a>, then assigned by reference on pages. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-ContactInfo">Go to documentation</a>',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
         'module' => 'entityreference',
         'settings' => array(
           'links' => 0,
+          'use_content_language' => TRUE,
           'view_mode' => 'default',
         ),
         'type' => 'entityreference_entity_view',
@@ -227,7 +228,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The featured highlight is a special field, available on the "Featured Highlight" template, which appears automatically when data has been entered for it (in other words, it is not a positionable field). <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-FeaturedHighlight">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -265,7 +266,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The Flex Content Area field, as its name implies, is a highly flexible block that can yield a variety of looks. It comes with an image, linkable title, copy text area, and call to action link or list of links. In addition, you can add multiple flex content area fields on a single page. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-FlexContentArea">Go to documentation</a>',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -305,7 +306,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The Flex Content Area field, as its name implies, is a highly flexible block that can yield a variety of looks. It comes with an image, linkable title, copy text area, and call to action link or list of links. In addition, you can add multiple flex content area fields on a single page. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-FlexContentArea">Go to documentation</a>',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -344,7 +345,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The hero photo is a large image region, typically displayed at the top of content, to provide identity to the content on the page. On Landing Pages, the hero image spans the full width of the page and has a number of different theming configurations.  <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-HeroPhoto">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -381,7 +382,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The Image Link is a simple field which allows uploading an image of any size and optionally linking it to another webpage (internal or external). <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-ImageLink">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -418,7 +419,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The Image Link is a simple field which allows uploading an image of any size and optionally linking it to another webpage (internal or external). <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-ImageLink">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -455,7 +456,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The UT Newsreel widget adds an unlimited number of feeds from news.utexas.edu. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-UTNewsreel">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -493,7 +494,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Photo Content Areas are similar to Flex Content Areas (see above), and come with an image, linkable title, copy text, and link(s). <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-PhotoContentArea">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -532,7 +533,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Promo Lists provide the ability to add many content-rich featured items on a page, without taking up much space. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-PromoList">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -571,7 +572,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The Promo Unit, similar in content to the Promo List, adds an unlimited number of preformatted content, each with image, headline, copy text, and call to action link. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-PromoUnit">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -608,7 +609,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The Quick Links widget provides the ability to display a list of links with a title and optional copy. On landing page template 2 the "Quick Links" are a locked region that will produce an interesting full-width layout to highlight a number of links. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-QuickLinks">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -647,7 +648,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The Resources widget provides a responsive display consisting of a title, image, headline and list of links. There is no copy field available for this widget. <a href="https://wikis.utexas.edu/display/quicksites/List+of+available+fields+and+widgets#Listofavailablefieldsandwidgets-Resources">Go to documentation</a>',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -686,7 +687,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The Social Links widget provides an easy way to link to your organization\'s social media accounts. On most layouts, the social link block will automatically appear within the page\'s regions as social media icons. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-SocialLinks">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -723,13 +724,14 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Select an existing Twitter Widget to be available on this page. <a href="/admin/content/twitter">Review or add Twitter widgets</a>.',
+    'description' => 'The Twitter widget allows you to add an unlimited number of configurable Twitter feeds that pull from an account or user timeline. Add and configure Twitter widgets <a href="/admin/content/twitter">here</a>. Also see <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-TwitterWidget">the documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
         'module' => 'entityreference',
         'settings' => array(
           'links' => TRUE,
+          'use_content_language' => TRUE,
           'view_mode' => 'default',
         ),
         'type' => 'entityreference_entity_view',
@@ -763,7 +765,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The WYSIWYG ("What you see is what you get") field is the all-purpose text field, which allows you to add formatted text, including bold and italicized text, links, ordered and unordered lists, and tables. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-WYSIWYGfield">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -803,7 +805,7 @@ function content_type_landing_page_field_default_field_instances() {
     'bundle' => 'landing_page',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The WYSIWYG ("What you see is what you get") field is the all-purpose text field, which allows you to add formatted text, including bold and italicized text, links, ordered and unordered lists, and tables. <a href="https://wikis.utexas.edu/display/UTDK/Fields+and+Widgets#FieldsandWidgets-WYSIWYGfield">Go to documentation</a>.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',

@@ -32,25 +32,22 @@
   </div>
   <div class="meta-bottom">
       <div class="template-fields">
-        <?php if (!empty($fields)): ?>
+        <?php if (!empty($enabled_fields)): ?>
           <h3><a href="#" class="field-expander">Available Fields</a></h3>
           <ul class="template-field-list collapsed">
             <?php foreach ($fields as $field_name => $field): ?>
               <?php if ($field['enabled']): ?>
                 <li>
                   <span class="field-label"><?php print $field['label']; ?></span>
-                  <?php if (!empty($field['description'])): ?>
-                    <span class="field-help">[<a href="#" class="field-description-help-text" title="<?php print $field['description']; ?>">?</a>]</span>
-                  <?php endif; ?>
                 </li>
               <?php endif; ?>
             <?php endforeach; ?>
           </ul>
       <?php else: ?>
          <p class="none">
-          No available fields for this template.
+          No available fields for this template.<br />
           <?php if (user_access('manage template additional settings')): ?>
-            <?php print l(t('Manage available fields.'), 'taxonomy/term/' . $term['tid'] . '/additional-settings', array('attributes' => array('target' => '_blank'))); ?>
+            <?php print l(t('Manage available fields.'), 'admin/templates/manage/' . $term, array('attributes' => array('target' => '_blank'))); ?>
           <?php endif; ?>
         </p>
       <?php endif; ?>

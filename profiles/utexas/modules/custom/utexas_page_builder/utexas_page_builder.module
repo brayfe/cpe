@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Page Builder module.
@@ -144,12 +145,12 @@ function template_preprocess_utexas_page_builder_template_option(&$variables) {
     }
   }
   // Sort by weight.
-  uasort($fields, function($a, $b) {
+  uasort($fields, function ($a, $b) {
     $a_weight = (is_array($a) && isset($a['weight'])) ? $a['weight'] : 0;
     $b_weight = (is_array($b) && isset($b['weight'])) ? $b['weight'] : 0;
-                    if ($a_weight == $b_weight) {
-                      return 0;
-                    }
+    if ($a_weight == $b_weight) {
+      return 0;
+    }
     return ($a_weight < $b_weight) ? -1 : 1;
   });
 
@@ -196,6 +197,12 @@ function template_preprocess_utexas_page_builder_template_option(&$variables) {
     'height' => 150,
   ));
   $variables['selected'] = ($term == $variables['selected']) ? ' selected' : '';
+  $variables['enabled_fields'] = array();
+  foreach ($fields as $field_name => $field) {
+    if ($field['enabled']) {
+      $variables['enabled_fields'][] = $field;
+    }
+  }
 }
 
 /**
@@ -473,6 +480,20 @@ function utexas_page_builder_form_alter(&$form, &$form_state, $form_id) {
         $form['field_template']['#access'] = FALSE;
       }
 
+      // Field display cleanup logic. If not saved via the UI, the given
+      // template will not have data for fields that aren't explicitly enabled.
+      // This is due to the fact that utexas_templates_install() doesn't
+      // define all fields present in the system.
+      // The following loops through all available fields on the content type
+      // and if they don't exist in the template definition, sets access to
+      // FALSE (i.e., hidden). See MC-468.
+      foreach ($fields as $field) {
+        $field_name = $field['field_name'];
+        if (!isset($defined_fields[$field_name])) {
+          $form[$field['field_name']]['#access'] = FALSE;
+        }
+      }
+
       // Set the fields with custom text areas.
       $field_filters = array(
         'filtered_html' => array(
@@ -514,8 +535,19 @@ function utexas_page_builder_form_alter(&$form, &$form_state, $form_id) {
               '#weight' => $form[$field_name]['#weight'] - 25,
               '#access' => $form[$field_name]['#access'],
             );
+            // If a field description is provided, display it above the widget.
+            if ($field['description'] != '') {
+              $help = array(
+                '#type' => 'fieldset',
+                '#title' => $field['label'],
+                '#weight' => 0,
+              );
+              $help['description']['#markup'] = $field['description'];
+              $form[$field_name]['#prefix'] = drupal_render($help);
+            }
             // Attach the fieldset to the form and remove the original field.
             $form['sub_' . $field_name][$field_name] = $form[$field_name];
+
             unset($form[$field_name]);
             break;
         }
@@ -537,6 +569,11 @@ function utexas_page_builder_form_alter(&$form, &$form_state, $form_id) {
     }
   }
   return $form;
+}
+
+function utexas_page_builder_field_widget_form_alter(&$element, &$form_state, $context) {
+  $element[0]['#description'] = '';
+  $element['#description'] = '';
 }
 
 /**
@@ -634,7 +671,6 @@ function utexas_page_builder_block_view_alter(&$data, $block) {
     }
   }
 }
-
 
 /**
  * Implements hook_context_registry_alter().
@@ -789,6 +825,7 @@ function utexas_page_builder_preprocess_context_block_browser(&$variables) {
     'views' => t('Views'),
     'menu-block' => t('Menu Blocks'),
     'block' => t('Standard Blocks'),
+    'utexas-social-sharing' => t('Social Sharing'),
   );
   // Check if the developer has supplied alternate arrays of modules.
   if ($remove_modules = variable_get('utexas_page_builder_remove_block_modules', FALSE)) {
@@ -965,6 +1002,7 @@ function utexas_page_builder_preprocess_block(&$variables) {
       'field_utexas_promo_list',
       'field_utexas_resource',
       'field_utexas_promo_units',
+      'field_utexas_social_sharing',
     );
     if (isset($variables['elements']['#field_name']) and !in_array($variables['elements']['#field_name'], $no_default)) {
       $variables['classes_array'][] = 'sidebar-default-style';
@@ -976,7 +1014,11 @@ function utexas_page_builder_preprocess_block(&$variables) {
     }
 
     // If it's a non-fieldblock, attach the default style as well.
-    if (!isset($variables['elements']['#field_name']) && ($variables['block']->module) != 'menu_block') {
+    $no_default_style = array(
+      'menu_block',
+      'utexas_social_sharing',
+    );
+    if (!isset($variables['elements']['#field_name']) && !in_array($variables['block']->module, $no_default_style)) {
       $variables['classes_array'][] = 'sidebar-default-style';
       $variables['theme_hook_suggestions'][] = 'block__' . $variables['block']->region . '__default_style';
     }

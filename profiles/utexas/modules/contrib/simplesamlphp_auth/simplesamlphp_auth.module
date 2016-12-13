@@ -250,9 +250,6 @@ function simplesamlphp_auth_user_logout($account) {
       $gotourl = variable_get('simplesamlphp_auth_logoutgotourl', '');
     }
 
-  // Allow modules to alter $gotourl.
-  drupal_alter('simplesamlphp_auth_logout_gotourl', $gotourl, $account);
-
     $_simplesamlphp_auth_as->logout($gotourl);
 
   }
@@ -318,6 +315,10 @@ function simplesamlphp_auth_form_alter(&$form, $form_state, $form_id) {
     // Drupal password, remove the fields from the form.
     if (!variable_get('simplesamlphp_auth_allowsetdrupalpwd')) {
       unset($form['account']['pass']);
+    }
+    // If user fields are being synced from SAML on every login, don't allow editing
+    if (variable_get('simplesamlphp_auth_lock_saml_attrs','0')) {
+        $form['account']['mail']['#disabled'] = TRUE;
     }
   }
 }

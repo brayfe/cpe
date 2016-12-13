@@ -1,6 +1,6 @@
 name = Utexas
 description = UT Drupal Kit installation profile
-version = "7.x-2.4.1"
+version = "7.x-2.5"
 core = 7.x
 php = 5.4
 
@@ -88,6 +88,7 @@ dependencies[] = utexas_menu
 dependencies[] = utexas_navigation404
 dependencies[] = utexas_qualtrics_filter
 dependencies[] = utexas_social_accounts
+dependencies[] = utexas_social_sharing
 dependencies[] = utexas_tablesaw_filter
 dependencies[] = utexas_twitter_widget
 dependencies[] = utexas_utdk_deploy

@@ -1,3 +1,24 @@
+UT Drupal Kit 7.x-2.5, 2016-12-12
+---------------------------------
+[MC-499] - Update core to 7.53
+[MC-497] - Fix reverted settings path : CKEditor Advanced Settings
+[MC-496] - Patch CKEditor bug that results in "FALSE" text
+[MC-489] - Fix Image Link empty URL conversion to base URL
+[MC-488] - Update LibXML validation on custom tablesaw module
+[MC-485] - Resolve undefined send_mail conditional in UTexas Beacon
+[MC-483] - Re-featurize overridden content type features
+[MC-482] - Update the UT_icons icon set
+[MC-477] - Add Drush command to make authmap adjustments for SAML users
+[MC-476] - Add Views caching to Team Member display
+[MC-475] - Allow developers to extend Social Accounts
+[MC-472] - Update CKEditor module
+[MC-469] - Improve labeling on templates & vertical tabs
+[MC-468] - Fix disallowed fields showing on node edit form (Page Builder)
+[MC-466] - Audit Forty Acres theme for obsolete tpl.php files
+[MC-465] - Add Social Sharing functionality
+[MC-450] - Add editing permission to Announcement Editors
+[MC-445] - Update UTexas Beacon module to send data to endpoint via POST request
+
 UT Drupal Kit 7.x-2.4.1, 2016-10-27
 ---------------------------------
 [MC-437] - Update LibXML validation in UTexas Tablesaw Filter module

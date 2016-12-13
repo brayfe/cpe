@@ -76,6 +76,27 @@ ul.icon-demo {padding-top: 40px;}
         <p>For more advanced users, there is a SASS mixin available for the more commonly used icons.  The mixin is located at ../forty_acres/src/scss/mixins/_icons.scss.  The following grid shows all of the currently available icons.  If you choose to use &lti> tags you will need to use the class names.  If you choose to use ::after pseudo-classes you will need to use the unique alphanumeric identifiers in the "content" attribute.</p>
       </div>
       <ul class="columns small-block-grid-1 medium-block-grid-2 large-block-grid-3 icon-demo">
+        <li class="glyph fs2">
+          <div class="pbs">
+              <span class="icon-youtube3"></span>
+              <span class="mls"> icon-youtube3</span>
+              <div class="unicode">\ea9d</div>
+          </div>
+      </li>
+      <li class="glyph fs2">
+          <div class="pbs">
+              <span class="icon-youtube2"></span>
+              <span class="mls"> icon-youtube2</span>
+              <div class="unicode">\ea9e</div>
+          </div>
+      </li>
+      <li class="glyph fs2">
+          <div class="pbs">
+              <span class="icon-snapchat"></span>
+              <span class="mls"> icon-snapchat</span>
+              <div class="unicode">\e901</div>
+          </div>
+      </li>
           <li class="glyph fs2">
               <div class="pbs">
                   <span class="icon-controller-play"></span>

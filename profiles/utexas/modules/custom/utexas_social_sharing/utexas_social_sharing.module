@@ -1,0 +1,390 @@
+<?php
+
+/**
+ * @file
+ * Defines a block that gets embedded into the article detail view.
+ */
+
+/**
+ * Implements hook_permission().
+ *
+ * Define permissions to administer the module.
+ */
+function utexas_social_sharing_permission() {
+  return array(
+    'administer social sharing' => array(
+      'title'       => t('Administer UTexas Social Sharing'),
+      'description' => t('Perform administration tasks for social share module.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * Register a menu item for the administration of the module.
+ */
+function utexas_social_sharing_menu() {
+  $items = array();
+
+  // Set up the admin menu.
+  $items['admin/config/utexas/utexas_social_sharing'] = array(
+    'title' => 'Social Sharing Configuration',
+    'description' => 'Set which social media sources show on the "share" block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('utexas_social_sharing_admin_form'),
+    'access arguments' => array('administer social sharing'),
+    'file' => 'utexas_social_sharing.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Perform alterations before the social sharing form is rendered.
+ */
+function utexas_social_sharing_form_utexas_social_sharing_admin_form_alter(&$form, &$form_state, $form_id) {
+  $form['#attached']['css'][] = drupal_get_path('module', 'utexas_social_sharing') . '/theme/config.css';
+}
+
+/**
+ * Implements hook_file_download().
+ *
+ * Checks access to make sure users can actually use the files that have been
+ * uploaded. Required since Drupal 7.29.
+ */
+function utexas_social_sharing_file_download($uri) {
+  if (strpos(file_uri_target($uri), 'og_images') === 0) {
+    $info = image_get_info($uri);
+    return array('Content-Type' => $info['mime_type']);
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements template preprocess_theme().
+ *
+ * Format the variables passed to the block.
+ */
+function template_preprocess_utexas_social_sharing(&$variables) {
+  if (arg(0) == 'node' and is_numeric(arg(1))) {
+    $variables['hidden'] = '';
+    if (variable_get('utexas_social_sharing_text', 1) == 0) {
+      $variables['hidden'] = 'hiddenText';
+    }
+    $node = node_load(arg(1));
+    $title_encoded = urlencode($node->title);
+    $current_url = url("node/" . $node->nid, array('absolute' => TRUE));
+    $current_url_encoded = urlencode($current_url);
+
+    // UTM parameters for all social shares.
+    $parameters = array();
+    $campaign = variable_get('utexas_social_sharing_campaign', '');
+    if ($campaign != '') {
+      $parameters['utm_campaign'] = $campaign;
+    }
+    // Title.
+    $variables['utexas_social_sharing_title'] = variable_get('utexas_social_sharing_title', 'Share this content');
+    // Email.
+    if (variable_get('utexas_social_sharing_em', 1) == 1) {
+      $body = htmlentities($node->title) . " %0D%0A";
+      $body .= htmlentities($current_url);
+      if (!empty($parameters)) {
+        $parameters['utm_medium'] = 'email';
+        $parameters['utm_source'] = 'emailsharebutton';
+        $body .= '?' . http_build_query($parameters, '', '%26');
+      }
+      if (variable_get('utexas_social_sharing_email_subject', '') == '') {
+        $subject = variable_get('site_name', '') . ': ' . $node->title;
+      }
+      else {
+        $subject = variable_get('utexas_social_sharing_email_subject', '');
+      }
+      if (variable_get('utexas_social_sharing_email_body', '') != '') {
+        $body = variable_get('utexas_social_sharing_email_body', '');
+      }
+      $mailto_parameters = 'subject=' . $subject . '&body=' . $body;
+      $email_link = 'mailto:?' . $mailto_parameters;
+      $variables['enabled']['email']['link'] = $email_link;
+      $variables['enabled']['email']['data'] = '';
+      $variables['enabled']['email']['class'] = '';
+      $variables['enabled']['email']['text'] = 'Email';
+      $variables['enabled']['email']['icon'] = 'icon-mail';
+    }
+
+    // Twitter.
+    if (variable_get('utexas_social_sharing_tw', 1) == 1) {
+      $twitter_link = 'https://twitter.com/intent/tweet?url=';
+      $twitter_link .= urlencode($current_url);
+      if (!empty($parameters)) {
+        // Unset additonal parameters due to 140 character limit.
+        unset($parameters['utm_medium']);
+        unset($parameters['utm_source']);
+        $twitter_link .= urlencode('?' . http_build_query($parameters));
+      }
+      $twitter_link .= '&text=' . urlencode($node->title);
+      $twitter_name = variable_get('utexas_social_sharing_twitter_name', '');
+      if ($twitter_name != '') {
+        $twitter_link .= '&via=' . urlencode($twitter_name);
+      }
+      $variables['enabled']['twitter']['link'] = $twitter_link;
+      $variables['enabled']['twitter']['data'] = '';
+      $variables['enabled']['twitter']['class'] = '';
+      $variables['enabled']['twitter']['text'] = 'Twitter';
+      $variables['enabled']['twitter']['icon'] = 'icon-twitter';
+    }
+
+    // Facebook.
+    if (variable_get('utexas_social_sharing_fb', 0) == 1) {
+      $facebook_link = $current_url;
+      if (!empty($parameters)) {
+        $facebook_link .= '?' . http_build_query(array('utm_source' => 'facebook') + $parameters, '', '&amp;');
+      }
+      $variables['enabled']['facebook']['link'] = '#';
+      $variables['enabled']['facebook']['data'] = htmlentities($facebook_link);
+      $variables['enabled']['facebook']['class'] = 'fbShare';
+      $variables['enabled']['facebook']['text'] = 'Facebook';
+      $variables['enabled']['facebook']['icon'] = 'icon-facebook';
+    }
+
+    // Google+.
+    if (variable_get('utexas_social_sharing_go', 1) == 1) {
+      $google_link = 'https://plus.google.com/share?url=';
+      $google_link .= $current_url;
+      if (!empty($parameters)) {
+        $google_link .= '?' . http_build_query(array('utm_source' => 'googleplus') + $parameters, '', '&amp;');
+      }
+      $variables['enabled']['google']['link'] = $google_link;
+      $variables['enabled']['google']['data'] = '';
+      $variables['enabled']['google']['class'] = '';
+      $variables['enabled']['google']['text'] = 'Google+';
+      $variables['enabled']['google']['icon'] = 'icon-googleplus';
+    }
+
+    // LinkedIn.
+    if (variable_get('utexas_social_sharing_li', 1) == 1) {
+      $linkedin_link = 'https://www.linkedin.com/shareArticle?mini=true&amp;url=';
+      $linked_url = $current_url;
+      if (!empty($parameters)) {
+        $linked_url .= '?' . http_build_query(array('utm_source' => 'linkedin') + $parameters, '', '&amp;');
+      }
+      $linkedin_link .= urlencode($linked_url);
+      $linkedin_link .= '&amp;title=' . urlencode($node->title);
+      $variables['enabled']['linkedin']['link'] = $linkedin_link;
+      $variables['enabled']['linkedin']['data'] = '';
+      $variables['enabled']['linkedin']['class'] = '';
+      $variables['enabled']['linkedin']['text'] = 'LinkedIn';
+      $variables['enabled']['linkedin']['icon'] = 'icon-linkedin';
+    }
+
+    // Pinterest.
+    if (variable_get('utexas_social_sharing_pi', 1) == 1) {
+      $fields = variable_get('utexas_social_sharing_pi_fields', 'field_utexas_hero_image, field_utexas_member_headshot');
+      if ($fields != '') {
+        $fields = explode(',', $fields);
+        foreach ($fields as $field) {
+          if (trim($field) == 'field_utexas_hero_image') {
+            if (isset($node->field_utexas_hero_photo[LANGUAGE_NONE])) {
+              if ($file = file_load($node->field_utexas_hero_photo['und'][0]['image_fid'])) {
+                $pinterest_pin = file_create_url($file->uri);
+                break;
+              }
+            }
+          }
+          elseif ($image = field_get_items('node', $node, trim($field), $node->language) and isset($image[0]['fid'])) {
+            $pinterest_pin = file_create_url($image[0]['uri']);
+            break;
+          }
+        }
+      }
+      $pinterest_link = 'https://pinterest.com/pin/create/button/?url=';
+      $pinterest_link .= urlencode($current_url);
+      if (isset($pinterest_pin)) {
+        $pinterest_link .= '&media=' . urlencode($pinterest_pin);
+      }
+      $pinterest_link .= '&description=' . urlencode($node->title);
+      $variables['enabled']['pinterest']['link'] = $pinterest_link;
+      $variables['enabled']['pinterest']['data'] = '';
+      $variables['enabled']['pinterest']['class'] = '';
+      $variables['enabled']['pinterest']['text'] = 'Pinterest';
+      $variables['enabled']['pinterest']['icon'] = 'icon-pinterest';
+    }
+
+    // Tumblr.
+    if (variable_get('utexas_social_sharing_tu', 0) == 1) {
+      $tumblr_link = 'https://www.tumblr.com/share/link?url=';
+      $tumblr_url = $current_url;
+      if (!empty($parameters)) {
+        $tumblr_url .= '?' . http_build_query(array('utm_source' => 'tumblr') + $parameters, '', '&amp;');
+      }
+      $tumblr_link .= urlencode($tumblr_url);
+      $tumblr_link .= '&amp;name=' . urlencode($node->title);
+      $variables['enabled']['tumblr']['link'] = $tumblr_link;
+      $variables['enabled']['tumblr']['data'] = '';
+      $variables['enabled']['tumblr']['class'] = '';
+      $variables['enabled']['tumblr']['text'] = 'Tumblr';
+      $variables['enabled']['tumblr']['icon'] = 'icon-tumblr';
+    }
+
+    // Reddit.
+    if (variable_get('utexas_social_sharing_re', 1) == 1) {
+      $reddit_link = 'https://reddit.com/submit?url=';
+      $reddit_url = $current_url;
+      if (!empty($parameters)) {
+        $reddit_url .= '?' . http_build_query(array('utm_source' => 'reddit') + $parameters, '', '&amp;');
+      }
+      $reddit_link .= urlencode($reddit_url);
+      $reddit_link .= '&amp;title=' . urlencode($node->title);
+      $variables['enabled']['reddit']['link'] = $reddit_link;
+      $variables['enabled']['reddit']['data'] = '';
+      $variables['enabled']['reddit']['class'] = '';
+      $variables['enabled']['reddit']['text'] = 'Reddit';
+      $variables['enabled']['reddit']['icon'] = 'icon-reddit';
+    }
+  }
+  // Get parent region and set block grid class accordingly.
+  $parent_region = utexas_admin_retrieve_parent_region($node->nid, 'utexas_social_sharing_block');
+  $accounts = array(
+    'utexas_social_sharing_em',
+    'utexas_social_sharing_tw',
+    'utexas_social_sharing_fb',
+    'utexas_social_sharing_go',
+    'utexas_social_sharing_li',
+    'utexas_social_sharing_pi',
+    'utexas_social_sharing_tu',
+    'utexas_social_sharing_re',
+  );
+  $count = 0;
+  foreach ($accounts as $value) {
+    if (variable_get($value, 1) == 1) {
+      $count += 1;
+    }
+  }
+  $variables['grid_class'] = 'small-block-grid-' . $count;
+  $no_default_regions = array(
+    'sidebar_second',
+    'main_content_top_right',
+    'main_content_top_left',
+    'content_top_right',
+  );
+  if ($parent_region == 'sidebar_second' || $parent_region == 'content_top_right') {
+    $variables['grid_class'] = 'small-block-grid-3';
+  }
+  if ($parent_region == 'main_content_top_right' || $parent_region == 'main_content_top_left') {
+    if ($count < 5) {
+      drupal_add_css('.social-share .social-share-li{max-width: 75px;}', 'inline');
+    }
+  }
+  if (!in_array($parent_region, $no_default_regions) && $count < 6) {
+    drupal_add_css('.social-share .social-share-li{max-width: 75px;}', 'inline');
+  }
+  drupal_add_js('https://platform.twitter.com/widgets.js');
+  // Add variable to edit contact info details.
+  $variables['social_sharing_details'] = '';
+  $perm = 'administer social sharing';
+  if (user_access($perm, $account = NULL)) {
+    $base_path = $GLOBALS['base_url'];
+    $path = current_path();
+    $variables['social_sharing_details'] = '<div class="edit-links" style="margin-top:0;"><a href="' . $base_path . '/admin/config/utexas/utexas_social_sharing?destination=' . $path . '">Edit Social Sharing Accounts</a></div>';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function utexas_social_sharing_theme($existing, $type, $theme, $path) {
+  return array(
+    'utexas_social_sharing' => array(
+      'template' => 'theme/utexas-social-sharing',
+      'variables' => array(),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ *
+ * Define the News Share block.
+ */
+function utexas_social_sharing_block_info() {
+  $blocks = array();
+
+  // Small blocks used for above the article.
+  $blocks['utexas_social_sharing_block'] = array(
+    'info'  => 'Social Sharing Icons',
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * Build the News Share block.
+ */
+function utexas_social_sharing_block_view($delta = '') {
+  // Get the block array.
+  $block = array();
+
+  switch ($delta) {
+    case 'utexas_social_sharing_block':
+      // Pass in the facebook app id variable.
+      drupal_add_js(array('utexas_social_sharing' => array('facebook_app_id' => variable_get('utexas_social_sharing_facebook_app_id', ''))), 'setting');
+
+      // Set the block information.
+      $block['subject'] = NULL;
+      $block['content'] = array(
+        '#markup' => theme('utexas_social_sharing'),
+        '#attached' => array(
+          'js' => array(
+            drupal_get_path('module', 'utexas_social_sharing') . '/theme/facebook.js',
+            drupal_get_path('module', 'utexas_social_sharing') . '/theme/utexas-social-sharing.js',
+          ),
+        ),
+      );
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Helper function for links to styled images in lieu of image_style_url().
+ */
+function _utexas_social_create_styled_image_uri($image_uri, $style) {
+  $derivative_uri = image_style_path($style, $image_uri);
+  $success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load($style), $image_uri, $derivative_uri);
+  return file_create_url($derivative_uri);
+}
+
+/**
+ * Helper function to strip the token from the URL.
+ *
+ * @param string $url
+ *   A URL.
+ *
+ * @return string
+ *   A URL without the token.
+ */
+function _strip_token($url) {
+  $parts = drupal_parse_url($url);
+
+  // We remove the itok from the query.
+  if (isset($parts['query'][IMAGE_DERIVATIVE_TOKEN])) {
+    unset($parts['query'][IMAGE_DERIVATIVE_TOKEN]);
+  }
+
+  // There should not be any fragment or query, so we simply can return the
+  // already processed path.
+  if (empty($uri['query']) and empty($uri['fragment'])) {
+    return $parts['path'];
+  }
+
+  // Else build the path again.
+  return url($parts['path'], $parts);
+}

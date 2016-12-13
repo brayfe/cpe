@@ -583,7 +583,32 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
 // $conf['utexas_page_builder_remove_block_modules'][] = 'block';
 // Disable "fieldblocks." Warning: this will prevent any widgets from placement.
 // $conf['utexas_page_builder_remove_block_modules'][] = 'fieldblock';
-
+//
+// Overriding social media links
+//
+// Configure which social media icons are available in both the social links
+// field and sitewide social accounts by adding the following to local
+// settings.php file. See constants UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS and
+// UTEXAS_SOCIAL_ACCOUNTS_MEDIA_ITEMS for the default definitions.
+//
+// $conf['utexas_social_accounts_media_items'] = serialize(
+//   array(
+//     'Facebook' => 'icon-facebook',
+//     'Flickr' => 'icon-flickr',
+//     'Pinterest' => 'icon-pinterest',
+//     'Tumblr'  => 'icon-tumblr',
+//     'Newsletter' => 'icon-mail',
+//   )
+// );
+// $conf['utexas_social_links_media_items'] = serialize(
+//   array(
+//    'Flickr' => 'icon-flickr',
+//    'Pinterest' => 'icon-pinterest',
+//    'Tumblr'  => 'icon-tumblr',
+//    'Vimeo' => 'icon-vimeo2',
+//    'Newsletter' => 'icon-mail',
+//   )
+// );
 
 // Pantheon-specific configuration. If you are not using this codebase on the
 // Pantheon platform, you can safely disregard this section.

@@ -1,0 +1,13 @@
+.form-item-utexas-social-sharing-email-body,
+.form-item-utexas-social-sharing-og-default,
+.form-item-utexas-social-sharing-twitter-name,
+.form-item-utexas-social-sharing-pi-fields {
+  border-bottom: 1px solid #aaa!important;
+}
+#social-sharing-screenshot {
+    width: 50%;
+}
+label[for="edit-utexas-social-sharing-text"] {
+  font-size: 13px!important;
+  font-weight: bold;
+}

@@ -161,7 +161,7 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
     if (!CKEDITOR.env.isCompatible) {
       return;
     }
-    // Patch to prevent caching when no XSS response.
+
     if (false && run_filter && ($("#" + textarea_id).val().length > 0) && typeof(ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]]) != 'undefined' && ((ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]]['ss'] == 1 && typeof(Drupal.settings.ckeditor.autostart) != 'undefined' && typeof(Drupal.settings.ckeditor.autostart[textarea_id]) != 'undefined') || ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]]['ss'] == 2)) {
       $.ajax({
         type: 'POST',
@@ -215,14 +215,12 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
     }
     if (typeof CKEDITOR.plugins != 'undefined') {
       for (var plugin in textarea_settings['loadPlugins']) {
-        if (typeof(textarea_settings['loadPlugins'][plugin]['active']) == 'undefined' || textarea_settings['loadPlugins'][plugin]['active'] == 1) {
-          textarea_settings.extraPlugins += (textarea_settings.extraPlugins) ? ',' + textarea_settings['loadPlugins'][plugin]['name'] : textarea_settings['loadPlugins'][plugin]['name'];
-          CKEDITOR.plugins.addExternal(textarea_settings['loadPlugins'][plugin]['name'], textarea_settings['loadPlugins'][plugin]['path']);
-        }
+        textarea_settings.extraPlugins += (textarea_settings.extraPlugins) ? ',' + textarea_settings['loadPlugins'][plugin]['name'] : textarea_settings['loadPlugins'][plugin]['name'];
+        CKEDITOR.plugins.addExternal(textarea_settings['loadPlugins'][plugin]['name'], textarea_settings['loadPlugins'][plugin]['path']);
       }
     }
     return textarea_settings;
-  }
+  };
 
   /**
  * Returns true if CKEDITOR.version >= version
