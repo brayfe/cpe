@@ -606,7 +606,7 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
 //    'Pinterest' => 'icon-pinterest',
 //    'Tumblr'  => 'icon-tumblr',
 //    'Vimeo' => 'icon-vimeo2',
-//     'Newsletter' => 'icon-mail',
+//    'Newsletter' => 'icon-mail',
 //   )
 // );
 
