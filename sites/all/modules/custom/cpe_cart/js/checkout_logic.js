@@ -29,7 +29,6 @@
         // MISHELL expects to see in the cart cookie for cart checkout.
         var mishellIdForCart = mishellIdEightByte + '000000000000';
         setCookie(cpeCartCookieName, mishellIdForCart);
-        $('form#section-form').submit();
       });
 
       // "Seat availability check" functionality
@@ -67,6 +66,34 @@
                 // Show the "Seats Remaining" field if there are 1-4 seats available.
                 $seatsRemainingField.show();
               }
+            }
+            else {
+              // Hide the "Add to Cart" button if there are no seats available.
+              $addToCartButton.hide();
+            }
+          });
+        }
+      });
+
+      // "Seat availability check" functionality for multi-course certificates
+      //
+      // This does an AJAX call to a wrapper script that connects to MISHELL
+      // and queries the course_id for a multi course certificate to see how
+      // many seats are available.
+      //
+      // If a certificate course_id has 0 zero seats available or is not found,
+      // the "Add to Cart" button is hidden in favor of the "Contact Coordinator" button.
+      //
+      $('#mcc-form').each(function () {
+        if ($('input#add-to-cart', this).length) {
+          var $addToCartButton = $('input#add-to-cart', this);
+          var mishellId = $addToCartButton.data('mishell-id');
+          var $emailCoordinatorButton = $('button.email-coord', this);
+          $.get(Drupal.settings.cpe_cart.cpeCartSeatCheckUrl + mishellId, function (data) {
+            var seatsAvailable = parseInt(data);
+            if (seatsAvailable > 0) {
+              // Hide the "Contact Coodinator" button if there are seats available.
+              $emailCoordinatorButton.hide();
             }
             else {
               // Hide the "Add to Cart" button if there are no seats available.
