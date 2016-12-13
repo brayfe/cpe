@@ -95,23 +95,17 @@
 
   }
 
-  button.email-coord {
-    padding: 0;
-    background-color: transparent;
-    margin: 8px 0;
-
-    a {
-      margin-bottom: 0;
-      background-color: #3282a6;
-      padding: 8px 18px;
-      outline: 0;
-      color: #fff;
-      font-size: 1em;
-      border: none;
-      color: #fff;
-      text-decoration: none;
-    }
-
+  #mcc-form a {
+    background-color: #3282a6;
+    padding: 8px 18px;
+    outline: 0;
+    color: #fff;
+    font-size: 1em;
+    border: none;
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    margin: 0;
   }
 
   .column.medium-8.large-9 {
