@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Module definition file for utexas_image_links module.
@@ -41,8 +42,7 @@ function utexas_image_links_field_widget_info() {
  *
  * Used to create the form field widget.
  */
-function utexas_image_links_field_widget_form(&$form, &$form_state, $field,
-  $instance, $langcode, $items, $delta, $element) {
+function utexas_image_links_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   switch ($instance['widget']['type']) {
     case 'utexas_image_link':
 
@@ -105,18 +105,17 @@ function utexas_image_links_field_widget_form(&$form, &$form_state, $field,
 
   return $element;
 }
+
 /**
  * Implements hook_field_validate().
  *
  * Used to make sure uploaded links are valid before trying to save.
  */
-function utexas_image_links_field_validate($entity_type, $entity, $field,
-  $instance, $langcode, $items, &$errors) {
+function utexas_image_links_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
   // Loop through the values, making sure all check out.
   foreach ($items as $delta => &$item) {
     if (!empty($item) and !utexas_image_links_field_is_empty($item, $field)) {
       // == CUSTOM VALIDATION RULES ==.
-
       // Bypass if data sent directly via a migration.
       $image = isset($item['image_fid']) ? 0 : $item['image']['fid'];
 
@@ -147,8 +146,8 @@ function utexas_image_links_field_validate($entity_type, $entity, $field,
       if (!utexas_admin_drupal_path_exists($href)) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'utexas_image_link_bad_href',
-          'message' => t('%field: ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR,
-            array('%field' => $instance['label'])),
+          'message' => t('%field:') . ' ' . UTEXAS_ADMIN_PATH_VALIDATION_ERROR,
+            array('%field' => $instance['label']),
         );
       }
     }
@@ -236,20 +235,17 @@ function utexas_image_links_file_download($uri) {
  *
  * Increment file usage.
  */
-function utexas_image_links_field_insert($entity_type, $entity, $field,
-  $instance, $langcode, &$items) {
+function utexas_image_links_field_insert($entity_type, $entity, $field, $instance, $langcode, &$items) {
   utexas_admin_field_insert_custom($entity_type, $entity, $field,
   $instance, $langcode, $items, 'utexas_image_links');
 }
-
 
 /**
  * Implements hook_field_update().
  *
  * Adjust copy format+value and handle images.
  */
-function utexas_image_links_field_update($entity_type, $entity, $field,
-  $instance, $langcode, &$items) {
+function utexas_image_links_field_update($entity_type, $entity, $field, $instance, $langcode, &$items) {
   utexas_admin_field_update_custom($entity_type, $entity, $field,
   $instance, $langcode, $items, 'utexas_image_links');
 }
@@ -282,8 +278,7 @@ function utexas_image_links_field_formatter_info() {
  *
  * Used to display the utexas_image_link formatter.
  */
-function utexas_image_links_field_formatter_view($entity_type, $entity, $field,
-  $instance, $langcode, $items, $display) {
+function utexas_image_links_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
   $settings = $display['settings'];
 
@@ -337,7 +332,6 @@ function template_preprocess_utexas_image_link(&$variables) {
   $link_title = $variables['item']['link_title'];
   $link_href = $variables['item']['link_href'];
   $link = '';
-
   // Unset unneeded variables.
   unset($variables['item']);
 
@@ -356,11 +350,15 @@ function template_preprocess_utexas_image_link(&$variables) {
     ));
 
     // Set the link.
-    if (!empty($link_title)) {
+    if (!empty($link_title) && !empty($link_href)) {
       $link = l($image, $link_href, array('html' => TRUE, 'attributes' => array('title' => $link_title)));
     }
-    else {
+    elseif (!empty($link_href)) {
       $link = l($image, $link_href, array('html' => TRUE));
+    }
+    else {
+      // There is no href, so we are defining the "image_link" as just an image.
+      $link = $image;
     }
   }
   else {

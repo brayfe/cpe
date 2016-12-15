@@ -762,7 +762,7 @@ function utexas_admin_ckeditor_profile($operation = NULL, $profile = 'Advanced')
           'media' => array(
             'name' => 'media',
             'desc' => 'Plugin for embedding files using Media CKEditor',
-            'path' => '%base_path%' . drupal_get_path('module', 'media_ckeditor') . '/js/plugins/media/',
+            'path' => '%base_path%profiles/utexas/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/',
             'buttons' => array(
               'Media' => array(
                 'icon' => 'images/icon.gif',
