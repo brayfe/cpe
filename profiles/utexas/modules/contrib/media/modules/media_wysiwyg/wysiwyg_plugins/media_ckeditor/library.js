@@ -55,12 +55,8 @@
 
       // Insert element. Use CKEDITOR.dom.element.createFromHtml to ensure our
       // custom wrapper element is preserved.
-      if (wysiwygHTML.indexOf("<!--MEDIA-WRAPPER-START-") !== -1) {
-        ckeditorInstance.plugins.media.mediaLegacyWrappers = true;
-        wysiwygHTML = wysiwygHTML.replace(/<!--MEDIA-WRAPPER-START-(\d+)-->(.*?)<!--MEDIA-WRAPPER-END-\d+-->/gi, '');
-      } else {
-        wysiwygHTML = '<mediawrapper data="">' + wysiwygHTML + '</mediawrapper>';
-      }
+      ckeditorInstance.plugins.media.mediaLegacyWrappers = true;
+      wysiwygHTML = wysiwygHTML.replace(/<!--MEDIA-WRAPPER-START-(\d+)-->(.*?)<!--MEDIA-WRAPPER-END-\d+-->/gi, '');
 
       var editorElement = CKEDITOR.dom.element.createFromHtml(wysiwygHTML);
       ckeditorInstance.insertElement(editorElement);

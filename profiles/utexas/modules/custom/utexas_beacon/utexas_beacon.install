@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Installation functions for the Beacon module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Set the initial value for the schema version so we can run updates after installation
+   and sets the the utexas_beacon_key variable.
+ */
+function utexas_beacon_install() {
+  drupal_set_installed_schema_version('utexas_beacon', 7101);
+  variable_set('utexas_beacon_key', 'wASfqQUs+JbY^;Bv7#QCU5bKKRh=Sj^YxT]HK#<8;]y?+%6heeh*}5wRasDDz_fe,!H4n(*V5Z4<L:y*wb$zf2XE:H%r*YA%VVHQ');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set the utexas_beacon_key variable.
+ */
+function utexas_beacon_update_7101() {
+  variable_set('utexas_beacon_key', 'wASfqQUs+JbY^;Bv7#QCU5bKKRh=Sj^YxT]HK#<8;]y?+%6heeh*}5wRasDDz_fe,!H4n(*V5Z4<L:y*wb$zf2XE:H%r*YA%VVHQ');
+}
+
+/**
+ * Implements hook_unininstall().
+ *
+ * Deletes set variable.
+ */
+function utexas_beacon_uninstall() {
+  variable_del('utexas_beacon_key');
+}

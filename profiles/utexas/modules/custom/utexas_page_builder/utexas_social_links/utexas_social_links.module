@@ -16,7 +16,7 @@ define('UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS', serialize(
     'Twitter' => 'icon-twitter',
     'Instagram' => 'icon-instagram',
     'LinkedIn' => 'icon-linkedin',
-    'YouTube' => 'icon-youtube',
+    'YouTube' => 'icon-youtube3',
     'GooglePlus' => 'icon-googleplus',
     'Flickr' => 'icon-flickr',
     'Pinterest' => 'icon-pinterest',
@@ -101,7 +101,7 @@ function utexas_social_links_field_widget_form(&$form,
 
       $count = 0;
       $max_delta = 10;
-      $accounts = unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS);
+      $accounts = unserialize(variable_get('utexas_social_links_media_items', UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS));
       // Define and populate the link fields.
       foreach (array_keys($accounts) as $name) {
         $element['links']{$name} = array(
@@ -299,7 +299,7 @@ function utexas_social_links_field_formatter_view($entity_type,
 
   switch ($display['type']) {
     case 'utexas_social_links':
-      $accounts = unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS);
+      $accounts = unserialize(variable_get('utexas_social_links_media_items', UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS));
       foreach ($items as $delta => $item) {
         // Sort link items by weight.
         $sorted_fields = array();
@@ -371,7 +371,7 @@ function theme_utexas_social_links_field_table(&$variables) {
     t('Weight'),
   );
   $rows = array();
-  $accounts = unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS);
+  $accounts = unserialize(variable_get('utexas_social_links_media_items', UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS));
   $sorted_fields = array();
   foreach (array_keys($accounts) as $name) {
     $weight = $form[$name . '_weight']['#value'];
@@ -422,7 +422,7 @@ function theme_utexas_social_links_field_table(&$variables) {
 function template_preprocess_utexas_social_links(&$variables) {
   // Sanitize and offer default headline.
   $output = array();
-  $accounts = unserialize(UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS);
+  $accounts = unserialize(variable_get('utexas_social_links_media_items', UTEXAS_SOCIAL_LINKS_MEDIA_ITEMS));
   $headline = (!empty($variables['item']['headline'])) ?
   check_plain($variables['item']['headline']) : 'Connect';
   $links = !empty($variables['item']['links']) ? $variables['item']['links'] : array();

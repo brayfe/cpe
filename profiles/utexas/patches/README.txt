@@ -37,3 +37,15 @@ CKEditor module maintainers provide a better solution. The problem is difficult
 to reproduce, but both Henry Tijerina and John Kotarski reported it on UT Web
 installs of UT Drupal Kit. See tickets 490232 and 488316.
 See https://www.drupal.org/node/2069871
+
+8. media_replicate-patches-in-media-ckeditor_MC-497.patch
+The 2.0-beta1 version of Media, added in April 2016[1], included its own version of
+the "media" CKEditor plugin, which was already present in the Media CKEditor
+module, and to which we had applied two patches (#1 & #2, above). When the
+CKEditor configuration is saved via the UI, it looks through the codebase for
+the "media" plugin and finds the "first available" one. The most transparent
+solution for existing sites is simply to replicate the patches in this second
+version of the plugin. As of Sept 2016, the bug for which the patches are made
+is still present[2], so we do need to keep this patch in place.
+[1] https://bitbucket.org/utexas-its-drupal/managed-cms/commits/f67cd0f696d9d0722eac8998027fb461d16b21e2
+[2] https://www.drupal.org/node/2591069
