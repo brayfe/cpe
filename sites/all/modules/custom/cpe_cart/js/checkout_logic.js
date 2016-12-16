@@ -52,7 +52,7 @@
         if ($('input#add-to-cart', this).length) {
           var $addToCartButton = $('input#add-to-cart', this);
           var mishellId = $addToCartButton.data('mishell-id');
-          var $emailCoordinatorButton = $('button.email-coord', this);
+          var $emailCoordinatorButton = $('a.email-coord', this);
           $('div.field_section_course_id', this).before('<div class="field field_seats_remaining"><div class="field-label">Seats Remaining: </div><div class="field-items"></div></div></div>');
           var $seatsRemainingField = $('div.field_seats_remaining', this);
           $seatsRemainingField.hide();
@@ -88,7 +88,7 @@
         if ($('input#add-to-cart', this).length) {
           var $addToCartButton = $('input#add-to-cart', this);
           var mishellId = $addToCartButton.data('mishell-id');
-          var $emailCoordinatorButton = $('button.email-coord', this);
+          var $emailCoordinatorButton = $('a.email-coord', this);
           $.get(Drupal.settings.cpe_cart.cpeCartSeatCheckUrl + mishellId, function (data) {
             var seatsAvailable = parseInt(data);
             if (seatsAvailable > 0) {
